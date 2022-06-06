@@ -1,0 +1,53 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.2.32519.379
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WorkoutReservation.API", "WorkoutReservation.API\WorkoutReservation.API.csproj", "{D29645B8-022E-4424-8D1B-C094A160B0C9}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{3965AD60-CF6C-4A46-8C2C-7DFBE0C45F7B}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WorkoutReservation.Application", "WorkoutReservation.Application\WorkoutReservation.Application.csproj", "{7816FF09-94B0-4578-A1F9-AF34760B1E02}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WorkoutReservation.Infrastructure", "WorkoutReservation.Infrastructure\WorkoutReservation.Infrastructure.csproj", "{60937853-B96A-45BB-BFC6-E9FFDFB1ACAA}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WorkoutReservation.Domain", "WorkoutReservation.Domain\WorkoutReservation.Domain.csproj", "{1A3578D0-CCBE-4232-8C94-156F1570D158}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{EAE81CE8-0DD3-430C-9982-3FBA49135D5F}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{D29645B8-022E-4424-8D1B-C094A160B0C9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D29645B8-022E-4424-8D1B-C094A160B0C9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D29645B8-022E-4424-8D1B-C094A160B0C9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D29645B8-022E-4424-8D1B-C094A160B0C9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7816FF09-94B0-4578-A1F9-AF34760B1E02}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7816FF09-94B0-4578-A1F9-AF34760B1E02}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7816FF09-94B0-4578-A1F9-AF34760B1E02}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7816FF09-94B0-4578-A1F9-AF34760B1E02}.Release|Any CPU.Build.0 = Release|Any CPU
+		{60937853-B96A-45BB-BFC6-E9FFDFB1ACAA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{60937853-B96A-45BB-BFC6-E9FFDFB1ACAA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{60937853-B96A-45BB-BFC6-E9FFDFB1ACAA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{60937853-B96A-45BB-BFC6-E9FFDFB1ACAA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1A3578D0-CCBE-4232-8C94-156F1570D158}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1A3578D0-CCBE-4232-8C94-156F1570D158}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1A3578D0-CCBE-4232-8C94-156F1570D158}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1A3578D0-CCBE-4232-8C94-156F1570D158}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{D29645B8-022E-4424-8D1B-C094A160B0C9} = {3965AD60-CF6C-4A46-8C2C-7DFBE0C45F7B}
+		{7816FF09-94B0-4578-A1F9-AF34760B1E02} = {3965AD60-CF6C-4A46-8C2C-7DFBE0C45F7B}
+		{60937853-B96A-45BB-BFC6-E9FFDFB1ACAA} = {3965AD60-CF6C-4A46-8C2C-7DFBE0C45F7B}
+		{1A3578D0-CCBE-4232-8C94-156F1570D158} = {3965AD60-CF6C-4A46-8C2C-7DFBE0C45F7B}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {03DCDDAF-E7D1-4A7B-9879-FFF098F42804}
+	EndGlobalSection
+EndGlobal
