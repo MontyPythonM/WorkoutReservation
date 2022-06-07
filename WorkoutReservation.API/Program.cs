@@ -1,3 +1,4 @@
+using WorkoutReservation.Application;
 using WorkoutReservation.Infrastructure;
 using WorkoutReservation.Infrastructure.Seeders;
 
@@ -8,6 +9,8 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 
 builder.Services.AddInfrastructureServices(builder.Configuration);
+builder.Services.AddApplicationServices(builder.Configuration);
+
 builder.Services.AddScoped<Seeder>();
 
 
@@ -22,7 +25,7 @@ var seeder = scope.ServiceProvider.GetService<Seeder>();
 
 seeder.Seed();
 
-app.UseAuthorization();
+//app.UseAuthorization();
 
 app.MapControllers();
 

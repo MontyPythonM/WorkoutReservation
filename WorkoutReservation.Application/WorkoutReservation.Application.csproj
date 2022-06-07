@@ -15,9 +15,21 @@
     <Folder Include="Common\Models\" />
     <Folder Include="Common\Interfaces\" />
     <Folder Include="Common\Mapping\" />
-    <Folder Include="Functions\Instructor\" />
-    <Folder Include="Functions\Workout\" />
-    <Folder Include="Functions\WorkoutType\" />
+    <Folder Include="Features\WorkoutType\Commands\DeleteWorkoutType\" />
+    <Folder Include="Features\WorkoutType\Commands\AssignWorkoutTypeToInstructor\" />
+    <Folder Include="Features\WorkoutType\Commands\UpdateWorkoutType\" />
+    <Folder Include="Exceptions\" />
+    <Folder Include="Interfaces\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="11.0.1" />
+    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="11.0.0" />
+    <PackageReference Include="FluentValidation" Version="11.0.2" />
+    <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="11.0.2" />
+    <PackageReference Include="MediatR" Version="10.0.1" />
+    <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="10.0.1" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="6.0.0" />
   </ItemGroup>
 
 </Project>

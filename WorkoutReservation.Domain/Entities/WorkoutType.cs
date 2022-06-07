@@ -8,7 +8,8 @@ namespace WorkoutReservation.Domain.Entities
         public string Name { get; set; }
         public string Description { get; set; }
         public WorkoutIntensity Intensity { get; set; }
-
-        public List<Instructor> Instructors { get; set; } = new List<Instructor>();      
+        
+        public List<Instructor> Instructors { get; set; } = new List<Instructor>();
+        public List<WorkoutTypeTag> WorkoutTypeTags { get; set; } = new List<WorkoutTypeTag>();
     }
 }
