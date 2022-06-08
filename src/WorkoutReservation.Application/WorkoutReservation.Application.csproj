@@ -11,9 +11,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Common\Models\" />
     <Folder Include="Features\WorkoutTypes\Commands\AssignWorkoutTypeToInstructor\" />
-    <Folder Include="Common\Interfaces\" />
   </ItemGroup>
 
   <ItemGroup>

@@ -11,13 +11,15 @@ namespace WorkoutReservation.Application.Features.WorkoutTypes.Commands.CreateWo
         private readonly IWorkoutTypeRepository _workoutRepository;
         private readonly IMapper _mapper;
 
-        public CreateWorkoutTypeCommandHandler(IWorkoutTypeRepository workoutTypeRepository, IMapper mapper)
+        public CreateWorkoutTypeCommandHandler(IWorkoutTypeRepository workoutTypeRepository, 
+                                               IMapper mapper)
         {
             _workoutRepository = workoutTypeRepository;
             _mapper = mapper;
         }
 
-        public async Task<int> Handle(CreateWorkoutTypeCommand request, CancellationToken cancellationToken)
+        public async Task<int> Handle(CreateWorkoutTypeCommand request, 
+                                      CancellationToken cancellationToken)
         {
             var validator = new CreateWorkoutTypeCommandValidator();
             var validatorResult = await validator.ValidateAsync(request);
