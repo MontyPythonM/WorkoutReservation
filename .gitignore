@@ -342,4 +342,4 @@ ASALocalRun/
 
 # BeatPulse healthcheck temp database
 healthchecksdb
-/WorkoutReservation.API/appsettings.Development.json
+src/WorkoutReservation.API/appsettings.Development.json
