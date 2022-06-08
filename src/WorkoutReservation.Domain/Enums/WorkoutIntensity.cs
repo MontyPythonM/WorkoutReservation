@@ -2,7 +2,7 @@
 {
     public enum WorkoutIntensity
     {
-        low,
+        low = 1,
         moderate,
         vigorous,
         extreme

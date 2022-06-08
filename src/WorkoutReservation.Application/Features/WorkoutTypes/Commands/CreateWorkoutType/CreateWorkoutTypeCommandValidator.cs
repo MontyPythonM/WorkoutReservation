@@ -1,4 +1,5 @@
 ﻿using FluentValidation;
+using WorkoutReservation.Domain.Enums;
 
 namespace WorkoutReservation.Application.Features.WorkoutTypes.Commands.CreateWorkoutType
 {
@@ -13,9 +14,9 @@ namespace WorkoutReservation.Application.Features.WorkoutTypes.Commands.CreateWo
             RuleFor(x => x.Intensity)
                 .IsInEnum()
                 .NotEmpty();
-
+            
             RuleFor(x => x.Description)
-                .MaximumLength(5000)
+                .MaximumLength(600)
                 .NotEmpty();
         }
     }
