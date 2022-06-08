@@ -11,15 +11,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Common\Exceptions\" />
     <Folder Include="Common\Models\" />
+    <Folder Include="Features\WorkoutTypes\Commands\AssignWorkoutTypeToInstructor\" />
     <Folder Include="Common\Interfaces\" />
-    <Folder Include="Common\Mapping\" />
-    <Folder Include="Features\WorkoutType\Commands\DeleteWorkoutType\" />
-    <Folder Include="Features\WorkoutType\Commands\AssignWorkoutTypeToInstructor\" />
-    <Folder Include="Features\WorkoutType\Commands\UpdateWorkoutType\" />
-    <Folder Include="Exceptions\" />
-    <Folder Include="Interfaces\" />
   </ItemGroup>
 
   <ItemGroup>

@@ -1,7 +1,7 @@
 ﻿using System.Text.Json.Serialization;
 using WorkoutReservation.Domain.Enums;
 
-namespace WorkoutReservation.Application.Features.WorkoutType.Queries.GetWorkoutTypeDetail
+namespace WorkoutReservation.Application.Features.WorkoutTypes.Queries.GetWorkoutTypeDetail
 {
     public class WorkoutTypeDetailDto
     {

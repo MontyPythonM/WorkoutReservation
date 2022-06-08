@@ -1,3 +1,4 @@
+using WorkoutReservation.API.Middleware;
 using WorkoutReservation.Application;
 using WorkoutReservation.Infrastructure;
 using WorkoutReservation.Infrastructure.Seeders;
@@ -12,7 +13,7 @@ builder.Services.AddInfrastructureServices(builder.Configuration);
 builder.Services.AddApplicationServices(builder.Configuration);
 
 builder.Services.AddScoped<Seeder>();
-
+builder.Services.AddScoped<ExceptionHandlingMiddleware>();
 
 var app = builder.Build();
 
@@ -24,6 +25,8 @@ var seeder = scope.ServiceProvider.GetService<Seeder>();
 // Configure the HTTP request pipeline.
 
 seeder.Seed();
+
+app.UseMiddleware<ExceptionHandlingMiddleware>();
 
 //app.UseAuthorization();
 

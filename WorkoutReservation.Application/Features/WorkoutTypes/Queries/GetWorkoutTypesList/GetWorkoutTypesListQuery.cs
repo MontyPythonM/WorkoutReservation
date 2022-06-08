@@ -1,7 +1,8 @@
 ﻿using MediatR;
 using WorkoutReservation.Application.Contracts;
+using WorkoutReservation.Application.Exceptions;
 
-namespace WorkoutReservation.Application.Features.WorkoutType.Queries.GetWorkoutTypesList
+namespace WorkoutReservation.Application.Features.WorkoutTypes.Queries.GetWorkoutTypesList
 {
     public class GetWorkoutTypesListQuery : IRequest<List<WorkoutTypesListDto>>
     {
@@ -21,7 +22,8 @@ namespace WorkoutReservation.Application.Features.WorkoutType.Queries.GetWorkout
         {
             var workoutTypes = await _workoutTypeRepository.GetAllAsync();
 
-            // validation here
+            if (!workoutTypes.Any())
+                throw new NotFoundException($"Workout types not found.");
 
             var results = workoutTypes
                 .Select(x => new WorkoutTypesListDto

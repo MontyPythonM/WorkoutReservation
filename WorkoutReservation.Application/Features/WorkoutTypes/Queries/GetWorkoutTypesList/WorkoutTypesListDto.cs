@@ -1,6 +1,6 @@
 ﻿using WorkoutReservation.Domain.Enums;
 
-namespace WorkoutReservation.Application.Features.WorkoutType.Queries.GetWorkoutTypesList
+namespace WorkoutReservation.Application.Features.WorkoutTypes.Queries.GetWorkoutTypesList
 {
     public class WorkoutTypesListDto
     {

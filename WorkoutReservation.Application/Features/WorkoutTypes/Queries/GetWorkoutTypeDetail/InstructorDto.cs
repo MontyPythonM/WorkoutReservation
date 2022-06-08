@@ -1,4 +1,4 @@
-﻿namespace WorkoutReservation.Application.Features.WorkoutType.Queries.GetWorkoutTypeDetail
+﻿namespace WorkoutReservation.Application.Features.WorkoutTypes.Queries.GetWorkoutTypeDetail
 {
     public class InstructorDto
     {
