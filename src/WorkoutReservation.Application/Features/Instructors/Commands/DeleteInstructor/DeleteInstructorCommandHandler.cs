@@ -1,16 +1,19 @@
 ﻿using MediatR;
+using Microsoft.Extensions.Logging;
 using NLog;
 using WorkoutReservation.Application.Contracts;
 using WorkoutReservation.Application.Exceptions;
+
 
 namespace WorkoutReservation.Application.Features.Instructors.Commands.DeleteInstructor
 {
     public class DeleteInstructorCommandHandler : IRequestHandler<DeleteInstructorCommand>
     {
         private readonly IInstructorRepository _instructorRepository;
-        private readonly ILogger _logger;
+        private readonly ILogger<DeleteInstructorCommandHandler> _logger;
 
-        public DeleteInstructorCommandHandler(IInstructorRepository instructorRepository, ILogger logger)
+        public DeleteInstructorCommandHandler(IInstructorRepository instructorRepository, 
+                                              ILogger<DeleteInstructorCommandHandler> logger)
         {
             _instructorRepository = instructorRepository;
             _logger = logger;
@@ -26,7 +29,7 @@ namespace WorkoutReservation.Application.Features.Instructors.Commands.DeleteIns
 
             await _instructorRepository.DeleteAsync(instructor);
 
-            _logger.Info($"Instructor with Id: {request.InstructorId} was deleted.");
+            _logger.LogInformation($"Instructor with Id: {request.InstructorId} was deleted.");
 
             return Unit.Value;
         }

@@ -1,5 +1,5 @@
 ﻿using MediatR;
-using NLog;
+using Microsoft.Extensions.Logging;
 using WorkoutReservation.Application.Contracts;
 using WorkoutReservation.Application.Exceptions;
 
@@ -8,9 +8,10 @@ namespace WorkoutReservation.Application.Features.WorkoutTypes.Commands.DeleteWo
     public class DeleteWorkoutTypeCommandHandler : IRequestHandler<DeleteWorkoutTypeCommand>
     {
         private readonly IWorkoutTypeRepository _workoutTypeRepository;
-        private readonly ILogger _logger;
+        private readonly ILogger<DeleteWorkoutTypeCommandHandler> _logger;
 
-        public DeleteWorkoutTypeCommandHandler(IWorkoutTypeRepository workoutTypeRepository, ILogger logger)
+        public DeleteWorkoutTypeCommandHandler(IWorkoutTypeRepository workoutTypeRepository, 
+                                               ILogger<DeleteWorkoutTypeCommandHandler> logger)
         {
             _workoutTypeRepository = workoutTypeRepository;
             _logger = logger;
@@ -26,7 +27,7 @@ namespace WorkoutReservation.Application.Features.WorkoutTypes.Commands.DeleteWo
 
             await _workoutTypeRepository.DeleteAsync(workoutType);
 
-            _logger.Info($"WorkoutType with Id: {request.WorkoutTypeId} was deleted.");
+            _logger.LogInformation($"WorkoutType with Id: {request.WorkoutTypeId} was deleted.");
 
             return Unit.Value;
         }

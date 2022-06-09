@@ -7,10 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Content Remove="Common\nlog.config" />
-  </ItemGroup>
-
-  <ItemGroup>
     <None Include="Common\nlog.config" />
   </ItemGroup>
 

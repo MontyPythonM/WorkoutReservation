@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using FluentAssertions;
+using Microsoft.Extensions.Logging;
 using Moq;
 using NLog;
 using WorkoutReservation.Application.Contracts;
@@ -15,7 +16,7 @@ namespace WorkoutReservation.Application.UnitTests.WorkoutTypes
     public class GetWorkoutTypesListQueryHandlerTest
     {
         private readonly IMapper _mapper;
-        private readonly Logger _logger;
+        private readonly Mock<ILogger<DeleteWorkoutTypeCommandHandler>> _mockLogger;
         private readonly Mock<IWorkoutTypeRepository> _mockWorkoutTypeRepository;
         private readonly List<WorkoutType> _workoutTypeDummyList;
 
@@ -31,7 +32,7 @@ namespace WorkoutReservation.Application.UnitTests.WorkoutTypes
 
             _mapper = configurationProvider.CreateMapper();
 
-            _logger = LogManager.GetCurrentClassLogger();
+            _mockLogger = new Mock<ILogger<DeleteWorkoutTypeCommandHandler>>();
         }
 
         [Fact]
@@ -56,7 +57,7 @@ namespace WorkoutReservation.Application.UnitTests.WorkoutTypes
             // arrange
             var getHandler = new GetWorkoutTypesListQueryHandler(_mockWorkoutTypeRepository.Object, _mapper);
             
-            var deleteHandler = new DeleteWorkoutTypeCommandHandler(_mockWorkoutTypeRepository.Object, _logger);
+            var deleteHandler = new DeleteWorkoutTypeCommandHandler(_mockWorkoutTypeRepository.Object, _mockLogger.Object);
 
             var workoutTypesCount = _workoutTypeDummyList.Count;
 
