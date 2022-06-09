@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using FluentAssertions;
 using Moq;
+using NLog;
 using WorkoutReservation.Application.Contracts;
 using WorkoutReservation.Application.Exceptions;
 using WorkoutReservation.Application.Features.WorkoutTypes.Commands.DeleteWorkoutType;
@@ -14,6 +15,7 @@ namespace WorkoutReservation.Application.UnitTests.WorkoutTypes
     public class DeleteWorkoutTypeCommandHandlerTest
     {
         private readonly IMapper _mapper;
+        private readonly Logger _logger;
         private readonly Mock<IWorkoutTypeRepository> _mockWorkoutTypeRepository;
         private readonly List<WorkoutType> _workoutTypeDummyList;
 
@@ -28,13 +30,15 @@ namespace WorkoutReservation.Application.UnitTests.WorkoutTypes
             });
 
             _mapper = configurationProvider.CreateMapper();
+
+            _logger = LogManager.GetCurrentClassLogger();
         }
 
         [Fact]
         public async Task Handle_ForValidWorkoutTypeId_RemoveWorkoutType()
         {
             // arrange
-            var deleteHandler = new DeleteWorkoutTypeCommandHandler(_mockWorkoutTypeRepository.Object);
+            var deleteHandler = new DeleteWorkoutTypeCommandHandler(_mockWorkoutTypeRepository.Object, _logger);
             var getHandler = new GetWorkoutTypesListQueryHandler(_mockWorkoutTypeRepository.Object, _mapper);
 
             var workoutTypesBeforeCount = _workoutTypeDummyList.Count;
@@ -52,7 +56,7 @@ namespace WorkoutReservation.Application.UnitTests.WorkoutTypes
         public async Task Handle_ForInvalidWorkoutTypeId_ThrowNotFoundException()
         {
             // arrange
-            var deleteHandler = new DeleteWorkoutTypeCommandHandler(_mockWorkoutTypeRepository.Object);
+            var deleteHandler = new DeleteWorkoutTypeCommandHandler(_mockWorkoutTypeRepository.Object, _logger);
 
             var notExistWorkoutType = _workoutTypeDummyList.Count + 1;
 

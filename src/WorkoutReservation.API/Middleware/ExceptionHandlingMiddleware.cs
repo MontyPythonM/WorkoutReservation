@@ -5,6 +5,13 @@ namespace WorkoutReservation.API.Middleware
 {
     public class ExceptionHandlingMiddleware : IMiddleware
     {
+        private readonly ILogger<ExceptionHandlingMiddleware> _logger;
+
+        public ExceptionHandlingMiddleware(ILogger<ExceptionHandlingMiddleware> logger)
+        {
+            _logger = logger;
+        }
+
         public async Task InvokeAsync(HttpContext context, RequestDelegate next)
         {
             try
@@ -28,6 +35,8 @@ namespace WorkoutReservation.API.Middleware
             }
             catch (Exception ex)
             {
+                _logger.LogCritical("Internal server error", ex);
+
                 context.Response.StatusCode = 500;
                 await context.Response.WriteAsync(ex.Message);
             }

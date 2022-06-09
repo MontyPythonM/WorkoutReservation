@@ -17,3 +17,5 @@
 - ##### AutoMapper
 - ##### FluentValidation 
 - ##### xUnit (with Moq and FluentAssertions)
+- ##### Swagger
+- ##### NLog

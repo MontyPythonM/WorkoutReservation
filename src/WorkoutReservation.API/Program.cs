@@ -1,9 +1,15 @@
+using NLog.Web;
 using WorkoutReservation.API.Middleware;
 using WorkoutReservation.Application;
 using WorkoutReservation.Infrastructure;
 using WorkoutReservation.Infrastructure.Seeders;
 
 var builder = WebApplication.CreateBuilder(args);
+
+// NLog: Setup NLog for Dependency injection.
+builder.Logging.ClearProviders();
+builder.Logging.SetMinimumLevel(Microsoft.Extensions.Logging.LogLevel.Trace);
+builder.Host.UseNLog();
 
 // Add services to the container.
 
