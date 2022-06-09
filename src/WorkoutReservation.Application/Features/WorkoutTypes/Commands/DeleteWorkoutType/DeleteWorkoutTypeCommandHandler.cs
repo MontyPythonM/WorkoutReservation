@@ -13,7 +13,8 @@ namespace WorkoutReservation.Application.Features.WorkoutTypes.Commands.DeleteWo
             _workoutTypeRepository = workoutTypeRepository;
         }
 
-        public async Task<Unit> Handle(DeleteWorkoutTypeCommand request, CancellationToken cancellationToken)
+        public async Task<Unit> Handle(DeleteWorkoutTypeCommand request, 
+                                       CancellationToken cancellationToken)
         {
             var workoutType = await _workoutTypeRepository.GetByIdAsync(request.WorkoutTypeId);
 

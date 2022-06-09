@@ -11,13 +11,15 @@ namespace WorkoutReservation.Application.Features.WorkoutTypes.Commands.UpdateWo
         private readonly IWorkoutTypeRepository _workoutTypeRepository;
         private readonly IMapper _mapper;
 
-        public UpdateWorkoutTypeCommandHandler(IWorkoutTypeRepository workoutTypeRepository, IMapper mapper)
+        public UpdateWorkoutTypeCommandHandler(IWorkoutTypeRepository workoutTypeRepository, 
+                                               IMapper mapper)
         {
             _workoutTypeRepository = workoutTypeRepository;
             _mapper = mapper;
         }
 
-        public async Task<Unit> Handle(UpdateWorkoutTypeCommand request, CancellationToken cancellationToken)
+        public async Task<Unit> Handle(UpdateWorkoutTypeCommand request, 
+                                       CancellationToken cancellationToken)
         {
             var workoutType = await _workoutTypeRepository.GetByIdAsync(request.WorkoutTypeId);
 

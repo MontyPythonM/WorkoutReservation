@@ -11,16 +11,18 @@ namespace WorkoutReservation.Application.MappingProfile
     {
         public WorkoutTypeProfile()
         {
-            CreateMap<WorkoutType, WorkoutTypeDetailDto>();
+            // WorkoutTypesListQueryDto
+            CreateMap<WorkoutType, WorkoutTypesListQueryDto>();
 
-            CreateMap<WorkoutType, WorkoutTypesListDto>();
-
+            // WorkoutTypeDetailQueryDto
+            CreateMap<WorkoutType, WorkoutTypeDetailQueryDto>();
+            CreateMap<WorkoutTypeTag, WorkoutTypeTagDto>();
             CreateMap<Instructor, InstructorDto>();
 
-            CreateMap<WorkoutTypeTag, WorkoutTypeTagDto>();
-
+            // CreateWorkoutTypeCommand
             CreateMap<CreateWorkoutTypeCommand, WorkoutType>();
 
+            // UpdateWorkoutTypeCommand
             CreateMap<UpdateWorkoutTypeCommand, WorkoutType>()
                 .ForMember(x => x.Id, y => y.MapFrom(z => z.WorkoutTypeId));
         }

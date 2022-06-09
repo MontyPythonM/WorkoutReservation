@@ -12,7 +12,7 @@ namespace WorkoutReservation.Infrastructure.Presistence.Configuration
             builder.Property(x => x.LastName).IsRequired();          
             builder.Property(x => x.Email).IsRequired();
 
-            builder.Property(x => x.Biography).HasMaxLength(10000);
+            builder.Property(x => x.Biography).HasMaxLength(3000);
         }
     }
 }

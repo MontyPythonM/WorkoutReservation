@@ -10,7 +10,7 @@ namespace WorkoutReservation.Domain.Entities
         public Gender? Gender { get; set; }
         public string Biography { get; set; }
         public string Email { get; set; }
-        //public string ImageUrl { get; set; } // extend entity with next migration.        
+        //public string ImageUrl { get; set; }    
 
         public List<WorkoutType> WorkoutTypes { get; set; } = new List<WorkoutType>();
     }

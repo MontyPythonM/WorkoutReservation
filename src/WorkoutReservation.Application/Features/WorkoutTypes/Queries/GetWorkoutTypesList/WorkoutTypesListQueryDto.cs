@@ -2,7 +2,7 @@
 
 namespace WorkoutReservation.Application.Features.WorkoutTypes.Queries.GetWorkoutTypesList
 {
-    public class WorkoutTypesListDto
+    public class WorkoutTypesListQueryDto
     {
         public int Id { get; set; }
         public string Name { get; set; }

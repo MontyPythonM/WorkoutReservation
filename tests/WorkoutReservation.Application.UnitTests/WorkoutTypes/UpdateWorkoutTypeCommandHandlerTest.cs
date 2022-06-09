@@ -69,6 +69,7 @@ namespace WorkoutReservation.Application.UnitTests.WorkoutTypes
         [Fact]
         public async Task Handle_ForNotExistWorkoutType_ThrowNotFoundException()
         {
+            // arrange
             var handler = new UpdateWorkoutTypeCommandHandler(_mockWorkoutTypeRepository.Object, _mapper);
 
             var dummyWorkoutType = _workoutTypeDummyList.Last();

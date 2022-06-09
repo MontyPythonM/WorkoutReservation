@@ -45,6 +45,7 @@ namespace WorkoutReservation.Infrastructure.Repositories
         {
             return await _dbContext.Instructors
                 .AsNoTracking()
+                .Include(x => x.WorkoutTypes)
                 .FirstOrDefaultAsync(x => x.Id == instructorId);
         }
     }
