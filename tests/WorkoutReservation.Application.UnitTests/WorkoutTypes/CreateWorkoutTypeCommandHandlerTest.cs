@@ -17,7 +17,7 @@ namespace WorkoutReservation.Application.UnitTests.WorkoutTypes
 
         public CreateWorkoutTypeCommandHandlerTest()
         {
-            _mockWorkoutTypeRepository = WorkoutTypeRepositoryMock.RepositoryMock();
+            _mockWorkoutTypeRepository = RepositoryMock.GetWorkoutTypeRepositoryMock();
 
             var configurationProvider = new MapperConfiguration(cfg =>
             {
@@ -63,6 +63,7 @@ namespace WorkoutReservation.Application.UnitTests.WorkoutTypes
         {
             // arrange
             var handler = new CreateWorkoutTypeCommandHandler(_mockWorkoutTypeRepository.Object, _mapper);
+
             var command = new CreateWorkoutTypeCommand()
             {
                 Name = "correctName",
@@ -70,12 +71,15 @@ namespace WorkoutReservation.Application.UnitTests.WorkoutTypes
                 Intensity = WorkoutIntensity.low
             };
 
+            var allWorkoutTypesBeforeCount = (await _mockWorkoutTypeRepository.Object.GetAllAsync()).Count;
+
             // act
             var result = await handler.Handle(command, CancellationToken.None);
+            var allWorkoutTypesAfterCount = (await _mockWorkoutTypeRepository.Object.GetAllAsync()).Count;
 
             // assert
-            result.Should().Be(4); 
-
+            result.Should().NotBe(null);
+            allWorkoutTypesAfterCount.Should().Be(allWorkoutTypesBeforeCount + 1);
         }
 
     }
