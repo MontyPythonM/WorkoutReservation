@@ -1,10 +1,10 @@
 ﻿using FluentValidation;
 
-namespace WorkoutReservation.Application.Features.WorkoutTypes.Commands.CreateWorkoutType
+namespace WorkoutReservation.Application.Features.WorkoutTypes.Commands.UpdateWorkoutType
 {
-    public class CreateWorkoutTypeCommandValidator : AbstractValidator<CreateWorkoutTypeCommand>
+    public class UpdateWorkoutTypeCommandValidatior : AbstractValidator<UpdateWorkoutTypeCommand>
     {
-        public CreateWorkoutTypeCommandValidator()
+        public UpdateWorkoutTypeCommandValidatior()
         {
             RuleFor(x => x.Name)
                 .MaximumLength(50)
@@ -13,10 +13,10 @@ namespace WorkoutReservation.Application.Features.WorkoutTypes.Commands.CreateWo
             RuleFor(x => x.Intensity)
                 .IsInEnum()
                 .NotEmpty();
-            
+
             RuleFor(x => x.Description)
                 .MaximumLength(600)
                 .NotEmpty();
-        }
+        }      
     }
 }

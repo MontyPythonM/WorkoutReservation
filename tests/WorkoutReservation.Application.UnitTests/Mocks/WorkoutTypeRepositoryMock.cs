@@ -5,9 +5,9 @@ using WorkoutReservation.Domain.Enums;
 
 namespace WorkoutReservation.Application.UnitTests.Mocks
 {
-    public static class RepositoryMock
+    public static class WorkoutTypeRepositoryMock
     {
-        public static Mock<IWorkoutTypeRepository> GetWorkoutTypeRepositoryMock()
+        public static List<WorkoutType> GetDummyList()
         {
             var workoutTypes = new List<WorkoutType>
             {
@@ -36,35 +36,15 @@ namespace WorkoutReservation.Application.UnitTests.Mocks
                         new WorkoutTypeTag { Tag = "Health" },
                         new WorkoutTypeTag { Tag = "Strengthening the whole body" }
                     }
-                },
-
-                new WorkoutType()
-                {
-                    Id = 3,
-                    Name = "Test-Crossfit",
-                    Description = "A form of high intensity interval training.",
-                    Intensity = WorkoutIntensity.extreme,
-                    WorkoutTypeTags = new List<WorkoutTypeTag>()
-                    {
-                        new WorkoutTypeTag { Tag = "Strong muscles" },
-                        new WorkoutTypeTag { Tag = "Body shaping" },
-                    }
-                },
-
-                new WorkoutType()
-                {
-                    Id = 4,
-                    Name = "Test-Full-body workout",
-                    Description = "Test",
-                    Intensity = WorkoutIntensity.vigorous,
-                    WorkoutTypeTags = new List<WorkoutTypeTag>()
-                    {
-                        new WorkoutTypeTag { Tag = "Weight loss" },
-                        new WorkoutTypeTag { Tag = "Body shaping" },
-                        new WorkoutTypeTag { Tag = "Fitness" }
-                    }
-                }
+                },               
             };
+
+            return workoutTypes;
+        }
+
+        public static Mock<IWorkoutTypeRepository> GetRepositoryMock()
+        {
+            var workoutTypes = GetDummyList();
 
             var repositoryMock = new Mock<IWorkoutTypeRepository>();
 

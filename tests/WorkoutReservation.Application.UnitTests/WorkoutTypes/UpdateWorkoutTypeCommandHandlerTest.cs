@@ -4,20 +4,24 @@ using Moq;
 using WorkoutReservation.Application.Contracts;
 using WorkoutReservation.Application.Exceptions;
 using WorkoutReservation.Application.Features.WorkoutTypes.Commands.CreateWorkoutType;
+using WorkoutReservation.Application.Features.WorkoutTypes.Commands.UpdateWorkoutType;
 using WorkoutReservation.Application.MappingProfile;
 using WorkoutReservation.Application.UnitTests.Mocks;
+using WorkoutReservation.Domain.Entities;
 using WorkoutReservation.Domain.Enums;
 
 namespace WorkoutReservation.Application.UnitTests.WorkoutTypes
 {
-    public class CreateWorkoutTypeCommandHandlerTest
+    public class UpdateWorkoutTypeCommandHandlerTest
     {
         private readonly IMapper _mapper;
         private readonly Mock<IWorkoutTypeRepository> _mockWorkoutTypeRepository;
+        private readonly List<WorkoutType> _workoutTypeDummyList;
 
-        public CreateWorkoutTypeCommandHandlerTest()
+        public UpdateWorkoutTypeCommandHandlerTest()
         {
             _mockWorkoutTypeRepository = WorkoutTypeRepositoryMock.GetRepositoryMock();
+            _workoutTypeDummyList = WorkoutTypeRepositoryMock.GetDummyList();
 
             var configurationProvider = new MapperConfiguration(cfg =>
             {
@@ -40,12 +44,16 @@ namespace WorkoutReservation.Application.UnitTests.WorkoutTypes
         [InlineData("correctName", "correctDescription", 5)]
         [InlineData("correctName", "correctDescription", 0)]
         [InlineData("correctName", "correctDescription", -5)]
-        public async Task Handle_NotValidRequest_ThrowValidationException(string name, string description, int workoutIntensity)
+        public async Task Handle_ForInvalidRequest_ThrowValidationException(string name, string description, int workoutIntensity)
         {
             // arrange
-            var handler = new CreateWorkoutTypeCommandHandler(_mockWorkoutTypeRepository.Object, _mapper);
-            var command = new CreateWorkoutTypeCommand()
+            var handler = new UpdateWorkoutTypeCommandHandler(_mockWorkoutTypeRepository.Object, _mapper);
+
+            var dummyWorkoutType = _workoutTypeDummyList.First();
+
+            var command = new UpdateWorkoutTypeCommand()
             {
+                WorkoutTypeId = dummyWorkoutType.Id,
                 Name = name,
                 Description = description,
                 Intensity = (WorkoutIntensity)workoutIntensity
@@ -59,28 +67,26 @@ namespace WorkoutReservation.Application.UnitTests.WorkoutTypes
         }
 
         [Fact]
-        public async Task Handle_ValidRequest_AddWorkoutTypeToRepository()
+        public async Task Handle_ForNotExistWorkoutType_ThrowNotFoundException()
         {
-            // arrange
-            var handler = new CreateWorkoutTypeCommandHandler(_mockWorkoutTypeRepository.Object, _mapper);
+            var handler = new UpdateWorkoutTypeCommandHandler(_mockWorkoutTypeRepository.Object, _mapper);
 
-            var command = new CreateWorkoutTypeCommand()
+            var dummyWorkoutType = _workoutTypeDummyList.Last();
+            var notExistWorkoutType = dummyWorkoutType.Id + 1;
+
+            var command = new UpdateWorkoutTypeCommand()
             {
+                WorkoutTypeId = notExistWorkoutType,
                 Name = "correctName",
-                Description = "correctDescriptiopn",
-                Intensity = WorkoutIntensity.low
+                Description = "correctDescription",
+                Intensity = WorkoutIntensity.vigorous
             };
 
-            var allWorkoutTypesBeforeCount = WorkoutTypeRepositoryMock.GetDummyList().Count;
-
             // act
-            var result = await handler.Handle(command, CancellationToken.None);
-            var allWorkoutTypesAfterCount = (await _mockWorkoutTypeRepository.Object.GetAllAsync()).Count;
+            Func<Task> result = async () => await handler.Handle(command, CancellationToken.None);
 
             // assert
-            result.Should().NotBe(null);
-            allWorkoutTypesAfterCount.Should().Be(allWorkoutTypesBeforeCount + 1);
+            await result.Should().ThrowAsync<NotFoundException>();
         }
-
     }
 }

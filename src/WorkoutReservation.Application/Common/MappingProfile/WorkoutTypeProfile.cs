@@ -21,7 +21,8 @@ namespace WorkoutReservation.Application.MappingProfile
 
             CreateMap<CreateWorkoutTypeCommand, WorkoutType>();
 
-            CreateMap<UpdateWorkoutTypeCommand, WorkoutType>();
+            CreateMap<UpdateWorkoutTypeCommand, WorkoutType>()
+                .ForMember(x => x.Id, y => y.MapFrom(z => z.WorkoutTypeId));
         }
     }
 }

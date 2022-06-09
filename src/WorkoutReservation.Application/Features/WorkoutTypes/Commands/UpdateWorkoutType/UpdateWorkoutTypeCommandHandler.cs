@@ -19,10 +19,16 @@ namespace WorkoutReservation.Application.Features.WorkoutTypes.Commands.UpdateWo
 
         public async Task<Unit> Handle(UpdateWorkoutTypeCommand request, CancellationToken cancellationToken)
         {
-            var workoutType = await _workoutTypeRepository.GetByIdAsync(request.Id);
+            var workoutType = await _workoutTypeRepository.GetByIdAsync(request.WorkoutTypeId);
 
             if (workoutType is null)
-                throw new NotFoundException($"Workout type with Id: {request.Id} not found.");
+                throw new NotFoundException($"Workout type with Id: {request.WorkoutTypeId} not found.");
+
+            var validator = new UpdateWorkoutTypeCommandValidatior();
+            var validatorResult = await validator.ValidateAsync(request);
+
+            if (!validatorResult.IsValid)
+                throw new ValidationException($"Validation error:\n{validatorResult}");
 
             var mappedWorkoutType = _mapper.Map<WorkoutType>(request);
 
