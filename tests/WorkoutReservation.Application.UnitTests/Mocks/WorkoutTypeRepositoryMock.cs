@@ -41,7 +41,7 @@ namespace WorkoutReservation.Application.UnitTests.Mocks
 
             return workoutTypes;
         }
-
+         
         public static Mock<IWorkoutTypeRepository> GetRepositoryMock()
         {
             var workoutTypes = GetDummyList();

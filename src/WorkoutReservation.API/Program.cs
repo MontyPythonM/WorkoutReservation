@@ -9,11 +9,15 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 
+builder.Services.AddSwaggerGen();
+
 builder.Services.AddInfrastructureServices(builder.Configuration);
 builder.Services.AddApplicationServices(builder.Configuration);
 
 builder.Services.AddScoped<Seeder>();
 builder.Services.AddScoped<ExceptionHandlingMiddleware>();
+
+
 
 var app = builder.Build();
 
@@ -29,6 +33,12 @@ seeder.Seed();
 app.UseMiddleware<ExceptionHandlingMiddleware>();
 
 //app.UseAuthorization();
+
+app.UseSwagger();
+app.UseSwaggerUI(c =>
+{
+    c.SwaggerEndpoint("/swagger/v1/swagger.json", "Workout Reservation REST API app");
+});
 
 app.MapControllers();
 
