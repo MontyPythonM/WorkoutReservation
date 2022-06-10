@@ -3,7 +3,7 @@ using WorkoutReservation.Domain.Enums;
 
 namespace WorkoutReservation.Domain.Entities
 {
-    public class WorkoutType : AuditableEntityBase
+    public class WorkoutType
     {
         public int Id { get; set; }
         public string Name { get; set; }

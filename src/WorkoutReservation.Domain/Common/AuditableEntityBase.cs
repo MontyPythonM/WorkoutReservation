@@ -1,6 +1,6 @@
 ﻿namespace WorkoutReservation.Domain.Common
 {
-    public abstract class AuditableEntityBase
+    public class AuditableEntityBase
     {
         public string CreatedBy { get; set; }
         public DateTime CreatedDate { get; set; }
