@@ -9,7 +9,7 @@ namespace WorkoutReservation.Application.Features.WorkoutTypes.Queries.GetWorkou
         public string Name { get; set; }
         public string Description { get; set; }
 
-        [JsonConverter(typeof(JsonStringEnumConverter))]
+        [JsonConverter(typeof(JsonStringEnumConverter))] 
         public WorkoutIntensity Intensity { get; set; }
 
         public List<InstructorDto> Instructors { get; set; }

@@ -35,7 +35,7 @@ namespace WorkoutReservation.API.Middleware
             }
             catch (Exception ex)
             {
-                _logger.LogCritical("Internal server error", ex);
+                _logger.LogError("Internal server error", ex);
 
                 context.Response.StatusCode = 500;
                 await context.Response.WriteAsync(ex.Message);

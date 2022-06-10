@@ -20,6 +20,7 @@ namespace WorkoutReservation.API.Controllers
         }
 
         [HttpGet]
+        [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<IActionResult> GetAllInstructors()
         {
             var result = await _mediator.Send(new GetInstructorListQuery());
@@ -27,6 +28,7 @@ namespace WorkoutReservation.API.Controllers
         }
 
         [HttpGet("{instructorId}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<IActionResult> GetInstructor([FromRoute] int instructorId)
         {
             var result = await _mediator.Send(new GetInstructorDetailQuery() { InstructorId = instructorId });
@@ -34,6 +36,7 @@ namespace WorkoutReservation.API.Controllers
         }
 
         [HttpPost]
+        [ProducesResponseType(StatusCodes.Status201Created)]
         public async Task<IActionResult> CreateInstructor([FromBody] CreateInstructorCommand command)
         {
             var instructorId = await _mediator.Send(command);
@@ -41,6 +44,7 @@ namespace WorkoutReservation.API.Controllers
         }
 
         [HttpDelete("{instructorId}")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
         public async Task<IActionResult> DeleteInstructor([FromRoute] int instructorId)
         {
             await _mediator.Send(new DeleteInstructorCommand() { InstructorId = instructorId });
@@ -48,6 +52,7 @@ namespace WorkoutReservation.API.Controllers
         }
 
         [HttpPut]
+        [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<IActionResult> UpdateInstructor([FromBody] UpdateInstructorCommand command)
         {
             await _mediator.Send(command);
