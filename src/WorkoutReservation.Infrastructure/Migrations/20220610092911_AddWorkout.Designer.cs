@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using WorkoutReservation.Infrastructure.Presistence;
 
@@ -11,9 +12,10 @@ using WorkoutReservation.Infrastructure.Presistence;
 namespace WorkoutReservation.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220610092911_AddWorkout")]
+    partial class AddWorkout
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -67,7 +69,7 @@ namespace WorkoutReservation.Infrastructure.Migrations
 
                     b.HasIndex("WorkoutTypeId");
 
-                    b.ToTable("Workouts", (string)null);
+                    b.ToTable("Workouts");
 
                     b.HasDiscriminator<string>("Discriminator").HasValue("WorkoutBase");
                 });
@@ -113,7 +115,7 @@ namespace WorkoutReservation.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Instructors", (string)null);
+                    b.ToTable("Instructors");
                 });
 
             modelBuilder.Entity("WorkoutReservation.Domain.Entities.WorkoutType", b =>
@@ -151,7 +153,7 @@ namespace WorkoutReservation.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("WorkoutTypes", (string)null);
+                    b.ToTable("WorkoutTypes");
                 });
 
             modelBuilder.Entity("WorkoutReservation.Domain.Entities.WorkoutTypeInstructor", b =>
@@ -166,7 +168,7 @@ namespace WorkoutReservation.Infrastructure.Migrations
 
                     b.HasIndex("WorkoutTypeId");
 
-                    b.ToTable("WorkoutTypeInstructors", (string)null);
+                    b.ToTable("WorkoutTypeInstructors");
                 });
 
             modelBuilder.Entity("WorkoutReservation.Domain.Entities.WorkoutTypeTag", b =>
@@ -188,7 +190,7 @@ namespace WorkoutReservation.Infrastructure.Migrations
 
                     b.HasIndex("WorkoutTypeId");
 
-                    b.ToTable("WorkoutTypeTags", (string)null);
+                    b.ToTable("WorkoutTypeTags");
                 });
 
             modelBuilder.Entity("WorkoutReservation.Domain.Entities.Workout.ParticularWorkout", b =>

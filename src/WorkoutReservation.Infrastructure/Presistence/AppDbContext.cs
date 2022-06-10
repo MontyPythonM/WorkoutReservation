@@ -1,5 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using WorkoutReservation.Domain.Common;
 using WorkoutReservation.Domain.Entities;
+using WorkoutReservation.Domain.Entities.Workout;
 using WorkoutReservation.Infrastructure.Presistence.Configuration;
 
 namespace WorkoutReservation.Infrastructure.Presistence
@@ -15,11 +17,21 @@ namespace WorkoutReservation.Infrastructure.Presistence
         public DbSet<WorkoutTypeInstructor> WorkoutTypeInstructors { get; set; }
         public DbSet<WorkoutTypeTag> WorkoutTypeTags { get; set; }
 
+        public DbSet<WorkoutBase> Workouts { get; set; }
+        public DbSet<WeeklyWorkout> WeeklyWorkouts { get; set; }
+        public DbSet<ParticularWorkout> ParticularWorkouts { get; set; }
+
+
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             new InstructorConfiguration().Configure(modelBuilder.Entity<Instructor>()); 
             new WorkoutTypeConfiguration().Configure(modelBuilder.Entity<WorkoutType>());
             new WorkoutTypeTagConfiguration().Configure(modelBuilder.Entity<WorkoutTypeTag>());
+            new WorkoutBaseConfiguration().Configure(modelBuilder.Entity<WorkoutBase>());
+            new WeeklyWorkoutConfiguration().Configure(modelBuilder.Entity<WeeklyWorkout>());
+            new ParticularWorkoutConfiguration().Configure(modelBuilder.Entity<ParticularWorkout>());
+
         }
     }
 }

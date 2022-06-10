@@ -1,8 +1,9 @@
-﻿using WorkoutReservation.Domain.Enums;
+﻿using WorkoutReservation.Domain.Common;
+using WorkoutReservation.Domain.Enums;
 
 namespace WorkoutReservation.Domain.Entities
 {
-    public class Instructor
+    public class Instructor : AuditableEntityBase
     {
         public int Id { get; set; }
         public string FirstName { get; set; }
@@ -10,8 +11,8 @@ namespace WorkoutReservation.Domain.Entities
         public Gender? Gender { get; set; }
         public string Biography { get; set; }
         public string Email { get; set; }
-        //public string ImageUrl { get; set; }    
 
         public List<WorkoutType> WorkoutTypes { get; set; } = new List<WorkoutType>();
+        public List<WorkoutBase> Workouts { get; set; } = new List<WorkoutBase>();
     }
 }

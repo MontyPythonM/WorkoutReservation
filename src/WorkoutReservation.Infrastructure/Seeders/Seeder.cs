@@ -1,4 +1,5 @@
-﻿using WorkoutReservation.Domain.Entities;
+﻿using Microsoft.Extensions.Logging;
+using WorkoutReservation.Domain.Entities;
 using WorkoutReservation.Infrastructure.Presistence;
 
 namespace WorkoutReservation.Infrastructure.Seeders
@@ -6,10 +7,12 @@ namespace WorkoutReservation.Infrastructure.Seeders
     public class Seeder
     {
         private readonly AppDbContext _dbContext;
+        private readonly ILogger<Seeder> _logger;
 
-        public Seeder(AppDbContext dbContext)
+        public Seeder(AppDbContext dbContext, ILogger<Seeder> logger)
         {
             _dbContext = dbContext;
+            _logger = logger;
         }
 
         public void Seed()
@@ -20,6 +23,10 @@ namespace WorkoutReservation.Infrastructure.Seeders
                 {
                     _dbContext.AddRange(DummyInstructors.GetInstructors());
                     _dbContext.AddRange(DummyWorkoutTypes.GetWorkoutTypes());
+
+                    //_dbContext.AddRange(DummyParticularWorkouts.GetWorkouts());
+                    //_dbContext.AddRange(DummyWeeklyWorkouts.GetWorkouts());
+
                     _dbContext.SaveChanges();
 
                     var i1 = _dbContext.Instructors.First();
@@ -31,18 +38,41 @@ namespace WorkoutReservation.Infrastructure.Seeders
                     var wt4 = _dbContext.WorkoutTypes.Skip(3).First();
 
                     _dbContext.WorkoutTypeInstructors.AddRange
-                        (        
+                        (
                             new WorkoutTypeInstructor { InstructorId = i1.Id, WorkoutTypeId = wt1.Id },
                             new WorkoutTypeInstructor { InstructorId = i1.Id, WorkoutTypeId = wt2.Id },
-                            new WorkoutTypeInstructor { InstructorId = i2.Id, WorkoutTypeId = wt4.Id },                          
+                            new WorkoutTypeInstructor { InstructorId = i2.Id, WorkoutTypeId = wt4.Id },
                             new WorkoutTypeInstructor { InstructorId = i3.Id, WorkoutTypeId = wt3.Id },
                             new WorkoutTypeInstructor { InstructorId = i3.Id, WorkoutTypeId = wt4.Id }
                         );
+                    _dbContext.SaveChanges();
+                    /*
+                    var ww1 = _dbContext.WeeklyWorkouts.First();
+                    var ww2 = _dbContext.WeeklyWorkouts.Skip(1).First();
+                    var pw1 = _dbContext.ParticularWorkouts.First();
+                    var pw2 = _dbContext.ParticularWorkouts.Skip(1).First();
+                    
+                    ww1.InstructorId = i1.Id;
+                    ww1.WorkoutTypeId = wt1.Id;
 
-                    _dbContext.SaveChangesAsync();
+                    ww2.InstructorId = i2.Id;
+                    ww2.WorkoutTypeId = wt2.Id; 
+
+                    pw1.InstructorId = i3.Id;
+                    pw1.WorkoutTypeId = wt3.Id;
+
+                    pw2.InstructorId = i1.Id;
+                    pw2.WorkoutTypeId = wt4.Id;
+                    
+                    _dbContext.SaveChanges();
+                    _logger.LogInformation("Dummy data was seeded.");
+                    
+                     */
                 }
-
-
+            }
+            else 
+            {
+                _logger.LogWarning("Cannot connect with database.");
             }
         }
 
