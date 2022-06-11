@@ -17,7 +17,7 @@ namespace WorkoutReservation.Infrastructure.Presistence
         public DbSet<WorkoutTypeInstructor> WorkoutTypeInstructors { get; set; }
         public DbSet<WorkoutTypeTag> WorkoutTypeTags { get; set; }
 
-        public DbSet<WorkoutBase> Workouts { get; set; }
+        public DbSet<BaseWorkout> BaseWorkouts { get; set; }
         public DbSet<WeeklyWorkout> WeeklyWorkouts { get; set; }
         public DbSet<ParticularWorkout> ParticularWorkouts { get; set; }
 
@@ -28,7 +28,7 @@ namespace WorkoutReservation.Infrastructure.Presistence
             new InstructorConfiguration().Configure(modelBuilder.Entity<Instructor>()); 
             new WorkoutTypeConfiguration().Configure(modelBuilder.Entity<WorkoutType>());
             new WorkoutTypeTagConfiguration().Configure(modelBuilder.Entity<WorkoutTypeTag>());
-            new WorkoutBaseConfiguration().Configure(modelBuilder.Entity<WorkoutBase>());
+            new BaseWorkoutConfiguration().Configure(modelBuilder.Entity<BaseWorkout>());
             new WeeklyWorkoutConfiguration().Configure(modelBuilder.Entity<WeeklyWorkout>());
             new ParticularWorkoutConfiguration().Configure(modelBuilder.Entity<ParticularWorkout>());
 

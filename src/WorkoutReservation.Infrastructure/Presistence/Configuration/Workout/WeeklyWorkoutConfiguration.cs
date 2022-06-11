@@ -10,14 +10,6 @@ namespace WorkoutReservation.Infrastructure.Presistence.Configuration
         public void Configure(EntityTypeBuilder<WeeklyWorkout> builder)
         {
             builder.Property(x => x.DayOfWeek).IsRequired();
-
-            //builder.Property(x => x.StartTime)
-            //    .HasTimeOnlyConversion()
-            //    .IsRequired();
-
-            //builder.Property(x => x.EndTime)
-            //    .HasTimeOnlyConversion()
-            //    .IsRequired();
         }
     }
 }

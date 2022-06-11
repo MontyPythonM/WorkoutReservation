@@ -19,14 +19,13 @@ namespace WorkoutReservation.Infrastructure.Seeders
         {
             if (_dbContext.Database.CanConnect())
             {
-                if (!_dbContext.Instructors.Any() && !_dbContext.WorkoutTypes.Any())
+                if (!_dbContext.Instructors.Any() && !_dbContext.WorkoutTypes.Any() && 
+                    !_dbContext.ParticularWorkouts.Any() && !_dbContext.WeeklyWorkouts.Any())
                 {
                     _dbContext.AddRange(DummyInstructors.GetInstructors());
                     _dbContext.AddRange(DummyWorkoutTypes.GetWorkoutTypes());
-
-                    //_dbContext.AddRange(DummyParticularWorkouts.GetWorkouts());
-                    //_dbContext.AddRange(DummyWeeklyWorkouts.GetWorkouts());
-
+                    _dbContext.AddRange(DummyParticularWorkouts.GetWorkouts());
+                    _dbContext.AddRange(DummyWeeklyWorkouts.GetWorkouts());
                     _dbContext.SaveChanges();
 
                     var i1 = _dbContext.Instructors.First();
@@ -46,7 +45,7 @@ namespace WorkoutReservation.Infrastructure.Seeders
                             new WorkoutTypeInstructor { InstructorId = i3.Id, WorkoutTypeId = wt4.Id }
                         );
                     _dbContext.SaveChanges();
-                    /*
+                    
                     var ww1 = _dbContext.WeeklyWorkouts.First();
                     var ww2 = _dbContext.WeeklyWorkouts.Skip(1).First();
                     var pw1 = _dbContext.ParticularWorkouts.First();
@@ -67,7 +66,7 @@ namespace WorkoutReservation.Infrastructure.Seeders
                     _dbContext.SaveChanges();
                     _logger.LogInformation("Dummy data was seeded.");
                     
-                     */
+                     
                 }
             }
             else 

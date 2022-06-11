@@ -2,7 +2,7 @@
 
 namespace WorkoutReservation.Domain.Entities.Workout
 {
-    public class WeeklyWorkout : WorkoutBase
+    public class WeeklyWorkout : BaseWorkout
     {
         public DayOfWeek DayOfWeek { get; set; }
 

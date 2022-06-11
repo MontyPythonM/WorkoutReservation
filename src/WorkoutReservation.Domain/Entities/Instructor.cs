@@ -13,6 +13,6 @@ namespace WorkoutReservation.Domain.Entities
         public string Email { get; set; }
 
         public List<WorkoutType> WorkoutTypes { get; set; } = new List<WorkoutType>();
-        public List<WorkoutBase> Workouts { get; set; } = new List<WorkoutBase>();
+        public List<BaseWorkout> BaseWorkouts { get; set; } = new List<BaseWorkout>();
     }
 }

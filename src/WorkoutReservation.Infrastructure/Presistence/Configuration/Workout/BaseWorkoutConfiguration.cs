@@ -5,10 +5,12 @@ using WorkoutReservation.Domain.Common;
 
 namespace WorkoutReservation.Infrastructure.Presistence.Configuration
 {
-    public class WorkoutBaseConfiguration : IEntityTypeConfiguration<WorkoutBase>
+    public class BaseWorkoutConfiguration : IEntityTypeConfiguration<BaseWorkout>
     {
-        public void Configure(EntityTypeBuilder<WorkoutBase> builder)
+        public void Configure(EntityTypeBuilder<BaseWorkout> builder)
         {
+            builder.ToTable("Workouts");
+
             builder.Property(x => x.StartTime)
                 .HasTimeOnlyConversion()
                 .IsRequired();
@@ -17,8 +19,13 @@ namespace WorkoutReservation.Infrastructure.Presistence.Configuration
                 .HasTimeOnlyConversion()
                 .IsRequired();
 
-            builder.HasOne(x => x.WorkoutType).WithMany(x => x.Workouts).HasForeignKey(x => x.WorkoutTypeId);
-            builder.HasOne(x => x.Instructor).WithMany(x => x.Workouts).HasForeignKey(x => x.InstructorId);
+            builder.HasOne(x => x.WorkoutType)
+                .WithMany(x => x.BaseWorkouts)
+                .HasForeignKey(x => x.WorkoutTypeId);
+
+            builder.HasOne(x => x.Instructor)
+                .WithMany(x => x.BaseWorkouts)
+                .HasForeignKey(x => x.InstructorId);
         }
     }
 }

@@ -22,7 +22,7 @@ namespace WorkoutReservation.Infrastructure.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
 
-            modelBuilder.Entity("WorkoutReservation.Domain.Common.WorkoutBase", b =>
+            modelBuilder.Entity("WorkoutReservation.Domain.Common.BaseWorkout", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -43,7 +43,7 @@ namespace WorkoutReservation.Infrastructure.Migrations
                     b.Property<TimeSpan>("EndTime")
                         .HasColumnType("time");
 
-                    b.Property<int>("InstructorId")
+                    b.Property<int?>("InstructorId")
                         .HasColumnType("int");
 
                     b.Property<string>("LastModifiedBy")
@@ -58,7 +58,7 @@ namespace WorkoutReservation.Infrastructure.Migrations
                     b.Property<TimeSpan>("StartTime")
                         .HasColumnType("time");
 
-                    b.Property<int>("WorkoutTypeId")
+                    b.Property<int?>("WorkoutTypeId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -69,7 +69,7 @@ namespace WorkoutReservation.Infrastructure.Migrations
 
                     b.ToTable("Workouts", (string)null);
 
-                    b.HasDiscriminator<string>("Discriminator").HasValue("WorkoutBase");
+                    b.HasDiscriminator<string>("Discriminator").HasValue("BaseWorkout");
                 });
 
             modelBuilder.Entity("WorkoutReservation.Domain.Entities.Instructor", b =>
@@ -84,12 +84,6 @@ namespace WorkoutReservation.Infrastructure.Migrations
                         .HasMaxLength(3000)
                         .HasColumnType("nvarchar(3000)");
 
-                    b.Property<string>("CreatedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("datetime2");
-
                     b.Property<string>("Email")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -101,19 +95,13 @@ namespace WorkoutReservation.Infrastructure.Migrations
                     b.Property<int?>("Gender")
                         .HasColumnType("int");
 
-                    b.Property<string>("LastModifiedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("LastModifiedDate")
-                        .HasColumnType("datetime2");
-
                     b.Property<string>("LastName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
-                    b.ToTable("Instructors", (string)null);
+                    b.ToTable("Instructors");
                 });
 
             modelBuilder.Entity("WorkoutReservation.Domain.Entities.WorkoutType", b =>
@@ -124,12 +112,6 @@ namespace WorkoutReservation.Infrastructure.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<string>("CreatedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("datetime2");
-
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasMaxLength(600)
@@ -138,12 +120,6 @@ namespace WorkoutReservation.Infrastructure.Migrations
                     b.Property<int>("Intensity")
                         .HasColumnType("int");
 
-                    b.Property<string>("LastModifiedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("LastModifiedDate")
-                        .HasColumnType("datetime2");
-
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(50)
@@ -151,7 +127,7 @@ namespace WorkoutReservation.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("WorkoutTypes", (string)null);
+                    b.ToTable("WorkoutTypes");
                 });
 
             modelBuilder.Entity("WorkoutReservation.Domain.Entities.WorkoutTypeInstructor", b =>
@@ -166,7 +142,7 @@ namespace WorkoutReservation.Infrastructure.Migrations
 
                     b.HasIndex("WorkoutTypeId");
 
-                    b.ToTable("WorkoutTypeInstructors", (string)null);
+                    b.ToTable("WorkoutTypeInstructors");
                 });
 
             modelBuilder.Entity("WorkoutReservation.Domain.Entities.WorkoutTypeTag", b =>
@@ -188,12 +164,12 @@ namespace WorkoutReservation.Infrastructure.Migrations
 
                     b.HasIndex("WorkoutTypeId");
 
-                    b.ToTable("WorkoutTypeTags", (string)null);
+                    b.ToTable("WorkoutTypeTags");
                 });
 
             modelBuilder.Entity("WorkoutReservation.Domain.Entities.Workout.ParticularWorkout", b =>
                 {
-                    b.HasBaseType("WorkoutReservation.Domain.Common.WorkoutBase");
+                    b.HasBaseType("WorkoutReservation.Domain.Common.BaseWorkout");
 
                     b.Property<int>("CurrentParticipianNumber")
                         .HasColumnType("int");
@@ -201,12 +177,15 @@ namespace WorkoutReservation.Infrastructure.Migrations
                     b.Property<DateTime>("Date")
                         .HasColumnType("datetime2");
 
+                    b.Property<bool>("IsAutoGenerated")
+                        .HasColumnType("bit");
+
                     b.HasDiscriminator().HasValue("ParticularWorkout");
                 });
 
             modelBuilder.Entity("WorkoutReservation.Domain.Entities.Workout.WeeklyWorkout", b =>
                 {
-                    b.HasBaseType("WorkoutReservation.Domain.Common.WorkoutBase");
+                    b.HasBaseType("WorkoutReservation.Domain.Common.BaseWorkout");
 
                     b.Property<int>("DayOfWeek")
                         .HasColumnType("int");
@@ -214,19 +193,15 @@ namespace WorkoutReservation.Infrastructure.Migrations
                     b.HasDiscriminator().HasValue("WeeklyWorkout");
                 });
 
-            modelBuilder.Entity("WorkoutReservation.Domain.Common.WorkoutBase", b =>
+            modelBuilder.Entity("WorkoutReservation.Domain.Common.BaseWorkout", b =>
                 {
                     b.HasOne("WorkoutReservation.Domain.Entities.Instructor", "Instructor")
-                        .WithMany("Workouts")
-                        .HasForeignKey("InstructorId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .WithMany("BaseWorkouts")
+                        .HasForeignKey("InstructorId");
 
                     b.HasOne("WorkoutReservation.Domain.Entities.WorkoutType", "WorkoutType")
-                        .WithMany("Workouts")
-                        .HasForeignKey("WorkoutTypeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .WithMany("BaseWorkouts")
+                        .HasForeignKey("WorkoutTypeId");
 
                     b.Navigation("Instructor");
 
@@ -265,14 +240,14 @@ namespace WorkoutReservation.Infrastructure.Migrations
 
             modelBuilder.Entity("WorkoutReservation.Domain.Entities.Instructor", b =>
                 {
-                    b.Navigation("Workouts");
+                    b.Navigation("BaseWorkouts");
                 });
 
             modelBuilder.Entity("WorkoutReservation.Domain.Entities.WorkoutType", b =>
                 {
-                    b.Navigation("WorkoutTypeTags");
+                    b.Navigation("BaseWorkouts");
 
-                    b.Navigation("Workouts");
+                    b.Navigation("WorkoutTypeTags");
                 });
 #pragma warning restore 612, 618
         }

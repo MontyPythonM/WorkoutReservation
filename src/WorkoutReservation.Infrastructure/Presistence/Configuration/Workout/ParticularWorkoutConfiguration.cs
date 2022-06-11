@@ -9,19 +9,12 @@ namespace WorkoutReservation.Infrastructure.Presistence.Configuration
     {
         public void Configure(EntityTypeBuilder<ParticularWorkout> builder)
         {
-            builder.Property(x => x.CurrentParticipianNumber).IsRequired();
+            builder.Property(x => x.CurrentParticipianNumber)
+                .IsRequired();
 
             builder.Property(x => x.Date)
                 .HasDateOnlyConversion()
                 .IsRequired();
-
-            //builder.Property(x => x.StartTime)
-            //    .HasTimeOnlyConversion()
-            //    .IsRequired();
-
-            //builder.Property(x => x.EndTime)
-            //    .HasTimeOnlyConversion()
-            //    .IsRequired();
         }
     }
 }

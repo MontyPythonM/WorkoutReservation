@@ -13,9 +13,9 @@ namespace WorkoutReservation.Infrastructure.Seeders
                     StartTime = new TimeOnly(10, 15),
                     EndTime = new TimeOnly(11, 00),
                     MaxParticipianNumber = 40,
-                    DayOfWeek = DayOfWeek.Monday,
-                    CreatedDate = DateTime.Now,
-                    CreatedBy = "DummyAdmin2",                                   
+                    DayOfWeek = DayOfWeek.Tuesday,
+                    CreatedBy = "Dummy Admin",
+                    CreatedDate = new DateTime(2022, 06, 10)                   
                 },
 
                 new WeeklyWorkout()
@@ -23,9 +23,9 @@ namespace WorkoutReservation.Infrastructure.Seeders
                     StartTime = new TimeOnly(14, 15),
                     EndTime = new TimeOnly(15, 00),
                     MaxParticipianNumber = 25,
-                    DayOfWeek = DayOfWeek.Friday,
-                    CreatedDate = new DateTime(2022, 06, 10),
-                    CreatedBy = "DummyAdmin3",
+                    DayOfWeek = DayOfWeek.Friday,               
+                    CreatedBy = "Dummy Manager",
+                    CreatedDate = new DateTime(2022, 06, 13)
                 },
             };
 

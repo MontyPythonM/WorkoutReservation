@@ -13,11 +13,6 @@ namespace WorkoutReservation.Infrastructure
         {
             services.AddDbContext<AppDbContext>(options =>
                 options.UseSqlServer(configuration.GetConnectionString("localDbConnection")));
-                //options.UseSqlServer("Server=(localdb)\SQLEXPRESS;Integrated Security=true;"));
-                //options.UseSqlServer("Server=localhost\\SQLEXPRESS;Database=WorkoutReservation;Trusted_Connection=Yes;"));
-
-
-
 
             services.AddScoped<IInstructorRepository, InstructorRepository>();
             services.AddScoped<IWorkoutTypeRepository, WorkoutTypeRepository>();

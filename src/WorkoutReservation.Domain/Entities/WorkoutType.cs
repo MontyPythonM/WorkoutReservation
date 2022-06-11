@@ -12,6 +12,6 @@ namespace WorkoutReservation.Domain.Entities
         
         public List<Instructor> Instructors { get; set; } = new List<Instructor>();
         public List<WorkoutTypeTag> WorkoutTypeTags { get; set; } = new List<WorkoutTypeTag>();
-        public List<WorkoutBase> Workouts { get; set; } = new List<WorkoutBase>();
+        public List<BaseWorkout> BaseWorkouts { get; set; } = new List<BaseWorkout>();
     }
 }
