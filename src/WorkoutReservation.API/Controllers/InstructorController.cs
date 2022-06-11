@@ -21,6 +21,7 @@ namespace WorkoutReservation.API.Controllers
 
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> GetAllInstructors()
         {
             var result = await _mediator.Send(new GetInstructorListQuery());
@@ -29,6 +30,7 @@ namespace WorkoutReservation.API.Controllers
 
         [HttpGet("{instructorId}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> GetInstructor([FromRoute] int instructorId)
         {
             var result = await _mediator.Send(new GetInstructorDetailQuery() { InstructorId = instructorId });
@@ -37,6 +39,7 @@ namespace WorkoutReservation.API.Controllers
 
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> CreateInstructor([FromBody] CreateInstructorCommand command)
         {
             var instructorId = await _mediator.Send(command);
@@ -45,6 +48,8 @@ namespace WorkoutReservation.API.Controllers
 
         [HttpDelete("{instructorId}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> DeleteInstructor([FromRoute] int instructorId)
         {
             await _mediator.Send(new DeleteInstructorCommand() { InstructorId = instructorId });
@@ -53,6 +58,8 @@ namespace WorkoutReservation.API.Controllers
 
         [HttpPut]
         [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> UpdateInstructor([FromBody] UpdateInstructorCommand command)
         {
             await _mediator.Send(command);

@@ -63,7 +63,7 @@ namespace WorkoutReservation.Application.UnitTests.WorkoutTypes
             Func<Task> result = async () => await handler.Handle(command, CancellationToken.None);
 
             // assert
-            await result.Should().ThrowAsync<ValidationException>();
+            await result.Should().ThrowAsync<BadRequestException>();
         }
 
         [Fact]

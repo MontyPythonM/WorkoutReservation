@@ -25,7 +25,7 @@ namespace WorkoutReservation.Application.Features.WorkoutTypes.Commands.CreateWo
             var validatorResult = await validator.ValidateAsync(request);
 
             if (!validatorResult.IsValid)
-                throw new ValidationException($"Validation error:\n{validatorResult}");
+                throw new BadRequestException($"Validation error:\n{validatorResult}");
 
             var workoutType = _mapper.Map<WorkoutType>(request);
 

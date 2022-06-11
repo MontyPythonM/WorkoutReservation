@@ -30,7 +30,7 @@ namespace WorkoutReservation.Application.Features.Instructors.Commands.UpdateIns
             var validatorResult = await validator.ValidateAsync(request);
 
             if (!validatorResult.IsValid)
-                throw new ValidationException($"Validation error:\n{validatorResult}");
+                throw new BadRequestException($"Validation error:\n{validatorResult}");
 
             var mappedWorkoutType = _mapper.Map<Instructor>(request);
 

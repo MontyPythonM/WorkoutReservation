@@ -18,19 +18,14 @@ namespace WorkoutReservation.API.Middleware
             {
                 await next.Invoke(context);
             }
-            catch (ValidationException ex)
+            catch (BadRequestException ex)
             {
-                context.Response.StatusCode = 403;
+                context.Response.StatusCode = (int)HttpStatusCode.BadRequest;
                 await context.Response.WriteAsync(ex.Message);
             }
             catch (NotFoundException ex)
             {
                 context.Response.StatusCode = (int)HttpStatusCode.NotFound;
-                await context.Response.WriteAsync(ex.Message);
-            }
-            catch (BadRequestException ex)             
-            {
-                context.Response.StatusCode = (int)HttpStatusCode.BadRequest;
                 await context.Response.WriteAsync(ex.Message);
             }
             catch (Exception ex)

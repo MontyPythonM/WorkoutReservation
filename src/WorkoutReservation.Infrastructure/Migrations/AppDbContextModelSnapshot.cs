@@ -101,7 +101,7 @@ namespace WorkoutReservation.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Instructors");
+                    b.ToTable("Instructors", (string)null);
                 });
 
             modelBuilder.Entity("WorkoutReservation.Domain.Entities.WorkoutType", b =>
@@ -127,7 +127,7 @@ namespace WorkoutReservation.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("WorkoutTypes");
+                    b.ToTable("WorkoutTypes", (string)null);
                 });
 
             modelBuilder.Entity("WorkoutReservation.Domain.Entities.WorkoutTypeInstructor", b =>
@@ -142,7 +142,7 @@ namespace WorkoutReservation.Infrastructure.Migrations
 
                     b.HasIndex("WorkoutTypeId");
 
-                    b.ToTable("WorkoutTypeInstructors");
+                    b.ToTable("WorkoutTypeInstructors", (string)null);
                 });
 
             modelBuilder.Entity("WorkoutReservation.Domain.Entities.WorkoutTypeTag", b =>
@@ -164,7 +164,7 @@ namespace WorkoutReservation.Infrastructure.Migrations
 
                     b.HasIndex("WorkoutTypeId");
 
-                    b.ToTable("WorkoutTypeTags");
+                    b.ToTable("WorkoutTypeTags", (string)null);
                 });
 
             modelBuilder.Entity("WorkoutReservation.Domain.Entities.Workout.ParticularWorkout", b =>

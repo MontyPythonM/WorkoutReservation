@@ -25,7 +25,7 @@ namespace WorkoutReservation.Application.Features.Instructors.Commands.CreateIns
             var validatorResult = await validator.ValidateAsync(request);
 
             if(!validatorResult.IsValid)
-                throw new ValidationException($"Validation error:\n{validatorResult}");
+                throw new BadRequestException($"Validation error:\n{validatorResult}");
 
             var instructor = _mapper.Map<Instructor>(request);
 
