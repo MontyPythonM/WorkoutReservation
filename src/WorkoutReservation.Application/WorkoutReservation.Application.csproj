@@ -11,8 +11,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Features\Workout\" />
     <Folder Include="Features\WorkoutTypes\Commands\AssignWorkoutTypeToInstructor\" />
+    <Folder Include="Features\Workout\Commands\" />
+    <Folder Include="Features\Workout\Queries\Get\" />
   </ItemGroup>
 
   <ItemGroup>

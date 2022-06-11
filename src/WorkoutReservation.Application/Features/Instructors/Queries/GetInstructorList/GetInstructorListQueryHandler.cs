@@ -1,8 +1,7 @@
 ﻿using AutoMapper;
 using MediatR;
+using WorkoutReservation.Application.Common.Exceptions;
 using WorkoutReservation.Application.Contracts;
-using WorkoutReservation.Application.Exceptions;
-using WorkoutReservation.Application.Features.WorkoutTypes.Queries.GetWorkoutTypeDetail;
 
 namespace WorkoutReservation.Application.Features.Instructors.Queries.GetInstructorList
 {

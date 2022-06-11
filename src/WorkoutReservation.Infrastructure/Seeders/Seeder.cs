@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Logging;
+using WorkoutReservation.Application.Common.Exceptions;
 using WorkoutReservation.Domain.Entities;
 using WorkoutReservation.Infrastructure.Presistence;
 
@@ -20,7 +21,7 @@ namespace WorkoutReservation.Infrastructure.Seeders
             if (_dbContext.Database.CanConnect())
             {
                 if (!_dbContext.Instructors.Any() && !_dbContext.WorkoutTypes.Any() && 
-                    !_dbContext.ParticularWorkouts.Any() && !_dbContext.WeeklyWorkouts.Any())
+                    !_dbContext.RealWorkouts.Any() && !_dbContext.RepetitiveWorkouts.Any())
                 {
                     _dbContext.AddRange(DummyInstructors.GetInstructors());
                     _dbContext.AddRange(DummyWorkoutTypes.GetWorkoutTypes());
@@ -46,10 +47,10 @@ namespace WorkoutReservation.Infrastructure.Seeders
                         );
                     _dbContext.SaveChanges();
                     
-                    var ww1 = _dbContext.WeeklyWorkouts.First();
-                    var ww2 = _dbContext.WeeklyWorkouts.Skip(1).First();
-                    var pw1 = _dbContext.ParticularWorkouts.First();
-                    var pw2 = _dbContext.ParticularWorkouts.Skip(1).First();
+                    var ww1 = _dbContext.RepetitiveWorkouts.First();
+                    var ww2 = _dbContext.RepetitiveWorkouts.Skip(1).First();
+                    var pw1 = _dbContext.RealWorkouts.First();
+                    var pw2 = _dbContext.RealWorkouts.Skip(1).First();
                     
                     ww1.InstructorId = i1.Id;
                     ww1.WorkoutTypeId = wt1.Id;
@@ -64,14 +65,12 @@ namespace WorkoutReservation.Infrastructure.Seeders
                     pw2.WorkoutTypeId = wt4.Id;
                     
                     _dbContext.SaveChanges();
-                    _logger.LogInformation("Dummy data was seeded.");
-                    
-                     
+                    _logger.LogInformation("Dummy data was seeded.");                                       
                 }
             }
             else 
             {
-                _logger.LogWarning("Cannot connect with database.");
+                throw new InternalServerError("Cannot connect with database.");
             }
         }
 

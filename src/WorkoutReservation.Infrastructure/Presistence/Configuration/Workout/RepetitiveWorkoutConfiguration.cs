@@ -5,9 +5,9 @@ using WorkoutReservation.Domain.Entities.Workout;
 
 namespace WorkoutReservation.Infrastructure.Presistence.Configuration
 {
-    public class WeeklyWorkoutConfiguration : IEntityTypeConfiguration<WeeklyWorkout>
+    public class RepetitiveWorkoutConfiguration : IEntityTypeConfiguration<RepetitiveWorkout>
     {
-        public void Configure(EntityTypeBuilder<WeeklyWorkout> builder)
+        public void Configure(EntityTypeBuilder<RepetitiveWorkout> builder)
         {
             builder.Property(x => x.DayOfWeek).IsRequired();
         }

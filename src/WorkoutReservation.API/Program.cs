@@ -2,7 +2,9 @@ using NLog;
 using NLog.Web;
 using WorkoutReservation.API.Middleware;
 using WorkoutReservation.Application;
+using WorkoutReservation.Application.Common.Exceptions;
 using WorkoutReservation.Infrastructure;
+using WorkoutReservation.Infrastructure.Presistence;
 using WorkoutReservation.Infrastructure.Seeders;
 
 var logger = LogManager.Setup().LoadConfigurationFromAppSettings().GetCurrentClassLogger();
@@ -35,13 +37,14 @@ try
 
     using var scope = app.Services.CreateScope();
     var seeder = scope.ServiceProvider.GetService<Seeder>();
+    var db = scope.ServiceProvider.GetService<AppDbContext>();
 
 
     // Configure the HTTP request pipeline.
 
-    seeder.Seed();
-
     app.UseMiddleware<ExceptionHandlingMiddleware>();
+   
+    seeder.Seed();
 
     //app.UseAuthorization();
 
@@ -58,7 +61,7 @@ try
 }
 catch (Exception ex)
 {
-    logger.Error(ex, "The program has been stopped due to an exception.");
+    logger.Fatal(ex, "The program has been stopped due to an exception.");
     throw;
 }
 finally

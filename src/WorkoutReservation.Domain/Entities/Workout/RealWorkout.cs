@@ -2,7 +2,7 @@
 
 namespace WorkoutReservation.Domain.Entities.Workout
 {
-    public class ParticularWorkout : BaseWorkout
+    public class RealWorkout : BaseWorkout
     {
         public DateOnly Date { get; set; }
         public int CurrentParticipianNumber { get; set; }

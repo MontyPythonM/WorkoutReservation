@@ -1,4 +1,4 @@
-﻿namespace WorkoutReservation.Application.Exceptions
+﻿namespace WorkoutReservation.Application.Common.Exceptions
 {
     public class NotFoundException : Exception
     {

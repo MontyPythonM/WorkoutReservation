@@ -1,8 +1,7 @@
 ﻿using MediatR;
 using Microsoft.Extensions.Logging;
-using NLog;
+using WorkoutReservation.Application.Common.Exceptions;
 using WorkoutReservation.Application.Contracts;
-using WorkoutReservation.Application.Exceptions;
 
 
 namespace WorkoutReservation.Application.Features.Instructors.Commands.DeleteInstructor

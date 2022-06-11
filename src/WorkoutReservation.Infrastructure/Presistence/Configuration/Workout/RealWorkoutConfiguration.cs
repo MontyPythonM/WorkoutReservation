@@ -5,9 +5,9 @@ using WorkoutReservation.Domain.Entities.Workout;
 
 namespace WorkoutReservation.Infrastructure.Presistence.Configuration
 {
-    public class ParticularWorkoutConfiguration : IEntityTypeConfiguration<ParticularWorkout>
+    public class RealWorkoutConfiguration : IEntityTypeConfiguration<RealWorkout>
     {
-        public void Configure(EntityTypeBuilder<ParticularWorkout> builder)
+        public void Configure(EntityTypeBuilder<RealWorkout> builder)
         {
             builder.Property(x => x.CurrentParticipianNumber)
                 .IsRequired();

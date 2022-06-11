@@ -4,11 +4,11 @@ namespace WorkoutReservation.Infrastructure.Seeders
 {
     internal class DummyWeeklyWorkouts
     {
-        internal static List<WeeklyWorkout> GetWorkouts()
+        internal static List<RepetitiveWorkout> GetWorkouts()
         {
-            var particularWorkouts = new List<WeeklyWorkout>
+            var particularWorkouts = new List<RepetitiveWorkout>
             {
-                new WeeklyWorkout()
+                new RepetitiveWorkout()
                 {
                     StartTime = new TimeOnly(10, 15),
                     EndTime = new TimeOnly(11, 00),
@@ -18,7 +18,7 @@ namespace WorkoutReservation.Infrastructure.Seeders
                     CreatedDate = new DateTime(2022, 06, 10)                   
                 },
 
-                new WeeklyWorkout()
+                new RepetitiveWorkout()
                 {
                     StartTime = new TimeOnly(14, 15),
                     EndTime = new TimeOnly(15, 00),

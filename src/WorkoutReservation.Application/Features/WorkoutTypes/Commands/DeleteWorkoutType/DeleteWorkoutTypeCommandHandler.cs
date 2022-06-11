@@ -1,7 +1,7 @@
 ﻿using MediatR;
 using Microsoft.Extensions.Logging;
+using WorkoutReservation.Application.Common.Exceptions;
 using WorkoutReservation.Application.Contracts;
-using WorkoutReservation.Application.Exceptions;
 
 namespace WorkoutReservation.Application.Features.WorkoutTypes.Commands.DeleteWorkoutType
 {

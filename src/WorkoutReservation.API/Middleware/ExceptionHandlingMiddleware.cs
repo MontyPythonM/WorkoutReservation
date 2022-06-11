@@ -1,5 +1,5 @@
 ﻿using System.Net;
-using WorkoutReservation.Application.Exceptions;
+using WorkoutReservation.Application.Common.Exceptions;
 
 namespace WorkoutReservation.API.Middleware
 {
@@ -28,9 +28,16 @@ namespace WorkoutReservation.API.Middleware
                 context.Response.StatusCode = (int)HttpStatusCode.NotFound;
                 await context.Response.WriteAsync(ex.Message);
             }
+            catch (InternalServerError ex)
+            {
+                _logger.LogError("Cannot connect with database.", ex);
+
+                context.Response.StatusCode = 500;
+                await context.Response.WriteAsync(ex.Message);
+            }
             catch (Exception ex)
             {
-                _logger.LogError("Internal server error", ex);
+                _logger.LogError("Internal server error.", ex);
 
                 context.Response.StatusCode = 500;
                 await context.Response.WriteAsync(ex.Message);
