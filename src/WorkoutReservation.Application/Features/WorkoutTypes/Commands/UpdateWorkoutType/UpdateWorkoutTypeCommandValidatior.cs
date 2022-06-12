@@ -1,10 +1,11 @@
 ﻿using FluentValidation;
+using WorkoutReservation.Domain.Entities;
 
 namespace WorkoutReservation.Application.Features.WorkoutTypes.Commands.UpdateWorkoutType
 {
     public class UpdateWorkoutTypeCommandValidatior : AbstractValidator<UpdateWorkoutTypeCommand>
     {
-        public UpdateWorkoutTypeCommandValidatior()
+        public UpdateWorkoutTypeCommandValidatior(WorkoutType workoutType)
         {
             RuleFor(x => x.Name)
                 .MaximumLength(50)
@@ -17,6 +18,14 @@ namespace WorkoutReservation.Application.Features.WorkoutTypes.Commands.UpdateWo
             RuleFor(x => x.Description)
                 .MaximumLength(600)
                 .NotEmpty();
+
+            RuleFor(x => x.WorkoutTypeId)
+                .NotNull()
+                .Custom((value, context) => 
+                {
+                    if (workoutType is null)
+                        context.AddFailure("WorkoutTypeId", $"Workout type with Id: {workoutType.Id} not found.");
+                });
         }      
     }
 }

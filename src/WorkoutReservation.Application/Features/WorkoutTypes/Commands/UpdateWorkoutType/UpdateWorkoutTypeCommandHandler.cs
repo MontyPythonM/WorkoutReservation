@@ -23,10 +23,7 @@ namespace WorkoutReservation.Application.Features.WorkoutTypes.Commands.UpdateWo
         {
             var workoutType = await _workoutTypeRepository.GetByIdAsync(request.WorkoutTypeId);
 
-            if (workoutType is null)
-                throw new NotFoundException($"Workout type with Id: {request.WorkoutTypeId} not found.");
-
-            var validator = new UpdateWorkoutTypeCommandValidatior();
+            var validator = new UpdateWorkoutTypeCommandValidatior(workoutType);
             var validatorResult = await validator.ValidateAsync(request);
 
             if (!validatorResult.IsValid)

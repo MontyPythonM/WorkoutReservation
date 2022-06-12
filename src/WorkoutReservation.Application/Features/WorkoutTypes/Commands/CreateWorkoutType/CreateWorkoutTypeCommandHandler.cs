@@ -22,7 +22,7 @@ namespace WorkoutReservation.Application.Features.WorkoutTypes.Commands.CreateWo
                                       CancellationToken cancellationToken)
         {
             var validator = new CreateWorkoutTypeCommandValidator();
-            var validatorResult = await validator.ValidateAsync(request);
+            var validatorResult = await validator.ValidateAsync(request, cancellationToken);
 
             if (!validatorResult.IsValid)
                 throw new BadRequestException($"Validation error:\n{validatorResult}");
