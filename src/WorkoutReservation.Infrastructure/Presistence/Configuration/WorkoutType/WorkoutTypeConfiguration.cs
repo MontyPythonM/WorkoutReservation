@@ -18,14 +18,15 @@ namespace WorkoutReservation.Infrastructure.Presistence.Configuration
 
                     i => i.HasOne(wi => wi.Instructor)
                     .WithMany()
-                    .HasForeignKey(i => i.InstructorId),
+                    .HasForeignKey(i => i.InstructorId)
+                    .OnDelete(DeleteBehavior.NoAction),
 
-                    i => i.HasOne(wi => wi.WorkoutType)
+                    w => w.HasOne(wi => wi.WorkoutType)
                     .WithMany()
-                    .HasForeignKey(i => i.WorkoutTypeId),
+                    .HasForeignKey(w => w.WorkoutTypeId)
+                    .OnDelete(DeleteBehavior.NoAction),
 
-                    wi => wi.HasKey(x => 
-                        new { x.InstructorId, x.WorkoutTypeId })
+                    wi => wi.HasKey(x => new { x.InstructorId, x.WorkoutTypeId })
                 );
 
             builder.HasMany(x => x.WorkoutTypeTags)

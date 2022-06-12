@@ -9,7 +9,7 @@ using WorkoutReservation.Application.Features.WorkoutTypes.Queries.GetWorkoutTyp
 namespace WorkoutReservation.API.Controllers
 {
     [ApiController]
-    [Route("/api/workout-type")]
+    [Route("/api/workout-type/")]
     public class WorkoutTypeController : ControllerBase
     {
         private readonly IMediator _mediator;

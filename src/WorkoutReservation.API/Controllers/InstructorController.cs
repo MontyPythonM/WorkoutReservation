@@ -9,7 +9,7 @@ using WorkoutReservation.Application.Features.Instructors.Queries.GetInstructorL
 namespace WorkoutReservation.API.Controllers
 {
     [ApiController]
-    [Route("/api/instructor")]
+    [Route("/api/instructor/")]
     public class InstructorController : ControllerBase
     {
         private readonly IMediator _mediator;
