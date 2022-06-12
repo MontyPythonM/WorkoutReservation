@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using WorkoutReservation.Application.Common.Models;
 using WorkoutReservation.Application.Features.WorkoutTypes.Commands.CreateWorkoutType;
 using WorkoutReservation.Application.Features.WorkoutTypes.Commands.UpdateWorkoutType;
 using WorkoutReservation.Application.Features.WorkoutTypes.Queries.GetWorkoutTypeDetail;
@@ -17,7 +18,6 @@ namespace WorkoutReservation.Application.MappingProfile
             // WorkoutTypeDetailQueryDto
             CreateMap<WorkoutType, WorkoutTypeDetailQueryDto>();
             CreateMap<WorkoutTypeTag, WorkoutTypeTagDto>();
-            CreateMap<Instructor, InstructorDto>();
 
             // CreateWorkoutTypeCommand
             CreateMap<CreateWorkoutTypeCommand, WorkoutType>();
@@ -25,6 +25,9 @@ namespace WorkoutReservation.Application.MappingProfile
             // UpdateWorkoutTypeCommand
             CreateMap<UpdateWorkoutTypeCommand, WorkoutType>()
                 .ForMember(x => x.Id, y => y.MapFrom(z => z.WorkoutTypeId));
+
+            // Common dtos
+            CreateMap<WorkoutType, WorkoutTypeDto>();
         }
     }
 }
