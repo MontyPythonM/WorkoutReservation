@@ -25,5 +25,16 @@ namespace WorkoutReservation.Infrastructure.Repositories
                     .ThenBy(x => x.StartTime)
                 .ToListAsync();
         }
+
+        public async Task<RealWorkout> GetByIdAsync(int realworkoutId)
+        {
+            return await _dbContext.RealWorkouts
+                .AsNoTracking()
+                .Include(x => x.Instructor)
+                .Include(x => x.WorkoutType)
+                .FirstOrDefaultAsync(x => x.Id == realworkoutId);             
+        }
+
+
     }
 }
