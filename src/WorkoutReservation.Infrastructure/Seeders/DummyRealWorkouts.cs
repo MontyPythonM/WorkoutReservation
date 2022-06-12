@@ -2,7 +2,7 @@
 
 namespace WorkoutReservation.Infrastructure.Seeders
 {
-    internal class DummyParticularWorkouts
+    internal class DummyRealWorkouts
     {
         internal static List<RealWorkout> GetWorkouts()
         {
@@ -12,7 +12,7 @@ namespace WorkoutReservation.Infrastructure.Seeders
                 {
                     StartTime = new TimeOnly(10, 15),
                     EndTime = new TimeOnly(11, 00),
-                    Date = new DateOnly(2022, 01, 01),
+                    Date = new DateOnly(2022, 06, 14),
                     MaxParticipianNumber = 10,
                     CurrentParticipianNumber = 4,
                     CreatedBy = "Dummy Admin",
@@ -24,7 +24,7 @@ namespace WorkoutReservation.Infrastructure.Seeders
                 {
                     StartTime = new TimeOnly(20, 15),
                     EndTime = new TimeOnly(21, 00),
-                    Date = new DateOnly(2022, 05, 05),
+                    Date = new DateOnly(2022, 06, 12),
                     MaxParticipianNumber = 15,
                     CurrentParticipianNumber = 8,                      
                     CreatedDate = DateTime.Now,

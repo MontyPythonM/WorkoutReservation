@@ -25,7 +25,7 @@ namespace WorkoutReservation.Infrastructure.Seeders
                 {
                     _dbContext.AddRange(DummyInstructors.GetInstructors());
                     _dbContext.AddRange(DummyWorkoutTypes.GetWorkoutTypes());
-                    _dbContext.AddRange(DummyParticularWorkouts.GetWorkouts());
+                    _dbContext.AddRange(DummyRealWorkouts.GetWorkouts());
                     _dbContext.AddRange(DummyWeeklyWorkouts.GetWorkouts());
                     _dbContext.SaveChanges();
 
