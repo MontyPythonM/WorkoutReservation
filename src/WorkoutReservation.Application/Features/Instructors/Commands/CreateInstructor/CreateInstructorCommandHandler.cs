@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
+using FluentValidation;
 using MediatR;
-using WorkoutReservation.Application.Common.Exceptions;
 using WorkoutReservation.Application.Contracts;
 using WorkoutReservation.Domain.Entities;
 
@@ -17,15 +17,12 @@ namespace WorkoutReservation.Application.Features.Instructors.Commands.CreateIns
             _instructorRepository = instructorRepository;
             _mapper = mapper;
         }
-
+        
         public async Task<int> Handle(CreateInstructorCommand request, 
                                       CancellationToken cancellationToken)
         {
             var validator = new CreateInstructorCommandValidator();
-            var validatorResult = await validator.ValidateAsync(request);
-
-            if(!validatorResult.IsValid)
-                throw new BadRequestException($"Validation error:\n{validatorResult}");
+            await validator.ValidateAndThrowAsync(request, cancellationToken);
 
             var instructor = _mapper.Map<Instructor>(request);
 

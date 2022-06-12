@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using FluentValidation;
 using MediatR;
 using WorkoutReservation.Application.Common.Exceptions;
 using WorkoutReservation.Application.Contracts;
@@ -27,10 +28,7 @@ namespace WorkoutReservation.Application.Features.Instructors.Commands.UpdateIns
                 throw new NotFoundException($"Instructor with Id: {request.InstructorId} not found.");
 
             var validator = new UpdateInstructorCommandValidator();
-            var validatorResult = await validator.ValidateAsync(request);
-
-            if (!validatorResult.IsValid)
-                throw new BadRequestException($"Validation error:\n{validatorResult}");
+            await validator.ValidateAndThrowAsync(request, cancellationToken);
 
             var mappedWorkoutType = _mapper.Map<Instructor>(request);
 

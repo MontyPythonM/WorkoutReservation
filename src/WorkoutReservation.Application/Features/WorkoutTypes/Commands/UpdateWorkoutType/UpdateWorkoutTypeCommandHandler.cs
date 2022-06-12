@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
+using FluentValidation;
 using MediatR;
-using WorkoutReservation.Application.Common.Exceptions;
 using WorkoutReservation.Application.Contracts;
 using WorkoutReservation.Domain.Entities;
 
@@ -24,10 +24,7 @@ namespace WorkoutReservation.Application.Features.WorkoutTypes.Commands.UpdateWo
             var workoutType = await _workoutTypeRepository.GetByIdAsync(request.WorkoutTypeId);
 
             var validator = new UpdateWorkoutTypeCommandValidatior(workoutType);
-            var validatorResult = await validator.ValidateAsync(request);
-
-            if (!validatorResult.IsValid)
-                throw new BadRequestException($"Validation error:\n{validatorResult}");
+            await validator.ValidateAndThrowAsync(request, cancellationToken);
 
             var mappedWorkoutType = _mapper.Map<WorkoutType>(request);
 

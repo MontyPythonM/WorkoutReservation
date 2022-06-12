@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
+using FluentValidation;
 using MediatR;
-using WorkoutReservation.Application.Common.Exceptions;
 using WorkoutReservation.Application.Contracts;
 using WorkoutReservation.Domain.Entities;
 
@@ -22,10 +22,7 @@ namespace WorkoutReservation.Application.Features.WorkoutTypes.Commands.CreateWo
                                       CancellationToken cancellationToken)
         {
             var validator = new CreateWorkoutTypeCommandValidator();
-            var validatorResult = await validator.ValidateAsync(request, cancellationToken);
-
-            if (!validatorResult.IsValid)
-                throw new BadRequestException($"Validation error:\n{validatorResult}");
+            await validator.ValidateAndThrowAsync(request, cancellationToken);
 
             var workoutType = _mapper.Map<WorkoutType>(request);
 
