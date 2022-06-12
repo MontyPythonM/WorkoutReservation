@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using WorkoutReservation.Application.Features.RealWorkouts.Queries.GetRealWorkoutDetail;
 using WorkoutReservation.Application.Features.RealWorkouts.Queries.GetRealWorkoutFromCurrentWeek;
+using WorkoutReservation.Application.Features.RealWorkouts.Queries.GetRealWorkoutFromUpcomingWeek;
 
 namespace WorkoutReservation.API.Controllers
 {
@@ -34,6 +35,13 @@ namespace WorkoutReservation.API.Controllers
             return Ok(realWorkout);
         }
 
-
+        [HttpGet("upcoming-week")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> GetRealWorkoutsFromUpcomingWeek()
+        {
+            var realWorkouts = await _mediator.Send(new GetRealWorkoutFromUpcomingWeekQuery());
+            return Ok(realWorkouts);
+        }
     }
 }

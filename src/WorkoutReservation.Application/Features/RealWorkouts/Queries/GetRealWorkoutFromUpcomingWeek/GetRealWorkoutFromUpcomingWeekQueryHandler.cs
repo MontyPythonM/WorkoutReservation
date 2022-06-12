@@ -1,12 +1,36 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using AutoMapper;
+using MediatR;
+using WorkoutReservation.Application.Common.Exceptions;
+using WorkoutReservation.Application.Common.Models;
+using WorkoutReservation.Application.Contracts;
+using WorkoutReservation.Domain.Methods;
 
 namespace WorkoutReservation.Application.Features.RealWorkouts.Queries.GetRealWorkoutFromUpcomingWeek
 {
-    internal class GetRealWorkoutFromUpcomingWeekQueryHandler
+    public class GetRealWorkoutFromUpcomingWeekQueryHandler : IRequestHandler<GetRealWorkoutFromUpcomingWeekQuery,
+                                                                              List<RealWorkoutListDto>>
     {
+        private readonly IRealWorkoutRepository _realWorkoutRepository;
+        private readonly IMapper _mapper;
+
+        public GetRealWorkoutFromUpcomingWeekQueryHandler(IRealWorkoutRepository realWorkoutRepository,
+                                                          IMapper mapper)
+        {
+            _realWorkoutRepository = realWorkoutRepository;
+            _mapper = mapper;
+        }
+        public async Task<List<RealWorkoutListDto>> Handle(GetRealWorkoutFromUpcomingWeekQuery request, 
+                                                           CancellationToken cancellationToken)
+        {
+            var firstDayOfCurrentWeek = DateTime.Now.GetFirstDayOfWeek().AddDays(7);
+            var lastDayOfCurrentWeek = firstDayOfCurrentWeek.AddDays(7);
+
+            var realWorkouts = await _realWorkoutRepository.GetAllAsync(firstDayOfCurrentWeek, lastDayOfCurrentWeek);
+
+            if (!realWorkouts.Any())
+                throw new NotFoundException($"Real workouts from current week not found. [Date from: {firstDayOfCurrentWeek} to {lastDayOfCurrentWeek}");
+
+            return _mapper.Map<List<RealWorkoutListDto>>(realWorkouts);
+        }
     }
 }

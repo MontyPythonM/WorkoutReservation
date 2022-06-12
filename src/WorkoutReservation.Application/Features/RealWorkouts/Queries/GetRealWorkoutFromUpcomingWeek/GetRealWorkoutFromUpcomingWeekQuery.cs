@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using MediatR;
+using WorkoutReservation.Application.Common.Models;
 
 namespace WorkoutReservation.Application.Features.RealWorkouts.Queries.GetRealWorkoutFromUpcomingWeek
 {
-    internal class GetRealWorkoutFromUpcomingWeekQuery
+    public class GetRealWorkoutFromUpcomingWeekQuery : IRequest<List<RealWorkoutListDto>>
     {
     }
 }

@@ -24,7 +24,7 @@ namespace WorkoutReservation.Infrastructure.Seeders
                 {
                     StartTime = new TimeOnly(20, 15),
                     EndTime = new TimeOnly(21, 00),
-                    Date = new DateOnly(2022, 06, 12),
+                    Date = new DateOnly(2022, 06, 21),
                     MaxParticipianNumber = 15,
                     CurrentParticipianNumber = 8,                      
                     CreatedDate = DateTime.Now,
