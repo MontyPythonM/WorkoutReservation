@@ -16,6 +16,7 @@ namespace WorkoutReservation.Infrastructure
 
             services.AddScoped<IInstructorRepository, InstructorRepository>();
             services.AddScoped<IWorkoutTypeRepository, WorkoutTypeRepository>();
+            services.AddScoped<IRepetitiveWorkoutRepository, RepetitiveWorkoutRepository>();
 
             return services;
         }

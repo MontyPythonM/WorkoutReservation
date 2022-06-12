@@ -2,7 +2,6 @@ using NLog;
 using NLog.Web;
 using WorkoutReservation.API.Middleware;
 using WorkoutReservation.Application;
-using WorkoutReservation.Application.Common.Exceptions;
 using WorkoutReservation.Infrastructure;
 using WorkoutReservation.Infrastructure.Presistence;
 using WorkoutReservation.Infrastructure.Seeders;
@@ -21,9 +20,12 @@ try
 
     // Add services to the container.
 
+    builder.Services.AddControllers(options => options.UseDateOnlyTimeOnlyStringConverters())
+        .AddJsonOptions(options => options.UseDateOnlyTimeOnlyStringConverters());
+
     builder.Services.AddControllers();
 
-    builder.Services.AddSwaggerGen();
+    builder.Services.AddSwaggerGen(c => c.UseDateOnlyTimeOnlyStringConverters());
 
     builder.Services.AddInfrastructureServices(builder.Configuration);
     builder.Services.AddApplicationServices(builder.Configuration);

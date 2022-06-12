@@ -9,7 +9,7 @@ namespace WorkoutReservation.Infrastructure.Presistence.Configuration
     {
         public void Configure(EntityTypeBuilder<RepetitiveWorkout> builder)
         {
-            builder.Property(x => x.DayOfWeek).IsRequired();
+            builder.Property(x => x.DayOfWeek).IsRequired();          
         }
     }
 }
