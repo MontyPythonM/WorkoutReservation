@@ -1,6 +1,7 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using WorkoutReservation.Application.Features.RealWorkouts.Commands.CreateRealWorkout;
+using WorkoutReservation.Application.Features.RealWorkouts.Commands.DeleteRealWorkout;
 using WorkoutReservation.Application.Features.RealWorkouts.Queries.GetRealWorkoutDetail;
 using WorkoutReservation.Application.Features.RealWorkouts.Queries.GetRealWorkoutFromCurrentWeek;
 using WorkoutReservation.Application.Features.RealWorkouts.Queries.GetRealWorkoutFromUpcomingWeek;
@@ -54,6 +55,13 @@ namespace WorkoutReservation.API.Controllers
             return Created($"/api/real-workout/{realWorkoutId}", null);
         }
 
-
+        [HttpDelete("{realWorkoutId}")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> DeleteRealWorkout([FromRoute] int realWorkoutId)
+        {
+            await _mediator.Send(new DeleteRealWorkoutCommand() { RealWorkoutId = realWorkoutId });
+            return NoContent();
+        }
     }
 }

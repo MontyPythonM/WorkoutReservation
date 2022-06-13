@@ -7,5 +7,6 @@ namespace WorkoutReservation.Application.Contracts
         public Task<List<RealWorkout>> GetAllAsync(DateOnly startDate, DateOnly endDate);
         public Task<RealWorkout> GetByIdAsync(int realworkoutId);
         public Task<RealWorkout> AddAsync(RealWorkout realWorkout);
+        public Task DeleteAsync(RealWorkout realWorkout);
     }
 }
