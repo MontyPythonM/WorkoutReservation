@@ -18,14 +18,6 @@ namespace WorkoutReservation.Application.Features.WorkoutTypes.Commands.UpdateWo
             RuleFor(x => x.Description)
                 .MaximumLength(600)
                 .NotEmpty();
-
-            RuleFor(x => x.WorkoutTypeId)
-                .NotNull()
-                .Custom((value, context) => 
-                {
-                    if (workoutType is null)
-                        context.AddFailure("WorkoutTypeId", $"Workout type with Id: {workoutType.Id} not found.");
-                });
         }      
     }
 }
