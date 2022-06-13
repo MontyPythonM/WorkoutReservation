@@ -8,5 +8,6 @@ namespace WorkoutReservation.Application.Contracts
         public Task<RealWorkout> GetByIdAsync(int realworkoutId);
         public Task<RealWorkout> AddAsync(RealWorkout realWorkout);
         public Task DeleteAsync(RealWorkout realWorkout);
+        public Task UpdateAsync(RealWorkout realWorkout);
     }
 }

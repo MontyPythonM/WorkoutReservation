@@ -48,5 +48,11 @@ namespace WorkoutReservation.Infrastructure.Repositories
             _dbContext.Remove(realWorkout);
             await _dbContext.SaveChangesAsync();
         }
+
+        public async Task UpdateAsync(RealWorkout realWorkout)
+        {
+            _dbContext.Update(realWorkout);
+            await _dbContext.SaveChangesAsync();
+        }
     }
 }

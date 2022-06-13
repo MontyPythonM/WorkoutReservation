@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using WorkoutReservation.Application.Features.RealWorkouts.Commands.CreateRealWorkout;
 using WorkoutReservation.Application.Features.RealWorkouts.Commands.DeleteRealWorkout;
+using WorkoutReservation.Application.Features.RealWorkouts.Commands.UpdateRealWorkout;
 using WorkoutReservation.Application.Features.RealWorkouts.Queries.GetRealWorkoutDetail;
 using WorkoutReservation.Application.Features.RealWorkouts.Queries.GetRealWorkoutFromCurrentWeek;
 using WorkoutReservation.Application.Features.RealWorkouts.Queries.GetRealWorkoutFromUpcomingWeek;
@@ -62,6 +63,16 @@ namespace WorkoutReservation.API.Controllers
         {
             await _mediator.Send(new DeleteRealWorkoutCommand() { RealWorkoutId = realWorkoutId });
             return NoContent();
+        }
+
+        [HttpPut]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> UpdateRealWorkout([FromBody] UpdateRealWorkoutCommand command)
+        {
+            await _mediator.Send(command);
+            return Ok();
         }
     }
 }
