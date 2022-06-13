@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using WorkoutReservation.Application.Contracts;
-using WorkoutReservation.Domain.Entities.Workout;
+using WorkoutReservation.Domain.Entities;
 using WorkoutReservation.Infrastructure.Presistence;
 
 namespace WorkoutReservation.Infrastructure.Repositories
@@ -33,6 +33,14 @@ namespace WorkoutReservation.Infrastructure.Repositories
                 .Include(x => x.Instructor)
                 .Include(x => x.WorkoutType)
                 .FirstOrDefaultAsync(x => x.Id == realworkoutId);             
+        }
+
+        public async Task<RealWorkout> AddAsync(RealWorkout realWorkout)
+        {
+            await _dbContext.AddAsync(realWorkout);
+            await _dbContext.SaveChangesAsync();
+
+            return realWorkout;
         }
 
 

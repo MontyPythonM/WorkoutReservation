@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using TinyHelpers.EntityFrameworkCore.Extensions;
-using WorkoutReservation.Domain.Entities.Workout;
+using WorkoutReservation.Domain.Entities;
 
 namespace WorkoutReservation.Infrastructure.Presistence.Configuration
 {

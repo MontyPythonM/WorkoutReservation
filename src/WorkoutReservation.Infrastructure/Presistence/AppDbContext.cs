@@ -1,7 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using WorkoutReservation.Domain.Common;
 using WorkoutReservation.Domain.Entities;
-using WorkoutReservation.Domain.Entities.Workout;
 using WorkoutReservation.Infrastructure.Presistence.Configuration;
 
 namespace WorkoutReservation.Infrastructure.Presistence

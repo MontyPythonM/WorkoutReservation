@@ -1,7 +1,8 @@
 ﻿using AutoMapper;
 using WorkoutReservation.Application.Common.Models;
+using WorkoutReservation.Application.Features.RealWorkouts.Commands.CreateRealWorkout;
 using WorkoutReservation.Application.Features.RealWorkouts.Queries.GetRealWorkoutDetail;
-using WorkoutReservation.Domain.Entities.Workout;
+using WorkoutReservation.Domain.Entities;
 
 namespace WorkoutReservation.Application.Common.MappingProfile
 {
@@ -14,6 +15,9 @@ namespace WorkoutReservation.Application.Common.MappingProfile
 
             // GetRealWorkoutDetailQueryHandler
             CreateMap<RealWorkout, RealWorkoutDetailDto>();
+
+            // CreateRealWorkoutCommandHander
+            CreateMap<CreateRealWorkoutCommand, RealWorkout>();
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using WorkoutReservation.Application.Features.RealWorkouts.Commands.CreateRealWorkout;
 using WorkoutReservation.Application.Features.RealWorkouts.Queries.GetRealWorkoutDetail;
 using WorkoutReservation.Application.Features.RealWorkouts.Queries.GetRealWorkoutFromCurrentWeek;
 using WorkoutReservation.Application.Features.RealWorkouts.Queries.GetRealWorkoutFromUpcomingWeek;
@@ -43,5 +44,16 @@ namespace WorkoutReservation.API.Controllers
             var realWorkouts = await _mediator.Send(new GetRealWorkoutFromUpcomingWeekQuery());
             return Ok(realWorkouts);
         }
+
+        [HttpPost]
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> CreateRealWorkout([FromBody] CreateRealWorkoutCommand command)
+        {
+            var realWorkoutId = await _mediator.Send(command);
+            return Created($"/api/real-workout/{realWorkoutId}", null);
+        }
+
+
     }
 }

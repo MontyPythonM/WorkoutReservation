@@ -1,24 +1,32 @@
 ﻿using FluentValidation;
-using FluentValidation.Results;
 using WorkoutReservation.Domain.Entities;
+using WorkoutReservation.Domain.Methods;
 
-namespace WorkoutReservation.Application.Features.RepetitiveWorkouts.Commands.CreateRepetitiveWorkout
+namespace WorkoutReservation.Application.Features.RealWorkouts.Commands.CreateRealWorkout
 {
-    public class CreateRepetitiveWorkoutCommandValidator : AbstractValidator<CreateRepetitiveWorkoutCommand>
+    public class CreateRealWorkoutCommandValidator : AbstractValidator<CreateRealWorkoutCommand>
     {
-        public CreateRepetitiveWorkoutCommandValidator(List<RepetitiveWorkout> dailyExistWorkouts)
+        public CreateRealWorkoutCommandValidator(List<RealWorkout> dailyWorkouts)
         {
-            RuleFor(x => x.DayOfWeek)
-                .IsInEnum();
+            RuleFor(x => x.Date)
+                .NotEmpty()
+                .Custom((value, context) => 
+                {
+                    if (value < DateOnly.FromDateTime(DateTime.Now))
+                    {
+                        context.AddFailure("You cannot create a workout with a past date.");
+                    }
+                });
 
             RuleFor(x => x.StartTime)
-                .LessThan(x => x.EndTime);
+                .LessThan(x => x.EndTime)
+                .WithMessage("'StartTime' must be earlier than the 'EndTime'.");
 
             RuleFor(x => new { x.StartTime, x.EndTime })
                 .NotEmpty()
-                .Custom((newWorkout, context) => 
+                .Custom((newWorkout, context) =>
                 {
-                    foreach (var existWorkout in dailyExistWorkouts)
+                    foreach (var existWorkout in dailyWorkouts)
                     {
                         // isConflict = internal collision || existing workout time contains new workout endtime || new workout time covers existing 
 

@@ -1,4 +1,4 @@
-﻿using WorkoutReservation.Domain.Entities.Workout;
+﻿using WorkoutReservation.Domain.Entities;
 
 namespace WorkoutReservation.Application.Contracts
 {

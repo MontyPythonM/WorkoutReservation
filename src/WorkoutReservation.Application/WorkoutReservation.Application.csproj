@@ -11,7 +11,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Features\RealWorkouts\Commands\CreateRealWorkout\" />
     <Folder Include="Features\RealWorkouts\Commands\DeleteRealWorkout\" />
     <Folder Include="Features\RealWorkouts\Commands\UpdateRealWorkout\" />
     <Folder Include="Features\WorkoutTypes\Commands\AssignWorkoutTypeToInstructor\" />

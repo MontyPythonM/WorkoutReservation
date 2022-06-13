@@ -1,6 +1,6 @@
 ﻿using WorkoutReservation.Domain.Common;
 
-namespace WorkoutReservation.Domain.Entities.Workout
+namespace WorkoutReservation.Domain.Entities
 {
     public class RepetitiveWorkout : BaseWorkout
     {

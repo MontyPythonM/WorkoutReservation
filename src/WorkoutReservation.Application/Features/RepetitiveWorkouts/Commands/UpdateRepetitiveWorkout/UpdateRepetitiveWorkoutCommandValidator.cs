@@ -1,6 +1,5 @@
 ﻿using FluentValidation;
 using WorkoutReservation.Domain.Entities;
-using WorkoutReservation.Domain.Entities.Workout;
 
 namespace WorkoutReservation.Application.Features.RepetitiveWorkouts.Commands.UpdateRepetitiveWorkout
 {
@@ -13,7 +12,7 @@ namespace WorkoutReservation.Application.Features.RepetitiveWorkouts.Commands.Up
                 .IsInEnum();
 
             RuleFor(x => new { x.StartTime, x.EndTime })
-                .NotNull()
+                .NotEmpty()
                 .Custom((newWorkout, context) =>
                 {
                     foreach (var existWorkout in dailyWorkouts)
@@ -21,10 +20,9 @@ namespace WorkoutReservation.Application.Features.RepetitiveWorkouts.Commands.Up
                         // exclude edited workout from list
                         if (existWorkout.Id == newRepetitiveWorkout.Id)
                             continue;
-                            
-                        // internal collision ||
-                        // existing workout time contains new workout endtime ||
-                        // new workout time covers existing 
+
+                        // isConflict = internal collision || existing workout time contains new workout endtime || new workout time covers existing 
+
                         var isConflict = (newWorkout.StartTime >= existWorkout.StartTime && newWorkout.StartTime < existWorkout.EndTime) ||
                                          (newWorkout.EndTime > existWorkout.StartTime && newWorkout.EndTime <= existWorkout.EndTime) ||
                                          (newWorkout.StartTime < existWorkout.StartTime && newWorkout.EndTime > existWorkout.EndTime);
