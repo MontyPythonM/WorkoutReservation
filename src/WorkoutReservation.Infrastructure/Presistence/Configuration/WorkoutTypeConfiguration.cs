@@ -8,9 +8,18 @@ namespace WorkoutReservation.Infrastructure.Presistence.Configuration
     {
         public void Configure(EntityTypeBuilder<WorkoutType> builder)
         {
-            builder.Property(x => x.Name).HasMaxLength(50).IsRequired();
-            builder.Property(x => x.Description).HasMaxLength(600).IsRequired();
-            builder.Property(x => x.Intensity).IsRequired();
+            builder.Property(x => x.Name)
+                .HasMaxLength(50)
+                .IsRequired();
+
+            builder.Property(x => x.Description)
+                .HasMaxLength(600)
+                .IsRequired();
+
+            builder.Property(x => x.Intensity)
+                .IsRequired()
+                .HasConversion<string>(); ;
+
 
             builder.HasMany(x => x.Instructors)
                 .WithMany(x => x.WorkoutTypes)
