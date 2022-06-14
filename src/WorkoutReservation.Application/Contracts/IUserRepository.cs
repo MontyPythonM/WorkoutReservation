@@ -6,5 +6,6 @@ namespace WorkoutReservation.Application.Contracts
     {
         public Task AddUser(User user);
         public Task<User> GetByEmail(string email);
+        public Task<List<User>> GetAllAsync();
     }
 }

@@ -21,6 +21,13 @@ namespace WorkoutReservation.Infrastructure.Repositories
                 .FirstOrDefaultAsync(x => x.Email == email);
         }
 
+        public async Task<List<User>> GetAllAsync()
+        {
+            return await _dbContext.Users
+                .AsNoTracking()
+                .ToListAsync();
+        }
+
         public async Task AddUser(User user)
         { 
             await _dbContext.Users.AddAsync(user);

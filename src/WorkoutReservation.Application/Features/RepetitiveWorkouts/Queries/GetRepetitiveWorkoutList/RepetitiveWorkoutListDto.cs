@@ -1,4 +1,5 @@
-﻿using WorkoutReservation.Application.Common.Models;
+﻿using System.Text.Json.Serialization;
+using WorkoutReservation.Application.Common.Models;
 using WorkoutReservation.Domain.Entities;
 
 namespace WorkoutReservation.Application.Features.RepetitiveWorkouts.Queries.GetRepetitiveWorkoutList
@@ -9,6 +10,8 @@ namespace WorkoutReservation.Application.Features.RepetitiveWorkouts.Queries.Get
         public int MaxParticipianNumber { get; set; }
         public TimeOnly StartTime { get; set; }
         public TimeOnly EndTime { get; set; }
+
+        [JsonConverter(typeof(JsonStringEnumConverter))]
         public DayOfWeek DayOfWeek { get; set; }
 
         public string CreatedBy { get; set; }
