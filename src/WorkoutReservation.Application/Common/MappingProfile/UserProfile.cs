@@ -10,12 +10,10 @@ namespace WorkoutReservation.Application.Common.MappingProfile
         public UserProfile()
         {
             // register
-            CreateMap<RegisterCommand, User>()
-                .ForMember(x => x.Email, y => y.MapFrom(z => z.Email));
+            CreateMap<RegisterCommand, User>();
 
             // login
             CreateMap<LoginCommand, User>();
         }
-
     }
 }

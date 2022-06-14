@@ -48,7 +48,7 @@ namespace WorkoutReservation.Application.Features.Users.Commands.Login
                 new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
                 new Claim(ClaimTypes.Email, user.Email),
                 new Claim(ClaimTypes.Name, $"{user.FirstName} {user.LastName}"),
-                new Claim(ClaimTypes.Role, $"{user.UserRole}"),
+                new Claim(ClaimTypes.Role, user.UserRole.ToString()),
             };
 
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_authenticationSettings.JwtKey));
@@ -61,8 +61,7 @@ namespace WorkoutReservation.Application.Features.Users.Commands.Login
                 expires: expires,
                 signingCredentials: cred);
 
-            var tokenHandler = new JwtSecurityTokenHandler();
-            return tokenHandler.WriteToken(token);
+            return new JwtSecurityTokenHandler().WriteToken(token);
         }
     }
 }

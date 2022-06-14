@@ -26,15 +26,5 @@ namespace WorkoutReservation.Infrastructure.Repositories
             await _dbContext.Users.AddAsync(user);
             await _dbContext.SaveChangesAsync();
         }
-
-        public async Task Authenticate()
-        { 
-        
-        }
-        public async Task GenerateJwt()
-        {
-
-        }
-
     }
 }

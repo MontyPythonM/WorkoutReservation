@@ -1,4 +1,5 @@
-﻿using WorkoutReservation.Domain.Common;
+﻿using Microsoft.AspNetCore.Identity;
+using WorkoutReservation.Domain.Common;
 using WorkoutReservation.Domain.Entities;
 using WorkoutReservation.Domain.Enums;
 
@@ -6,18 +7,22 @@ namespace WorkoutReservation.Infrastructure.Seeders.Data
 {
     internal static class FirstAdminAccount
     {
-        internal static User GerFirstAdmin(FirstAdminSettings firstAdminSettings)
+        internal static User GerFirstAdmin(FirstAdminSettings firstAdmin, 
+                                           IPasswordHasher<User> passwordHasher)
         {
+
             var admin = new User()
             {
-                Email = firstAdminSettings.Email,
-                FirstName = firstAdminSettings.FirstName,
-                LastName = firstAdminSettings.LastName,
+                Email = firstAdmin.Email,
+                FirstName = firstAdmin.FirstName,
+                LastName = firstAdmin.LastName,
                 Gender = null,
                 UserRole = UserRole.Administrator,
                 AccountCreationDate = DateTime.Now,
-                PasswordHash = firstAdminSettings.Password
             };
+
+            var hashPassword = passwordHasher.HashPassword(admin, firstAdmin.Password);
+            admin.PasswordHash = hashPassword;
 
             return admin;
         }

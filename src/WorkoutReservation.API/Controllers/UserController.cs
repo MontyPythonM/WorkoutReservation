@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WorkoutReservation.Application.Features.Users.Commands.Login;
 using WorkoutReservation.Application.Features.Users.Commands.Register;
@@ -6,6 +7,7 @@ using WorkoutReservation.Application.Features.Users.Commands.Register;
 namespace WorkoutReservation.API.Controllers
 {
     [ApiController]
+    [AllowAnonymous]
     [Route("/api/account/")]
     public class UserController : ControllerBase
     {

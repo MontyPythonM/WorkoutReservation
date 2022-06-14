@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WorkoutReservation.Application.Features.RealWorkouts.Commands.CreateRealWorkout;
 using WorkoutReservation.Application.Features.RealWorkouts.Commands.DeleteRealWorkout;
@@ -10,6 +11,7 @@ using WorkoutReservation.Application.Features.RealWorkouts.Queries.GetRealWorkou
 namespace WorkoutReservation.API.Controllers
 {
     [ApiController]
+    [Authorize(Roles = "Manager, Administrator")]
     [Route("/api/real-workout/")]
     public class RealWorkoutController : ControllerBase
     {
@@ -21,6 +23,7 @@ namespace WorkoutReservation.API.Controllers
         }
 
         [HttpGet("current-week")]
+        [AllowAnonymous]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> GetRealWorkoutsFromCurrentWeek()
@@ -39,6 +42,7 @@ namespace WorkoutReservation.API.Controllers
         }
 
         [HttpGet("upcoming-week")]
+        [AllowAnonymous]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> GetRealWorkoutsFromUpcomingWeek()

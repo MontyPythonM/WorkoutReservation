@@ -73,18 +73,25 @@ try
     var db = scope.ServiceProvider.GetService<AppDbContext>();
 
     //--- Configure the HTTP request pipeline.
-    app.UseMiddleware<ExceptionHandlingMiddleware>();  
 
     firstAdminSeeder.Seed();
     dummyDataSeeder.Seed();
 
-    app.UseAuthorization();
-
-    app.UseSwagger();
-    app.UseSwaggerUI(c =>
+    if (app.Environment.IsDevelopment())
     {
-        c.SwaggerEndpoint("/swagger/v1/swagger.json", "Workout Reservation REST API Application");
-    });
+        app.UseDeveloperExceptionPage();
+        app.UseSwagger();
+        app.UseSwaggerUI(c =>
+        {
+            c.SwaggerEndpoint("/swagger/v1/swagger.json", "Workout Reservation REST API Application");
+        });
+    }
+
+    app.UseMiddleware<ExceptionHandlingMiddleware>();
+
+    app.UseAuthentication();
+
+    app.UseRouting();
 
     app.UseAuthorization();
 

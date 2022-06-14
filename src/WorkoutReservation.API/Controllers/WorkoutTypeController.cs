@@ -1,14 +1,17 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WorkoutReservation.Application.Features.WorkoutTypes.Commands.CreateWorkoutType;
 using WorkoutReservation.Application.Features.WorkoutTypes.Commands.DeleteWorkoutType;
 using WorkoutReservation.Application.Features.WorkoutTypes.Commands.UpdateWorkoutType;
 using WorkoutReservation.Application.Features.WorkoutTypes.Queries.GetWorkoutTypeDetail;
 using WorkoutReservation.Application.Features.WorkoutTypes.Queries.GetWorkoutTypesList;
+using WorkoutReservation.Domain.Enums;
 
 namespace WorkoutReservation.API.Controllers
 {
     [ApiController]
+    [Authorize(Roles = "Manager, Administrator")]
     [Route("/api/workout-type/")]
     public class WorkoutTypeController : ControllerBase
     {
@@ -20,6 +23,7 @@ namespace WorkoutReservation.API.Controllers
         }
 
         [HttpGet]
+        [AllowAnonymous]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> GetAllWorkoutTypes()
@@ -29,6 +33,7 @@ namespace WorkoutReservation.API.Controllers
         }
 
         [HttpGet("{workoutTypeId}")]
+        [AllowAnonymous]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> GetWorkoutType([FromRoute] int workoutTypeId)
@@ -39,7 +44,7 @@ namespace WorkoutReservation.API.Controllers
 
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]      
         public async Task<IActionResult> CreateWorkoutType([FromBody] CreateWorkoutTypeCommand command)
         {
             var workoutTypeId = await _mediator.Send(command);

@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WorkoutReservation.Application.Features.Instructors.Commands.CreateInstructor;
 using WorkoutReservation.Application.Features.Instructors.Commands.DeleteInstructor;
@@ -9,6 +10,7 @@ using WorkoutReservation.Application.Features.Instructors.Queries.GetInstructorL
 namespace WorkoutReservation.API.Controllers
 {
     [ApiController]
+    [Authorize(Roles = "Manager, Administrator")]
     [Route("/api/instructor/")]
     public class InstructorController : ControllerBase
     {
@@ -20,6 +22,7 @@ namespace WorkoutReservation.API.Controllers
         }
 
         [HttpGet]
+        [AllowAnonymous]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> GetAllInstructors()
@@ -29,6 +32,7 @@ namespace WorkoutReservation.API.Controllers
         }
 
         [HttpGet("{instructorId}")]
+        [AllowAnonymous]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> GetInstructor([FromRoute] int instructorId)

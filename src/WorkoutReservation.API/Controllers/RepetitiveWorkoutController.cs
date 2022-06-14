@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WorkoutReservation.Application.Features.RepetitiveWorkouts.Commands.CreateRepetitiveWorkout;
 using WorkoutReservation.Application.Features.RepetitiveWorkouts.Commands.DeleteAllRepetitiveWorkouts;
@@ -9,6 +10,7 @@ using WorkoutReservation.Application.Features.RepetitiveWorkouts.Queries.GetRepe
 namespace WorkoutReservation.API.Controllers
 {
     [ApiController]
+    [Authorize(Roles = "Manager, Administrator")]
     [Route("/api/repetitive-workout/")]
     public class RepetitiveWorkoutController : ControllerBase
     {
