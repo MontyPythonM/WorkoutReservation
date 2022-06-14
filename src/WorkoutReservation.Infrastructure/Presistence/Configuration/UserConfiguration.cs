@@ -11,12 +11,13 @@ namespace WorkoutReservation.Infrastructure.Presistence.Configuration
             builder.Property(x => x.Email).IsRequired();
             builder.Property(x => x.FirstName).IsRequired();
             builder.Property(x => x.LastName).IsRequired(); 
-
-            builder.Property(x => x.IsEmailConfirmed)
-                .HasDefaultValue(false);
             
             builder.Property(x => x.UserRole)
                 .IsRequired()
+                .HasDefaultValue(null)
+                .HasConversion<string>();
+
+            builder.Property(x => x.Gender)
                 .HasDefaultValue(null)
                 .HasConversion<string>();
         }

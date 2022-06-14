@@ -2,7 +2,7 @@
 {
     public enum UserRole
     {
-        member,
+        member = 1,
         manager,
         administrator,            
         notConfirmedMember

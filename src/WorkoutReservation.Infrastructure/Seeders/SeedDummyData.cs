@@ -1,16 +1,20 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using WorkoutReservation.Application.Common.Exceptions;
+using WorkoutReservation.Domain.Common;
 using WorkoutReservation.Domain.Entities;
+using WorkoutReservation.Domain.Enums;
 using WorkoutReservation.Infrastructure.Presistence;
+using WorkoutReservation.Infrastructure.Seeders.Data;
 
 namespace WorkoutReservation.Infrastructure.Seeders
 {
-    public class Seeder
+    public class SeedDummyData
     {
         private readonly AppDbContext _dbContext;
-        private readonly ILogger<Seeder> _logger;
+        private readonly ILogger<SeedDummyData> _logger;
 
-        public Seeder(AppDbContext dbContext, ILogger<Seeder> logger)
+        public SeedDummyData(AppDbContext dbContext, ILogger<SeedDummyData> logger)
         {
             _dbContext = dbContext;
             _logger = logger;
@@ -27,6 +31,7 @@ namespace WorkoutReservation.Infrastructure.Seeders
                     _dbContext.AddRange(DummyWorkoutTypes.GetWorkoutTypes());
                     _dbContext.AddRange(DummyRealWorkouts.GetWorkouts());
                     _dbContext.AddRange(DummyWeeklyWorkouts.GetWorkouts());
+                    _dbContext.AddRange(DummyUsers.GetUsers());
                     _dbContext.SaveChanges();
 
                     var i1 = _dbContext.Instructors.First();

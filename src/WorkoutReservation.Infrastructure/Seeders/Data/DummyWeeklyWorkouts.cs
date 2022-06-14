@@ -1,6 +1,6 @@
 ﻿using WorkoutReservation.Domain.Entities;
 
-namespace WorkoutReservation.Infrastructure.Seeders
+namespace WorkoutReservation.Infrastructure.Seeders.Data
 {
     internal class DummyWeeklyWorkouts
     {
@@ -15,7 +15,7 @@ namespace WorkoutReservation.Infrastructure.Seeders
                     MaxParticipianNumber = 40,
                     DayOfWeek = DayOfWeek.Tuesday,
                     CreatedBy = "Dummy Admin",
-                    CreatedDate = new DateTime(2022, 06, 10)                   
+                    CreatedDate = new DateTime(2022, 06, 10)
                 },
 
                 new RepetitiveWorkout()
@@ -23,7 +23,7 @@ namespace WorkoutReservation.Infrastructure.Seeders
                     StartTime = new TimeOnly(14, 15),
                     EndTime = new TimeOnly(15, 00),
                     MaxParticipianNumber = 25,
-                    DayOfWeek = DayOfWeek.Friday,               
+                    DayOfWeek = DayOfWeek.Friday,
                     CreatedBy = "Dummy Manager",
                     CreatedDate = new DateTime(2022, 06, 13)
                 },

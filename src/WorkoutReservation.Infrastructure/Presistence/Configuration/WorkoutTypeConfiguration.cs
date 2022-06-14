@@ -18,7 +18,7 @@ namespace WorkoutReservation.Infrastructure.Presistence.Configuration
 
             builder.Property(x => x.Intensity)
                 .IsRequired()
-                .HasConversion<string>(); ;
+                .HasConversion<string>();
 
 
             builder.HasMany(x => x.Instructors)

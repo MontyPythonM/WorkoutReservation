@@ -1,7 +1,7 @@
 ﻿using WorkoutReservation.Domain.Entities;
 using WorkoutReservation.Domain.Enums;
 
-namespace WorkoutReservation.Infrastructure.Seeders
+namespace WorkoutReservation.Infrastructure.Seeders.Data
 {
     internal class DummyInstructors
     {

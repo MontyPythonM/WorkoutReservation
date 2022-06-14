@@ -2,6 +2,7 @@ using NLog;
 using NLog.Web;
 using WorkoutReservation.API.Middleware;
 using WorkoutReservation.Application;
+using WorkoutReservation.Domain.Common;
 using WorkoutReservation.Infrastructure;
 using WorkoutReservation.Infrastructure.Presistence;
 using WorkoutReservation.Infrastructure.Seeders;
@@ -20,33 +21,35 @@ try
 
     // Add services to the container.
 
+    var firstAdminSettings = new FirstAdminSettings();
+    builder.Configuration.GetSection("FirstAdmin").Bind(firstAdminSettings);
+    builder.Services.AddSingleton(firstAdminSettings);
+
     builder.Services.AddControllers(options => options.UseDateOnlyTimeOnlyStringConverters())
         .AddJsonOptions(options => options.UseDateOnlyTimeOnlyStringConverters());
-
-    builder.Services.AddControllers();
 
     builder.Services.AddSwaggerGen(c => c.UseDateOnlyTimeOnlyStringConverters());
 
     builder.Services.AddInfrastructureServices(builder.Configuration);
     builder.Services.AddApplicationServices(builder.Configuration);
 
-    builder.Services.AddScoped<Seeder>();
     builder.Services.AddScoped<ExceptionHandlingMiddleware>();
-
 
     var app = builder.Build();
 
-
     using var scope = app.Services.CreateScope();
-    var seeder = scope.ServiceProvider.GetService<Seeder>();
-    var db = scope.ServiceProvider.GetService<AppDbContext>();
 
+    var firstAdminSeeder = scope.ServiceProvider.GetService<SeedFirstAdmin>(); 
+    var dummyDataSeeder = scope.ServiceProvider.GetService<SeedDummyData>();
+
+    var db = scope.ServiceProvider.GetService<AppDbContext>();
 
     // Configure the HTTP request pipeline.
 
     app.UseMiddleware<ExceptionHandlingMiddleware>();
-   
-    seeder.Seed();
+    
+    firstAdminSeeder.Seed();
+    dummyDataSeeder.Seed();
 
     //app.UseAuthorization();
 

@@ -4,6 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 using WorkoutReservation.Application.Contracts;
 using WorkoutReservation.Infrastructure.Presistence;
 using WorkoutReservation.Infrastructure.Repositories;
+using WorkoutReservation.Infrastructure.Seeders;
 
 namespace WorkoutReservation.Infrastructure
 {
@@ -18,6 +19,8 @@ namespace WorkoutReservation.Infrastructure
             services.AddScoped<IWorkoutTypeRepository, WorkoutTypeRepository>();
             services.AddScoped<IRepetitiveWorkoutRepository, RepetitiveWorkoutRepository>();
             services.AddScoped<IRealWorkoutRepository, RealWorkoutRepository>();
+            services.AddScoped<SeedFirstAdmin>();
+            services.AddScoped<SeedDummyData>();
 
             return services;
         }

@@ -1,7 +1,7 @@
 ﻿using WorkoutReservation.Domain.Entities;
 using WorkoutReservation.Domain.Enums;
 
-namespace WorkoutReservation.Infrastructure.Seeders
+namespace WorkoutReservation.Infrastructure.Seeders.Data
 {
     internal class DummyWorkoutTypes
     {
@@ -15,7 +15,7 @@ namespace WorkoutReservation.Infrastructure.Seeders
                     Description = "The purpose of Hatha Yoga is relief from three types of pain — physical, environmental and spiritual, and through the practices giving in the Hatha Yoga Pradipika, we are able to prepare the body for the Raja Yoga.",
                     Intensity = WorkoutIntensity.low,
                     WorkoutTypeTags = new List<WorkoutTypeTag>()
-                    { 
+                    {
                         new WorkoutTypeTag { Tag = "Relax" },
                         new WorkoutTypeTag { Tag = "Health" },
                     }

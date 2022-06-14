@@ -10,7 +10,6 @@ namespace WorkoutReservation.Domain.Entities
         public string LastName { get; set; }
         public Gender? Gender { get; set; }
         public string PasswordHash { get; set; }
-        public bool IsEmailConfirmed { get; set; }
         public string ConfirmationToken { get; set; }
         public DateTime AccountCreationDate { get; set; }
         public UserRole? UserRole { get; set; }
