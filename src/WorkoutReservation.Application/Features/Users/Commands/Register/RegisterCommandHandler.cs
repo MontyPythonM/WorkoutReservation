@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using FluentValidation;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
 using WorkoutReservation.Application.Common.Exceptions;
@@ -28,16 +29,16 @@ namespace WorkoutReservation.Application.Features.Users.Commands.Register
         {
             var user = await _userRepository.GetByEmail(request.Email);
 
-            if (user is not null)
-                throw new ForbidException("Email address is already taken.");
+            var validator = new RegisterCommandValidator(user);
+            await validator.ValidateAndThrowAsync(request, cancellationToken);
 
             var mappedUser = _mapper.Map<User>(request);
 
+            var hashPassword = _passwordHasher.HashPassword(mappedUser, request.Password);
+
+            mappedUser.PasswordHash = hashPassword;
             mappedUser.AccountCreationDate = DateTime.Now;
             mappedUser.UserRole = UserRole.Member;
-
-            var hashPassword = _passwordHasher.HashPassword(mappedUser, request.Password);
-            mappedUser.PasswordHash = hashPassword;
 
             await _userRepository.AddUser(mappedUser);
 
