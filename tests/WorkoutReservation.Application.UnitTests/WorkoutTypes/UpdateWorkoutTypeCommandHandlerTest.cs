@@ -79,7 +79,7 @@ namespace WorkoutReservation.Application.UnitTests.WorkoutTypes
                 WorkoutTypeId = notExistWorkoutType,
                 Name = "correctName",
                 Description = "correctDescription",
-                Intensity = WorkoutIntensity.vigorous
+                Intensity = WorkoutIntensity.Vigorous
             };
 
             // act

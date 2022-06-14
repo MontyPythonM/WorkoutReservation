@@ -14,9 +14,9 @@ namespace WorkoutReservation.Infrastructure.Seeders.Data
                     Email = "dummy-member@email.com",
                     FirstName = "dummy",
                     LastName = "member",
-                    Gender = Gender.male,
+                    Gender = Gender.Male,
                     AccountCreationDate = DateTime.Now,
-                    UserRole = UserRole.member
+                    UserRole = UserRole.Member
                 },
 
                 new User()
@@ -24,9 +24,9 @@ namespace WorkoutReservation.Infrastructure.Seeders.Data
                     Email = "dummy-manager@email.com",
                     FirstName = "fake",
                     LastName = "manager",
-                    Gender = Gender.female,
+                    Gender = Gender.Female,
                     AccountCreationDate = new DateTime(2022, 01, 01),
-                    UserRole = UserRole.manager
+                    UserRole = UserRole.Manager
                 },
 
                 new User()
@@ -34,9 +34,9 @@ namespace WorkoutReservation.Infrastructure.Seeders.Data
                     Email = "dummy-notConfirmMember@email.com",
                     FirstName = "member",
                     LastName = "notConfirm",
-                    Gender = Gender.female,
+                    Gender = Gender.Female,
                     AccountCreationDate = new DateTime(2022, 06, 06),
-                    UserRole = UserRole.notConfirmedMember
+                    UserRole = UserRole.NotConfirmedMember
                 },
             };
 

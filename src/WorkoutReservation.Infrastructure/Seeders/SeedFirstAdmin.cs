@@ -26,7 +26,7 @@ namespace WorkoutReservation.Infrastructure.Seeders
         {
             if (_dbContext.Database.CanConnect())
             {
-                var anyAdmin = _dbContext.Users.FirstOrDefault(x => x.UserRole == UserRole.administrator);
+                var anyAdmin = _dbContext.Users.FirstOrDefault(x => x.UserRole == UserRole.Administrator);
 
                 if (anyAdmin is null)
                 {

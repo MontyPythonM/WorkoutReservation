@@ -68,7 +68,7 @@ namespace WorkoutReservation.Application.UnitTests.WorkoutTypes
             {
                 Name = "correctName",
                 Description = "correctDescriptiopn",
-                Intensity = WorkoutIntensity.low
+                Intensity = WorkoutIntensity.Low
             };
 
             var allWorkoutTypesBeforeCount = WorkoutTypeRepositoryMock.GetDummyList().Count;

@@ -16,7 +16,7 @@ namespace WorkoutReservation.Application.UnitTests.Mocks
                     Id = 1,
                     Name = "Test-Hatha yoga",
                     Description = "The purpose of Hatha Yoga is relief from three types of pain.",
-                    Intensity = WorkoutIntensity.low,
+                    Intensity = WorkoutIntensity.Low,
                     WorkoutTypeTags = new List<WorkoutTypeTag>()
                     {
                         new WorkoutTypeTag { Tag = "Relax" },
@@ -29,7 +29,7 @@ namespace WorkoutReservation.Application.UnitTests.Mocks
                     Id = 2,
                     Name = "Test-Vinyasa yoga",
                     Description = "Vinyasa is a style of yoga",
-                    Intensity = WorkoutIntensity.moderate,
+                    Intensity = WorkoutIntensity.Moderate,
                     WorkoutTypeTags = new List<WorkoutTypeTag>()
                     {
                         new WorkoutTypeTag { Tag = "Relax" },

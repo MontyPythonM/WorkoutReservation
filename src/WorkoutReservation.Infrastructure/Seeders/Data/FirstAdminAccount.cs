@@ -14,7 +14,7 @@ namespace WorkoutReservation.Infrastructure.Seeders.Data
                 FirstName = firstAdminSettings.FirstName,
                 LastName = firstAdminSettings.LastName,
                 Gender = null,
-                UserRole = UserRole.administrator,
+                UserRole = UserRole.Administrator,
                 AccountCreationDate = DateTime.Now,
                 PasswordHash = firstAdminSettings.Password
             };
