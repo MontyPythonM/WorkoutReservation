@@ -13,5 +13,7 @@ namespace WorkoutReservation.Domain.Entities
         public string ConfirmationToken { get; set; }
         public DateTime AccountCreationDate { get; set; }
         public UserRole? UserRole { get; set; }
+
+        public List<Reservation> Reservations { get; set; } = new List<Reservation>();
     }
 }

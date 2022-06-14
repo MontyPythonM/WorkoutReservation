@@ -19,6 +19,7 @@ namespace WorkoutReservation.Infrastructure.Presistence
         public DbSet<RepetitiveWorkout> RepetitiveWorkouts { get; set; }
         public DbSet<RealWorkout> RealWorkouts { get; set; }
         public DbSet<User> Users { get; set; }
+        public DbSet<Reservation> Reservations { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -29,6 +30,7 @@ namespace WorkoutReservation.Infrastructure.Presistence
             new RepetitiveWorkoutConfiguration().Configure(modelBuilder.Entity<RepetitiveWorkout>());
             new RealWorkoutConfiguration().Configure(modelBuilder.Entity<RealWorkout>());
             new UserConfiguration().Configure(modelBuilder.Entity<User>());
+            new ReservationConfiguration().Configure(modelBuilder.Entity<Reservation>());
         }
     }
 }
