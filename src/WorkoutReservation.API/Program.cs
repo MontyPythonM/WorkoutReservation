@@ -61,6 +61,17 @@ try
     builder.Services.AddScoped<ExceptionHandlingMiddleware>();
     builder.Services.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();
 
+    builder.Services.AddCors(options =>
+    {
+        options.AddPolicy("FrontEndClient", 
+            builder =>      
+            {
+                builder.AllowAnyMethod()
+                       .AllowAnyHeader()
+                       .WithOrigins("http://localhost:5001");
+            });
+    });
+
     //--- Build application
     var app = builder.Build();
 
