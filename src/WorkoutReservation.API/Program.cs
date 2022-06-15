@@ -4,7 +4,9 @@ using NLog;
 using NLog.Web;
 using System.Text;
 using WorkoutReservation.API.Middleware;
+using WorkoutReservation.API.Services;
 using WorkoutReservation.Application;
+using WorkoutReservation.Application.Contracts;
 using WorkoutReservation.Domain.Common;
 using WorkoutReservation.Domain.Entities;
 using WorkoutReservation.Infrastructure;
@@ -51,6 +53,9 @@ try
     //--- Add services to the container
     builder.Services.AddSingleton(authenticationSettings);
     builder.Services.AddSingleton(firstAdminSettings);
+    builder.Services.AddSingleton<ICurrentUserService, CurrentUserService>();
+
+    builder.Services.AddHttpContextAccessor();
 
     builder.Services.AddControllers(options => options.UseDateOnlyTimeOnlyStringConverters())
         .AddJsonOptions(options => options.UseDateOnlyTimeOnlyStringConverters());
@@ -99,6 +104,8 @@ try
     }
 
     app.UseMiddleware<ExceptionHandlingMiddleware>();
+
+    app.UseCors();
 
     app.UseAuthentication();
 

@@ -20,6 +20,7 @@ namespace WorkoutReservation.Infrastructure
             services.AddScoped<IRepetitiveWorkoutRepository, RepetitiveWorkoutRepository>();
             services.AddScoped<IRealWorkoutRepository, RealWorkoutRepository>();
             services.AddScoped<IUserRepository, UserRepository>();
+            services.AddScoped<IReservationRepository, ReservationRepository>();
 
             services.AddScoped<SeedFirstAdmin>();
             services.AddScoped<SeedDummyData>();

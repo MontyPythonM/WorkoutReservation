@@ -20,6 +20,12 @@ namespace WorkoutReservation.Infrastructure.Repositories
                 .AsNoTracking()
                 .FirstOrDefaultAsync(x => x.Email == email);
         }
+        public async Task<User> GetByGuid(Guid guid)
+        {
+            return await _dbContext.Users
+                .AsNoTracking()
+                .FirstOrDefaultAsync(x => x.Id == guid);
+        }
 
         public async Task<List<User>> GetAllAsync()
         {
