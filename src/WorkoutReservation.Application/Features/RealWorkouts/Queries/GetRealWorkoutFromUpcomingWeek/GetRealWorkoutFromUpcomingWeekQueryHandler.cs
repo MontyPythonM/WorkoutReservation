@@ -1,14 +1,13 @@
 ﻿using AutoMapper;
 using MediatR;
 using WorkoutReservation.Application.Common.Exceptions;
-using WorkoutReservation.Application.Common.Models;
 using WorkoutReservation.Application.Contracts;
 using WorkoutReservation.Domain.Methods;
 
 namespace WorkoutReservation.Application.Features.RealWorkouts.Queries.GetRealWorkoutFromUpcomingWeek
 {
     public class GetRealWorkoutFromUpcomingWeekQueryHandler : IRequestHandler<GetRealWorkoutFromUpcomingWeekQuery,
-                                                                              List<RealWorkoutListDto>>
+                                                                              List<RealWorkoutFromUpcomingWeekDto>>
     {
         private readonly IRealWorkoutRepository _realWorkoutRepository;
         private readonly IMapper _mapper;
@@ -19,8 +18,8 @@ namespace WorkoutReservation.Application.Features.RealWorkouts.Queries.GetRealWo
             _realWorkoutRepository = realWorkoutRepository;
             _mapper = mapper;
         }
-        public async Task<List<RealWorkoutListDto>> Handle(GetRealWorkoutFromUpcomingWeekQuery request, 
-                                                           CancellationToken cancellationToken)
+        public async Task<List<RealWorkoutFromUpcomingWeekDto>> Handle(GetRealWorkoutFromUpcomingWeekQuery request, 
+                                                                       CancellationToken cancellationToken)
         {
             var firstDayOfCurrentWeek = DateTime.Now.GetFirstDayOfWeek().AddDays(7);
             var lastDayOfCurrentWeek = firstDayOfCurrentWeek.AddDays(7);
@@ -30,7 +29,7 @@ namespace WorkoutReservation.Application.Features.RealWorkouts.Queries.GetRealWo
             if (!realWorkouts.Any())
                 throw new NotFoundException($"Real workouts from current week not found. [Date from: {firstDayOfCurrentWeek} to {lastDayOfCurrentWeek}");
 
-            return _mapper.Map<List<RealWorkoutListDto>>(realWorkouts);
+            return _mapper.Map<List<RealWorkoutFromUpcomingWeekDto>>(realWorkouts);
         }
     }
 }

@@ -1,5 +1,4 @@
 ﻿using System.Text.Json.Serialization;
-using WorkoutReservation.Application.Common.Models;
 using WorkoutReservation.Domain.Enums;
 
 namespace WorkoutReservation.Application.Features.Instructors.Queries.GetInstructorDetail
@@ -15,6 +14,16 @@ namespace WorkoutReservation.Application.Features.Instructors.Queries.GetInstruc
         public string Biography { get; set; }
         public string Email { get; set; }
 
-        public List<WorkoutTypeDto> WorkoutTypes { get; set; } = new List<WorkoutTypeDto>();
+        public List<WorkoutTypeForInstructorDetailQeuryDto> WorkoutTypes { get; set; } = new List<WorkoutTypeForInstructorDetailQeuryDto>();
+    }
+
+    public class WorkoutTypeForInstructorDetailQeuryDto
+    {
+        public int Id { get; set; }
+        public string Name { get; set; }
+        public string Description { get; set; }
+
+        [JsonConverter(typeof(JsonStringEnumConverter))]
+        public WorkoutIntensity Intensity { get; set; }
     }
 }

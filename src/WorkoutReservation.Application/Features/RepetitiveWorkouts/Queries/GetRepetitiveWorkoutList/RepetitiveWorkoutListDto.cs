@@ -1,6 +1,5 @@
 ﻿using System.Text.Json.Serialization;
-using WorkoutReservation.Application.Common.Models;
-using WorkoutReservation.Domain.Entities;
+using WorkoutReservation.Domain.Enums;
 
 namespace WorkoutReservation.Application.Features.RepetitiveWorkouts.Queries.GetRepetitiveWorkoutList
 {
@@ -19,7 +18,25 @@ namespace WorkoutReservation.Application.Features.RepetitiveWorkouts.Queries.Get
         public string LastModifiedBy { get; set; }
         public DateTime? LastModifiedDate { get; set; }
 
-        public WorkoutTypeDto WorkoutType { get; set; }
-        public InstructorDto Instructor { get; set; }
+        public WorkoutTypeForRepetitiveWorkoutListDto WorkoutType { get; set; }
+        public InstructorForRepetitiveWorkoutListDto Instructor { get; set; }
+    }
+
+    public class WorkoutTypeForRepetitiveWorkoutListDto
+    {
+        public int Id { get; set; }
+        public string Name { get; set; }
+        public string Description { get; set; }
+
+        [JsonConverter(typeof(JsonStringEnumConverter))]
+        public WorkoutIntensity Intensity { get; set; }
+    }
+
+    public class InstructorForRepetitiveWorkoutListDto
+    {
+        public int Id { get; set; }
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
+        public string Email { get; set; }
     }
 }

@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using WorkoutReservation.Application.Common.Models;
 using WorkoutReservation.Application.Features.Instructors.Commands.CreateInstructor;
 using WorkoutReservation.Application.Features.Instructors.Commands.UpdateInstructor;
 using WorkoutReservation.Application.Features.Instructors.Queries.GetInstructorDetail;
@@ -17,17 +16,14 @@ namespace WorkoutReservation.Application.Common.MappingProfile
 
             // InstructorDetailQueryDto
             CreateMap<Instructor, InstructorDetailQueryDto>();
+            CreateMap<WorkoutType, WorkoutTypeForInstructorDetailQeuryDto>();
 
             // CreateInstructorCommandHandler
             CreateMap<CreateInstructorCommand, Instructor>();
 
             // UpdateInstructorCommandHandler
-            CreateMap<UpdateInstructorCommand, Instructor > ()
+            CreateMap<UpdateInstructorCommand, Instructor> ()
                 .ForMember(x => x.Id, y => y.MapFrom(z => z.InstructorId));
-
-            // Common dtos
-            CreateMap<Instructor, InstructorDto>();
-
         }
     }
 }

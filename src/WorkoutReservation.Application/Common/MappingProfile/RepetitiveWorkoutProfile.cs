@@ -12,6 +12,8 @@ namespace WorkoutReservation.Application.Common.MappingProfile
         {
             // RepetitiveWorkoutListDto
             CreateMap<RepetitiveWorkout, RepetitiveWorkoutListDto>();
+            CreateMap<WorkoutType, WorkoutTypeForRepetitiveWorkoutListDto>();
+            CreateMap<Instructor, InstructorForRepetitiveWorkoutListDto>();
 
             // CreateInstructorCommandHandler
             CreateMap<CreateRepetitiveWorkoutCommand, RepetitiveWorkout>();
