@@ -1,6 +1,7 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using WorkoutReservation.Application.Features.Reservations.Commands.AddReservation;
 using WorkoutReservation.Application.Features.Reservations.Queries.GetUserReservationsList;
 
 namespace WorkoutReservation.API.Controllers
@@ -24,6 +25,17 @@ namespace WorkoutReservation.API.Controllers
         {
             var result = await _mediator.Send(new GetUserReservationsListQuery());
             return Ok(result);
+        }
+
+        [HttpPost]
+        [Authorize]
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> AddReservation([FromBody] AddReservationCommand command)
+        {
+            var reservationId = await _mediator.Send(command);
+
+            return Created($"/api/reservation/{reservationId}", null);
         }
     }
 }
