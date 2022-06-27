@@ -29,7 +29,6 @@ namespace WorkoutReservation.Application.Features.Reservations.Commands.AddReser
             _mapper = mapper;
         }
 
-
         public async Task<int> Handle(AddReservationCommand request,    
                                       CancellationToken cancellationToken)
         {
@@ -40,7 +39,7 @@ namespace WorkoutReservation.Application.Features.Reservations.Commands.AddReser
             var currentUserGuid = Guid.Parse(_userService.UserId);
  
             var isUserAlreadyReservedWorkout = await _reservationRepository
-                .CheckUserAlreadyReservedWorkout(request.RealWorkoutId, currentUserGuid);
+                .CheckUserReservation(request.RealWorkoutId, currentUserGuid);
 
             var validator = new AddReservationCommandValidator(realWorkout, 
                                                                currentUserGuid, 

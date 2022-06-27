@@ -6,6 +6,8 @@ namespace WorkoutReservation.Application.Contracts
     {
         public Task<List<Reservation>> GetUserReservationsAsyncByGuid(Guid userId);
         public Task<Reservation> AddReservation(Reservation reservation);
-        public Task<bool> CheckUserAlreadyReservedWorkout(int workoutId, Guid currentUserId);
+        public Task<bool> CheckUserReservation(int workoutId, Guid currentUserId);
+        public Task<Reservation> GetReservationById(int reservationId);
+        public Task UpdateReservation(Reservation reservation);
     }
 }

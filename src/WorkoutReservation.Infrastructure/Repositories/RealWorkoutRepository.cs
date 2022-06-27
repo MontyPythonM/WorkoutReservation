@@ -72,5 +72,13 @@ namespace WorkoutReservation.Infrastructure.Repositories
             result.CurrentParticipianNumber++; 
             await _dbContext.SaveChangesAsync();
         }
+        public async Task DecrementCurrentParticipianNumber(RealWorkout realWorkout)
+        {
+            var result = await _dbContext.RealWorkouts
+                .FirstOrDefaultAsync(x => x.Id == realWorkout.Id);
+
+            result.CurrentParticipianNumber--;
+            await _dbContext.SaveChangesAsync();
+        }
     }
 }

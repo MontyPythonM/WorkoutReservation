@@ -1,5 +1,7 @@
 ﻿using AutoMapper;
 using WorkoutReservation.Application.Features.Reservations.Commands.AddReservation;
+using WorkoutReservation.Application.Features.Reservations.Commands.CancelReservation;
+using WorkoutReservation.Application.Features.Reservations.Commands.EditReservationStatus;
 using WorkoutReservation.Application.Features.Reservations.Queries.GetUserReservationsList;
 using WorkoutReservation.Domain.Entities;
 
@@ -17,6 +19,14 @@ namespace WorkoutReservation.Application.Common.MappingProfile
 
             // AddReservationCommand
             CreateMap<AddReservationCommand, Reservation>();
+
+            // CancelReservationCommand
+            CreateMap<CancelReservationCommand, Reservation>()
+                .ForMember(x => x.Id, y => y.MapFrom(z => z.ReservationId));
+
+            // EditReservationStatusCommand
+            CreateMap<EditReservationStatusCommand, Reservation>()
+                .ForMember(x => x.Id, y => y.MapFrom(z => z.ReservationId));
         }
     }
 }

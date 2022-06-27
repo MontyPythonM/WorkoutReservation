@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using WorkoutReservation.Application.Contracts;
 using WorkoutReservation.Domain.Entities;
+using WorkoutReservation.Domain.Enums;
 using WorkoutReservation.Infrastructure.Presistence;
 
 namespace WorkoutReservation.Infrastructure.Repositories
@@ -33,7 +34,7 @@ namespace WorkoutReservation.Infrastructure.Repositories
             return reservation;
         }
 
-        public async Task<bool> CheckUserAlreadyReservedWorkout(int workoutId, Guid currentUserId)
+        public async Task<bool> CheckUserReservation(int workoutId, Guid currentUserId)
         {
             var isUserAlreadyReserved = await _dbContext.Reservations
                 .Include(x => x.User)
@@ -45,6 +46,21 @@ namespace WorkoutReservation.Infrastructure.Repositories
                 return true;
 
             return false;
+        }
+
+        public async Task<Reservation> GetReservationById(int reservationId)
+        {
+            return await _dbContext.Reservations
+                .AsNoTracking()
+                .Include(x => x.RealWorkout)
+                .Include(x => x.User)
+                .FirstOrDefaultAsync(x => x.Id == reservationId);
+        }
+
+        public async Task UpdateReservation(Reservation reservation)
+        {
+            _dbContext.Update(reservation);
+            await _dbContext.SaveChangesAsync();
         }
     }
 }
