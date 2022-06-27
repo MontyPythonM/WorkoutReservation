@@ -35,6 +35,15 @@ namespace WorkoutReservation.Infrastructure.Repositories
                 .FirstOrDefaultAsync(x => x.Id == realworkoutId);             
         }
 
+        public async Task<RealWorkout> GetByIdWithReservationDetailsAsync(int realworkoutId)
+        {
+            return await _dbContext.RealWorkouts
+                .AsNoTracking()
+                .Include(x => x.Reservations)
+                    .ThenInclude(x => x.User)
+                .FirstOrDefaultAsync(x => x.Id == realworkoutId);
+        }
+
         public async Task<RealWorkout> AddAsync(RealWorkout realWorkout)
         {
             await _dbContext.AddAsync(realWorkout);
@@ -52,6 +61,23 @@ namespace WorkoutReservation.Infrastructure.Repositories
         public async Task UpdateAsync(RealWorkout realWorkout)
         {
             _dbContext.Update(realWorkout);
+            await _dbContext.SaveChangesAsync();
+        }
+
+        public async Task IncrementCurrentParticipianNumber(RealWorkout realWorkout)
+        {
+            var result = await _dbContext.RealWorkouts
+                .FirstOrDefaultAsync(x => x.Id == realWorkout.Id);
+
+            result.CurrentParticipianNumber++; 
+            await _dbContext.SaveChangesAsync();
+        }
+        public async Task DecrementCurrentParticipianNumber(RealWorkout realWorkout)
+        {
+            var result = await _dbContext.RealWorkouts
+                .FirstOrDefaultAsync(x => x.Id == realWorkout.Id);
+
+            result.CurrentParticipianNumber--;
             await _dbContext.SaveChangesAsync();
         }
     }

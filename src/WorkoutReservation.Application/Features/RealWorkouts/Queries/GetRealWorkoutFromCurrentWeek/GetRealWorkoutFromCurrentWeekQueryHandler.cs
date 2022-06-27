@@ -28,7 +28,7 @@ namespace WorkoutReservation.Application.Features.RealWorkouts.Queries.GetRealWo
             var realWorkouts = await _realWorkoutRepository.GetAllAsync(firstDayOfCurrentWeek, lastDayOfCurrentWeek);
 
             if (!realWorkouts.Any())
-                throw new NotFoundException($"Real workouts from current week not found. [Date from: {firstDayOfCurrentWeek} to {lastDayOfCurrentWeek}");
+                throw new NotFoundException($"Real workouts from current week not found. [Date from: {firstDayOfCurrentWeek} to {lastDayOfCurrentWeek}]");
 
             return _mapper.Map<List<RealWorkoutFromCurrentWeekDto>>(realWorkouts);
         }
