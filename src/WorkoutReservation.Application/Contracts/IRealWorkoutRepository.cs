@@ -12,5 +12,6 @@ namespace WorkoutReservation.Application.Contracts
         public Task UpdateAsync(RealWorkout realWorkout);
         public Task IncrementCurrentParticipianNumber(RealWorkout realWorkout);
         public Task DecrementCurrentParticipianNumber(RealWorkout realWorkout);
+        public Task AddRangeAsync(List<RealWorkout> realWorkouts);
     }
 }

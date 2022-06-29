@@ -80,5 +80,12 @@ namespace WorkoutReservation.Infrastructure.Repositories
             result.CurrentParticipianNumber--;
             await _dbContext.SaveChangesAsync();
         }
+
+        public async Task AddRangeAsync(List<RealWorkout> realWorkouts)
+        {
+            await _dbContext.AddRangeAsync(realWorkouts);
+            await _dbContext.SaveChangesAsync();
+        }
+
     }
 }

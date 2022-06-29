@@ -20,4 +20,8 @@
     <PackageReference Include="TinyHelpers.EntityFrameworkCore" Version="1.0.56" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Services\" />
+  </ItemGroup>
+
 </Project>

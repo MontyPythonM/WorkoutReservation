@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Hangfire;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using WorkoutReservation.Application.Contracts;
@@ -14,6 +15,11 @@ namespace WorkoutReservation.Infrastructure
         {
             services.AddDbContext<AppDbContext>(options =>
                 options.UseSqlServer(configuration.GetConnectionString("localDbConnection")));
+
+            services.AddHangfire(options =>
+                options.UseSqlServerStorage(configuration.GetConnectionString("localDbConnection")));
+
+            services.AddHangfireServer();
 
             services.AddScoped<IInstructorRepository, InstructorRepository>();
             services.AddScoped<IWorkoutTypeRepository, WorkoutTypeRepository>();
