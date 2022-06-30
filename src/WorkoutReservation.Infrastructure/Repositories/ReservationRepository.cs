@@ -15,7 +15,7 @@ namespace WorkoutReservation.Infrastructure.Repositories
             _dbContext = dbContext;
         }
 
-        public async Task<List<Reservation>> GetUserReservationsAsyncByGuid(Guid userId)
+        public async Task<List<Reservation>> GetUserReservationsByGuidAsync(Guid userId)
         {
             return await _dbContext.Reservations
                 .AsNoTracking()
@@ -26,7 +26,7 @@ namespace WorkoutReservation.Infrastructure.Repositories
                 .ToListAsync();
         }
 
-        public async Task<Reservation> AddReservation(Reservation reservation)
+        public async Task<Reservation> AddReservationAsync(Reservation reservation)
         {
             await _dbContext.AddAsync(reservation);
             await _dbContext.SaveChangesAsync();
@@ -34,7 +34,7 @@ namespace WorkoutReservation.Infrastructure.Repositories
             return reservation;
         }
 
-        public async Task<bool> CheckUserReservation(int workoutId, Guid currentUserId)
+        public async Task<bool> CheckUserReservationAsync(int workoutId, Guid currentUserId)
         {
             var isUserAlreadyReserved = await _dbContext.Reservations
                 .Include(x => x.User)
@@ -48,7 +48,7 @@ namespace WorkoutReservation.Infrastructure.Repositories
             return false;
         }
 
-        public async Task<Reservation> GetReservationById(int reservationId)
+        public async Task<Reservation> GetReservationByIdAsync(int reservationId)
         {
             return await _dbContext.Reservations
                 .AsNoTracking()
@@ -57,7 +57,7 @@ namespace WorkoutReservation.Infrastructure.Repositories
                 .FirstOrDefaultAsync(x => x.Id == reservationId);
         }
 
-        public async Task UpdateReservation(Reservation reservation)
+        public async Task UpdateReservationAsync(Reservation reservation)
         {
             _dbContext.Update(reservation);
             await _dbContext.SaveChangesAsync();

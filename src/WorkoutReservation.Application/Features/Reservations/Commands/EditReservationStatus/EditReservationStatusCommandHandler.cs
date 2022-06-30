@@ -26,7 +26,8 @@ namespace WorkoutReservation.Application.Features.Reservations.Commands.EditRese
         public async Task<Unit> Handle(EditReservationStatusCommand request, 
                                        CancellationToken cancellationToken)
         {
-            var reservation = await _reservationRepository.GetReservationById(request.ReservationId);
+            var reservation = await _reservationRepository
+                .GetReservationByIdAsync(request.ReservationId);
 
             if (reservation is null)
                 throw new NotFoundException($"Reservation with Id: {request.ReservationId} not found.");
@@ -43,7 +44,7 @@ namespace WorkoutReservation.Application.Features.Reservations.Commands.EditRese
             mappedReservation.RealWorkoutId = reservation.RealWorkoutId;
 
             await _reservationRepository
-                .UpdateReservation(mappedReservation);
+                .UpdateReservationAsync(mappedReservation);
 
             if (reservation.ReservationStatus != ReservationStatus.Cancelled &&
                 mappedReservation.ReservationStatus == ReservationStatus.Cancelled)

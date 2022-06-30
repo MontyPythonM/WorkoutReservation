@@ -39,7 +39,7 @@ namespace WorkoutReservation.Application.Features.Reservations.Commands.AddReser
             var currentUserGuid = Guid.Parse(_userService.UserId);
  
             var isUserAlreadyReservedWorkout = await _reservationRepository
-                .CheckUserReservation(request.RealWorkoutId, currentUserGuid);
+                .CheckUserReservationAsync(request.RealWorkoutId, currentUserGuid);
 
             var validator = new AddReservationCommandValidator(realWorkout, 
                                                                currentUserGuid, 
@@ -56,7 +56,7 @@ namespace WorkoutReservation.Application.Features.Reservations.Commands.AddReser
             reservation.CreationDate = DateTime.Now;
             reservation.ReservationStatus = ReservationStatus.Reserved;
 
-            reservation = await _reservationRepository.AddReservation(reservation);
+            reservation = await _reservationRepository.AddReservationAsync(reservation);
 
             return reservation.Id;
         }

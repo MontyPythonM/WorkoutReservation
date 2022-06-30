@@ -26,7 +26,7 @@ namespace WorkoutReservation.Application.Features.Reservations.Queries.GetUserRe
         {
             var userGuid = Guid.Parse(_userService.UserId);
 
-            var reservations = await _reservationRepository.GetUserReservationsAsyncByGuid(userGuid);
+            var reservations = await _reservationRepository.GetUserReservationsByGuidAsync(userGuid);
 
             if (!reservations.Any())
                 throw new NotFoundException("Reservations not found.");

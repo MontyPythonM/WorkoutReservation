@@ -32,7 +32,7 @@ namespace WorkoutReservation.Application.Features.Reservations.Commands.CancelRe
         public async Task<Unit> Handle(CancelReservationCommand request, 
                                        CancellationToken cancellationToken)
         {
-            var reservation = await _reservationRepository.GetReservationById(request.ReservationId);
+            var reservation = await _reservationRepository.GetReservationByIdAsync(request.ReservationId);
 
             if (reservation is null)
                 throw new NotFoundException($"Reservation with Id: {request.ReservationId} not found.");
@@ -51,7 +51,7 @@ namespace WorkoutReservation.Application.Features.Reservations.Commands.CancelRe
             mappedReservation.RealWorkoutId = reservation.RealWorkoutId;
 
             await _reservationRepository
-                .UpdateReservation(mappedReservation);
+                .UpdateReservationAsync(mappedReservation);
 
             await _realWorkoutRepository
                 .DecrementCurrentParticipianNumber(reservation.RealWorkout);
