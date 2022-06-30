@@ -16,6 +16,11 @@ namespace WorkoutReservation.Application.Features.RealWorkouts.Commands.CreateRe
                     {
                         context.AddFailure("You cannot create a workout with a past date.");
                     }
+
+                    if (value > DateTime.Now.GetFirstDayOfWeek().AddDays(13))
+                    {
+                        context.AddFailure("You cannot create a workout with a date further than 2 weeks (counting from the beginning of the current week).");
+                    }
                 });
 
             RuleFor(x => x.StartTime)

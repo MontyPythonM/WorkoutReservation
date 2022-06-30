@@ -4,7 +4,7 @@ namespace WorkoutReservation.API.Services
 {
     public class MediatorHangfireJobService
     {
-        private IMediator _mediator;
+        private readonly IMediator _mediator;
         public MediatorHangfireJobService(IMediator mediator)
         {
             _mediator = mediator;

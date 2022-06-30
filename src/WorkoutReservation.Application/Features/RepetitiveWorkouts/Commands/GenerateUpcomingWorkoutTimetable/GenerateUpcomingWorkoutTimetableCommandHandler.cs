@@ -1,4 +1,5 @@
-﻿using MediatR;
+﻿using FluentValidation;
+using MediatR;
 using Microsoft.Extensions.Logging;
 using WorkoutReservation.Application.Common.Exceptions;
 using WorkoutReservation.Application.Contracts;
@@ -37,6 +38,10 @@ namespace WorkoutReservation.Application.Features.RepetitiveWorkouts.Commands.Ge
                 throw new NotFoundException("Repetitive workouts not found.");
             }
 
+            // get first day (monday) of next week
+            var firstDayOfUpcomingWeek = DateTime.Now.GetFirstDayOfWeek().AddDays(7);          
+
+            // convert repetitive to real workouts with correct date
             var convertedWorkouts = repetitiveWorkouts.Select(x => new RepetitiveWorkoutToRealWorkoutDto
             {
                 StartTime = x.StartTime,
@@ -47,11 +52,7 @@ namespace WorkoutReservation.Application.Features.RepetitiveWorkouts.Commands.Ge
                 DayOfWeek = x.DayOfWeek
             })
             .ToList();
-
-            // get first day (monday) of next week
-            var firstDayOfUpcomingWeek = DateTime.Now.GetFirstDayOfWeek().AddDays(7);
             
-            // convert repetitive to real workouts with correct date
             foreach (var workout in convertedWorkouts)
             {
                 switch (workout.DayOfWeek)
@@ -93,7 +94,7 @@ namespace WorkoutReservation.Application.Features.RepetitiveWorkouts.Commands.Ge
                 createdBy = Guid.Parse(_userService.UserId).ToString();
             }
                 
-            var realWorkouts = convertedWorkouts.Select(x => new RealWorkout
+            var newRealWorkouts = convertedWorkouts.Select(x => new RealWorkout
             {
                 StartTime = x.StartTime,
                 EndTime = x.EndTime,
@@ -108,8 +109,12 @@ namespace WorkoutReservation.Application.Features.RepetitiveWorkouts.Commands.Ge
             })
             .ToList();
 
+            // validation
+            var validator = new GenerateUpcomingWorkoutTimetableCommandValidator();
+            await validator.ValidateAndThrowAsync(request, cancellationToken);
+
             // add new real workouts for upcoming week
-            await _realWorkoutRepository.AddRangeAsync(realWorkouts);
+            await _realWorkoutRepository.AddRangeAsync(newRealWorkouts);
 
             _logger.LogInformation("The method generating a new weekly workout plan has been called");
             return Unit.Value;
