@@ -116,7 +116,7 @@ try
     app.UseHangfireDashboard("/hangfire", new DashboardOptions
     {
         Authorization = new[] { new HangfireAuthorizationFilter() },
-        //IsReadOnlyFunc = (DashboardContext context) => true
+        IsReadOnlyFunc = (DashboardContext context) => true
     });
 
     app.UseRouting();

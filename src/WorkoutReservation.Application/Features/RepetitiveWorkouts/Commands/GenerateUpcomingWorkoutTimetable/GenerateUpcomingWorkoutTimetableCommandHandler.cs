@@ -1,4 +1,5 @@
-﻿using FluentValidation;
+﻿using AutoMapper;
+using FluentValidation;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using WorkoutReservation.Application.Common.Exceptions;
@@ -13,16 +14,19 @@ namespace WorkoutReservation.Application.Features.RepetitiveWorkouts.Commands.Ge
         private readonly IRepetitiveWorkoutRepository _repetitiveRepository;
         private readonly IRealWorkoutRepository _realWorkoutRepository;
         private readonly ICurrentUserService _userService;
+        private readonly IMapper _mapper;
         private readonly ILogger<GenerateUpcomingWorkoutTimetableCommandHandler> _logger;
 
         public GenerateUpcomingWorkoutTimetableCommandHandler(IRepetitiveWorkoutRepository repetitiveRepository,
                                                               IRealWorkoutRepository realWorkoutRepository,
                                                               ICurrentUserService userService,
+                                                              IMapper mapper,
                                                               ILogger<GenerateUpcomingWorkoutTimetableCommandHandler> logger)
         {
             _repetitiveRepository = repetitiveRepository;
             _realWorkoutRepository = realWorkoutRepository;
             _userService = userService;
+            _mapper = mapper;
             _logger = logger;
         }
 
@@ -39,19 +43,10 @@ namespace WorkoutReservation.Application.Features.RepetitiveWorkouts.Commands.Ge
             }
 
             // get first day (monday) of next week
-            var firstDayOfUpcomingWeek = DateTime.Now.GetFirstDayOfWeek().AddDays(7);          
+            var firstDayOfUpcomingWeek = DateTime.Now.GetFirstDayOfWeek().AddDays(7);
 
-            // convert repetitive to real workouts with correct date
-            var convertedWorkouts = repetitiveWorkouts.Select(x => new RepetitiveWorkoutToRealWorkoutDto
-            {
-                StartTime = x.StartTime,
-                EndTime = x.EndTime,
-                InstructorId = (int)x.InstructorId,
-                WorkoutTypeId = (int)x.WorkoutTypeId,
-                MaxParticipianNumber = x.MaxParticipianNumber,
-                DayOfWeek = x.DayOfWeek
-            })
-            .ToList();
+            var convertedWorkouts = _mapper
+                .Map<List<RepetitiveWorkoutToRealWorkoutDto>>(repetitiveWorkouts);
             
             foreach (var workout in convertedWorkouts)
             {
@@ -93,7 +88,7 @@ namespace WorkoutReservation.Application.Features.RepetitiveWorkouts.Commands.Ge
             {
                 createdBy = Guid.Parse(_userService.UserId).ToString();
             }
-                
+
             var newRealWorkouts = convertedWorkouts.Select(x => new RealWorkout
             {
                 StartTime = x.StartTime,
