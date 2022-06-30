@@ -36,3 +36,4 @@ In addition, a few application user roles are implemented:
 - #### xUnit (with Moq and FluentAssertions)
 - #### Swagger
 - #### NLog
+- #### Hangfire
