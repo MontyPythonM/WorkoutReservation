@@ -14,16 +14,15 @@ namespace WorkoutReservation.Infrastructure.Repositories
             _dbContext = dbContext;
         }
 
-        public async Task<User> GetByEmail(string email)
+        public async Task<User> GetByEmailAsync(string email)
         {
             return await _dbContext.Users   
                 .AsNoTracking()
                 .FirstOrDefaultAsync(x => x.Email == email);
         }
-        public async Task<User> GetByGuid(Guid guid)
+        public async Task<User> GetByGuidAsync(Guid guid)
         {
             return await _dbContext.Users
-                .AsNoTracking()
                 .FirstOrDefaultAsync(x => x.Id == guid);
         }
 
@@ -34,9 +33,15 @@ namespace WorkoutReservation.Infrastructure.Repositories
                 .ToListAsync();
         }
 
-        public async Task AddUser(User user)
+        public async Task AddAsync(User user)
         { 
             await _dbContext.Users.AddAsync(user);
+            await _dbContext.SaveChangesAsync();
+        }
+
+        public async Task UpdateAsync(User user)
+        {
+            _dbContext.Update(user);
             await _dbContext.SaveChangesAsync();
         }
     }

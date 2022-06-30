@@ -33,7 +33,7 @@ namespace WorkoutReservation.Application.Features.Users.Commands.Login
         public async Task<string> Handle(LoginCommand request, 
                                          CancellationToken cancellationToken)
         {
-            var user = await _userRepository.GetByEmail(request.Email);
+            var user = await _userRepository.GetByEmailAsync(request.Email);
 
             if (user is null)
                 throw new ForbidException("Invalid email address or password.");

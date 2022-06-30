@@ -27,7 +27,7 @@ namespace WorkoutReservation.Application.Features.Users.Commands.Register
         public async Task<Unit> Handle(RegisterCommand request, 
                                        CancellationToken cancellationToken)
         {
-            var user = await _userRepository.GetByEmail(request.Email);
+            var user = await _userRepository.GetByEmailAsync(request.Email);
 
             var validator = new RegisterCommandValidator(user);
             await validator.ValidateAndThrowAsync(request, cancellationToken);
@@ -40,7 +40,7 @@ namespace WorkoutReservation.Application.Features.Users.Commands.Register
             mappedUser.AccountCreationDate = DateTime.Now;
             mappedUser.UserRole = UserRole.Member;
 
-            await _userRepository.AddUser(mappedUser);
+            await _userRepository.AddAsync(mappedUser);
 
             return Unit.Value;
         }
