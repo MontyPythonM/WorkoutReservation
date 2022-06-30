@@ -44,5 +44,11 @@ namespace WorkoutReservation.Infrastructure.Repositories
             _dbContext.Update(user);
             await _dbContext.SaveChangesAsync();
         }
+
+        public async Task DeleteAsync(User user)
+        {
+            _dbContext.Remove(user);
+            await _dbContext.SaveChangesAsync();
+        }
     }
 }

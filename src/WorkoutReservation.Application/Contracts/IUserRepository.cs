@@ -9,5 +9,6 @@ namespace WorkoutReservation.Application.Contracts
         public Task<User> GetByGuidAsync(Guid guid);
         public Task<List<User>> GetAllAsync();
         public Task UpdateAsync(User user);
+        public Task DeleteAsync(User user);
     }
 }
