@@ -1,32 +1,31 @@
 ﻿using AutoMapper;
+using FluentValidation;
 using MediatR;
+using WorkoutReservation.Application.Common.Dtos;
 using WorkoutReservation.Application.Common.Exceptions;
 using WorkoutReservation.Application.Contracts;
 
 namespace WorkoutReservation.Application.Features.WorkoutTypes.Queries.GetWorkoutTypesList
 {
-    public class GetWorkoutTypesListQueryHandler : IRequestHandler<GetWorkoutTypesListQuery, 
-                                                                   List<WorkoutTypesListQueryDto>>
+    public class GetWorkoutTypesListQueryHandler : IRequestHandler<GetWorkoutTypesListQuery,
+                                                                   PagedResultDto<WorkoutTypesListQueryDto>>
     {
         private readonly IWorkoutTypeRepository _workoutTypeRepository;
-        private readonly IMapper _mapper;
 
-        public GetWorkoutTypesListQueryHandler(IWorkoutTypeRepository workoutTypeRepository,    
-                                               IMapper mapper)
+        public GetWorkoutTypesListQueryHandler(IWorkoutTypeRepository workoutTypeRepository)
         {
             _workoutTypeRepository = workoutTypeRepository;
-            _mapper = mapper;
         }
 
-        public async Task<List<WorkoutTypesListQueryDto>> Handle(GetWorkoutTypesListQuery request, 
-                                                                 CancellationToken cancellationToken)
+        public async Task<PagedResultDto<WorkoutTypesListQueryDto>> Handle(GetWorkoutTypesListQuery request, 
+                                                                           CancellationToken cancellationToken)
         {
-            var workoutTypes = await _workoutTypeRepository.GetAllAsync();
+            var validator = new GetWorkoutTypesListQueryValidator();
+            await validator.ValidateAndThrowAsync(request, cancellationToken);
 
-            if (!workoutTypes.Any())
-                throw new NotFoundException($"Workout types not found.");
+            var pagedWorkoutTypes = await _workoutTypeRepository.GetAllPagedAsync(request);
 
-            return _mapper.Map<List<WorkoutTypesListQueryDto>>(workoutTypes);
+            return pagedWorkoutTypes;
         }
     }
 }

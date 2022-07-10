@@ -1,5 +1,7 @@
 ﻿using Moq;
+using WorkoutReservation.Application.Common.Dtos;
 using WorkoutReservation.Application.Contracts;
+using WorkoutReservation.Application.Features.WorkoutTypes.Queries.GetWorkoutTypesList;
 using WorkoutReservation.Domain.Entities;
 using WorkoutReservation.Domain.Enums;
 
@@ -41,11 +43,10 @@ namespace WorkoutReservation.Application.UnitTests.Mocks
 
             return workoutTypes;
         }
-         
+
         public static Mock<IWorkoutTypeRepository> GetRepositoryMock()
         {
             var workoutTypes = GetDummyList();
-
             var repositoryMock = new Mock<IWorkoutTypeRepository>();
 
             // GetAllAsync

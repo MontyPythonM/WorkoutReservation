@@ -5,7 +5,6 @@ using Moq;
 using WorkoutReservation.Application.Common.Exceptions;
 using WorkoutReservation.Application.Contracts;
 using WorkoutReservation.Application.Features.WorkoutTypes.Commands.DeleteWorkoutType;
-using WorkoutReservation.Application.Features.WorkoutTypes.Queries.GetWorkoutTypesList;
 using WorkoutReservation.Application.MappingProfile;
 using WorkoutReservation.Application.UnitTests.Mocks;
 using WorkoutReservation.Domain.Entities;
@@ -30,7 +29,6 @@ namespace WorkoutReservation.Application.UnitTests.WorkoutTypes
             });
 
             _mapper = configurationProvider.CreateMapper();
-
             _mockLogger = new Mock<ILogger<DeleteWorkoutTypeCommandHandler>>();
         }
 
@@ -39,18 +37,19 @@ namespace WorkoutReservation.Application.UnitTests.WorkoutTypes
         {
             // arrange
             var deleteHandler = new DeleteWorkoutTypeCommandHandler(_mockWorkoutTypeRepository.Object, _mockLogger.Object);
-            var getHandler = new GetWorkoutTypesListQueryHandler(_mockWorkoutTypeRepository.Object, _mapper);
 
             var workoutTypesBeforeCount = _workoutTypeDummyList.Count;
 
             // act
-            await deleteHandler.Handle(new DeleteWorkoutTypeCommand { 
-                WorkoutTypeId = workoutTypesBeforeCount }, CancellationToken.None);
+            await deleteHandler.Handle(new DeleteWorkoutTypeCommand
+            {
+                WorkoutTypeId = workoutTypesBeforeCount
+            }, CancellationToken.None);
 
-            var workoutTypesAfterCount = (await getHandler.Handle(new GetWorkoutTypesListQuery(), CancellationToken.None)).Count;
+            var allWorkoutTypesAfterCount = (await _mockWorkoutTypeRepository.Object.GetAllAsync()).Count;
 
             // assert
-            workoutTypesAfterCount.Should().Be(workoutTypesBeforeCount - 1);
+            allWorkoutTypesAfterCount.Should().Be(workoutTypesBeforeCount - 1);
         }
 
         [Fact]

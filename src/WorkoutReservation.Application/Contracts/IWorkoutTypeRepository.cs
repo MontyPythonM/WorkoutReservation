@@ -1,4 +1,6 @@
-﻿using WorkoutReservation.Domain.Entities;
+﻿using WorkoutReservation.Application.Common.Dtos;
+using WorkoutReservation.Application.Features.WorkoutTypes.Queries.GetWorkoutTypesList;
+using WorkoutReservation.Domain.Entities;
 
 namespace WorkoutReservation.Application.Contracts
 {
@@ -9,5 +11,6 @@ namespace WorkoutReservation.Application.Contracts
         public Task UpdateAsync(WorkoutType workoutType);
         public Task<List<WorkoutType>> GetAllAsync();
         public Task<WorkoutType> GetByIdAsync(int workoutTypeId);
+        public Task<PagedResultDto<WorkoutTypesListQueryDto>> GetAllPagedAsync(GetWorkoutTypesListQuery clientRequest);
     }
 }

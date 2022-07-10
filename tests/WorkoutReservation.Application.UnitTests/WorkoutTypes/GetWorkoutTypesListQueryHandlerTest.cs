@@ -1,75 +1,84 @@
-﻿using AutoMapper;
-using FluentAssertions;
-using Microsoft.Extensions.Logging;
+﻿using FluentAssertions;
 using Moq;
-using WorkoutReservation.Application.Common.Exceptions;
 using WorkoutReservation.Application.Contracts;
-using WorkoutReservation.Application.Features.WorkoutTypes.Commands.DeleteWorkoutType;
 using WorkoutReservation.Application.Features.WorkoutTypes.Queries.GetWorkoutTypesList;
-using WorkoutReservation.Application.MappingProfile;
 using WorkoutReservation.Application.UnitTests.Mocks;
-using WorkoutReservation.Domain.Entities;
 
 namespace WorkoutReservation.Application.UnitTests.WorkoutTypes
 {
     public class GetWorkoutTypesListQueryHandlerTest
     {
-        private readonly IMapper _mapper;
-        private readonly Mock<ILogger<DeleteWorkoutTypeCommandHandler>> _mockLogger;
         private readonly Mock<IWorkoutTypeRepository> _mockWorkoutTypeRepository;
-        private readonly List<WorkoutType> _workoutTypeDummyList;
 
         public GetWorkoutTypesListQueryHandlerTest()
         {
             _mockWorkoutTypeRepository = WorkoutTypeRepositoryMock.GetRepositoryMock();
-            _workoutTypeDummyList = WorkoutTypeRepositoryMock.GetDummyList();
-
-            var configurationProvider = new MapperConfiguration(cfg =>
-            {
-                cfg.AddProfile<WorkoutTypeProfile>();
-            });
-
-            _mapper = configurationProvider.CreateMapper();
-
-            _mockLogger = new Mock<ILogger<DeleteWorkoutTypeCommandHandler>>();
         }
 
-        [Fact]
-        public async Task Handle_ForValidRequest_GetCorrectResults()
-        {           
-            // arrange
-            var handler = new GetWorkoutTypesListQueryHandler(_mockWorkoutTypeRepository.Object, _mapper);
-
-            var workoutTypesCount = _workoutTypeDummyList.Count;
-
-            // act
-            var result = await handler.Handle(new GetWorkoutTypesListQuery(), CancellationToken.None);
-
-            // assert
-            result.Should().NotBeNull();
-            result.Count.Should().Be(workoutTypesCount);
-        }
-
-        [Fact]
-        public async Task Handle_ForEmptyRepository_ThrowNotFoundException()
+        [Theory]       
+        [InlineData(0, 5, null, null, true)]    // invalid pageNumber
+        [InlineData(-1, 10, null, null, true)]
+        [InlineData(-1, 15, null, null, true)]
+        [InlineData(1, 1, null, null, false)]    // invalid pageSize
+        [InlineData(1, 0, null, "Intensity", true)]
+        [InlineData(1, -1, null, "Name", true)]
+        [InlineData(1, 5, null, "name", true)]  // invalid sortBy
+        [InlineData(1, 5, null, "intensity", false)]
+        [InlineData(1, 5, null, "asd", false)]
+        public async Task Handle_InvalidRequest_ThrowValidationException(int pageNumber, 
+                                                                         int pageSize, 
+                                                                         string searchPhrase, 
+                                                                         string sortBy, 
+                                                                         bool sortByDescending)
         {
             // arrange
-            var getHandler = new GetWorkoutTypesListQueryHandler(_mockWorkoutTypeRepository.Object, _mapper);
-            
-            var deleteHandler = new DeleteWorkoutTypeCommandHandler(_mockWorkoutTypeRepository.Object, _mockLogger.Object);
+            var handler = new GetWorkoutTypesListQueryHandler(_mockWorkoutTypeRepository.Object);
 
-            var workoutTypesCount = _workoutTypeDummyList.Count;
-
-            for (int i = 1; i <= workoutTypesCount; i++)
-            {
-                await deleteHandler.Handle(new DeleteWorkoutTypeCommand { WorkoutTypeId = i}, CancellationToken.None);
-            }
+            var incorrectQuery = new GetWorkoutTypesListQuery
+            { 
+                PageNumber = pageNumber,
+                PageSize = pageSize,
+                SearchPhrase = searchPhrase,
+                SortBy = sortBy,
+                SortByDescending = sortByDescending
+            };
 
             // act
-            Func<Task> result = async () => await getHandler.Handle(new GetWorkoutTypesListQuery(), CancellationToken.None);
+            Func<Task> result = async () => await handler.Handle(incorrectQuery, CancellationToken.None);
 
             // assert
-            await result.Should().ThrowAsync<NotFoundException>();
+            await result.Should().ThrowAsync<FluentValidation.ValidationException>();
+        }
+
+        [Theory]
+        [InlineData(1, 5, null, null, true)]    // valid pageNumber and pageSize
+        [InlineData(2, 10, null, null, false)]
+        [InlineData(100, 15, null, null, true)]
+        [InlineData(1, 5, null, "Name", true)]  // valid sortBy
+        [InlineData(1, 5, null, "Intensity", false)] 
+        public async Task Handle_ValidRequest_NotThrowValidationException(int pageNumber,
+                                                                          int pageSize,
+                                                                          string searchPhrase,
+                                                                          string sortBy,
+                                                                          bool sortByDescending)
+        {
+            // arrange
+            var handler = new GetWorkoutTypesListQueryHandler(_mockWorkoutTypeRepository.Object);
+
+            var correctQuery = new GetWorkoutTypesListQuery
+            {
+                PageNumber = pageNumber,
+                PageSize = pageSize,
+                SearchPhrase = searchPhrase,
+                SortBy = sortBy,
+                SortByDescending = sortByDescending
+            };
+
+            // act
+            Func<Task> result = async () => await handler.Handle(correctQuery, CancellationToken.None);
+
+            // assert
+            await result.Should().NotThrowAsync<FluentValidation.ValidationException>();
         }
     }
 }

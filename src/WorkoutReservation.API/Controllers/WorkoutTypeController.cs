@@ -1,6 +1,7 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using WorkoutReservation.Application.Common.Dtos;
 using WorkoutReservation.Application.Features.WorkoutTypes.Commands.CreateWorkoutType;
 using WorkoutReservation.Application.Features.WorkoutTypes.Commands.DeleteWorkoutType;
 using WorkoutReservation.Application.Features.WorkoutTypes.Commands.UpdateWorkoutType;
@@ -26,10 +27,9 @@ namespace WorkoutReservation.API.Controllers
         [AllowAnonymous]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> GetAllWorkoutTypes()
+        public async Task<IActionResult> GetAllWorkoutTypes([FromQuery] GetWorkoutTypesListQuery query)
         {
-            var result = await _mediator.Send(new GetWorkoutTypesListQuery());
-            return Ok(result);
+            return Ok(await _mediator.Send(query));
         }
 
         [HttpGet("{workoutTypeId}")]
