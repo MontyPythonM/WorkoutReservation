@@ -1,11 +1,10 @@
-﻿namespace WorkoutReservation.Domain.Entities
-{
-    public class WorkoutTypeTag
-    {
-        public int Id { get; set; }
-        public string Tag { get; set; }
+﻿namespace WorkoutReservation.Domain.Entities;
 
-        public int WorkoutTypeId { get; set; }
-        public WorkoutType WorkoutType { get; set; }
-    }
+public class WorkoutTypeTag
+{
+    public int Id { get; set; }
+    public string Tag { get; set; }
+
+    public int WorkoutTypeId { get; set; }
+    public WorkoutType WorkoutType { get; set; }
 }

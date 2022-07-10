@@ -5,26 +5,25 @@ using WorkoutReservation.Application.Features.RepetitiveWorkouts.Commands.Update
 using WorkoutReservation.Application.Features.RepetitiveWorkouts.Queries.GetRepetitiveWorkoutList;
 using WorkoutReservation.Domain.Entities;
 
-namespace WorkoutReservation.Application.Common.MappingProfile
+namespace WorkoutReservation.Application.Common.MappingProfile;
+
+public class RepetitiveWorkoutProfile : Profile
 {
-    public class RepetitiveWorkoutProfile : Profile
+    public RepetitiveWorkoutProfile()
     {
-        public RepetitiveWorkoutProfile()
-        {
-            // RepetitiveWorkoutListDto
-            CreateMap<RepetitiveWorkout, RepetitiveWorkoutListDto>();
-            CreateMap<WorkoutType, WorkoutTypeForRepetitiveWorkoutListDto>();
-            CreateMap<Instructor, InstructorForRepetitiveWorkoutListDto>();
+        // RepetitiveWorkoutListDto
+        CreateMap<RepetitiveWorkout, RepetitiveWorkoutListDto>();
+        CreateMap<WorkoutType, WorkoutTypeForRepetitiveWorkoutListDto>();
+        CreateMap<Instructor, InstructorForRepetitiveWorkoutListDto>();
 
-            // CreateInstructorCommandHandler
-            CreateMap<CreateRepetitiveWorkoutCommand, RepetitiveWorkout>();
+        // CreateInstructorCommandHandler
+        CreateMap<CreateRepetitiveWorkoutCommand, RepetitiveWorkout>();
 
-            // UpdateInstructorCommandHandler
-            CreateMap<UpdateRepetitiveWorkoutCommand, RepetitiveWorkout>()
-                .ForMember(x => x.Id, y => y.MapFrom(z => z.RepetitiveWorkoutId));
+        // UpdateInstructorCommandHandler
+        CreateMap<UpdateRepetitiveWorkoutCommand, RepetitiveWorkout>()
+            .ForMember(x => x.Id, y => y.MapFrom(z => z.RepetitiveWorkoutId));
 
-            // GenerateUpcomingWorkoutTimetable
-            CreateMap<RepetitiveWorkout, RepetitiveWorkoutToRealWorkoutDto>();
-        }
+        // GenerateUpcomingWorkoutTimetable
+        CreateMap<RepetitiveWorkout, RepetitiveWorkoutToRealWorkoutDto>();
     }
 }

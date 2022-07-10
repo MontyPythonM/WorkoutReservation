@@ -7,112 +7,111 @@ using WorkoutReservation.Application.Contracts;
 using WorkoutReservation.Domain.Entities;
 using WorkoutReservation.Domain.Methods;
 
-namespace WorkoutReservation.Application.Features.RepetitiveWorkouts.Commands.GenerateUpcomingWorkoutTimetable
+namespace WorkoutReservation.Application.Features.RepetitiveWorkouts.Commands.GenerateUpcomingWorkoutTimetable;
+
+public class GenerateUpcomingWorkoutTimetableCommandHandler : IRequestHandler<GenerateUpcomingWorkoutTimetableCommand>
 {
-    public class GenerateUpcomingWorkoutTimetableCommandHandler : IRequestHandler<GenerateUpcomingWorkoutTimetableCommand>
+    private readonly IRepetitiveWorkoutRepository _repetitiveRepository;
+    private readonly IRealWorkoutRepository _realWorkoutRepository;
+    private readonly ICurrentUserService _userService;
+    private readonly IMapper _mapper;
+    private readonly ILogger<GenerateUpcomingWorkoutTimetableCommandHandler> _logger;
+
+    public GenerateUpcomingWorkoutTimetableCommandHandler(IRepetitiveWorkoutRepository repetitiveRepository,
+                                                          IRealWorkoutRepository realWorkoutRepository,
+                                                          ICurrentUserService userService,
+                                                          IMapper mapper,
+                                                          ILogger<GenerateUpcomingWorkoutTimetableCommandHandler> logger)
     {
-        private readonly IRepetitiveWorkoutRepository _repetitiveRepository;
-        private readonly IRealWorkoutRepository _realWorkoutRepository;
-        private readonly ICurrentUserService _userService;
-        private readonly IMapper _mapper;
-        private readonly ILogger<GenerateUpcomingWorkoutTimetableCommandHandler> _logger;
+        _repetitiveRepository = repetitiveRepository;
+        _realWorkoutRepository = realWorkoutRepository;
+        _userService = userService;
+        _mapper = mapper;
+        _logger = logger;
+    }
 
-        public GenerateUpcomingWorkoutTimetableCommandHandler(IRepetitiveWorkoutRepository repetitiveRepository,
-                                                              IRealWorkoutRepository realWorkoutRepository,
-                                                              ICurrentUserService userService,
-                                                              IMapper mapper,
-                                                              ILogger<GenerateUpcomingWorkoutTimetableCommandHandler> logger)
+    public async Task<Unit> Handle(GenerateUpcomingWorkoutTimetableCommand request, 
+                                   CancellationToken cancellationToken)
+    {
+        // get repetitive workouts timetable
+        var repetitiveWorkouts = await _repetitiveRepository.GetAllAsync();
+
+        if (!repetitiveWorkouts.Any())
         {
-            _repetitiveRepository = repetitiveRepository;
-            _realWorkoutRepository = realWorkoutRepository;
-            _userService = userService;
-            _mapper = mapper;
-            _logger = logger;
+            _logger.LogWarning("Repetitive workouts not found. No new workout week has been generated.");
+            throw new NotFoundException("Repetitive workouts not found.");
         }
 
-        public async Task<Unit> Handle(GenerateUpcomingWorkoutTimetableCommand request, 
-                                       CancellationToken cancellationToken)
+        // get first day (monday) of next week
+        var firstDayOfUpcomingWeek = DateTime.Now.GetFirstDayOfWeek().AddDays(7);
+
+        var convertedWorkouts = _mapper
+            .Map<List<RepetitiveWorkoutToRealWorkoutDto>>(repetitiveWorkouts);
+        
+        foreach (var workout in convertedWorkouts)
         {
-            // get repetitive workouts timetable
-            var repetitiveWorkouts = await _repetitiveRepository.GetAllAsync();
-
-            if (!repetitiveWorkouts.Any())
+            switch (workout.DayOfWeek)
             {
-                _logger.LogWarning("Repetitive workouts not found. No new workout week has been generated.");
-                throw new NotFoundException("Repetitive workouts not found.");
+                case DayOfWeek.Monday:
+                    workout.Date = firstDayOfUpcomingWeek;
+                    break;
+
+                case DayOfWeek.Tuesday:
+                    workout.Date = firstDayOfUpcomingWeek.AddDays(1);
+                    break;
+
+                case DayOfWeek.Wednesday:
+                    workout.Date = firstDayOfUpcomingWeek.AddDays(2);
+                    break;
+
+                case DayOfWeek.Thursday:
+                    workout.Date = firstDayOfUpcomingWeek.AddDays(3);
+                    break;
+
+                case DayOfWeek.Friday:
+                    workout.Date = firstDayOfUpcomingWeek.AddDays(4);
+                    break;
+
+                case DayOfWeek.Saturday:
+                    workout.Date = firstDayOfUpcomingWeek.AddDays(5);
+                    break;
+
+                case DayOfWeek.Sunday:
+                    workout.Date = firstDayOfUpcomingWeek.AddDays(6);
+                    break;
             }
-
-            // get first day (monday) of next week
-            var firstDayOfUpcomingWeek = DateTime.Now.GetFirstDayOfWeek().AddDays(7);
-
-            var convertedWorkouts = _mapper
-                .Map<List<RepetitiveWorkoutToRealWorkoutDto>>(repetitiveWorkouts);
-            
-            foreach (var workout in convertedWorkouts)
-            {
-                switch (workout.DayOfWeek)
-                {
-                    case DayOfWeek.Monday:
-                        workout.Date = firstDayOfUpcomingWeek;
-                        break;
-
-                    case DayOfWeek.Tuesday:
-                        workout.Date = firstDayOfUpcomingWeek.AddDays(1);
-                        break;
-
-                    case DayOfWeek.Wednesday:
-                        workout.Date = firstDayOfUpcomingWeek.AddDays(2);
-                        break;
-
-                    case DayOfWeek.Thursday:
-                        workout.Date = firstDayOfUpcomingWeek.AddDays(3);
-                        break;
-
-                    case DayOfWeek.Friday:
-                        workout.Date = firstDayOfUpcomingWeek.AddDays(4);
-                        break;
-
-                    case DayOfWeek.Saturday:
-                        workout.Date = firstDayOfUpcomingWeek.AddDays(5);
-                        break;
-
-                    case DayOfWeek.Sunday:
-                        workout.Date = firstDayOfUpcomingWeek.AddDays(6);
-                        break;
-                }
-            }
-
-            string createdBy = null;
-
-            if (!request.IsAutoGenerated)
-            {
-                createdBy = Guid.Parse(_userService.UserId).ToString();
-            }
-
-            var newRealWorkouts = convertedWorkouts.Select(x => new RealWorkout
-            {
-                StartTime = x.StartTime,
-                EndTime = x.EndTime,
-                InstructorId = (int)x.InstructorId,
-                WorkoutTypeId = (int)x.WorkoutTypeId,
-                MaxParticipianNumber = x.MaxParticipianNumber,
-                Date = x.Date,
-                CurrentParticipianNumber = 0,
-                IsAutoGenerated = request.IsAutoGenerated,
-                CreatedDate = DateTime.Now,
-                CreatedBy = createdBy
-            })
-            .ToList();
-
-            // validation
-            var validator = new GenerateUpcomingWorkoutTimetableCommandValidator();
-            await validator.ValidateAndThrowAsync(request, cancellationToken);
-
-            // add new real workouts for upcoming week
-            await _realWorkoutRepository.AddRangeAsync(newRealWorkouts);
-
-            _logger.LogInformation("The method generating a new weekly workout plan has been called");
-            return Unit.Value;
         }
+
+        string createdBy = null;
+
+        if (!request.IsAutoGenerated)
+        {
+            createdBy = Guid.Parse(_userService.UserId).ToString();
+        }
+
+        var newRealWorkouts = convertedWorkouts.Select(x => new RealWorkout
+        {
+            StartTime = x.StartTime,
+            EndTime = x.EndTime,
+            InstructorId = (int)x.InstructorId,
+            WorkoutTypeId = (int)x.WorkoutTypeId,
+            MaxParticipianNumber = x.MaxParticipianNumber,
+            Date = x.Date,
+            CurrentParticipianNumber = 0,
+            IsAutoGenerated = request.IsAutoGenerated,
+            CreatedDate = DateTime.Now,
+            CreatedBy = createdBy
+        })
+        .ToList();
+
+        // validation
+        var validator = new GenerateUpcomingWorkoutTimetableCommandValidator();
+        await validator.ValidateAndThrowAsync(request, cancellationToken);
+
+        // add new real workouts for upcoming week
+        await _realWorkoutRepository.AddRangeAsync(newRealWorkouts);
+
+        _logger.LogInformation("The method generating a new weekly workout plan has been called");
+        return Unit.Value;
     }
 }

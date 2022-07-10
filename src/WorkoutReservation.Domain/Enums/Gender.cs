@@ -1,8 +1,7 @@
-﻿namespace WorkoutReservation.Domain.Enums
+﻿namespace WorkoutReservation.Domain.Enums;
+
+public enum Gender
 {
-    public enum Gender
-    {
-        Female = 1,
-        Male
-    }
+    Female = 1,
+    Male
 }

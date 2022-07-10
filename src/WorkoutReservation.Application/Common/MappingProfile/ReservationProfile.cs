@@ -5,28 +5,27 @@ using WorkoutReservation.Application.Features.Reservations.Commands.EditReservat
 using WorkoutReservation.Application.Features.Reservations.Queries.GetUserReservationsList;
 using WorkoutReservation.Domain.Entities;
 
-namespace WorkoutReservation.Application.Common.MappingProfile
+namespace WorkoutReservation.Application.Common.MappingProfile;
+
+public class ReservationProfile : Profile
 {
-    public class ReservationProfile : Profile
+    public ReservationProfile()
     {
-        public ReservationProfile()
-        {
-            // GetUserReservationsList
-            CreateMap<Reservation, UserReservationsListDto>();
-            CreateMap<RealWorkout, RealWorkoutForUserReservationsListDto>();
-            CreateMap<WorkoutType, WorkoutTypeForUserReservationsListDto>();
-            CreateMap<Instructor, InstructorForUserReservationsListDto>();
+        // GetUserReservationsList
+        CreateMap<Reservation, UserReservationsListDto>();
+        CreateMap<RealWorkout, RealWorkoutForUserReservationsListDto>();
+        CreateMap<WorkoutType, WorkoutTypeForUserReservationsListDto>();
+        CreateMap<Instructor, InstructorForUserReservationsListDto>();
 
-            // AddReservationCommand
-            CreateMap<AddReservationCommand, Reservation>();
+        // AddReservationCommand
+        CreateMap<AddReservationCommand, Reservation>();
 
-            // CancelReservationCommand
-            CreateMap<CancelReservationCommand, Reservation>()
-                .ForMember(x => x.Id, y => y.MapFrom(z => z.ReservationId));
+        // CancelReservationCommand
+        CreateMap<CancelReservationCommand, Reservation>()
+            .ForMember(x => x.Id, y => y.MapFrom(z => z.ReservationId));
 
-            // EditReservationStatusCommand
-            CreateMap<EditReservationStatusCommand, Reservation>()
-                .ForMember(x => x.Id, y => y.MapFrom(z => z.ReservationId));
-        }
+        // EditReservationStatusCommand
+        CreateMap<EditReservationStatusCommand, Reservation>()
+            .ForMember(x => x.Id, y => y.MapFrom(z => z.ReservationId));
     }
 }

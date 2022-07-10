@@ -1,28 +1,27 @@
 ﻿using FluentValidation;
 
-namespace WorkoutReservation.Application.Features.Instructors.Commands.CreateInstructor
+namespace WorkoutReservation.Application.Features.Instructors.Commands.CreateInstructor;
+
+public class CreateInstructorCommandValidator : AbstractValidator<CreateInstructorCommand>
 {
-    public class CreateInstructorCommandValidator : AbstractValidator<CreateInstructorCommand>
+    public CreateInstructorCommandValidator()
     {
-        public CreateInstructorCommandValidator()
-        {
-            RuleFor(x => x.FirstName)
-                .MaximumLength(50)
-                .NotEmpty();
+        RuleFor(x => x.FirstName)
+            .MaximumLength(50)
+            .NotEmpty();
 
-            RuleFor(x => x.LastName)
-                .MaximumLength(50)
-                .NotEmpty();
+        RuleFor(x => x.LastName)
+            .MaximumLength(50)
+            .NotEmpty();
 
-            RuleFor(x => x.Email)
-                .EmailAddress()
-                .NotEmpty();
+        RuleFor(x => x.Email)
+            .EmailAddress()
+            .NotEmpty();
 
-            RuleFor(x => x.Biography)
-                .MaximumLength(3000);
+        RuleFor(x => x.Biography)
+            .MaximumLength(3000);
 
-            RuleFor(x => x.Gender)
-                .IsInEnum();
-        }
+        RuleFor(x => x.Gender)
+            .IsInEnum();
     }
 }

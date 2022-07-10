@@ -2,13 +2,12 @@
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using WorkoutReservation.Domain.Entities;
 
-namespace WorkoutReservation.Infrastructure.Presistence.Configuration
+namespace WorkoutReservation.Infrastructure.Presistence.Configuration;
+
+public class WorkoutTypeTagConfiguration : IEntityTypeConfiguration<WorkoutTypeTag>
 {
-    public class WorkoutTypeTagConfiguration : IEntityTypeConfiguration<WorkoutTypeTag>
+    public void Configure(EntityTypeBuilder<WorkoutTypeTag> builder)
     {
-        public void Configure(EntityTypeBuilder<WorkoutTypeTag> builder)
-        {
-            builder.Property(x => x.Tag).IsRequired();
-        }
+        builder.Property(x => x.Tag).IsRequired();
     }
 }

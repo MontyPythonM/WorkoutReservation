@@ -5,25 +5,24 @@ using WorkoutReservation.Application.Features.Instructors.Queries.GetInstructorD
 using WorkoutReservation.Application.Features.Instructors.Queries.GetInstructorList;
 using WorkoutReservation.Domain.Entities;
 
-namespace WorkoutReservation.Application.Common.MappingProfile
+namespace WorkoutReservation.Application.Common.MappingProfile;
+
+public class InstructorProfile : Profile
 {
-    public class InstructorProfile : Profile
+    public InstructorProfile()
     {
-        public InstructorProfile()
-        {
-            // InstructorListQueryDto
-            CreateMap<Instructor, InstructorListQueryDto>();
+        // InstructorListQueryDto
+        CreateMap<Instructor, InstructorListQueryDto>();
 
-            // InstructorDetailQueryDto
-            CreateMap<Instructor, InstructorDetailQueryDto>();
-            CreateMap<WorkoutType, WorkoutTypeForInstructorDetailQeuryDto>();
+        // InstructorDetailQueryDto
+        CreateMap<Instructor, InstructorDetailQueryDto>();
+        CreateMap<WorkoutType, WorkoutTypeForInstructorDetailQeuryDto>();
 
-            // CreateInstructorCommandHandler
-            CreateMap<CreateInstructorCommand, Instructor>();
+        // CreateInstructorCommandHandler
+        CreateMap<CreateInstructorCommand, Instructor>();
 
-            // UpdateInstructorCommandHandler
-            CreateMap<UpdateInstructorCommand, Instructor> ()
-                .ForMember(x => x.Id, y => y.MapFrom(z => z.InstructorId));
-        }
+        // UpdateInstructorCommandHandler
+        CreateMap<UpdateInstructorCommand, Instructor> ()
+            .ForMember(x => x.Id, y => y.MapFrom(z => z.InstructorId));
     }
 }

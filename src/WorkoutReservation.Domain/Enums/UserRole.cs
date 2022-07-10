@@ -1,10 +1,9 @@
-﻿namespace WorkoutReservation.Domain.Enums
+﻿namespace WorkoutReservation.Domain.Enums;
+
+public enum UserRole
 {
-    public enum UserRole
-    {
-        Member = 1,
-        Manager,
-        Administrator,            
-        NotConfirmedMember
-    }
+    Member = 1,
+    Manager,
+    Administrator,            
+    NotConfirmedMember
 }

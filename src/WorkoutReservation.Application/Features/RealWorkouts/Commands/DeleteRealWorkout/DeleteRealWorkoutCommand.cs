@@ -1,9 +1,8 @@
 ﻿using MediatR;
 
-namespace WorkoutReservation.Application.Features.RealWorkouts.Commands.DeleteRealWorkout
+namespace WorkoutReservation.Application.Features.RealWorkouts.Commands.DeleteRealWorkout;
+
+public class DeleteRealWorkoutCommand : IRequest
 {
-    public class DeleteRealWorkoutCommand : IRequest
-    {
-        public int RealWorkoutId { get; set; }
-    }
+    public int RealWorkoutId { get; set; }
 }

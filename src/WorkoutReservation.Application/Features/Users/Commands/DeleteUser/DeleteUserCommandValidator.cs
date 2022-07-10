@@ -1,15 +1,14 @@
 ﻿using FluentValidation;
 
-namespace WorkoutReservation.Application.Features.Users.Commands.DeleteUser
+namespace WorkoutReservation.Application.Features.Users.Commands.DeleteUser;
+
+public class DeleteUserCommandValidator : AbstractValidator<DeleteUserCommand>
 {
-    public class DeleteUserCommandValidator : AbstractValidator<DeleteUserCommand>
+    public DeleteUserCommandValidator(Guid currentUserGuid)
     {
-        public DeleteUserCommandValidator(Guid currentUserGuid)
-        {
-            RuleFor(x => x.UserGuid)
-                .NotEmpty()
-                .Must(x => x != currentUserGuid)
-                .WithMessage("You cannot delete your own account by this endpoint. Use route: */api/account/delete-account");
-        }
+        RuleFor(x => x.UserGuid)
+            .NotEmpty()
+            .Must(x => x != currentUserGuid)
+            .WithMessage("You cannot delete your own account by this endpoint. Use route: */api/account/delete-account");
     }
 }

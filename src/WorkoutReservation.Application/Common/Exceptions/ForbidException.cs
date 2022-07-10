@@ -1,9 +1,8 @@
-﻿namespace WorkoutReservation.Application.Common.Exceptions
+﻿namespace WorkoutReservation.Application.Common.Exceptions;
+
+public class ForbidException : Exception
 {
-    public class ForbidException : Exception
+    public ForbidException(string message) : base(message)
     {
-        public ForbidException(string message) : base(message)
-        {
-        }
     }
 }

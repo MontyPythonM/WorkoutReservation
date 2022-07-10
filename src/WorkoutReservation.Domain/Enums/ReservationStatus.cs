@@ -1,10 +1,9 @@
-﻿namespace WorkoutReservation.Domain.Enums
+﻿namespace WorkoutReservation.Domain.Enums;
+
+public enum ReservationStatus
 {
-    public enum ReservationStatus
-    {
-        Reserved = 1,
-        Cancelled,
-        Absence,
-        Presence
-    }
+    Reserved = 1,
+    Cancelled,
+    Absence,
+    Presence
 }

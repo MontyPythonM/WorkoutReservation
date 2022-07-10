@@ -1,9 +1,8 @@
 ﻿using MediatR;
 
-namespace WorkoutReservation.Application.Features.RepetitiveWorkouts.Commands.DeleteRepetitiveWorkout
+namespace WorkoutReservation.Application.Features.RepetitiveWorkouts.Commands.DeleteRepetitiveWorkout;
+
+public class DeleteRepetitiveWorkoutCommand : IRequest
 {
-    public class DeleteRepetitiveWorkoutCommand : IRequest
-    {
-        public int RepetitiveWorkoutId { get; set; }
-    }
+    public int RepetitiveWorkoutId { get; set; }
 }

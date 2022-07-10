@@ -4,32 +4,31 @@ using WorkoutReservation.Application.Common.Exceptions;
 using WorkoutReservation.Application.Contracts;
 using WorkoutReservation.Domain.Methods;
 
-namespace WorkoutReservation.Application.Features.RealWorkouts.Queries.GetRealWorkoutFromUpcomingWeek
+namespace WorkoutReservation.Application.Features.RealWorkouts.Queries.GetRealWorkoutFromUpcomingWeek;
+
+public class GetRealWorkoutFromUpcomingWeekQueryHandler : IRequestHandler<GetRealWorkoutFromUpcomingWeekQuery,
+                                                                          List<RealWorkoutFromUpcomingWeekDto>>
 {
-    public class GetRealWorkoutFromUpcomingWeekQueryHandler : IRequestHandler<GetRealWorkoutFromUpcomingWeekQuery,
-                                                                              List<RealWorkoutFromUpcomingWeekDto>>
+    private readonly IRealWorkoutRepository _realWorkoutRepository;
+    private readonly IMapper _mapper;
+
+    public GetRealWorkoutFromUpcomingWeekQueryHandler(IRealWorkoutRepository realWorkoutRepository,
+                                                      IMapper mapper)
     {
-        private readonly IRealWorkoutRepository _realWorkoutRepository;
-        private readonly IMapper _mapper;
+        _realWorkoutRepository = realWorkoutRepository;
+        _mapper = mapper;
+    }
+    public async Task<List<RealWorkoutFromUpcomingWeekDto>> Handle(GetRealWorkoutFromUpcomingWeekQuery request, 
+                                                                   CancellationToken cancellationToken)
+    {
+        var firstDayOfCurrentWeek = DateTime.Now.GetFirstDayOfWeek().AddDays(7);
+        var lastDayOfCurrentWeek = firstDayOfCurrentWeek.AddDays(7);
 
-        public GetRealWorkoutFromUpcomingWeekQueryHandler(IRealWorkoutRepository realWorkoutRepository,
-                                                          IMapper mapper)
-        {
-            _realWorkoutRepository = realWorkoutRepository;
-            _mapper = mapper;
-        }
-        public async Task<List<RealWorkoutFromUpcomingWeekDto>> Handle(GetRealWorkoutFromUpcomingWeekQuery request, 
-                                                                       CancellationToken cancellationToken)
-        {
-            var firstDayOfCurrentWeek = DateTime.Now.GetFirstDayOfWeek().AddDays(7);
-            var lastDayOfCurrentWeek = firstDayOfCurrentWeek.AddDays(7);
+        var realWorkouts = await _realWorkoutRepository.GetAllAsync(firstDayOfCurrentWeek, lastDayOfCurrentWeek);
 
-            var realWorkouts = await _realWorkoutRepository.GetAllAsync(firstDayOfCurrentWeek, lastDayOfCurrentWeek);
+        if (!realWorkouts.Any())
+            throw new NotFoundException($"Real workouts from current week not found. [Date from: {firstDayOfCurrentWeek} to {lastDayOfCurrentWeek}");
 
-            if (!realWorkouts.Any())
-                throw new NotFoundException($"Real workouts from current week not found. [Date from: {firstDayOfCurrentWeek} to {lastDayOfCurrentWeek}");
-
-            return _mapper.Map<List<RealWorkoutFromUpcomingWeekDto>>(realWorkouts);
-        }
+        return _mapper.Map<List<RealWorkoutFromUpcomingWeekDto>>(realWorkouts);
     }
 }

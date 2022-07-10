@@ -6,33 +6,32 @@ using WorkoutReservation.Application.Features.RealWorkouts.Queries.GetRealWorkou
 using WorkoutReservation.Application.Features.RealWorkouts.Queries.GetRealWorkoutFromUpcomingWeek;
 using WorkoutReservation.Domain.Entities;
 
-namespace WorkoutReservation.Application.Common.MappingProfile
+namespace WorkoutReservation.Application.Common.MappingProfile;
+
+public class RealWorkoutProfile : Profile
 {
-    public class RealWorkoutProfile : Profile
+    public RealWorkoutProfile()
     {
-        public RealWorkoutProfile()
-        {
-            // GetRealWorkoutFromCurrentWeekQuery
-            CreateMap<RealWorkout, RealWorkoutFromCurrentWeekDto>();
-            CreateMap<WorkoutType, WorkoutTypeForRealWorkoutFromCurrentWeekDto>();
-            CreateMap<Instructor, InstructorForRealWorkoutFromCurrentWeekDto>();
+        // GetRealWorkoutFromCurrentWeekQuery
+        CreateMap<RealWorkout, RealWorkoutFromCurrentWeekDto>();
+        CreateMap<WorkoutType, WorkoutTypeForRealWorkoutFromCurrentWeekDto>();
+        CreateMap<Instructor, InstructorForRealWorkoutFromCurrentWeekDto>();
 
-            // GetRealWorkoutFromUpcomingWeekQuery
-            CreateMap<RealWorkout, RealWorkoutFromUpcomingWeekDto>();
-            CreateMap<WorkoutType, WorkoutTypeForRealWorkoutFromUpcomingWeekDto>();
-            CreateMap<Instructor, InstructorForRealWorkoutFromUpcomingWeekDto>();
+        // GetRealWorkoutFromUpcomingWeekQuery
+        CreateMap<RealWorkout, RealWorkoutFromUpcomingWeekDto>();
+        CreateMap<WorkoutType, WorkoutTypeForRealWorkoutFromUpcomingWeekDto>();
+        CreateMap<Instructor, InstructorForRealWorkoutFromUpcomingWeekDto>();
 
-            // GetRealWorkoutDetailQuery
-            CreateMap<RealWorkout, RealWorkoutDetailDto>();
-            CreateMap<WorkoutType, WorkoutTypeForRealWorkoutDetailDto>();
-            CreateMap<Instructor, InstructorForRealWorkoutDetailDto>();
+        // GetRealWorkoutDetailQuery
+        CreateMap<RealWorkout, RealWorkoutDetailDto>();
+        CreateMap<WorkoutType, WorkoutTypeForRealWorkoutDetailDto>();
+        CreateMap<Instructor, InstructorForRealWorkoutDetailDto>();
 
-            // CreateRealWorkoutCommand
-            CreateMap<CreateRealWorkoutCommand, RealWorkout>();
+        // CreateRealWorkoutCommand
+        CreateMap<CreateRealWorkoutCommand, RealWorkout>();
 
-            // UpdateRealWorkoutCommand
-            CreateMap<UpdateRealWorkoutCommand, RealWorkout>()
-                .ForMember(x => x.Id, y => y.MapFrom(z => z.RealWorkoutId)); ;
-        }
+        // UpdateRealWorkoutCommand
+        CreateMap<UpdateRealWorkoutCommand, RealWorkout>()
+            .ForMember(x => x.Id, y => y.MapFrom(z => z.RealWorkoutId)); ;
     }
 }

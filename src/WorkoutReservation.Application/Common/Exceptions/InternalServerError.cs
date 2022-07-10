@@ -1,9 +1,8 @@
-﻿namespace WorkoutReservation.Application.Common.Exceptions
+﻿namespace WorkoutReservation.Application.Common.Exceptions;
+
+public class InternalServerError : Exception
 {
-    public class InternalServerError : Exception
+    public InternalServerError(string message) : base(message)
     {
-        public InternalServerError(string message) : base(message)
-        {
-        }
     }
 }

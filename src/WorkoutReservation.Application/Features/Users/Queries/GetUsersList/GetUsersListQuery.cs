@@ -1,8 +1,7 @@
 ﻿using MediatR;
 
-namespace WorkoutReservation.Application.Features.Users.Queries.GetUsersList
+namespace WorkoutReservation.Application.Features.Users.Queries.GetUsersList;
+
+public class GetUsersListQuery : IRequest<List<UsersListDto>>
 {
-    public class GetUsersListQuery : IRequest<List<UsersListDto>>
-    {
-    }
 }

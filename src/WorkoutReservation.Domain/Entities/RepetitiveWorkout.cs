@@ -1,9 +1,8 @@
 ﻿using WorkoutReservation.Domain.Common;
 
-namespace WorkoutReservation.Domain.Entities
+namespace WorkoutReservation.Domain.Entities;
+
+public class RepetitiveWorkout : BaseWorkout
 {
-    public class RepetitiveWorkout : BaseWorkout
-    {
-        public DayOfWeek DayOfWeek { get; set; }
-    }
+    public DayOfWeek DayOfWeek { get; set; }
 }

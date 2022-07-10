@@ -1,9 +1,8 @@
 ﻿using MediatR;
 
-namespace WorkoutReservation.Application.Features.Users.Commands.SelfUserDelete
+namespace WorkoutReservation.Application.Features.Users.Commands.SelfUserDelete;
+
+public class SelfDeleteUserCommand : IRequest
 {
-    public class SelfDeleteUserCommand : IRequest
-    {
-        public string Password { get; set; }
-    }
+    public string Password { get; set; }
 }

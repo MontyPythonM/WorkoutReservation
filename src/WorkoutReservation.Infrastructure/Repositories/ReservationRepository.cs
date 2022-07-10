@@ -4,63 +4,62 @@ using WorkoutReservation.Domain.Entities;
 using WorkoutReservation.Domain.Enums;
 using WorkoutReservation.Infrastructure.Presistence;
 
-namespace WorkoutReservation.Infrastructure.Repositories
+namespace WorkoutReservation.Infrastructure.Repositories;
+
+public class ReservationRepository : IReservationRepository
 {
-    public class ReservationRepository : IReservationRepository
+    private readonly AppDbContext _dbContext;
+
+    public ReservationRepository(AppDbContext dbContext)
     {
-        private readonly AppDbContext _dbContext;
+        _dbContext = dbContext;
+    }
 
-        public ReservationRepository(AppDbContext dbContext)
-        {
-            _dbContext = dbContext;
-        }
+    public async Task<List<Reservation>> GetUserReservationsByGuidAsync(Guid userId)
+    {
+        return await _dbContext.Reservations
+            .AsNoTracking()
+            .Include(x => x.RealWorkout)
+            .Where(x => x.UserId == userId)
+            .OrderBy(x => x.RealWorkout.Date)
+                .ThenBy(x => x.RealWorkout.StartTime)
+            .ToListAsync();
+    }
 
-        public async Task<List<Reservation>> GetUserReservationsByGuidAsync(Guid userId)
-        {
-            return await _dbContext.Reservations
-                .AsNoTracking()
-                .Include(x => x.RealWorkout)
-                .Where(x => x.UserId == userId)
-                .OrderBy(x => x.RealWorkout.Date)
-                    .ThenBy(x => x.RealWorkout.StartTime)
-                .ToListAsync();
-        }
+    public async Task<Reservation> AddReservationAsync(Reservation reservation)
+    {
+        await _dbContext.AddAsync(reservation);
+        await _dbContext.SaveChangesAsync();
 
-        public async Task<Reservation> AddReservationAsync(Reservation reservation)
-        {
-            await _dbContext.AddAsync(reservation);
-            await _dbContext.SaveChangesAsync();
+        return reservation;
+    }
 
-            return reservation;
-        }
+    public async Task<bool> CheckUserReservationAsync(int workoutId, Guid currentUserId)
+    {
+        var isUserAlreadyReserved = await _dbContext.Reservations
+            .Include(x => x.User)
+            .Include(x => x.RealWorkout)
+            .Where(x => x.RealWorkoutId == workoutId)
+            .FirstOrDefaultAsync(x => x.UserId == currentUserId);
+      
+        if(isUserAlreadyReserved is not null)
+            return true;
 
-        public async Task<bool> CheckUserReservationAsync(int workoutId, Guid currentUserId)
-        {
-            var isUserAlreadyReserved = await _dbContext.Reservations
-                .Include(x => x.User)
-                .Include(x => x.RealWorkout)
-                .Where(x => x.RealWorkoutId == workoutId)
-                .FirstOrDefaultAsync(x => x.UserId == currentUserId);
-          
-            if(isUserAlreadyReserved is not null)
-                return true;
+        return false;
+    }
 
-            return false;
-        }
+    public async Task<Reservation> GetReservationByIdAsync(int reservationId)
+    {
+        return await _dbContext.Reservations
+            .AsNoTracking()
+            .Include(x => x.RealWorkout)
+            .Include(x => x.User)
+            .FirstOrDefaultAsync(x => x.Id == reservationId);
+    }
 
-        public async Task<Reservation> GetReservationByIdAsync(int reservationId)
-        {
-            return await _dbContext.Reservations
-                .AsNoTracking()
-                .Include(x => x.RealWorkout)
-                .Include(x => x.User)
-                .FirstOrDefaultAsync(x => x.Id == reservationId);
-        }
-
-        public async Task UpdateReservationAsync(Reservation reservation)
-        {
-            _dbContext.Update(reservation);
-            await _dbContext.SaveChangesAsync();
-        }
+    public async Task UpdateReservationAsync(Reservation reservation)
+    {
+        _dbContext.Update(reservation);
+        await _dbContext.SaveChangesAsync();
     }
 }

@@ -1,8 +1,7 @@
 ﻿using MediatR;
 
-namespace WorkoutReservation.Application.Features.RealWorkouts.Queries.GetRealWorkoutFromCurrentWeek
+namespace WorkoutReservation.Application.Features.RealWorkouts.Queries.GetRealWorkoutFromCurrentWeek;
+
+public class GetRealWorkoutFromCurrentWeekQuery : IRequest<List<RealWorkoutFromCurrentWeekDto>>
 {
-    public class GetRealWorkoutFromCurrentWeekQuery : IRequest<List<RealWorkoutFromCurrentWeekDto>>
-    {
-    }
 }

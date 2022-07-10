@@ -1,10 +1,9 @@
 ﻿using MediatR;
 using WorkoutReservation.Domain.Enums;
 
-namespace WorkoutReservation.Application.Features.Reservations.Commands.CancelReservation
+namespace WorkoutReservation.Application.Features.Reservations.Commands.CancelReservation;
+
+public class CancelReservationCommand : IRequest
 {
-    public class CancelReservationCommand : IRequest
-    {
-        public int ReservationId { get; set; }
-    }
+    public int ReservationId { get; set; }
 }

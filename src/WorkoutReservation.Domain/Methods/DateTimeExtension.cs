@@ -1,16 +1,15 @@
-﻿namespace WorkoutReservation.Domain.Methods
+﻿namespace WorkoutReservation.Domain.Methods;
+
+public static class DateTimeExtension
 {
-    public static class DateTimeExtension
+    public static DateOnly GetFirstDayOfWeek(this DateTime dateTime)
     {
-        public static DateOnly GetFirstDayOfWeek(this DateTime dateTime)
-        {
-            var currentDayDate = dateTime;
-            var currentDayOfWeek = currentDayDate.DayOfWeek;
+        var currentDayDate = dateTime;
+        var currentDayOfWeek = currentDayDate.DayOfWeek;
 
-            var firstDayOfCurrentWeek = 
-                currentDayDate.AddDays((- 7 + (1 - (int)currentDayOfWeek)) % 7);
+        var firstDayOfCurrentWeek = 
+            currentDayDate.AddDays((- 7 + (1 - (int)currentDayOfWeek)) % 7);
 
-            return DateOnly.FromDateTime(firstDayOfCurrentWeek);
-        }
+        return DateOnly.FromDateTime(firstDayOfCurrentWeek);
     }
 }

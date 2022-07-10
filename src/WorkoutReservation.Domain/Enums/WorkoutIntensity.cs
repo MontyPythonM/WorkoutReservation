@@ -1,10 +1,9 @@
-﻿namespace WorkoutReservation.Domain.Enums
+﻿namespace WorkoutReservation.Domain.Enums;
+
+public enum WorkoutIntensity
 {
-    public enum WorkoutIntensity
-    {
-        Low = 1,
-        Moderate,
-        Vigorous,
-        Extreme
-    }
+    Low = 1,
+    Moderate,
+    Vigorous,
+    Extreme
 }

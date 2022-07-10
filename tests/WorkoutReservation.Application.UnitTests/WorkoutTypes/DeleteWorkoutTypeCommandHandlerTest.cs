@@ -8,63 +8,63 @@ using WorkoutReservation.Application.Features.WorkoutTypes.Commands.DeleteWorkou
 using WorkoutReservation.Application.MappingProfile;
 using WorkoutReservation.Application.UnitTests.Mocks;
 using WorkoutReservation.Domain.Entities;
+using Xunit;
 
-namespace WorkoutReservation.Application.UnitTests.WorkoutTypes
+namespace WorkoutReservation.Application.UnitTests.WorkoutTypes;
+
+public class DeleteWorkoutTypeCommandHandlerTest
 {
-    public class DeleteWorkoutTypeCommandHandlerTest
+    private readonly IMapper _mapper;
+    private readonly Mock<ILogger<DeleteWorkoutTypeCommandHandler>> _mockLogger;
+    private readonly Mock<IWorkoutTypeRepository> _mockWorkoutTypeRepository;
+    private readonly List<WorkoutType> _workoutTypeDummyList;
+
+    public DeleteWorkoutTypeCommandHandlerTest()
     {
-        private readonly IMapper _mapper;
-        private readonly Mock<ILogger<DeleteWorkoutTypeCommandHandler>> _mockLogger;
-        private readonly Mock<IWorkoutTypeRepository> _mockWorkoutTypeRepository;
-        private readonly List<WorkoutType> _workoutTypeDummyList;
+        _mockWorkoutTypeRepository = WorkoutTypeRepositoryMock.GetRepositoryMock();
+        _workoutTypeDummyList = WorkoutTypeRepositoryMock.GetDummyList();
 
-        public DeleteWorkoutTypeCommandHandlerTest()
+        var configurationProvider = new MapperConfiguration(cfg =>
         {
-            _mockWorkoutTypeRepository = WorkoutTypeRepositoryMock.GetRepositoryMock();
-            _workoutTypeDummyList = WorkoutTypeRepositoryMock.GetDummyList();
+            cfg.AddProfile<WorkoutTypeProfile>();
+        });
 
-            var configurationProvider = new MapperConfiguration(cfg =>
-            {
-                cfg.AddProfile<WorkoutTypeProfile>();
-            });
+        _mapper = configurationProvider.CreateMapper();
+        _mockLogger = new Mock<ILogger<DeleteWorkoutTypeCommandHandler>>();
+    }
 
-            _mapper = configurationProvider.CreateMapper();
-            _mockLogger = new Mock<ILogger<DeleteWorkoutTypeCommandHandler>>();
-        }
+    [Fact]
+    public async Task Handle_ForValidWorkoutTypeId_RemoveWorkoutType()
+    {
+        // arrange
+        var deleteHandler = new DeleteWorkoutTypeCommandHandler(_mockWorkoutTypeRepository.Object, _mockLogger.Object);
 
-        [Fact]
-        public async Task Handle_ForValidWorkoutTypeId_RemoveWorkoutType()
+        var workoutTypesBeforeCount = _workoutTypeDummyList.Count;
+
+        // act
+        await deleteHandler.Handle(new DeleteWorkoutTypeCommand
         {
-            // arrange
-            var deleteHandler = new DeleteWorkoutTypeCommandHandler(_mockWorkoutTypeRepository.Object, _mockLogger.Object);
+            WorkoutTypeId = workoutTypesBeforeCount
+        }, CancellationToken.None);
 
-            var workoutTypesBeforeCount = _workoutTypeDummyList.Count;
+        var allWorkoutTypesAfterCount = (await _mockWorkoutTypeRepository.Object.GetAllAsync()).Count;
 
-            // act
-            await deleteHandler.Handle(new DeleteWorkoutTypeCommand
-            {
-                WorkoutTypeId = workoutTypesBeforeCount
-            }, CancellationToken.None);
+        // assert
+        allWorkoutTypesAfterCount.Should().Be(workoutTypesBeforeCount - 1);
+    }
 
-            var allWorkoutTypesAfterCount = (await _mockWorkoutTypeRepository.Object.GetAllAsync()).Count;
+    [Fact]
+    public async Task Handle_ForInvalidWorkoutTypeId_ThrowNotFoundException()
+    {
+        // arrange
+        var deleteHandler = new DeleteWorkoutTypeCommandHandler(_mockWorkoutTypeRepository.Object, _mockLogger.Object);
 
-            // assert
-            allWorkoutTypesAfterCount.Should().Be(workoutTypesBeforeCount - 1);
-        }
+        var notExistWorkoutType = _workoutTypeDummyList.Count + 1;
 
-        [Fact]
-        public async Task Handle_ForInvalidWorkoutTypeId_ThrowNotFoundException()
-        {
-            // arrange
-            var deleteHandler = new DeleteWorkoutTypeCommandHandler(_mockWorkoutTypeRepository.Object, _mockLogger.Object);
+        // act
+        Func<Task> result = async () => await deleteHandler.Handle(new DeleteWorkoutTypeCommand { WorkoutTypeId = notExistWorkoutType }, CancellationToken.None);
 
-            var notExistWorkoutType = _workoutTypeDummyList.Count + 1;
-
-            // act
-            Func<Task> result = async () => await deleteHandler.Handle(new DeleteWorkoutTypeCommand { WorkoutTypeId = notExistWorkoutType }, CancellationToken.None);
-
-            // assert
-            await result.Should().ThrowAsync<NotFoundException>();
-        }
+        // assert
+        await result.Should().ThrowAsync<NotFoundException>();
     }
 }
