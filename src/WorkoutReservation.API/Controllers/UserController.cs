@@ -1,6 +1,6 @@
-﻿using MediatR;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using WorkoutReservation.API.Controllers.Base;
 using WorkoutReservation.Application.Features.Users.Commands.DeleteUser;
 using WorkoutReservation.Application.Features.Users.Commands.Login;
 using WorkoutReservation.Application.Features.Users.Commands.Register;
@@ -10,24 +10,16 @@ using WorkoutReservation.Application.Features.Users.Queries.GetUsersList;
 
 namespace WorkoutReservation.API.Controllers;
 
-[ApiController]
-[Route("/api/account/")]
-public class UserController : ControllerBase
+[Route("api/account/")]
+public class UserController : ApiControllerBase
 {
-    private readonly IMediator _mediator;
-
-    public UserController(IMediator mediator)
-    {
-        _mediator = mediator;
-    }
-
     [HttpPost("register")]
     [AllowAnonymous]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> RegisterAccount([FromBody] RegisterCommand command)
     {
-        await _mediator.Send(command);
+        await Mediator.Send(command);
         return Ok($"Account created.");
     }
 
@@ -37,20 +29,16 @@ public class UserController : ControllerBase
     [ProducesResponseType(StatusCodes.Status403Forbidden)]
     public async Task<IActionResult> Login([FromBody] LoginCommand command)
     {
-        var token = await _mediator.Send(command);
-        return Ok(token);
+        return Ok(await Mediator.Send(command));
     }
 
-    [HttpGet]
-    
-    //[Authorize(Roles = "Administrator")]
-    [AllowAnonymous]
-
+    [HttpGet] 
+    [Authorize(Roles = "Administrator")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> GetAllUsers([FromQuery] GetUsersListQuery query)
     {
-        return Ok(await _mediator.Send(query));
+        return Ok(await Mediator.Send(query));
     }
 
     [HttpPut("set-user-role")]
@@ -60,7 +48,7 @@ public class UserController : ControllerBase
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> SetUserRole([FromBody] SetUserRoleCommand command)
     {
-        await _mediator.Send(command);
+        await Mediator.Send(command);
         return Ok();
     }
 
@@ -71,7 +59,7 @@ public class UserController : ControllerBase
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> DeleteUserAccount([FromRoute] Guid userGuid)
     {
-        await _mediator.Send(new DeleteUserCommand { UserGuid = userGuid });
+        await Mediator.Send(new DeleteUserCommand { UserGuid = userGuid });
         return NoContent();
     }
 
@@ -81,7 +69,7 @@ public class UserController : ControllerBase
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> DeleteOwnAccount([FromBody] SelfDeleteUserCommand command)
     {
-        await _mediator.Send(command);
+        await Mediator.Send(command);
         return NoContent();
     }
 }

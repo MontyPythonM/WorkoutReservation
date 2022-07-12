@@ -1,6 +1,6 @@
-﻿using MediatR;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using WorkoutReservation.API.Controllers.Base;
 using WorkoutReservation.Application.Features.Instructors.Commands.CreateInstructor;
 using WorkoutReservation.Application.Features.Instructors.Commands.DeleteInstructor;
 using WorkoutReservation.Application.Features.Instructors.Commands.UpdateInstructor;
@@ -9,25 +9,17 @@ using WorkoutReservation.Application.Features.Instructors.Queries.GetInstructorL
 
 namespace WorkoutReservation.API.Controllers;
 
-[ApiController]
 [Authorize(Roles = "Manager, Administrator")]
-[Route("/api/instructor/")]
-public class InstructorController : ControllerBase
+[Route("api/instructor/")]
+public class InstructorController : ApiControllerBase
 {
-    private readonly IMediator _mediator;
-
-    public InstructorController(IMediator mediator)
-    {
-        _mediator = mediator;
-    }
-
     [HttpGet]
     [AllowAnonymous]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetAllInstructors()
     {
-        var result = await _mediator.Send(new GetInstructorListQuery());
+        var result = await Mediator.Send(new GetInstructorListQuery());
         return Ok(result);
     }
 
@@ -37,7 +29,7 @@ public class InstructorController : ControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetInstructor([FromRoute] int instructorId)
     {
-        var result = await _mediator.Send(new GetInstructorDetailQuery() { InstructorId = instructorId });
+        var result = await Mediator.Send(new GetInstructorDetailQuery() { InstructorId = instructorId });
         return Ok(result);
     }
 
@@ -46,7 +38,7 @@ public class InstructorController : ControllerBase
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> CreateInstructor([FromBody] CreateInstructorCommand command)
     {
-        var instructorId = await _mediator.Send(command);
+        var instructorId = await Mediator.Send(command);
         return Created($"/api/instructor/{instructorId}", null);
     }
 
@@ -56,7 +48,7 @@ public class InstructorController : ControllerBase
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> DeleteInstructor([FromRoute] int instructorId)
     {
-        await _mediator.Send(new DeleteInstructorCommand() { InstructorId = instructorId });
+        await Mediator.Send(new DeleteInstructorCommand() { InstructorId = instructorId });
         return NoContent();
     }
 
@@ -66,7 +58,7 @@ public class InstructorController : ControllerBase
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> UpdateInstructor([FromBody] UpdateInstructorCommand command)
     {
-        await _mediator.Send(command);
+        await Mediator.Send(command);
         return Ok();
     }
 }
