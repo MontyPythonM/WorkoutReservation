@@ -50,4 +50,11 @@ public class UserRepository : IUserRepository
         _dbContext.Remove(user);
         await _dbContext.SaveChangesAsync();
     }
+
+    public IQueryable<User> GetAllQueriesAsync()
+    {
+        return _dbContext.Users
+            .AsNoTracking()
+            .AsQueryable();
+    }
 }

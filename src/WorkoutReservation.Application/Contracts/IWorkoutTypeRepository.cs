@@ -11,6 +11,5 @@ public interface IWorkoutTypeRepository
     public Task UpdateAsync(WorkoutType workoutType);
     public Task<List<WorkoutType>> GetAllAsync();
     public Task<WorkoutType> GetByIdAsync(int workoutTypeId);
-    public Task<PagedResultDto<WorkoutTypesListQueryDto>> GetAllPagedAsync(GetWorkoutTypesListQuery clientRequest);
     public IQueryable<WorkoutType> GetAllQueriesAsync();
 }

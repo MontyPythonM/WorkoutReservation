@@ -10,4 +10,5 @@ public interface IUserRepository
     public Task<List<User>> GetAllAsync();
     public Task UpdateAsync(User user);
     public Task DeleteAsync(User user);
+    public IQueryable<User> GetAllQueriesAsync();
 }

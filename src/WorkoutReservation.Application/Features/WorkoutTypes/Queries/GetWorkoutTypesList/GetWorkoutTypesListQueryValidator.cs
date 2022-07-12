@@ -16,7 +16,7 @@ public class GetWorkoutTypesListQueryValidator : AbstractValidator<GetWorkoutTyp
         {
             if (!allowedPageSizes.Contains(value))
             {
-                context.AddFailure("PageSize", $"PageSize must in [{string.Join(",", allowedPageSizes)}]");
+                context.AddFailure("PageSize", $"PageSize must in [{string.Join(", ", allowedPageSizes)}]");
             }
         });
 

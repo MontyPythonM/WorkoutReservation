@@ -7,7 +7,6 @@ using WorkoutReservation.Application.Features.Users.Commands.Register;
 using WorkoutReservation.Application.Features.Users.Commands.SelfUserDelete;
 using WorkoutReservation.Application.Features.Users.Commands.SetUserRole;
 using WorkoutReservation.Application.Features.Users.Queries.GetUsersList;
-using WorkoutReservation.Domain.Enums;
 
 namespace WorkoutReservation.API.Controllers;
 
@@ -43,13 +42,15 @@ public class UserController : ControllerBase
     }
 
     [HttpGet]
-    [Authorize(Roles = "Administrator")]
+    
+    //[Authorize(Roles = "Administrator")]
+    [AllowAnonymous]
+
     [ProducesResponseType(StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> GetAllUsers()
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public async Task<IActionResult> GetAllUsers([FromQuery] GetUsersListQuery query)
     {
-        var result = await _mediator.Send(new GetUsersListQuery());
-        return Ok(result);
+        return Ok(await _mediator.Send(query));
     }
 
     [HttpPut("set-user-role")]

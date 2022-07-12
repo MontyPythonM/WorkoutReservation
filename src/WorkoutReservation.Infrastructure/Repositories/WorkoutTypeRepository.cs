@@ -1,9 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using System.Linq.Expressions;
-using WorkoutReservation.Application.Common.Dtos;
-using WorkoutReservation.Application.Common.Exceptions;
 using WorkoutReservation.Application.Contracts;
-using WorkoutReservation.Application.Features.WorkoutTypes.Queries.GetWorkoutTypesList;
 using WorkoutReservation.Domain.Entities;
 using WorkoutReservation.Infrastructure.Presistence;
 
