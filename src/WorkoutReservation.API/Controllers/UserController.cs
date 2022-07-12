@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WorkoutReservation.API.Controllers.Base;
+using WorkoutReservation.Application.Common.Dtos;
 using WorkoutReservation.Application.Features.Users.Commands.DeleteUser;
 using WorkoutReservation.Application.Features.Users.Commands.Login;
 using WorkoutReservation.Application.Features.Users.Commands.Register;
@@ -34,7 +35,7 @@ public class UserController : ApiControllerBase
 
     [HttpGet] 
     [Authorize(Roles = "Administrator")]
-    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(PagedResultDto<UsersListDto>), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> GetAllUsers([FromQuery] GetUsersListQuery query)
     {

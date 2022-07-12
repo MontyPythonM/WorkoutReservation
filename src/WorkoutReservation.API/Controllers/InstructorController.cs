@@ -15,7 +15,7 @@ public class InstructorController : ApiControllerBase
 {
     [HttpGet]
     [AllowAnonymous]
-    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(List<InstructorListQueryDto>), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetAllInstructors()
     {
@@ -25,7 +25,7 @@ public class InstructorController : ApiControllerBase
 
     [HttpGet("{instructorId}")]
     [AllowAnonymous]
-    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(InstructorDetailQueryDto), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetInstructor([FromRoute] int instructorId)
     {

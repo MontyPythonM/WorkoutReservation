@@ -15,7 +15,7 @@ namespace WorkoutReservation.API.Controllers;
 public class RepetitiveWorkoutController : ApiControllerBase
 {
     [HttpGet]
-    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(List<RepetitiveWorkoutListDto>), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetAllRepetitiveWorkoutsPlan()
     {

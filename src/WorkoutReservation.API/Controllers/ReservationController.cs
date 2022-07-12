@@ -13,7 +13,7 @@ public class ReservationController : ApiControllerBase
 {
     [HttpGet]
     [Authorize]
-    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(List<UserReservationsListDto>), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> GetReservation()
     {

@@ -16,7 +16,7 @@ public class RealWorkoutController : ApiControllerBase
 {
     [HttpGet("current-week")]
     [AllowAnonymous]
-    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(List<RealWorkoutFromCurrentWeekDto>), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetRealWorkoutsFromCurrentWeek()
     {
@@ -25,7 +25,7 @@ public class RealWorkoutController : ApiControllerBase
     }
 
     [HttpGet("{realWorkoutId}")]
-    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(RealWorkoutDetailDto), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetRealWorkoutById([FromRoute] int realWorkoutId)
     {
@@ -35,7 +35,7 @@ public class RealWorkoutController : ApiControllerBase
 
     [HttpGet("upcoming-week")]
     [AllowAnonymous]
-    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(List<RealWorkoutFromUpcomingWeekDto>), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetRealWorkoutsFromUpcomingWeek()
     {
