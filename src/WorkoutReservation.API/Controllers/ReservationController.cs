@@ -22,7 +22,7 @@ public class ReservationController : ControllerBase
     [HttpGet]
     [Authorize]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> GetReservation()
     {
         var result = await _mediator.Send(new GetUserReservationsListQuery());

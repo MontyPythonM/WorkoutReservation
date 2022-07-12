@@ -8,7 +8,7 @@ namespace WorkoutReservation.Application.Features.Reservations.Queries.GetUserRe
 public class GetUserReservationsListHandler : IRequestHandler<GetUserReservationsListQuery, 
                                                               List<UserReservationsListDto>>
 {
-    private IReservationRepository _reservationRepository;
+    private readonly IReservationRepository _reservationRepository;
     private readonly IMapper _mapper;
     private readonly ICurrentUserService _userService;
 
