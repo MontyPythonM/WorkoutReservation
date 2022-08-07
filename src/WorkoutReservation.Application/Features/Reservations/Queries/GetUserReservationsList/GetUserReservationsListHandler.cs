@@ -3,7 +3,6 @@ using FluentValidation;
 using MediatR;
 using System.Linq.Expressions;
 using WorkoutReservation.Application.Common.Dtos;
-using WorkoutReservation.Application.Common.Exceptions;
 using WorkoutReservation.Application.Contracts;
 using WorkoutReservation.Domain.Entities;
 
@@ -14,12 +13,15 @@ public class GetUserReservationsListHandler : IRequestHandler<GetUserReservation
 {
     private readonly IReservationRepository _reservationRepository;
     private readonly ICurrentUserService _userService;
+    private readonly IMapper _mapper;
 
     public GetUserReservationsListHandler(IReservationRepository reservationRepository, 
-                                          ICurrentUserService userService)
+                                          ICurrentUserService userService,
+                                          IMapper mapper)
     {
         _reservationRepository = reservationRepository;
         _userService = userService;
+        _mapper = mapper;
     }
 
     public async Task<PagedResultDto<UserReservationsListDto>> Handle(GetUserReservationsListQuery request, 
@@ -56,42 +58,13 @@ public class GetUserReservationsListHandler : IRequestHandler<GetUserReservation
         }
 
         var result = query
-        .Skip(request.PageSize * (request.PageNumber - 1))
-        .Take(request.PageSize)
-        .Select(x => new UserReservationsListDto
-        {
-            Id = x.Id,
-            CreationDate = x.CreationDate,
-            LastModificationDate = x.LastModificationDate,
-            ReservationStatus = x.ReservationStatus,
-            RealWorkout = new RealWorkoutForUserReservationsListDto
-            { 
-                Id = x.RealWorkout.Id,
-                StartTime = x.RealWorkout.StartTime,
-                EndTime = x.RealWorkout.EndTime,
-                Date = x.RealWorkout.Date,
-                CurrentParticipianNumber = x.RealWorkout.CurrentParticipianNumber,
-                MaxParticipianNumber = x.RealWorkout.MaxParticipianNumber,
+            .Skip(request.PageSize * (request.PageNumber - 1))
+            .Take(request.PageSize)
+            .ToList();
 
-                Instructor = new InstructorForUserReservationsListDto
-                { 
-                    Id = x.RealWorkout.Instructor.Id,
-                    FirstName = x.RealWorkout.Instructor.FirstName,
-                    LastName = x.RealWorkout.Instructor.LastName
-                },
+        var mappedResult = _mapper.Map<List<UserReservationsListDto>>(result);
 
-                WorkoutType = new WorkoutTypeForUserReservationsListDto 
-                { 
-                    Id = x.RealWorkout.WorkoutType.Id,
-                    Name = x.RealWorkout.WorkoutType.Name,
-                    Intensity = x.RealWorkout.WorkoutType.Intensity
-                }
-            } 
-
-        })
-        .ToList();
-
-        var pagedWorkoutTypes = new PagedResultDto<UserReservationsListDto>(result,
+        var pagedWorkoutTypes = new PagedResultDto<UserReservationsListDto>(mappedResult,
                                                                             totalCount,
                                                                             request.PageSize,
                                                                             request.PageNumber);
