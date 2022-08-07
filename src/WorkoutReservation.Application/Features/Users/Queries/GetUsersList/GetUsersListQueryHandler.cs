@@ -12,13 +12,10 @@ public class GetUsersListQueryHandler : IRequestHandler<GetUsersListQuery,
                                                         PagedResultDto<UsersListDto>>
 {
     private readonly IUserRepository _userRepository;
-    private readonly IMapper _mapper;
 
-    public GetUsersListQueryHandler(IUserRepository userRepository,
-                                    IMapper mapper)
+    public GetUsersListQueryHandler(IUserRepository userRepository)
     {
         _userRepository = userRepository;
-        _mapper = mapper;
     }
 
     public async Task<PagedResultDto<UsersListDto>> Handle(GetUsersListQuery request, 
@@ -27,7 +24,7 @@ public class GetUsersListQueryHandler : IRequestHandler<GetUsersListQuery,
         var validator = new GetUsersListQueryValidator();
         await validator.ValidateAndThrowAsync(request, cancellationToken);
 
-        var usersQuery = _userRepository.GetAllQueriesAsync();
+        var usersQuery = _userRepository.GetAllUsersQuery();
 
         var query = usersQuery
             .Where(x => request.SearchPhrase == null ||
@@ -55,19 +52,19 @@ public class GetUsersListQueryHandler : IRequestHandler<GetUsersListQuery,
         }
 
         var result = query
-                .Skip(request.PageSize * (request.PageNumber - 1))
-                .Take(request.PageSize)
-                .Select(x => new UsersListDto
-                {
-                    Id = x.Id,
-                    Email = x.Email,
-                    FirstName = x.FirstName,
-                    LastName = x.LastName,
-                    Gender = x.Gender.GetValueOrDefault(),
-                    AccountCreationDate = x.AccountCreationDate,
-                    UserRole = x.UserRole.GetValueOrDefault()
-                })
-                .ToList();
+            .Skip(request.PageSize * (request.PageNumber - 1))
+            .Take(request.PageSize)
+            .Select(x => new UsersListDto
+            {
+                Id = x.Id,
+                Email = x.Email,
+                FirstName = x.FirstName,
+                LastName = x.LastName,
+                Gender = x.Gender.GetValueOrDefault(),
+                AccountCreationDate = x.AccountCreationDate,
+                UserRole = x.UserRole.GetValueOrDefault()
+            })
+            .ToList();
 
         var pagedWorkoutTypes = new PagedResultDto<UsersListDto>(result,
                                                                  totalCount,

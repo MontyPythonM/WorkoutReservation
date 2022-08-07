@@ -62,4 +62,17 @@ public class ReservationRepository : IReservationRepository
         _dbContext.Update(reservation);
         await _dbContext.SaveChangesAsync();
     }
+
+    public IQueryable<Reservation> GetUserReservationsByGuidQuery(Guid userId)
+    { 
+        return _dbContext.Reservations
+            .AsNoTracking()
+            .Include(x => x.RealWorkout)
+                .ThenInclude(x => x.Instructor)
+            .Include(x => x.RealWorkout)
+                .ThenInclude(x => x.WorkoutType)
+            .OrderBy(x => x.RealWorkout.Date)
+                .ThenBy(x => x.RealWorkout.StartTime)
+            .AsQueryable();          
+    }
 }

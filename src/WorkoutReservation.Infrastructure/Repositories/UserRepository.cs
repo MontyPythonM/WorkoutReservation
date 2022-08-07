@@ -51,7 +51,7 @@ public class UserRepository : IUserRepository
         await _dbContext.SaveChangesAsync();
     }
 
-    public IQueryable<User> GetAllQueriesAsync()
+    public IQueryable<User> GetAllUsersQuery()
     {
         return _dbContext.Users
             .AsNoTracking()

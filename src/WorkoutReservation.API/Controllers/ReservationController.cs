@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WorkoutReservation.API.Controllers.Base;
+using WorkoutReservation.Application.Common.Dtos;
 using WorkoutReservation.Application.Features.Reservations.Commands.AddReservation;
 using WorkoutReservation.Application.Features.Reservations.Commands.CancelReservation;
 using WorkoutReservation.Application.Features.Reservations.Commands.EditReservationStatus;
@@ -13,12 +14,11 @@ public class ReservationController : ApiControllerBase
 {
     [HttpGet]
     [Authorize]
-    [ProducesResponseType(typeof(List<UserReservationsListDto>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(PagedResultDto<UserReservationsListDto>), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<IActionResult> GetReservation()
+    public async Task<IActionResult> GetReservation([FromQuery] GetUserReservationsListQuery query)
     {
-        var result = await Mediator.Send(new GetUserReservationsListQuery());
-        return Ok(result);
+        return Ok(await Mediator.Send(query));
     }
 
     [HttpPost]

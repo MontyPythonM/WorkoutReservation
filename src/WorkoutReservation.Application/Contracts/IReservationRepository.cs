@@ -9,4 +9,5 @@ public interface IReservationRepository
     public Task<bool> CheckUserReservationAsync(int workoutId, Guid currentUserId);
     public Task<Reservation> GetReservationByIdAsync(int reservationId);
     public Task UpdateReservationAsync(Reservation reservation);
+    public IQueryable<Reservation> GetUserReservationsByGuidQuery(Guid userId);
 }

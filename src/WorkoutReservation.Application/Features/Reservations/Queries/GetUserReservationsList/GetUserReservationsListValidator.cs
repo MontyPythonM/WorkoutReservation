@@ -1,20 +1,18 @@
 ﻿using FluentValidation;
 using WorkoutReservation.Domain.Entities;
 
-namespace WorkoutReservation.Application.Features.Users.Queries.GetUsersList
+namespace WorkoutReservation.Application.Features.Reservations.Queries.GetUserReservationsList
 {
-    public class GetUsersListQueryValidator : AbstractValidator<GetUsersListQuery>
+    public class GetUserReservationsListValidator : AbstractValidator<GetUserReservationsListQuery>
     {
         private readonly int[] allowedPageSizes = new[] { 10, 25, 50, 100 };
 
-        public readonly string[] allowedSortByColumnNames = { 
-            nameof(User.Email), 
-            nameof(User.FirstName),
-            nameof(User.LastName),
-            nameof(User.UserRole)
+        public readonly string[] allowedSortByColumnNames = {
+            nameof(Reservation.ReservationStatus),
+            "WorkoutDate"
         };
 
-        public GetUsersListQueryValidator()
+        public GetUserReservationsListValidator()
         {
             RuleFor(r => r.PageNumber).GreaterThanOrEqualTo(1);
 
