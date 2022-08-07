@@ -23,13 +23,6 @@ public class AppDbContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        new InstructorConfiguration().Configure(modelBuilder.Entity<Instructor>()); 
-        new WorkoutTypeConfiguration().Configure(modelBuilder.Entity<WorkoutType>());
-        new WorkoutTypeTagConfiguration().Configure(modelBuilder.Entity<WorkoutTypeTag>());
-        new BaseWorkoutConfiguration().Configure(modelBuilder.Entity<BaseWorkout>());
-        new RepetitiveWorkoutConfiguration().Configure(modelBuilder.Entity<RepetitiveWorkout>());
-        new RealWorkoutConfiguration().Configure(modelBuilder.Entity<RealWorkout>());
-        new UserConfiguration().Configure(modelBuilder.Entity<User>());
-        new ReservationConfiguration().Configure(modelBuilder.Entity<Reservation>());
+        modelBuilder.ApplyConfigurationsFromAssembly(typeof(AppDbContext).Assembly);
     }
 }

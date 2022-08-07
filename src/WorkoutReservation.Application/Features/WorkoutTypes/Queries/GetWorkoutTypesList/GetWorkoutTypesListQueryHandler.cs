@@ -1,4 +1,5 @@
-﻿using FluentValidation;
+﻿using AutoMapper;
+using FluentValidation;
 using MediatR;
 using System.Linq.Expressions;
 using WorkoutReservation.Application.Common.Dtos;
@@ -11,10 +12,12 @@ public class GetWorkoutTypesListQueryHandler : IRequestHandler<GetWorkoutTypesLi
                                                                PagedResultDto<WorkoutTypesListQueryDto>>
 {
     private readonly IWorkoutTypeRepository _workoutTypeRepository;
+    private readonly IMapper _mapper;
 
-    public GetWorkoutTypesListQueryHandler(IWorkoutTypeRepository workoutTypeRepository)
+    public GetWorkoutTypesListQueryHandler(IWorkoutTypeRepository workoutTypeRepository, IMapper mapper)
     {
         _workoutTypeRepository = workoutTypeRepository;
+        _mapper = mapper;
     }
 
     public async Task<PagedResultDto<WorkoutTypesListQueryDto>> Handle(GetWorkoutTypesListQuery request, 
@@ -47,18 +50,13 @@ public class GetWorkoutTypesListQueryHandler : IRequestHandler<GetWorkoutTypesLi
         }
 
         var result = query
-                .Skip(request.PageSize * (request.PageNumber - 1))
-                .Take(request.PageSize)
-                .Select(x => new WorkoutTypesListQueryDto
-                {
-                    Id = x.Id,
-                    Name = x.Name,
-                    Description = x.Description,
-                    Intensity = x.Intensity
-                })
-                .ToList();
+            .Skip(request.PageSize * (request.PageNumber - 1))
+            .Take(request.PageSize)
+            .ToList();
 
-        var pagedWorkoutTypes = new PagedResultDto<WorkoutTypesListQueryDto>(result,
+        var mappedResult = _mapper.Map<List<WorkoutTypesListQueryDto>>(result);
+
+        var pagedWorkoutTypes = new PagedResultDto<WorkoutTypesListQueryDto>(mappedResult,
                                                                              totalCount,
                                                                              request.PageSize,
                                                                              request.PageNumber);
