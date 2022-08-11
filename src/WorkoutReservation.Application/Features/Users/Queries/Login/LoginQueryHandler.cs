@@ -1,28 +1,28 @@
-﻿using AutoMapper;
+﻿using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
+using AutoMapper;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Text;
 using WorkoutReservation.Application.Common.Exceptions;
 using WorkoutReservation.Application.Contracts;
 using WorkoutReservation.Domain.Common;
 using WorkoutReservation.Domain.Entities;
 
-namespace WorkoutReservation.Application.Features.Users.Commands.Login;
+namespace WorkoutReservation.Application.Features.Users.Queries.Login;
 
-public class LoginCommandHandler : IRequestHandler<LoginCommand, string>
+public class LoginQueryHandler : IRequestHandler<LoginQuery, string>
 {
-    private readonly IUserRepository _userRepository;
-    private readonly IPasswordHasher<User> _passwordHasher;
     private readonly AuthenticationSettings _authenticationSettings;
     private readonly IMapper _mapper;
+    private readonly IPasswordHasher<User> _passwordHasher;
+    private readonly IUserRepository _userRepository;
 
-    public LoginCommandHandler(IUserRepository userRepository,
-                               IPasswordHasher<User> passwordHasher,
-                               AuthenticationSettings authenticationSettings,
-                               IMapper mapper)
+    public LoginQueryHandler(IUserRepository userRepository,
+        IPasswordHasher<User> passwordHasher,
+        AuthenticationSettings authenticationSettings,
+        IMapper mapper)
     {
         _userRepository = userRepository;
         _passwordHasher = passwordHasher;
@@ -30,8 +30,7 @@ public class LoginCommandHandler : IRequestHandler<LoginCommand, string>
         _mapper = mapper;
     }
 
-    public async Task<string> Handle(LoginCommand request, 
-                                     CancellationToken cancellationToken)
+    public async Task<string> Handle(LoginQuery request, CancellationToken cancellationToken)
     {
         var user = await _userRepository.GetByEmailAsync(request.Email);
 
@@ -45,10 +44,10 @@ public class LoginCommandHandler : IRequestHandler<LoginCommand, string>
 
         var claims = new List<Claim>
         {
-            new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
-            new Claim(ClaimTypes.Email, user.Email),
-            new Claim(ClaimTypes.Name, $"{user.FirstName} {user.LastName}"),
-            new Claim(ClaimTypes.Role, user.UserRole.ToString()),
+            new(ClaimTypes.NameIdentifier, user.Id.ToString()),
+            new(ClaimTypes.Email, user.Email),
+            new(ClaimTypes.Name, $"{user.FirstName} {user.LastName}"),
+            new(ClaimTypes.Role, user.UserRole.ToString())
         };
 
         var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_authenticationSettings.JwtKey));
