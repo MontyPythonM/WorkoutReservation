@@ -3,11 +3,11 @@ using Microsoft.AspNetCore.Mvc;
 using WorkoutReservation.API.Controllers.Base;
 using WorkoutReservation.Application.Common.Dtos;
 using WorkoutReservation.Application.Features.Users.Commands.DeleteUser;
-using WorkoutReservation.Application.Features.Users.Commands.Login;
 using WorkoutReservation.Application.Features.Users.Commands.Register;
 using WorkoutReservation.Application.Features.Users.Commands.SelfUserDelete;
 using WorkoutReservation.Application.Features.Users.Commands.SetUserRole;
 using WorkoutReservation.Application.Features.Users.Queries.GetUsersList;
+using WorkoutReservation.Application.Features.Users.Queries.Login;
 
 namespace WorkoutReservation.API.Controllers;
 
@@ -21,19 +21,19 @@ public class UserController : ApiControllerBase
     public async Task<IActionResult> RegisterAccount([FromBody] RegisterCommand command)
     {
         await Mediator.Send(command);
-        return Ok($"Account created.");
+        return Ok("Account created.");
     }
 
-    [HttpPost("login")]
+    [HttpGet("login")]
     [AllowAnonymous]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status403Forbidden)]
-    public async Task<IActionResult> Login([FromBody] LoginCommand command)
+    public async Task<IActionResult> Login([FromQuery] LoginQuery query)
     {
-        return Ok(await Mediator.Send(command));
+        return Ok(await Mediator.Send(query));
     }
 
-    [HttpGet] 
+    [HttpGet]
     [Authorize(Roles = "Administrator")]
     [ProducesResponseType(typeof(PagedResultDto<UsersListDto>), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
