@@ -5,10 +5,10 @@ import { InstructorsComponent } from './pages/instructors/instructors.component'
 import { WorkoutTypesComponent } from './pages/workout-types/workout-types.component';
 
 const routes: Routes = [
-    { path: '', redirectTo: '/home', pathMatch: 'prefix' },
     { path: 'home', component: HomeComponent },
     { path: 'instructors', component: InstructorsComponent },
-    { path: 'workout-types', component: WorkoutTypesComponent },
+    { path: 'workout-types', component: WorkoutTypesComponent },    
+    { path: '', redirectTo: '/home', pathMatch: 'prefix' }
   ];
 
   @NgModule({
