@@ -1,7 +1,9 @@
-﻿using FluentAssertions;
+﻿using AutoMapper;
+using FluentAssertions;
 using Moq;
 using WorkoutReservation.Application.Contracts;
 using WorkoutReservation.Application.Features.WorkoutTypes.Queries.GetWorkoutTypesList;
+using WorkoutReservation.Application.MappingProfile;
 using WorkoutReservation.Application.UnitTests.Mocks;
 using Xunit;
 
@@ -10,10 +12,18 @@ namespace WorkoutReservation.Application.UnitTests.WorkoutTypes;
 public class GetWorkoutTypesListQueryHandlerTest
 {
     private readonly Mock<IWorkoutTypeRepository> _mockWorkoutTypeRepository;
+    private readonly IMapper _mapper;
 
     public GetWorkoutTypesListQueryHandlerTest()
     {
         _mockWorkoutTypeRepository = WorkoutTypeRepositoryMock.GetRepositoryMock();
+
+        var configurationProvider = new MapperConfiguration(cfg =>
+        {
+            cfg.AddProfile<WorkoutTypeProfile>();
+        });
+
+        _mapper = configurationProvider.CreateMapper();
     }
 
     [Theory]       
@@ -33,7 +43,7 @@ public class GetWorkoutTypesListQueryHandlerTest
                                                                      bool sortByDescending)
     {
         // arrange
-        var handler = new GetWorkoutTypesListQueryHandler(_mockWorkoutTypeRepository.Object);
+        var handler = new GetWorkoutTypesListQueryHandler(_mockWorkoutTypeRepository.Object, _mapper);
 
         var incorrectQuery = new GetWorkoutTypesListQuery
         { 
@@ -64,7 +74,7 @@ public class GetWorkoutTypesListQueryHandlerTest
                                                                       bool sortByDescending)
     {
         // arrange
-        var handler = new GetWorkoutTypesListQueryHandler(_mockWorkoutTypeRepository.Object);
+        var handler = new GetWorkoutTypesListQueryHandler(_mockWorkoutTypeRepository.Object, _mapper);
 
         var correctQuery = new GetWorkoutTypesListQuery
         {
