@@ -70,17 +70,7 @@ try
     builder.Services.AddApplicationServices(builder.Configuration);
     builder.Services.AddScoped<ExceptionHandlingMiddleware>();
     builder.Services.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();
-
-    builder.Services.AddCors(options =>
-    {
-        options.AddPolicy("FrontEndClient", 
-            builder =>      
-            {
-                builder.AllowAnyMethod()
-                       .AllowAnyHeader()
-                       .WithOrigins("http://localhost:5001");
-            });
-    });
+    builder.Services.AddCors();
 
     //--- Build application
     var app = builder.Build();
@@ -92,8 +82,7 @@ try
     var dummyDataSeeder = scope.ServiceProvider.GetService<SeedDummyData>();
     var db = scope.ServiceProvider.GetService<AppDbContext>();
 
-    //--- Configure the HTTP request pipeline.
-
+    //--- Configure the HTTP request pipeline
     firstAdminSeeder.Seed();
     dummyDataSeeder.Seed();
 
@@ -109,7 +98,10 @@ try
 
     app.UseMiddleware<ExceptionHandlingMiddleware>();
 
-    app.UseCors();
+    app.UseCors(policy => policy
+        .AllowAnyOrigin()
+        .AllowAnyHeader()
+        .WithOrigins("http://localhost:4200"));
 
     app.UseAuthentication();
 
