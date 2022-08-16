@@ -18,10 +18,9 @@ export class InstructorsComponent implements OnInit {
   }
 
   getInstructors() {
-    this.httpClient.get('http://localhost:5001/api/instructor').subscribe(response => {
-      this.instructors = response;
-    }, error => {
-      console.log(error);
+    this.httpClient.get('http://localhost:5001/api/instructor').subscribe({
+      next: response => this.instructors = response,
+      error: error => console.log(error)
     })
   }
 

@@ -18,10 +18,9 @@ export class WorkoutTypesComponent implements OnInit {
   }
 
   getWorkoutTypes() {
-    this.httpClient.get('http://localhost:5001/api/workout-type').subscribe(response => {
-      this.workoutTypes = response;
-    }, error => {
-      console.log(error);
+    this.httpClient.get('http://localhost:5001/api/workout-type').subscribe({
+      next: response => this.workoutTypes = response,
+      error: error => console.log(error)
     })
   }
 
