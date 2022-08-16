@@ -1,3 +1,4 @@
+import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 
 @Component({
@@ -7,9 +8,21 @@ import { Component, OnInit } from '@angular/core';
 })
 export class WorkoutTypesComponent implements OnInit {
 
-  constructor() { }
+  title: string = 'Workout types';
+  workoutTypes: any;
+
+  constructor(private httpClient: HttpClient) { }
 
   ngOnInit(): void {
+    this.getWorkoutTypes();
+  }
+
+  getWorkoutTypes() {
+    this.httpClient.get('http://localhost:5001/api/workout-type').subscribe(response => {
+      this.workoutTypes = response;
+    }, error => {
+      console.log(error);
+    })
   }
 
 }
