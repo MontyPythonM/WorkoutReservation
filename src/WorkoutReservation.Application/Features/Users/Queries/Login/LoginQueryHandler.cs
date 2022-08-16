@@ -15,7 +15,6 @@ namespace WorkoutReservation.Application.Features.Users.Queries.Login;
 public class LoginQueryHandler : IRequestHandler<LoginQuery, string>
 {
     private readonly AuthenticationSettings _authenticationSettings;
-    private readonly IMapper _mapper;
     private readonly IPasswordHasher<User> _passwordHasher;
     private readonly IUserRepository _userRepository;
 
@@ -27,7 +26,6 @@ public class LoginQueryHandler : IRequestHandler<LoginQuery, string>
         _userRepository = userRepository;
         _passwordHasher = passwordHasher;
         _authenticationSettings = authenticationSettings;
-        _mapper = mapper;
     }
 
     public async Task<string> Handle(LoginQuery request, CancellationToken cancellationToken)
