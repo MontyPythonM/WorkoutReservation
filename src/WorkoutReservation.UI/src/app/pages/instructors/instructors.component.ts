@@ -1,3 +1,4 @@
+import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 
 @Component({
@@ -6,10 +7,22 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./instructors.component.css']
 })
 export class InstructorsComponent implements OnInit {
+  
+  title: string = 'Instructors';
+  instructors: any;
 
-  constructor() { }
+  constructor(private httpClient: HttpClient) { }
 
   ngOnInit(): void {
+    this.getInstructors();
+  }
+
+  getInstructors() {
+    this.httpClient.get('http://localhost:5001/api/instructor').subscribe(response => {
+      this.instructors = response;
+    }, error => {
+      console.log(error);
+    })
   }
 
 }
