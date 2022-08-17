@@ -22,6 +22,7 @@ export class InstructorsComponent implements OnInit {
       next: response => this.instructors = response,
       error: error => console.log(error)
     })
+    console.log(this.instructors);
   }
 
 }

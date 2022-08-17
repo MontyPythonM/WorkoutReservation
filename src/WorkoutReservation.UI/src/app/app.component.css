@@ -1,8 +1,7 @@
 .main{
-    border: 3px black;
-    background-color: aqua;
+    border: 1px black dashed;
 }
 
 .global-container{
-    border: 3px black ;
+    border: 1px black solid;
 }
