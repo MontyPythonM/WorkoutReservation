@@ -16,6 +16,13 @@ import { RegisterComponent } from './pages/register/register.component';
 import { InstructorDetailsComponent } from './pages/instructors/instructor-details/instructor-details.component';
 import { WorkoutDetailsComponent } from './pages/workouts/workout-details/workout-details.component';
 import { WorkoutTypeDetailsComponent } from './pages/workout-types/workout-type-details/workout-type-details.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+
+import { MatSliderModule } from '@angular/material/slider';
+import { MatFormFieldModule } from '@angular/material/form-field'; 
+import { MatIconModule } from '@angular/material/icon'; 
+import { MatInputModule } from '@angular/material/input';
+import { MatButtonModule } from '@angular/material/button';
 
 @NgModule({
   declarations: [
@@ -36,7 +43,13 @@ import { WorkoutTypeDetailsComponent } from './pages/workout-types/workout-type-
   imports: [
     BrowserModule,
     AppRoutingModule,    
-    HttpClientModule
+    HttpClientModule, 
+    BrowserAnimationsModule,
+    MatSliderModule,
+    MatFormFieldModule,
+    MatIconModule,
+    MatInputModule,
+    MatButtonModule
   ],
   providers: [],
   bootstrap: [AppComponent]
