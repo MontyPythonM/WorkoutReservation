@@ -1,12 +1,24 @@
 <div class="container">
+    <dx-text-box class="textBox" mode="email" placeholder="Email" width="350px">        
+        <dxi-button
+            name="email"      
+            [options]="emailTextBox">
+        </dxi-button>      
+        <dx-validator>
+            <dxi-validation-rule type="required" message="Email is required"></dxi-validation-rule>
+            <dxi-validation-rule type="email" message="Email is invalid"></dxi-validation-rule>
+        </dx-validator>
+    </dx-text-box>
+    
+    <dx-text-box class="textBox" mode="password" placeholder="Password" width="350px">
+        <dxi-button class="icon"
+            name="password"
+            [options]="passwordTextBox">
+        </dxi-button>
+        <dx-validator>
+            <dxi-validation-rule type="required" message="Password is required"></dxi-validation-rule>
+        </dx-validator>
+    </dx-text-box>
 
-    <div class="input-area">
-    </div>
-
-    <div class="input-area">  
-    </div>
-
-    <div class="button-area">
-        <button>Sign in</button>
-    </div>
+    <dx-button class="button" text="Login" type="success"></dx-button>
 </div>

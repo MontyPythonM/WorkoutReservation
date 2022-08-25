@@ -1,12 +1,14 @@
 .container {
-    padding: 10px 10px 10px 10px;
+    display: grid;
+    justify-content: center;
+    padding: 20px;
 }
 
-.input-area {
-    padding: 5px;
+.textBox {
+    margin-top: 10px;
 }
 
-.button-area {
-    padding: 10px;
-
+.button {
+    margin-top: 30px;
+    margin-bottom: 20px;
 }

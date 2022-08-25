@@ -18,7 +18,7 @@ import { WorkoutDetailsComponent } from './pages/workouts/workout-details/workou
 import { WorkoutTypeDetailsComponent } from './pages/workout-types/workout-type-details/workout-type-details.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
-import { DxButtonModule } from 'devextreme-angular';
+import { DxButtonModule, DxFormModule, DxTextBoxModule, DxValidatorModule } from 'devextreme-angular';
 
 @NgModule({
   declarations: [
@@ -41,7 +41,10 @@ import { DxButtonModule } from 'devextreme-angular';
     AppRoutingModule,    
     HttpClientModule, 
     BrowserAnimationsModule,
-    DxButtonModule
+    DxButtonModule,
+    DxFormModule,
+    DxTextBoxModule,
+    DxValidatorModule
   ],
   providers: [],
   bootstrap: [AppComponent]
