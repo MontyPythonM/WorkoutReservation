@@ -18,11 +18,7 @@ import { WorkoutDetailsComponent } from './pages/workouts/workout-details/workou
 import { WorkoutTypeDetailsComponent } from './pages/workout-types/workout-type-details/workout-type-details.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
-import { MatSliderModule } from '@angular/material/slider';
-import { MatFormFieldModule } from '@angular/material/form-field'; 
-import { MatIconModule } from '@angular/material/icon'; 
-import { MatInputModule } from '@angular/material/input';
-import { MatButtonModule } from '@angular/material/button';
+import { DxButtonModule } from 'devextreme-angular';
 
 @NgModule({
   declarations: [
@@ -45,11 +41,7 @@ import { MatButtonModule } from '@angular/material/button';
     AppRoutingModule,    
     HttpClientModule, 
     BrowserAnimationsModule,
-    MatSliderModule,
-    MatFormFieldModule,
-    MatIconModule,
-    MatInputModule,
-    MatButtonModule
+    DxButtonModule
   ],
   providers: [],
   bootstrap: [AppComponent]
