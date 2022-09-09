@@ -1,15 +1,10 @@
-<header>
-    <nav>
-        <div class="nav-menu">
-            <a class="brand-logo" routerLink="/">Workout Reservation App</a>
-            <div class="right-panel">
-                <a routerLink="/home" routerLinkActive="active">Home</a>
-                <a routerLink="/workouts" routerLinkActive="active">Workouts</a>
-                <a routerLink="/instructors" routerLinkActive="active">Instructors</a>        
-                <a routerLink="/workout-types" routerLinkActive="active">Workout Types</a>
-                <a routerLink="/register" routerLinkActive="active">Sign-up</a>
-                <a routerLink="/login" routerLinkActive="active">Sign-in</a>
-            </div>
-        </div>
-    </nav>
-</header>
+<div class="nav-menu">
+    <dx-menu #nav
+        [dataSource]="pages"
+        displayExpr="name"
+        orientation="horizontal"
+        (onItemClick)="setPage($event)"
+    ></dx-menu>
+</div>
+
+

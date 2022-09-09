@@ -1,10 +1,11 @@
-.nav-menu {
+ .nav-menu {
     overflow: hidden;
-    background-color: #e3dcdc;
+    /* background-color: #343547; */
+    background-color: whitesmoke;
     padding: 20px 10px;
   }
 
-  .brand-logo {
-    text-align: right;
+  .navButton {
+    float: left;
+    background-color: #da5859;
   }
-
