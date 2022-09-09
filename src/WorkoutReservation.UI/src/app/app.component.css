@@ -1,8 +1,7 @@
 .main{
-    border: 1px black dashed;
+    min-height: 88.5vh;
 }
 
 .global-container{
-    border: 1px black solid;
     font-family: 'Lato', sans-serif;
 }
