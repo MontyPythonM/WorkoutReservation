@@ -8,7 +8,8 @@ import { Component } from '@angular/core';
 export class LoginComponent  {
   emailTextBox: any;
   passwordTextBox: any;
-  loginButton: any;
+  email: string;
+  password: string;
 
   constructor() {
     this.emailTextBox = {
@@ -18,7 +19,7 @@ export class LoginComponent  {
       stylingMode: 'text',
       hoverStateEnabled: false,
       focusStateEnabled: false,
-      activeStateEnabled: false
+      activeStateEnabled: false,  
     }
 
     this.passwordTextBox = {
@@ -28,12 +29,20 @@ export class LoginComponent  {
       stylingMode: 'text',
       hoverStateEnabled: false,
       focusStateEnabled: false,
-      activeStateEnabled: false
+      activeStateEnabled: false,
     }
 
-    this.loginButton = {
-      
-    }
+    this.email = '';
+    this.password = ''; 
   }
 
+  signIn(params: any) { 
+    let result = params.validationGroup.validate();
+
+    if(result.isValid) {
+      console.log('email:', this.email);    
+      console.log('password:', this.password);
+      console.log('send request to backend');
+    }
+  }
 }
