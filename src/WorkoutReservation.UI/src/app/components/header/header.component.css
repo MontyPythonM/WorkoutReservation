@@ -1,11 +1,28 @@
  .nav-menu {
-    overflow: hidden;
-    /* background-color: #343547; */
     background-color: whitesmoke;
-    padding: 20px 10px;
+    padding: 20px 10px 20px 10px;
+    
   }
 
-  .navButton {
+  .nav-button {
+    text-align: right;
+  }
+
+  .workout {
     float: left;
-    background-color: #da5859;
+    font-size: 18px;
+    font-weight: 600;
+    color: rgb(24, 108, 24);
+    margin-left: 15px;
+  }
+
+  .reservation {
+    float:left;
+    margin-left: 3px;
+    font-size: 18px;
+    font-weight: 300;
+  }
+
+  .logo {
+    margin-top: 5px;
   }
