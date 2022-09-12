@@ -1,6 +1,6 @@
 # <p align="middle">WorkoutReservationWebApp<p>
 
-### <p align="middle"> This project is a Rest Api simulating a workout booking service made using ASP.NET Core, created for learning purposes. <p>
+### <p align="middle"> This project is a Rest Api simulating a workout booking service made using ASP.NET Core, created for learning purposes. The angular frontend project is currently under development.<p>
 
   
 ## How does it work?
