@@ -1,7 +1,7 @@
  .nav-menu {
     background-color: whitesmoke;
     padding: 20px 10px 20px 10px;
-    
+    border-bottom: 1px black solid;
   }
 
   .nav-button {
@@ -11,7 +11,7 @@
   .workout {
     float: left;
     font-size: 18px;
-    font-weight: 600;
+    font-weight: 900;
     color: rgb(24, 108, 24);
     margin-left: 15px;
   }
@@ -20,7 +20,7 @@
     float:left;
     margin-left: 3px;
     font-size: 18px;
-    font-weight: 300;
+    font-weight: 400;
   }
 
   .logo {

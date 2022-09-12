@@ -18,7 +18,7 @@ import { WorkoutDetailsComponent } from './pages/workouts/workout-details/workou
 import { WorkoutTypeDetailsComponent } from './pages/workout-types/workout-type-details/workout-type-details.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
-import { DxButtonModule, DxFormModule, DxMenuModule, DxTextBoxModule, DxValidatorModule } from 'devextreme-angular';
+import { DxButtonModule, DxFormModule, DxMenuModule, DxTextBoxModule, DxValidationGroupModule, DxValidationSummaryModule, DxValidatorModule } from 'devextreme-angular';
 import { DxiItemModule } from 'devextreme-angular/ui/nested';
 
 @NgModule({
@@ -47,7 +47,9 @@ import { DxiItemModule } from 'devextreme-angular/ui/nested';
     DxTextBoxModule,
     DxValidatorModule,
     DxiItemModule,
-    DxMenuModule 
+    DxMenuModule,
+    DxValidationSummaryModule,
+    DxValidationGroupModule
   ],
   providers: [],
   bootstrap: [AppComponent]
