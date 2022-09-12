@@ -1,0 +1,15 @@
+.container {
+    display: grid;
+    justify-content: center;
+    padding: 20px;
+}
+
+.textBox {
+    margin-top: 10px;
+}
+
+.button {
+    margin-top: 50px;
+    margin-bottom: 20px;
+    min-width: 350px;
+}
