@@ -47,7 +47,7 @@ public class CreateRealWorkoutCommandValidator : AbstractValidator<CreateRealWor
                 }
             });
 
-        RuleFor(x => x.MaxParticipianNumber)
+        RuleFor(x => x.MaxParticipiantNumber)
             .GreaterThan(0)
             .NotNull();
     }

@@ -32,5 +32,13 @@ public class RegisterCommandValidator : AbstractValidator<RegisterCommand>
         RuleFor(x => x.LastName).MaximumLength(50);
 
         RuleFor(x => x.Gender).IsInEnum();
+
+        RuleFor(x => x.DateOfBirth).Custom((value, context) =>
+        { 
+            if (value > DateOnly.FromDateTime(DateTime.Now))
+            {
+                context.AddFailure("You cannot be born in the future");
+            }
+        });
     }
 }

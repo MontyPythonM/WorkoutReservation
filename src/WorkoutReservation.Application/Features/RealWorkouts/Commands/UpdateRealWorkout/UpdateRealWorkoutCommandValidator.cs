@@ -45,9 +45,9 @@ public class UpdateRealWorkoutCommandValidator : AbstractValidator<UpdateRealWor
                 }
             });
 
-        RuleFor(x => x.MaxParticipianNumber)
+        RuleFor(x => x.MaxParticipiantNumber)
             .GreaterThan(0)
-            .GreaterThan(editedRealWorkout.CurrentParticipianNumber)
+            .GreaterThan(editedRealWorkout.CurrentParticipiantNumber)
             .NotNull();
     }
 }

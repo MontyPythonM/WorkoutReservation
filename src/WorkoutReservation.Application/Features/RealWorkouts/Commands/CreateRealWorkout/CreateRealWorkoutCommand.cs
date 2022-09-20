@@ -4,7 +4,7 @@ namespace WorkoutReservation.Application.Features.RealWorkouts.Commands.CreateRe
 
 public class CreateRealWorkoutCommand : IRequest<int>
 {
-    public int MaxParticipianNumber { get; set; }
+    public int MaxParticipiantNumber { get; set; }
     public DateOnly Date { get; set; }
     public TimeOnly StartTime { get; set; }
     public TimeOnly EndTime { get; set; }
