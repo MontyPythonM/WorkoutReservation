@@ -1,17 +1,26 @@
 import { Component } from '@angular/core';
+import { UserService } from 'src/app/services/user.service';
+import { ActivatedRoute, Router } from '@angular/router';
+import { LoginForm } from 'src/app/models/login-form.model';
 
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css']
 })
-export class LoginComponent  {
+export class LoginComponent {
   emailTextBox: any;
   passwordTextBox: any;
-  email: string;
-  password: string;
+  loggedIn: boolean;
+  loginData: LoginForm;
+  //returnUrl: string;
 
-  constructor() {
+  constructor(private userService: UserService,
+    private router: Router,
+    private activatedRoute: ActivatedRoute) {
+    this.loggedIn = false;
+    this.loginData = { email: '', password: ''};
+    //this.returnUrl = this.activatedRoute.snapshot.queryParams.returnUrl || '/shop';
     this.emailTextBox = {
       icon: "email",
       type: 'back',
@@ -19,9 +28,8 @@ export class LoginComponent  {
       stylingMode: 'text',
       hoverStateEnabled: false,
       focusStateEnabled: false,
-      activeStateEnabled: false,  
+      activeStateEnabled: false,
     }
-
     this.passwordTextBox = {
       icon: "lock",
       type: 'back',
@@ -31,18 +39,20 @@ export class LoginComponent  {
       focusStateEnabled: false,
       activeStateEnabled: false,
     }
-
-    this.email = '';
-    this.password = ''; 
   }
 
-  signIn(params: any) { 
-    let result = params.validationGroup.validate();
+  signIn(params: any) {
+    const result = params.validationGroup.validate();
 
     if(result.isValid) {
-      console.log('email:', this.email);    
-      console.log('password:', this.password);
-      console.log('send request to backend');
+      this.userService.login(this.loginData).subscribe(() => {
+       // TODO: this.router.navigateByUrl(this.returnUrl); redirect to main view after login
+      }, error => {
+        console.log('error: ', error);
+        if(error.status === 200) {
+          // return token (error.error.text)
+        }
+      })
     }
   }
 }

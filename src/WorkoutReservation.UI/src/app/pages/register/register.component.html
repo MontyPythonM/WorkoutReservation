@@ -1,65 +1,65 @@
 <div class="form">
-    <form (submit)="onFormSubmit($event)">
-        <dx-form  [formData]="registerFormData">
+    <form (submit)="signUp(registerFormData)">
+        <dx-form [(formData)]="registerFormData">
             <dxi-item itemType="group" caption="Personal Information">
                 <dxi-item dataField="firstName">
-                    <dxi-validation-rule 
-                        type="required" 
+                    <dxi-validation-rule
+                        type="required"
                         message="First name is required">
                     </dxi-validation-rule>
                     <dxi-validation-rule
                         type="pattern"
                         [pattern]="namePattern"
                         message="Do not use digits in the first name">
-                    </dxi-validation-rule> 
+                    </dxi-validation-rule>
                 </dxi-item>
-                
+
                 <dxi-item dataField="lastName">
-                    <dxi-validation-rule 
-                        type="required" 
+                    <dxi-validation-rule
+                        type="required"
                         message="Last name is required">
                     </dxi-validation-rule>
                     <dxi-validation-rule
                         type="pattern"
                         [pattern]="namePattern"
                         message="Do not use digits in the last name">
-                    </dxi-validation-rule> 
-                </dxi-item>
-                
-                <dxi-item dataField="gender" type="selectBox " [items]="['asd','dsa']"></dxi-item> 
-        
-                <dxi-item 
-                    dataField="dateOfBirth" 
-                    editorType="dxDateBox"
-                    [editorOptions]="dateOptions"> 
-                    <dxi-validation-rule
-                        type="range"
-                        [max]="maxDate"
-                        message="You cannot be born in the future">
                     </dxi-validation-rule>
-                </dxi-item>     
+                </dxi-item>
+
+                <dxi-item dataField="gender" editorType="dxSelectBox"
+                	[editorOptions]="{ dataSource: gender, valueExpr: 'index', displayExpr: 'description' }">
+                    <dxi-validation-rule
+                        type="required"
+                        message="Gender is required">
+                    </dxi-validation-rule>
+                </dxi-item>
+
+                <dxi-item
+                    dataField="dateOfBirth"
+                    editorType="dxDateBox"
+                    [editorOptions]="dateOptions">
+                </dxi-item>
             </dxi-item>
-        
+
             <dxi-item itemType="group" caption="Credentials">
                 <dxi-item dataField="email">
-                    <dxi-validation-rule 
-                        type="required" 
+                    <dxi-validation-rule
+                        type="required"
                         message="Email is required">
                     </dxi-validation-rule>
-                    <dxi-validation-rule 
-                        type="email" 
+                    <dxi-validation-rule
+                        type="email"
                         message="Email is invalid">
                     </dxi-validation-rule>
-                    <!-- <dxi-validation-rule type="async" message="Email is already registered" [validationCallback]="asyncValidation"></dxi-validation-rule> -->
                 </dxi-item>
-        
+
                 <dxi-item dataField="password" [editorOptions]="{ mode: 'password' }">
-                    <dxi-validation-rule 
-                        type="required" 
+                    <dxi-validation-rule
+                        type="required"
                         message="Password is required">
-                    </dxi-validation-rule>        
+                    </dxi-validation-rule>
                 </dxi-item>
-        
+
                 <dxi-item dataField="confirmPassword" [editorOptions]="{ mode: 'password' }">
                     <dxi-validation-rule
                         type="required"
@@ -70,19 +70,15 @@
                         [comparisonTarget]="passwordComparison"
                         message="Password and Confirm Password do not match">
                     </dxi-validation-rule>
-                </dxi-item>     
+                </dxi-item>
             </dxi-item>
-        
+
             <dxi-item itemType="empty" [colSpan]="2"></dxi-item>
-        
-            <dxi-item 
-                itemType="button" 
+
+            <dxi-item
+                itemType="button"
                 [buttonOptions]="buttonOptions">
             </dxi-item>
         </dx-form>
     </form>
 </div>
-
-
-
-

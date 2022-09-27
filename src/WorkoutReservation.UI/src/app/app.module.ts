@@ -18,8 +18,9 @@ import { WorkoutDetailsComponent } from './pages/workouts/workout-details/workou
 import { WorkoutTypeDetailsComponent } from './pages/workout-types/workout-type-details/workout-type-details.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
-import { DxButtonModule, DxFormModule, DxMenuModule, DxTextBoxModule, DxValidationGroupModule, DxValidationSummaryModule, DxValidatorModule } from 'devextreme-angular';
+import { DxButtonModule, DxFormModule, DxMenuModule, DxPopupModule, DxTextBoxModule, DxValidationGroupModule, DxValidationSummaryModule, DxValidatorModule } from 'devextreme-angular';
 import { DxiItemModule } from 'devextreme-angular/ui/nested';
+import { DatePipe } from '@angular/common';
 
 @NgModule({
   declarations: [
@@ -35,12 +36,12 @@ import { DxiItemModule } from 'devextreme-angular/ui/nested';
     RegisterComponent,
     InstructorDetailsComponent,
     WorkoutDetailsComponent,
-    WorkoutTypeDetailsComponent,
+    WorkoutTypeDetailsComponent
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule,    
-    HttpClientModule, 
+    AppRoutingModule,
+    HttpClientModule,
     BrowserAnimationsModule,
     DxButtonModule,
     DxFormModule,
@@ -49,9 +50,10 @@ import { DxiItemModule } from 'devextreme-angular/ui/nested';
     DxiItemModule,
     DxMenuModule,
     DxValidationSummaryModule,
-    DxValidationGroupModule
+    DxValidationGroupModule,
+    DxPopupModule
   ],
-  providers: [],
+  providers: [DatePipe],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
