@@ -52,7 +52,7 @@ namespace WorkoutReservation.Infrastructure.Migrations
                     b.Property<DateTime?>("LastModifiedDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("MaxParticipianNumber")
+                    b.Property<int>("MaxParticipiantNumber")
                         .HasColumnType("int");
 
                     b.Property<TimeSpan>("StartTime")
@@ -147,6 +147,9 @@ namespace WorkoutReservation.Infrastructure.Migrations
 
                     b.Property<string>("ConfirmationToken")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("DateOfBirth")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("Email")
                         .IsRequired()
@@ -243,7 +246,7 @@ namespace WorkoutReservation.Infrastructure.Migrations
                 {
                     b.HasBaseType("WorkoutReservation.Domain.Common.BaseWorkout");
 
-                    b.Property<int>("CurrentParticipianNumber")
+                    b.Property<int>("CurrentParticipiantNumber")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("Date")

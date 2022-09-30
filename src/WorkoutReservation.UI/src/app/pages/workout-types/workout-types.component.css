@@ -1,0 +1,22 @@
+.sub-title {
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+
+.margin-bottom {
+  margin-bottom: 20px;
+}
+
+.container {
+  margin: 0% 20% 0% 20%;
+}
+
+.tag {
+  float: left;
+  padding: 3px 8px 3px 8px;
+  margin-right: 8px;
+  background-color: rgb(122, 198, 9);
+  border-radius: 7px 7px 7px 7px;
+  box-shadow: 2px 2px 2px rgb(24, 108, 24);
+  background-image: linear-gradient(to right, rgb(122, 198, 9) , rgb(178, 254, 63));
+}

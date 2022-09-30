@@ -13,6 +13,7 @@ public class WorkoutTypeProfile : Profile
     {
         // WorkoutTypesListQueryDto
         CreateMap<WorkoutType, WorkoutTypesListQueryDto>();
+        CreateMap<WorkoutTypeTag, WorkoutTypeTagForWorkoutTypeDto>();
 
         // WorkoutTypeDetailQueryDto
         CreateMap<WorkoutType, WorkoutTypeDetailQueryDto>();

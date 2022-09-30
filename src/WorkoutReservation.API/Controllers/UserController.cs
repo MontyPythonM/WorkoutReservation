@@ -24,11 +24,11 @@ public class UserController : ApiControllerBase
         return Ok("Account created.");
     }
 
-    [HttpGet("login")]
+    [HttpPost("login")]
     [AllowAnonymous]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status403Forbidden)]
-    public async Task<IActionResult> Login([FromQuery] LoginQuery query)
+    public async Task<IActionResult> Login([FromBody] LoginQuery query)
     {
         return Ok(await Mediator.Send(query));
     }

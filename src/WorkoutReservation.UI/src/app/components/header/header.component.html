@@ -1,0 +1,16 @@
+<div class="nav-menu">
+    <div class="workout logo">
+        WORKOUT
+    </div>
+    <div class="reservation logo">
+        RESERVATION
+    </div>
+    <dx-menu class="nav-button"
+        [dataSource]="pages"
+        displayExpr="name"
+        orientation="horizontal"
+        (onItemClick)="setPage($event)"
+    ></dx-menu>
+</div>
+
+
