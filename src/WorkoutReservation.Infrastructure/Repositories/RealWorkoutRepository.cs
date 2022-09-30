@@ -69,7 +69,7 @@ public class RealWorkoutRepository : IRealWorkoutRepository
         var result = await _dbContext.RealWorkouts
             .FirstOrDefaultAsync(x => x.Id == realWorkout.Id);
 
-        result.CurrentParticipianNumber++; 
+        result.CurrentParticipiantNumber++; 
         await _dbContext.SaveChangesAsync();
     }
     public async Task DecrementCurrentParticipianNumber(RealWorkout realWorkout)
@@ -77,7 +77,7 @@ public class RealWorkoutRepository : IRealWorkoutRepository
         var result = await _dbContext.RealWorkouts
             .FirstOrDefaultAsync(x => x.Id == realWorkout.Id);
 
-        result.CurrentParticipianNumber--;
+        result.CurrentParticipiantNumber--;
         await _dbContext.SaveChangesAsync();
     }
 

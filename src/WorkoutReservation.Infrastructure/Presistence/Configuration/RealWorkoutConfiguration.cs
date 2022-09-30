@@ -9,7 +9,7 @@ public class RealWorkoutConfiguration : IEntityTypeConfiguration<RealWorkout>
 {
     public void Configure(EntityTypeBuilder<RealWorkout> builder)
     {
-        builder.Property(x => x.CurrentParticipianNumber)
+        builder.Property(x => x.CurrentParticipiantNumber)
             .IsRequired();
 
         builder.Property(x => x.Date)

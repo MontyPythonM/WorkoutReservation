@@ -24,7 +24,7 @@ public class UserController : ApiControllerBase
         return Ok("Account created.");
     }
 
-    [HttpGet("login")]
+    [HttpPost("login")]
     [AllowAnonymous]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status403Forbidden)]

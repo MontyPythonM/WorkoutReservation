@@ -7,7 +7,7 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./instructors.component.css']
 })
 export class InstructorsComponent implements OnInit {
-  
+
   title: string = 'Instructors';
   instructors: any;
 
@@ -15,6 +15,7 @@ export class InstructorsComponent implements OnInit {
 
   ngOnInit(): void {
     this.getInstructors();
+    console.log(this.instructors);
   }
 
   getInstructors() {
@@ -22,7 +23,6 @@ export class InstructorsComponent implements OnInit {
       next: response => this.instructors = response,
       error: error => console.log(error)
     })
-    console.log(this.instructors);
   }
 
 }

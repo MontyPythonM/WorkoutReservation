@@ -39,7 +39,7 @@ public class UpdateRepetitiveWorkoutCommandValidator : AbstractValidator<UpdateR
                 }
             });
 
-        RuleFor(x => x.MaxParticipianNumber)
+        RuleFor(x => x.MaxParticipiantNumber)
             .GreaterThan(0)
             .NotNull();
     }

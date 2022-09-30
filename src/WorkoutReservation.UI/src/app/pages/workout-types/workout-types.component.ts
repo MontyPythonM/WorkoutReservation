@@ -1,5 +1,7 @@
-import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
+import { PagedResult } from 'src/app/models/paged-result.model';
+import { WorkoutType } from 'src/app/models/workout-types.model';
+import { WorkoutTypeService } from 'src/app/services/workout-type.service';
 
 @Component({
   selector: 'app-workout-types',
@@ -7,21 +9,21 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./workout-types.component.css']
 })
 export class WorkoutTypesComponent implements OnInit {
+  workoutTypes?: PagedResult<WorkoutType>;
 
-  title: string = 'Workout types';
-  workoutTypes: any;
-
-  constructor(private httpClient: HttpClient) { }
+  constructor(private workoutTypeService: WorkoutTypeService) {
+    this.workoutTypes = new PagedResult<WorkoutType>();
+  }
 
   ngOnInit(): void {
-    this.getWorkoutTypes();
+    this.loadWorkoutTypes();
   }
 
-  getWorkoutTypes() {
-    this.httpClient.get('http://localhost:5001/api/workout-type').subscribe({
-      next: response => this.workoutTypes = response,
-      error: error => console.log(error)
-    })
+  loadWorkoutTypes(): void {
+    this.workoutTypeService.getAll(1, 5, true).subscribe(
+      (workoutTypes) => {
+        this.workoutTypes = workoutTypes;
+      }
+    );
   }
-
 }
