@@ -1,6 +1,6 @@
 # <p align="middle">WorkoutReservationWebApp<p>
 
-### <p align="middle"> This project is a Rest Api simulating a workout booking service made using ASP.NET Core, created for learning purposes. The angular frontend project is currently under development.<p>
+### <p align="middle"> This project is a Rest Api simulating a workout booking service made using ASP.NET Core, created for learning purposes.<p>
 
   
 ## How does it work?
@@ -28,6 +28,8 @@ In addition, a few application user roles are implemented:
 - #### Entity Framework Core
 - #### MS SQL Database
 - #### JWT Bearer authentication
+- #### Angular 13
+
   <br><br/>
 ## Used Libraries
 - #### MediatR
@@ -37,3 +39,5 @@ In addition, a few application user roles are implemented:
 - #### Swagger
 - #### NLog
 - #### Hangfire
+- #### Dev-Extreme
+
