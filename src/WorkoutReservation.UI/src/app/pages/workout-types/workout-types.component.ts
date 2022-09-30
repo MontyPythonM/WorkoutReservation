@@ -23,7 +23,6 @@ export class WorkoutTypesComponent implements OnInit {
     this.workoutTypeService.getAll(1, 5, true).subscribe(
       (workoutTypes) => {
         this.workoutTypes = workoutTypes;
-        console.log('test');
       }
     );
   }
