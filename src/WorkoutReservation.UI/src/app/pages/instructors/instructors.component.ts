@@ -15,7 +15,6 @@ export class InstructorsComponent implements OnInit {
 
   ngOnInit(): void {
     this.getInstructors();
-    console.log(this.instructors);
   }
 
   getInstructors() {
