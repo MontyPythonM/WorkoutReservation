@@ -18,12 +18,8 @@
       </div>
       <div>
         <div class="sub-title">Tags:</div>
-        <div>
-          <ul>
-            <li *ngFor="let workout of workoutType.workoutTypeTags">
-             {{ workout.tag }}
-            </li>
-          </ul>
+        <div *ngFor="let workout of workoutType.workoutTypeTags">
+             <div class="tag">{{ workout.tag }}</div>
         </div>
       </div>
     </div>
