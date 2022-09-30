@@ -1,4 +1,30 @@
-<dx-list
+<div class="container">
+  <dx-accordion
   [dataSource]="workoutTypes!.items"
-  displayExpr="name">
-</dx-list>
+  [collapsible]="true"
+  [animationDuration]="150"
+  >
+    <div *dxTemplate="let workoutType of 'title'">
+      <p>{{ workoutType.name }}</p>
+    </div>
+    <div *dxTemplate="let workoutType of 'item'">
+      <div>
+        <div class="sub-title">Description:</div>
+        <div class="margin-bottom">{{ workoutType.description }}</div>
+      </div>
+      <div>
+        <div class="sub-title">Intensity:</div>
+        <div class="margin-bottom">{{ workoutType.intensity }}</div>
+      </div>
+      <div>
+        <div class="sub-title">Tags:</div>
+        <div *ngFor="let workout of workoutType.workoutTypeTags">
+             <div class="tag">{{ workout.tag }}</div>
+        </div>
+      </div>
+    </div>
+  </dx-accordion>
+</div>
+
+
+
