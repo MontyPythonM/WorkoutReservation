@@ -1,10 +1,14 @@
+.title {
+  font-weight: 600;
+}
+
 .sub-title {
   margin-bottom: 5px;
-  font-weight: bold;
+  font-weight: 550;
 }
 
 .margin-bottom {
-  margin-bottom: 20px;
+  margin-bottom: 25px;
 }
 
 .container {
@@ -14,9 +18,28 @@
 .tag {
   float: left;
   padding: 3px 8px 3px 8px;
-  margin-right: 8px;
+  margin: 3px 8px 0px 0px;
   background-color: rgb(122, 198, 9);
   border-radius: 7px 7px 7px 7px;
   box-shadow: 2px 2px 2px rgb(24, 108, 24);
-  background-image: linear-gradient(to right, rgb(122, 198, 9) , rgb(178, 254, 63));
+  background-image: linear-gradient(to right, rgb(122, 198, 9), rgb(178, 254, 63));
+}
+
+.clear-both {
+  clear: both;
+}
+
+.instructor {
+  float: left;
+  margin: 3px 0px 0px 0px;
+
+}
+
+.instructor:hover {
+  cursor: pointer;
+}
+
+.comma {
+  float: left;
+  margin: 3px 5px 0px 0px;
 }

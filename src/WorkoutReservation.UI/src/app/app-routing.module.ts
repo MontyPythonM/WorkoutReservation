@@ -11,15 +11,15 @@ import { WorkoutDetailsComponent } from './pages/workouts/workout-details/workou
 import { WorkoutsComponent } from './pages/workouts/workouts.component';
 
 const routes: Routes = [
-    { path: 'home', component: HomeComponent },    
-    { path: 'workouts', component: WorkoutsComponent },  
-    { path: 'workouts/:id', component: WorkoutDetailsComponent },  
-    { path: 'instructors', component: InstructorsComponent },    
-    { path: 'instructors/:id', component: InstructorDetailsComponent },   
-    { path: 'workout-types', component: WorkoutTypesComponent },   
-    { path: 'workout-types/:id', component: WorkoutTypeDetailsComponent },   
-    { path: 'register', component: RegisterComponent },    
-    { path: 'login', component: LoginComponent },    
+    { path: 'home', component: HomeComponent },
+    { path: 'workouts', component: WorkoutsComponent },
+    { path: 'workouts/:id', component: WorkoutDetailsComponent },
+    { path: 'instructors', component: InstructorsComponent },
+    { path: 'instructors/:id', component: InstructorDetailsComponent },
+    { path: 'workout-types', component: WorkoutTypesComponent },
+    { path: 'workout-types/:id', component: WorkoutTypeDetailsComponent },
+    { path: 'register', component: RegisterComponent },
+    { path: 'login', component: LoginComponent },
     { path: '', redirectTo: '/home', pathMatch: 'prefix' }
   ];
 

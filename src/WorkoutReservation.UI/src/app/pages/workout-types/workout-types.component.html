@@ -5,7 +5,7 @@
   [animationDuration]="150"
   >
     <div *dxTemplate="let workoutType of 'title'">
-      <p>{{ workoutType.name }}</p>
+      <p class="title">{{ workoutType.name }}</p>
     </div>
     <div *dxTemplate="let workoutType of 'item'">
       <div>
@@ -18,13 +18,18 @@
       </div>
       <div>
         <div class="sub-title">Tags:</div>
-        <div *ngFor="let workout of workoutType.workoutTypeTags">
-             <div class="tag">{{ workout.tag }}</div>
+        <div *ngFor="let workoutTag of workoutType.workoutTypeTags">
+             <div class="tag">{{ workoutTag.tag }}</div>
+        </div>
+      </div>
+      <div class="clear-both margin-bottom"></div>
+      <div>
+        <div class="sub-title">Instructors:</div>
+        <div *ngFor="let instructor of workoutType.instructors; let last = last; let first = first">
+            <div class="instructor" [routerLink]="['/instructors/' + instructor.id]">{{ instructor.firstName + ' ' + instructor.lastName }}</div>
+            <div *ngIf="!last" class="comma">,</div>
         </div>
       </div>
     </div>
   </dx-accordion>
 </div>
-
-
-

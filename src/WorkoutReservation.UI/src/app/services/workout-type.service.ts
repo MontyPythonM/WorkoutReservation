@@ -15,11 +15,12 @@ export class WorkoutTypeService {
     this.paginatedResult = new PagedResult<WorkoutType>();
   }
 
-  getAll(pageNumber: number, pageSize: number, sortByDescending: boolean): Observable<PagedResult<WorkoutType>> {
+  getAll(pageNumber: number, pageSize: number, sortByDescending: boolean, sortBy: string): Observable<PagedResult<WorkoutType>> {
     const query = {
       PageNumber: pageNumber,
       PageSize: pageSize,
-      SortByDescending: sortByDescending
+      SortByDescending: sortByDescending,
+      SortBy: sortBy
     };
 
     return this.http.get<PagedResult<WorkoutType>>(environment.apiUrl + 'workout-type',
