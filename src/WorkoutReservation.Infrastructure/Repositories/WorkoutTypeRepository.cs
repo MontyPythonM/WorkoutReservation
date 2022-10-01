@@ -54,6 +54,7 @@ public class WorkoutTypeRepository : IWorkoutTypeRepository
     {
         return _dbContext.WorkoutTypes
             .AsNoTracking()
+            .Include(x => x.Instructors)
             .Include(x => x.WorkoutTypeTags)
             .AsQueryable();
     }
