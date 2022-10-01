@@ -13,7 +13,8 @@ public class WorkoutTypesListQueryDto
     [JsonConverter(typeof(JsonStringEnumConverter))]
     public WorkoutIntensity Intensity { get; set; }
     public List<WorkoutTypeTagForWorkoutTypeDto> WorkoutTypeTags { get; set; }
-
+    public List<InstructorForWorkoutTypeDto> Instructors { get; set; }
 }
 
 public record WorkoutTypeTagForWorkoutTypeDto(string Tag);
+public record InstructorForWorkoutTypeDto(int Id, string FirstName, string LastName);

@@ -14,6 +14,7 @@ public class WorkoutTypeProfile : Profile
         // WorkoutTypesListQueryDto
         CreateMap<WorkoutType, WorkoutTypesListQueryDto>();
         CreateMap<WorkoutTypeTag, WorkoutTypeTagForWorkoutTypeDto>();
+        CreateMap<Instructor, InstructorForWorkoutTypeDto>();
 
         // WorkoutTypeDetailQueryDto
         CreateMap<WorkoutType, WorkoutTypeDetailQueryDto>();
