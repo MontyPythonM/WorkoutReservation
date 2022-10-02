@@ -14,15 +14,7 @@ public class InstructorDetailQueryDto
     public string Biography { get; set; }
     public string Email { get; set; }
 
-    public List<WorkoutTypeForInstructorDetailQeuryDto> WorkoutTypes { get; set; } = new List<WorkoutTypeForInstructorDetailQeuryDto>();
+    public List<WorkoutTypeForInstructorDetailQueryDto> WorkoutTypes { get; set; } = new List<WorkoutTypeForInstructorDetailQueryDto>();
 }
 
-public class WorkoutTypeForInstructorDetailQeuryDto
-{
-    public int Id { get; set; }
-    public string Name { get; set; }
-    public string Description { get; set; }
-
-    [JsonConverter(typeof(JsonStringEnumConverter))]
-    public WorkoutIntensity Intensity { get; set; }
-}
+public record WorkoutTypeForInstructorDetailQueryDto(int Id, string Name);

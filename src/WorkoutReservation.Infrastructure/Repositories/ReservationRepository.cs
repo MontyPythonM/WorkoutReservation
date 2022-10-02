@@ -42,10 +42,7 @@ public class ReservationRepository : IReservationRepository
             .Where(x => x.RealWorkoutId == workoutId)
             .FirstOrDefaultAsync(x => x.UserId == currentUserId);
       
-        if(isUserAlreadyReserved is not null)
-            return true;
-
-        return false;
+        return isUserAlreadyReserved is not null;
     }
 
     public async Task<Reservation> GetReservationByIdAsync(int reservationId)
@@ -71,6 +68,7 @@ public class ReservationRepository : IReservationRepository
                 .ThenInclude(x => x.Instructor)
             .Include(x => x.RealWorkout)
                 .ThenInclude(x => x.WorkoutType)
+            .Where(x => x.UserId == userId)
             .OrderBy(x => x.RealWorkout.Date)
                 .ThenBy(x => x.RealWorkout.StartTime)
             .AsQueryable();          

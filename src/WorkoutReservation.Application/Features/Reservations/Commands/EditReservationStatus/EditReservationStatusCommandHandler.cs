@@ -50,7 +50,7 @@ public class EditReservationStatusCommandHandler : IRequestHandler<EditReservati
             mappedReservation.ReservationStatus == ReservationStatus.Cancelled)
         {
             await _realWorkoutRepository
-                .DecrementCurrentParticipianNumber(reservation.RealWorkout);
+                .DecrementCurrentParticipiantNumber(reservation.RealWorkout);
         }
 
         return Unit.Value;
