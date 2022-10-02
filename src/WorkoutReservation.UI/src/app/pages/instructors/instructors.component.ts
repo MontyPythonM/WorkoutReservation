@@ -1,5 +1,6 @@
-import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
+import { Instructor } from 'src/app/models/instructor.model';
+import { InstructorService } from 'src/app/services/instructor.service';
 
 @Component({
   selector: 'app-instructors',
@@ -7,21 +8,21 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./instructors.component.css']
 })
 export class InstructorsComponent implements OnInit {
+  instructors?: Instructor[];
 
-  title: string = 'Instructors';
-  instructors: any;
-
-  constructor(private httpClient: HttpClient) { }
+  constructor(private instructorService: InstructorService) {
+    this.instructors = new Array<Instructor>();
+  }
 
   ngOnInit(): void {
-    this.getInstructors();
+    this.loadInstructors();
   }
 
-  getInstructors() {
-    this.httpClient.get('http://localhost:5001/api/instructor').subscribe({
-      next: response => this.instructors = response,
-      error: error => console.log(error)
-    })
+  loadInstructors(): void {
+    this.instructorService.getAll().subscribe(
+      (instructors) => {
+        this.instructors = instructors;
+      }
+    );
   }
-
 }

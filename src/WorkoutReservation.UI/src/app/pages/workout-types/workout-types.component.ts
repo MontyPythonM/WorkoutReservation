@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { PagedQuery } from 'src/app/models/paged-query.model';
 import { PagedResult } from 'src/app/models/paged-result.model';
 import { WorkoutType } from 'src/app/models/workout-types.model';
 import { WorkoutTypeService } from 'src/app/services/workout-type.service';
@@ -10,17 +11,20 @@ import { WorkoutTypeService } from 'src/app/services/workout-type.service';
 })
 export class WorkoutTypesComponent implements OnInit {
   workoutTypes?: PagedResult<WorkoutType>;
+  query: PagedQuery;
 
   constructor(private workoutTypeService: WorkoutTypeService) {
     this.workoutTypes = new PagedResult<WorkoutType>();
+    this.query = PagedQuery.default();
+    this.query.sortBy = 'Name';
   }
 
   ngOnInit(): void {
-    this.loadWorkoutTypes();
+    this.loadWorkoutTypes(this.query);
   }
 
-  loadWorkoutTypes(): void {
-    this.workoutTypeService.getAll(1, 5, false, 'Name').subscribe(
+  loadWorkoutTypes(params: PagedQuery): void {
+    this.workoutTypeService.getAll(params).subscribe(
       (workoutTypes) => {
         this.workoutTypes = workoutTypes;
       }
