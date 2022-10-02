@@ -6,8 +6,8 @@ namespace WorkoutReservation.Application.Features.RealWorkouts.Queries.GetRealWo
 public class RealWorkoutFromCurrentWeekDto
 {
     public int Id { get; set; }
-    public int CurrentParticipianNumber { get; set; }
-    public int MaxParticipianNumber { get; set; }
+    public int CurrentParticipiantNumber { get; set; }
+    public int MaxParticipiantNumber { get; set; }
     public TimeOnly StartTime { get; set; }
     public TimeOnly EndTime { get; set; }
     public DateOnly Date { get; set; }
