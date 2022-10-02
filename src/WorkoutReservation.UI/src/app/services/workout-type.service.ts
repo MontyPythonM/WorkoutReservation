@@ -9,22 +9,12 @@ import { WorkoutType } from '../models/workout-types.model';
   providedIn: 'root'
 })
 export class WorkoutTypeService {
-  paginatedResult: PagedResult<WorkoutType>;
 
-  constructor(private http: HttpClient) {
-    this.paginatedResult = new PagedResult<WorkoutType>();
-  }
+  constructor(private http: HttpClient) {}
 
-  getAll(pageNumber: number, pageSize: number, sortByDescending: boolean, sortBy: string): Observable<PagedResult<WorkoutType>> {
-    const query = {
-      PageNumber: pageNumber,
-      PageSize: pageSize,
-      SortByDescending: sortByDescending,
-      SortBy: sortBy
-    };
-
+  getAll(queryParams: any): Observable<PagedResult<WorkoutType>> {
     return this.http.get<PagedResult<WorkoutType>>(environment.apiUrl + 'workout-type',
-    { params: query }).pipe(
+    { params: queryParams }).pipe(
       map((response) => {
         response.items = response.items.map((workoutType) => new WorkoutType(workoutType));
         return response;

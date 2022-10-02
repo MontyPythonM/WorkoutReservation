@@ -16,6 +16,8 @@
 }
 
 .tag {
+  font-size: 12px;
+  font-weight: 500;
   float: left;
   padding: 3px 8px 3px 8px;
   margin: 3px 8px 0px 0px;
@@ -32,7 +34,8 @@
 .instructor {
   float: left;
   margin: 3px 0px 0px 0px;
-
+  color: rgb(24, 108, 24);
+  font-weight: 500;
 }
 
 .instructor:hover {
