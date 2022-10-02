@@ -1,1 +1,25 @@
-<p>instructor-details works!</p>
+<div class="container" *ngIf="instructor">
+  <div>
+    <b>Name:</b>
+    {{ instructor.firstName + ' ' + instructor.lastName }}
+  </div>
+  <div>
+    <b>Biography:</b>
+    {{ instructor.biography }}
+  </div>
+  <div>
+    <b>Gender:</b>
+    {{ instructor.gender }}
+  </div>
+  <div>
+    <b>Email:</b>
+    {{ instructor.email }}
+  </div>
+  <div>
+    <b>Workout types:</b>
+    <div *ngFor="let workoutType of instructor.workoutTypes; let last = last">
+      <div class="workoutType">{{ workoutType.name }}</div>
+      <div *ngIf="!last" class="comma">,</div>
+    </div>
+  </div>
+</div>

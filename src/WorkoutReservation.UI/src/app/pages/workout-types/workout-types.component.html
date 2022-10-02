@@ -25,7 +25,7 @@
       <div class="clear-both margin-bottom"></div>
       <div>
         <div class="sub-title">Instructors:</div>
-        <div *ngFor="let instructor of workoutType.instructors; let last = last; let first = first">
+        <div *ngFor="let instructor of workoutType.instructors; let last = last">
             <div class="instructor" [routerLink]="['/instructors/' + instructor.id]">{{ instructor.firstName + ' ' + instructor.lastName }}</div>
             <div *ngIf="!last" class="comma">,</div>
         </div>

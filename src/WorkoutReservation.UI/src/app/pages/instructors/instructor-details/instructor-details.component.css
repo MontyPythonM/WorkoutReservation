@@ -1,0 +1,21 @@
+.container {
+  margin: 0% 20% 0% 20%;
+}
+
+.data {
+  float: left;
+}
+
+.clear {
+  clear: both;
+}
+
+.workoutType {
+  float: left;
+  margin: 3px 0px 0px 0px;
+}
+
+.comma {
+  float: left;
+  margin: 3px 5px 0px 0px;
+}
