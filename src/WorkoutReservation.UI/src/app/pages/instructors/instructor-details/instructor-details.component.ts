@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { BaseComponent } from 'src/app/common/base.component';
 import { InstructorDetails } from 'src/app/models/instructor-details.model';
 import { InstructorService } from 'src/app/services/instructor.service';
 
@@ -8,10 +9,11 @@ import { InstructorService } from 'src/app/services/instructor.service';
   templateUrl: './instructor-details.component.html',
   styleUrls: ['./instructor-details.component.css']
 })
-export class InstructorDetailsComponent implements OnInit {
+export class InstructorDetailsComponent extends BaseComponent implements OnInit {
   instructor?: InstructorDetails;
 
   constructor(private instructorService: InstructorService, private route: ActivatedRoute) {
+    super();
   }
 
   ngOnInit(): void {

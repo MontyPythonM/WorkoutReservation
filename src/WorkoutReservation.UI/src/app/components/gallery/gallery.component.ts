@@ -1,13 +1,16 @@
 import { Component, OnInit } from '@angular/core';
+import { BaseComponent } from 'src/app/common/base.component';
 
 @Component({
   selector: 'app-gallery',
   templateUrl: './gallery.component.html',
   styleUrls: ['./gallery.component.css']
 })
-export class GalleryComponent implements OnInit {
+export class GalleryComponent extends BaseComponent implements OnInit {
 
-  constructor() { }
+  constructor() {
+    super();
+  }
 
   ngOnInit(): void {
   }
