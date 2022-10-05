@@ -1,5 +1,6 @@
 import { Component, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
+import { BaseComponent } from 'src/app/common/base.component';
 import { EnumObject } from 'src/app/models/enum-object.model';
 import { RegisterForm } from 'src/app/models/register-form.model';
 import { UserService } from 'src/app/services/user.service';
@@ -10,7 +11,7 @@ import { environment } from 'src/environments/environment';
   templateUrl: './register.component.html',
   styleUrls: ['./register.component.css']
 })
-export class RegisterComponent {
+export class RegisterComponent extends BaseComponent {
   registerFormData: RegisterForm = {
     firstName: '',
     lastName: '',
@@ -38,7 +39,9 @@ export class RegisterComponent {
   };
   apiUrl = environment.apiUrl;
 
-  constructor(private userService: UserService, private router: Router) { }
+  constructor(private userService: UserService, private router: Router) {
+    super();
+  }
 
   passwordComparison = () => this.registerFormData.password;
 
