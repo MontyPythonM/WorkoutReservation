@@ -50,36 +50,17 @@ public class GenerateUpcomingWorkoutTimetableCommandHandler : IRequestHandler<Ge
         
         foreach (var workout in convertedWorkouts)
         {
-            switch (workout.DayOfWeek)
+            workout.Date = workout.DayOfWeek switch
             {
-                case DayOfWeek.Monday:
-                    workout.Date = firstDayOfUpcomingWeek;
-                    break;
-
-                case DayOfWeek.Tuesday:
-                    workout.Date = firstDayOfUpcomingWeek.AddDays(1);
-                    break;
-
-                case DayOfWeek.Wednesday:
-                    workout.Date = firstDayOfUpcomingWeek.AddDays(2);
-                    break;
-
-                case DayOfWeek.Thursday:
-                    workout.Date = firstDayOfUpcomingWeek.AddDays(3);
-                    break;
-
-                case DayOfWeek.Friday:
-                    workout.Date = firstDayOfUpcomingWeek.AddDays(4);
-                    break;
-
-                case DayOfWeek.Saturday:
-                    workout.Date = firstDayOfUpcomingWeek.AddDays(5);
-                    break;
-
-                case DayOfWeek.Sunday:
-                    workout.Date = firstDayOfUpcomingWeek.AddDays(6);
-                    break;
-            }
+                DayOfWeek.Monday => firstDayOfUpcomingWeek,
+                DayOfWeek.Tuesday => firstDayOfUpcomingWeek.AddDays(1),
+                DayOfWeek.Wednesday => firstDayOfUpcomingWeek.AddDays(2),
+                DayOfWeek.Thursday => firstDayOfUpcomingWeek.AddDays(3),
+                DayOfWeek.Friday => firstDayOfUpcomingWeek.AddDays(4),
+                DayOfWeek.Saturday => firstDayOfUpcomingWeek.AddDays(5),
+                DayOfWeek.Sunday => firstDayOfUpcomingWeek.AddDays(6),
+                _ => workout.Date
+            };
         }
 
         string createdBy = null;
