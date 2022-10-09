@@ -25,11 +25,11 @@ export class WorkoutTypesComponent extends BaseComponent implements OnInit {
     this.loadWorkoutTypes(this.query);
   }
 
-  loadWorkoutTypes(params: PagedQuery): void {
-    this.workoutTypeService.getAll(params).subscribe(
-      (workoutTypes) => {
-        this.workoutTypes = workoutTypes;
+  loadWorkoutTypes(queryParams: PagedQuery): void {
+    this.subscribe(this.workoutTypeService.getAll(queryParams), {
+      next: (response: PagedResult<WorkoutType>) => {
+        this.workoutTypes = response;
       }
-    );
+    });
   }
 }

@@ -1,4 +1,4 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { BaseComponent } from 'src/app/common/base.component';
 import { EnumObject } from 'src/app/models/enum-object.model';
@@ -45,12 +45,14 @@ export class RegisterComponent extends BaseComponent {
 
   passwordComparison = () => this.registerFormData.password;
 
-  signUp(data: RegisterForm) {
-    this.userService.register(data).subscribe(response => {
-    },
-    error => {
-      console.log(error);
-    })
+  signUp(registerForm: RegisterForm) {
+    this.subscribe(this.userService.register(registerForm), {
+      next: () => {
+        console.log("wysłano formularz rejestracji");
+      },
+      error: () => {
+        console.log("error");
+      }
+    });
   }
-
 }
