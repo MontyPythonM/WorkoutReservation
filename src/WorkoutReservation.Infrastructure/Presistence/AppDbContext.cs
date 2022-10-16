@@ -1,10 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using WorkoutReservation.Domain.Common;
 using WorkoutReservation.Domain.Entities;
-using WorkoutReservation.Infrastructure.Presistence.Configuration;
 
 namespace WorkoutReservation.Infrastructure.Presistence;
 
+// dotnet ef database update -s ../WorkoutReservation.API
 public class AppDbContext : DbContext
 {
     public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
