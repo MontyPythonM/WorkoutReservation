@@ -26,22 +26,22 @@ public class RealWorkoutRepository : IRealWorkoutRepository
             .ToListAsync();
     }
 
-    public async Task<RealWorkout> GetByIdAsync(int realworkoutId)
+    public async Task<RealWorkout> GetByIdAsync(int realWorkoutId)
     {
         return await _dbContext.RealWorkouts
             .AsNoTracking()
             .Include(x => x.Instructor)
             .Include(x => x.WorkoutType)
-            .FirstOrDefaultAsync(x => x.Id == realworkoutId);             
+            .FirstOrDefaultAsync(x => x.Id == realWorkoutId);             
     }
 
-    public async Task<RealWorkout> GetByIdWithReservationDetailsAsync(int realworkoutId)
+    public async Task<RealWorkout> GetByIdWithReservationDetailsAsync(int realWorkoutId)
     {
         return await _dbContext.RealWorkouts
             .AsNoTracking()
             .Include(x => x.Reservations)
                 .ThenInclude(x => x.User)
-            .FirstOrDefaultAsync(x => x.Id == realworkoutId);
+            .FirstOrDefaultAsync(x => x.Id == realWorkoutId);
     }
 
     public async Task<RealWorkout> AddAsync(RealWorkout realWorkout)
@@ -64,20 +64,20 @@ public class RealWorkoutRepository : IRealWorkoutRepository
         await _dbContext.SaveChangesAsync();
     }
 
-    public async Task IncrementCurrentParticipiantNumber(RealWorkout realWorkout)
+    public async Task IncrementCurrentParticipantNumber(RealWorkout realWorkout)
     {
         var result = await _dbContext.RealWorkouts
             .FirstOrDefaultAsync(x => x.Id == realWorkout.Id);
 
-        result.CurrentParticipiantNumber++; 
+        result.CurrentParticipantNumber++; 
         await _dbContext.SaveChangesAsync();
     }
-    public async Task DecrementCurrentParticipiantNumber(RealWorkout realWorkout)
+    public async Task DecrementCurrentParticipantNumber(RealWorkout realWorkout)
     {
         var result = await _dbContext.RealWorkouts
             .FirstOrDefaultAsync(x => x.Id == realWorkout.Id);
 
-        result.CurrentParticipiantNumber--;
+        result.CurrentParticipantNumber--;
         await _dbContext.SaveChangesAsync();
     }
 

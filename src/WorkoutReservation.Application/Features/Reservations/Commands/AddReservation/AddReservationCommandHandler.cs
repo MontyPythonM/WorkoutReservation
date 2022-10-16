@@ -47,7 +47,7 @@ public class AddReservationCommandHandler : IRequestHandler<AddReservationComman
 
         await validator.ValidateAndThrowAsync(request, cancellationToken);
 
-        await _realWorkoutRepository.IncrementCurrentParticipiantNumber(realWorkout);
+        await _realWorkoutRepository.IncrementCurrentParticipantNumber(realWorkout);
 
         var reservation = _mapper.Map<Reservation>(request);
 

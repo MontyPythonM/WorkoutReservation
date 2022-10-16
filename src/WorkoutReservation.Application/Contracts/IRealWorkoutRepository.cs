@@ -10,7 +10,7 @@ public interface IRealWorkoutRepository
     public Task<RealWorkout> AddAsync(RealWorkout realWorkout);
     public Task DeleteAsync(RealWorkout realWorkout);
     public Task UpdateAsync(RealWorkout realWorkout);
-    public Task IncrementCurrentParticipiantNumber(RealWorkout realWorkout);
-    public Task DecrementCurrentParticipiantNumber(RealWorkout realWorkout);
+    public Task IncrementCurrentParticipantNumber(RealWorkout realWorkout);
+    public Task DecrementCurrentParticipantNumber(RealWorkout realWorkout);
     public Task AddRangeAsync(List<RealWorkout> realWorkouts);
 }
