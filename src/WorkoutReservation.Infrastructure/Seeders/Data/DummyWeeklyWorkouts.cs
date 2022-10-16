@@ -13,9 +13,11 @@ internal class DummyWeeklyWorkouts
                 StartTime = new TimeOnly(10, 15),
                 EndTime = new TimeOnly(11, 00),
                 MaxParticipiantNumber = 40,
-                DayOfWeek = DayOfWeek.Tuesday,
+                DayOfWeek = DayOfWeek.Sunday,
                 CreatedBy = "Dummy Admin",
-                CreatedDate = new DateTime(2022, 06, 10)
+                CreatedDate = new DateTime(2022, 06, 10),
+                InstructorId = 2,
+                WorkoutTypeId = 3
             },
 
             new RepetitiveWorkout()
@@ -23,9 +25,11 @@ internal class DummyWeeklyWorkouts
                 StartTime = new TimeOnly(14, 15),
                 EndTime = new TimeOnly(15, 00),
                 MaxParticipiantNumber = 25,
-                DayOfWeek = DayOfWeek.Friday,
+                DayOfWeek = DayOfWeek.Sunday,
                 CreatedBy = "Dummy Manager",
-                CreatedDate = new DateTime(2022, 06, 13)
+                CreatedDate = new DateTime(2022, 06, 13),
+                InstructorId = 1,
+                WorkoutTypeId = 2
             },
         };
 
