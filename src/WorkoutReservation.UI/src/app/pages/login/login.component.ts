@@ -14,7 +14,6 @@ export class LoginComponent extends BaseComponent{
   passwordTextBox: any;
   loggedIn: boolean;
   loginData: LoginForm;
-  //returnUrl: string;
 
   constructor(private userService: UserService,
     private router: Router,
@@ -22,7 +21,6 @@ export class LoginComponent extends BaseComponent{
     super();
     this.loggedIn = false;
     this.loginData = { email: '', password: ''};
-    //this.returnUrl = this.activatedRoute.snapshot.queryParams.returnUrl || '/shop';
     this.emailTextBox = {
       icon: "email",
       type: 'back',
@@ -48,10 +46,10 @@ export class LoginComponent extends BaseComponent{
     if(validationResult.isValid) {
       this.subscribe(this.userService.login(this.loginData), {
         next: () => {
-          console.log("login success!");
+          console.log("login success");
         },
-        error: () => {
-          console.log("login failed!");
+        error: (error) => {
+          console.log("login failed. error:", error);
         }
       });
     }
