@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Swashbuckle.AspNetCore.Annotations;
 using WorkoutReservation.API.Controllers.Base;
 using WorkoutReservation.Application.Features.RealWorkouts.Commands.CreateRealWorkout;
 using WorkoutReservation.Application.Features.RealWorkouts.Commands.DeleteRealWorkout;
@@ -16,8 +17,7 @@ public class RealWorkoutController : ApiControllerBase
 {
     [HttpGet("current-week")]
     [AllowAnonymous]
-    [ProducesResponseType(typeof(List<RealWorkoutFromCurrentWeekDto>), StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [SwaggerOperation(Summary = "Returns a list of workouts for current week")]
     public async Task<IActionResult> GetRealWorkoutsFromCurrentWeek()
     {
         var realWorkouts = await Mediator.Send(new GetRealWorkoutFromCurrentWeekQuery());
@@ -25,8 +25,7 @@ public class RealWorkoutController : ApiControllerBase
     }
 
     [HttpGet("{realWorkoutId}")]
-    [ProducesResponseType(typeof(RealWorkoutDetailDto), StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [SwaggerOperation(Summary = "Returns selected workout")]
     public async Task<IActionResult> GetRealWorkoutById([FromRoute] int realWorkoutId)
     {
         var realWorkout = await Mediator.Send(new GetRealWorkoutDetailQuery { RealWorkoutId = realWorkoutId });
@@ -35,8 +34,7 @@ public class RealWorkoutController : ApiControllerBase
 
     [HttpGet("upcoming-week")]
     [AllowAnonymous]
-    [ProducesResponseType(typeof(List<RealWorkoutFromUpcomingWeekDto>), StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [SwaggerOperation(Summary = "Returns a list of workouts for upcoming week")]
     public async Task<IActionResult> GetRealWorkoutsFromUpcomingWeek()
     {
         var realWorkouts = await Mediator.Send(new GetRealWorkoutFromUpcomingWeekQuery());
@@ -44,8 +42,7 @@ public class RealWorkoutController : ApiControllerBase
     }
 
     [HttpPost]
-    [ProducesResponseType(StatusCodes.Status201Created)]
-    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [SwaggerOperation(Summary = "Create new workout")]
     public async Task<IActionResult> CreateRealWorkout([FromBody] CreateRealWorkoutCommand command)
     {
         var realWorkoutId = await Mediator.Send(command);
@@ -53,8 +50,7 @@ public class RealWorkoutController : ApiControllerBase
     }
 
     [HttpDelete("{realWorkoutId}")]
-    [ProducesResponseType(StatusCodes.Status204NoContent)]
-    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [SwaggerOperation(Summary = "Delete selected workout")]
     public async Task<IActionResult> DeleteRealWorkout([FromRoute] int realWorkoutId)
     {
         await Mediator.Send(new DeleteRealWorkoutCommand() { RealWorkoutId = realWorkoutId });
@@ -62,9 +58,7 @@ public class RealWorkoutController : ApiControllerBase
     }
 
     [HttpPut]
-    [ProducesResponseType(StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status404NotFound)]
-    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [SwaggerOperation(Summary = "Update selected workout")]
     public async Task<IActionResult> UpdateRealWorkout([FromBody] UpdateRealWorkoutCommand command)
     {
         await Mediator.Send(command);

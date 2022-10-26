@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Swashbuckle.AspNetCore.Annotations;
 using WorkoutReservation.API.Controllers.Base;
-using WorkoutReservation.Application.Common.Dtos;
 using WorkoutReservation.Application.Features.Users.Commands.DeleteUser;
 using WorkoutReservation.Application.Features.Users.Commands.Register;
 using WorkoutReservation.Application.Features.Users.Commands.SelfUserDelete;
@@ -16,8 +16,7 @@ public class UserController : ApiControllerBase
 {
     [HttpPost("register")]
     [AllowAnonymous]
-    [ProducesResponseType(StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [SwaggerOperation(Summary = "Register new user account")]
     public async Task<IActionResult> RegisterAccount([FromBody] RegisterCommand command)
     {
         await Mediator.Send(command);
@@ -26,8 +25,7 @@ public class UserController : ApiControllerBase
 
     [HttpPost("login")]
     [AllowAnonymous]
-    [ProducesResponseType(StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status403Forbidden)]
+    [SwaggerOperation(Summary = "Login user. If credentials is valid returns JWT Bearer token")]
     public async Task<IActionResult> Login([FromBody] LoginQuery query)
     {
         return Ok(await Mediator.Send(query));
@@ -35,8 +33,7 @@ public class UserController : ApiControllerBase
 
     [HttpGet]
     [Authorize(Roles = "Administrator")]
-    [ProducesResponseType(typeof(PagedResultDto<UsersListDto>), StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [SwaggerOperation(Summary = "Returns paged list of application users")]
     public async Task<IActionResult> GetAllUsers([FromQuery] GetUsersListQuery query)
     {
         return Ok(await Mediator.Send(query));
@@ -44,9 +41,7 @@ public class UserController : ApiControllerBase
 
     [HttpPut("set-user-role")]
     [Authorize(Roles = "Administrator")]
-    [ProducesResponseType(StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status404NotFound)]
-    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [SwaggerOperation(Summary = "Assigns a application role to a selected person")]
     public async Task<IActionResult> SetUserRole([FromBody] SetUserRoleCommand command)
     {
         await Mediator.Send(command);
@@ -55,9 +50,7 @@ public class UserController : ApiControllerBase
 
     [HttpDelete("delete-user/{userGuid}")]
     [Authorize(Roles = "Administrator")]
-    [ProducesResponseType(StatusCodes.Status204NoContent)]
-    [ProducesResponseType(StatusCodes.Status404NotFound)]
-    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [SwaggerOperation(Summary = "Delete the selected application user account")]
     public async Task<IActionResult> DeleteUserAccount([FromRoute] Guid userGuid)
     {
         await Mediator.Send(new DeleteUserCommand { UserGuid = userGuid });
@@ -66,8 +59,7 @@ public class UserController : ApiControllerBase
 
     [HttpDelete("delete-account")]
     [Authorize]
-    [ProducesResponseType(StatusCodes.Status204NoContent)]
-    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [SwaggerOperation(Summary = "Delete the currently logged-in user account")]
     public async Task<IActionResult> DeleteOwnAccount([FromBody] SelfDeleteUserCommand command)
     {
         await Mediator.Send(command);

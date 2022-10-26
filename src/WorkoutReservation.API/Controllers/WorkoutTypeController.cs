@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Swashbuckle.AspNetCore.Annotations;
 using WorkoutReservation.API.Controllers.Base;
 using WorkoutReservation.Application.Common.Dtos;
 using WorkoutReservation.Application.Features.WorkoutTypes.Commands.CreateWorkoutType;
@@ -16,8 +17,7 @@ public class WorkoutTypeController : ApiControllerBase
 {
     [HttpGet]
     [AllowAnonymous]
-    [ProducesResponseType(typeof(PagedResultDto<WorkoutTypesListQueryDto>), StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [SwaggerOperation(Summary = "Returns paged list of workout types")]
     public async Task<IActionResult> GetAllWorkoutTypes([FromQuery] GetWorkoutTypesListQuery query)
     {
         return Ok(await Mediator.Send(query));
@@ -25,8 +25,7 @@ public class WorkoutTypeController : ApiControllerBase
 
     [HttpGet("{workoutTypeId}")]
     [AllowAnonymous]
-    [ProducesResponseType(typeof(WorkoutTypeDetailQueryDto), StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [SwaggerOperation(Summary = "Returns selected workout type")]
     public async Task<IActionResult> GetWorkoutType([FromRoute] int workoutTypeId)
     {
         var result = await Mediator.Send(new GetWorkoutTypeDetailQuery() { WorkoutTypeId = workoutTypeId });
@@ -34,8 +33,7 @@ public class WorkoutTypeController : ApiControllerBase
     }
 
     [HttpPost]
-    [ProducesResponseType(StatusCodes.Status201Created)]
-    [ProducesResponseType(StatusCodes.Status400BadRequest)]      
+    [SwaggerOperation(Summary = "Create new workout type")]
     public async Task<IActionResult> CreateWorkoutType([FromBody] CreateWorkoutTypeCommand command)
     {
         var workoutTypeId = await Mediator.Send(command);
@@ -43,9 +41,8 @@ public class WorkoutTypeController : ApiControllerBase
     }
 
     [HttpDelete("{workoutTypeId}")]
-    [ProducesResponseType(StatusCodes.Status204NoContent)]
-    [ProducesResponseType(StatusCodes.Status404NotFound)]
-    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [SwaggerOperation(Summary = "Delete selected workout type")]
+
     public async Task<IActionResult> DeleteWorkoutType([FromRoute] int workoutTypeId)
     {
         await Mediator.Send(new DeleteWorkoutTypeCommand() { WorkoutTypeId = workoutTypeId });
@@ -53,9 +50,7 @@ public class WorkoutTypeController : ApiControllerBase
     }
 
     [HttpPut]
-    [ProducesResponseType(StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status404NotFound)]
-    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [SwaggerOperation(Summary = "Update selected workout type")]
     public async Task<IActionResult> UpdateWorkoutType([FromBody] UpdateWorkoutTypeCommand command)
     {
         await Mediator.Send(command);

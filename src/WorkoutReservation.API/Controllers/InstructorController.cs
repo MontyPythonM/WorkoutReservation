@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Swashbuckle.AspNetCore.Annotations;
 using WorkoutReservation.API.Controllers.Base;
 using WorkoutReservation.Application.Features.Instructors.Commands.CreateInstructor;
 using WorkoutReservation.Application.Features.Instructors.Commands.DeleteInstructor;
@@ -15,8 +16,7 @@ public class InstructorController : ApiControllerBase
 {
     [HttpGet]
     [AllowAnonymous]
-    [ProducesResponseType(typeof(List<InstructorListQueryDto>), StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [SwaggerOperation(Summary = "Returns list of instructors")]
     public async Task<IActionResult> GetAllInstructors()
     {
         var result = await Mediator.Send(new GetInstructorListQuery());
@@ -25,8 +25,7 @@ public class InstructorController : ApiControllerBase
 
     [HttpGet("{instructorId}")]
     [AllowAnonymous]
-    [ProducesResponseType(typeof(InstructorDetailQueryDto), StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [SwaggerOperation(Summary = "Returns selected instructor with list of related workout types")]
     public async Task<IActionResult> GetInstructor([FromRoute] int instructorId)
     {
         var result = await Mediator.Send(new GetInstructorDetailQuery() { InstructorId = instructorId });
@@ -34,8 +33,7 @@ public class InstructorController : ApiControllerBase
     }
 
     [HttpPost]
-    [ProducesResponseType(StatusCodes.Status201Created)]
-    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [SwaggerOperation(Summary = "Create new instructor")]
     public async Task<IActionResult> CreateInstructor([FromBody] CreateInstructorCommand command)
     {
         var instructorId = await Mediator.Send(command);
@@ -43,9 +41,7 @@ public class InstructorController : ApiControllerBase
     }
 
     [HttpDelete("{instructorId}")]
-    [ProducesResponseType(StatusCodes.Status204NoContent)]
-    [ProducesResponseType(StatusCodes.Status404NotFound)]
-    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [SwaggerOperation(Summary = "Delete selected instructor")]
     public async Task<IActionResult> DeleteInstructor([FromRoute] int instructorId)
     {
         await Mediator.Send(new DeleteInstructorCommand() { InstructorId = instructorId });
@@ -53,9 +49,7 @@ public class InstructorController : ApiControllerBase
     }
 
     [HttpPut]
-    [ProducesResponseType(StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status404NotFound)]
-    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [SwaggerOperation(Summary = "Update selected instructor")]
     public async Task<IActionResult> UpdateInstructor([FromBody] UpdateInstructorCommand command)
     {
         await Mediator.Send(command);
