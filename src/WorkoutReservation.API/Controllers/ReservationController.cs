@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Swashbuckle.AspNetCore.Annotations;
 using WorkoutReservation.API.Controllers.Base;
 using WorkoutReservation.Application.Common.Dtos;
 using WorkoutReservation.Application.Features.Reservations.Commands.AddReservation;
@@ -14,8 +15,7 @@ public class ReservationController : ApiControllerBase
 {
     [HttpGet]
     [Authorize]
-    [ProducesResponseType(typeof(PagedResultDto<UserReservationsListDto>), StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [SwaggerOperation(Summary = "Returns paged list of user reservations")]
     public async Task<IActionResult> GetReservation([FromQuery] GetUserReservationsListQuery query)
     {
         return Ok(await Mediator.Send(query));
@@ -23,8 +23,7 @@ public class ReservationController : ApiControllerBase
 
     [HttpPost]
     [Authorize]
-    [ProducesResponseType(StatusCodes.Status201Created)]
-    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [SwaggerOperation(Summary = "Creates a user reservation for the selected workout")]
     public async Task<IActionResult> AddReservation([FromBody] AddReservationCommand command)
     {
         var reservationId = await Mediator.Send(command);
@@ -34,8 +33,7 @@ public class ReservationController : ApiControllerBase
 
     [HttpPut("edit-reservation-status")]
     [Authorize(Roles = "Administrator")]
-    [ProducesResponseType(StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [SwaggerOperation(Summary = "Change the status of a selected reservation")]
     public async Task<IActionResult> EditUserReservationStatus([FromBody] EditReservationStatusCommand command)
     {
         await Mediator.Send(command);
@@ -44,8 +42,7 @@ public class ReservationController : ApiControllerBase
 
     [HttpPut("cancel-reservation")]
     [Authorize]
-    [ProducesResponseType(StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [SwaggerOperation(Summary = "Cancel a selected reservation")]
     public async Task<IActionResult> CancelReservation([FromBody] CancelReservationCommand command)
     {
         await Mediator.Send(command); 

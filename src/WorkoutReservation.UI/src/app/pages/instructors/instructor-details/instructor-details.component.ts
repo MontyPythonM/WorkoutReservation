@@ -21,10 +21,10 @@ export class InstructorDetailsComponent extends BaseComponent implements OnInit 
   }
 
   loadInstructorDetails(id: number): void {
-    this.instructorService.getDetails(id).subscribe(
-      (instructor) => {
-        this.instructor = instructor;
+    this.subscribe(this.instructorService.getDetails(id), {
+      next: (response: InstructorDetails) => {
+        this.instructor = response;
       }
-    );
+    });
   }
 }

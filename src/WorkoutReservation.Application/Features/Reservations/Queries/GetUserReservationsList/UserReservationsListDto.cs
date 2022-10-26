@@ -18,8 +18,8 @@ public class UserReservationsListDto
 public class RealWorkoutForUserReservationsListDto
 {
     public int Id { get; set; }
-    public int MaxParticipiantNumber { get; set; }
-    public int CurrentParticipiantNumber { get; set; }
+    public int MaxParticipantNumber { get; set; }
+    public int CurrentParticipantNumber { get; set; }
     public TimeOnly StartTime { get; set; }
     public TimeOnly EndTime { get; set; }
     public DateOnly Date { get; set; }

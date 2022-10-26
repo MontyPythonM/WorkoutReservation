@@ -30,6 +30,6 @@ export class HeaderComponent extends BaseComponent {
 }
 
 interface PageRoute {
-  name: string, 
+  name: string,
   path: string
 }

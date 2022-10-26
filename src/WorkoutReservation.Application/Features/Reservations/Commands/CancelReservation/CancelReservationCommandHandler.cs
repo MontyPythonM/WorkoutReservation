@@ -54,7 +54,7 @@ public class CancelReservationCommandHandler : IRequestHandler<CancelReservation
             .UpdateReservationAsync(mappedReservation);
 
         await _realWorkoutRepository
-            .DecrementCurrentParticipiantNumber(reservation.RealWorkout);
+            .DecrementCurrentParticipantNumber(reservation.RealWorkout);
 
         return Unit.Value;
     }

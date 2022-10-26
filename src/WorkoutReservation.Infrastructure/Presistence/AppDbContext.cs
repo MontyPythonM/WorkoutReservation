@@ -5,6 +5,7 @@ using WorkoutReservation.Domain.Entities;
 namespace WorkoutReservation.Infrastructure.Presistence;
 
 // dotnet ef database update -s ../WorkoutReservation.API
+//dotnet ef migrations add <name> -s../WorkoutReservation.API
 public class AppDbContext : DbContext
 {
     public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)

@@ -12,7 +12,7 @@ internal class DummyWeeklyWorkouts
             {
                 StartTime = new TimeOnly(10, 15),
                 EndTime = new TimeOnly(11, 00),
-                MaxParticipiantNumber = 40,
+                MaxParticipantNumber = 40,
                 DayOfWeek = DayOfWeek.Sunday,
                 CreatedBy = "Dummy Admin",
                 CreatedDate = new DateTime(2022, 06, 10),
@@ -24,7 +24,7 @@ internal class DummyWeeklyWorkouts
             {
                 StartTime = new TimeOnly(14, 15),
                 EndTime = new TimeOnly(15, 00),
-                MaxParticipiantNumber = 25,
+                MaxParticipantNumber = 25,
                 DayOfWeek = DayOfWeek.Sunday,
                 CreatedBy = "Dummy Manager",
                 CreatedDate = new DateTime(2022, 06, 13),

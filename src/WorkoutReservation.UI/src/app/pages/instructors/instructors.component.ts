@@ -21,10 +21,10 @@ export class InstructorsComponent extends BaseComponent implements OnInit {
   }
 
   loadInstructors(): void {
-    this.instructorService.getAll().subscribe(
-      (instructors) => {
-        this.instructors = instructors;
+    this.subscribe(this.instructorService.getAll(), {
+      next: (response: Instructor[]) => {
+        this.instructors = response;
       }
-    );
+    });
   }
 }

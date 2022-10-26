@@ -18,7 +18,7 @@ import { WorkoutDetailsComponent } from './pages/workouts/workout-details/workou
 import { WorkoutTypeDetailsComponent } from './pages/workout-types/workout-type-details/workout-type-details.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
-import { DxAccordionModule, DxButtonModule, DxFormModule, DxListModule, DxMenuModule, DxPopupModule, DxTextBoxModule, DxValidationGroupModule, DxValidationSummaryModule, DxValidatorModule } from 'devextreme-angular';
+import { DxAccordionModule, DxButtonModule, DxFormModule, DxListModule, DxMenuModule, DxPopupModule, DxSchedulerModule, DxTextBoxModule, DxValidationGroupModule, DxValidationSummaryModule, DxValidatorModule } from 'devextreme-angular';
 import { DxiItemModule } from 'devextreme-angular/ui/nested';
 import { DatePipe } from '@angular/common';
 
@@ -53,7 +53,8 @@ import { DatePipe } from '@angular/common';
     DxValidationGroupModule,
     DxPopupModule,
     DxListModule,
-    DxAccordionModule
+    DxAccordionModule,
+    DxSchedulerModule
   ],
   providers: [DatePipe],
   bootstrap: [AppComponent]

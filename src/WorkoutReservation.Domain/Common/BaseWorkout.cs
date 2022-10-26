@@ -5,7 +5,7 @@ namespace WorkoutReservation.Domain.Common;
 public abstract class BaseWorkout : BaseAuditableEntity
 {
     public int Id { get; set; }
-    public int MaxParticipiantNumber { get; set; }
+    public int MaxParticipantNumber { get; set; }
     public TimeOnly StartTime { get; set; }
     public TimeOnly EndTime { get; set; }
 

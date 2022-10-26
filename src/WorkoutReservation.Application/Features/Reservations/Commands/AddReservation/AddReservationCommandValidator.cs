@@ -11,10 +11,10 @@ public class AddReservationCommandValidator : AbstractValidator<AddReservationCo
 
         RuleFor(x => x).Custom((value, context) => 
         {
-            if (realWorkout.CurrentParticipiantNumber >= realWorkout.MaxParticipiantNumber)
+            if (realWorkout.CurrentParticipantNumber >= realWorkout.MaxParticipantNumber)
             {
                 context.AddFailure($"The maximum number of participants on training with Id: {realWorkout.Id} was reached. " +
-                    $"[{realWorkout.CurrentParticipiantNumber}/{realWorkout.MaxParticipiantNumber}]");
+                    $"[{realWorkout.CurrentParticipantNumber}/{realWorkout.MaxParticipantNumber}]");
             }
         });
 

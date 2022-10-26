@@ -65,7 +65,12 @@ try
     builder.Services.AddControllers(options => options.UseDateOnlyTimeOnlyStringConverters())
         .AddJsonOptions(options => options.UseDateOnlyTimeOnlyStringConverters());
 
-    builder.Services.AddSwaggerGen(c => c.UseDateOnlyTimeOnlyStringConverters());
+    builder.Services.AddSwaggerGen(c =>
+    {
+        c.UseDateOnlyTimeOnlyStringConverters();
+        c.EnableAnnotations();
+    });
+    
     builder.Services.AddInfrastructureServices(builder.Configuration);
     builder.Services.AddApplicationServices(builder.Configuration);
     builder.Services.AddScoped<ExceptionHandlingMiddleware>();
@@ -90,10 +95,7 @@ try
     {
         app.UseDeveloperExceptionPage();
         app.UseSwagger();
-        app.UseSwaggerUI(c =>
-        {
-            c.SwaggerEndpoint("/swagger/v1/swagger.json", "Workout Reservation REST API Application");
-        });
+        app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Workout Reservation REST API Application"));
     }
 
     app.UseMiddleware<ExceptionHandlingMiddleware>();

@@ -1,5 +1,6 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component } from '@angular/core';
 import { Router } from '@angular/router';
+import dxForm from 'devextreme/ui/form';
 import { BaseComponent } from 'src/app/common/base.component';
 import { EnumObject } from 'src/app/models/enum-object.model';
 import { RegisterForm } from 'src/app/models/register-form.model';
@@ -12,45 +13,46 @@ import { environment } from 'src/environments/environment';
   styleUrls: ['./register.component.css']
 })
 export class RegisterComponent extends BaseComponent {
-  registerFormData: RegisterForm = {
-    firstName: '',
-    lastName: '',
-    email: '',
-    password: '',
-    confirmPassword: '',
-    dateOfBirth: ''
-  };
-  gender: EnumObject[]  = [
-    { index: 1, description: 'Female' },
-    { index: 2, description: 'Male' }
-  ];
-  namePattern: any = /^[^0-9]+$/;
-  buttonOptions: any = {
-    text: "Register",
-    useSubmitBehavior: true,
-    type: "success",
-  };
-  dateOptions: any = {
-    invalidDateMessage:'The date must have the following format: dd-MM-yyyy',
-    type: 'date',
-    displayFormat:'dd-MM-yyyy',
-    min: new Date(1900, 0, 1),
-    max: new Date(Date.now())
-  };
-  apiUrl = environment.apiUrl;
+  registerFormData: RegisterForm;
+  gender: EnumObject[];
+  namePattern: any;
+  dateOptions: any;
+  private dxForm!: dxForm;
 
   constructor(private userService: UserService, private router: Router) {
     super();
+    this.registerFormData = new RegisterForm();
+    this.namePattern = /^[^0-9]+$/;
+    this.dateOptions = {
+      invalidDateMessage:'The date must have the following format: dd-MM-yyyy',
+      type: 'date',
+      displayFormat:'dd-MM-yyyy',
+      min: new Date(1900, 0, 1),
+      max: new Date(Date.now())
+    };
+    this.gender = [
+      { index: 1, description: 'Female' },
+      { index: 2, description: 'Male' }
+    ];
+  }
+
+  initializeDxForm(event: {component: dxForm}): void {
+    this.dxForm = event.component;
   }
 
   passwordComparison = () => this.registerFormData.password;
 
-  signUp(data: RegisterForm) {
-    this.userService.register(data).subscribe(response => {
-    },
-    error => {
-      console.log(error);
-    })
+  signUp() {
+    const isValid = this.dxForm.validate().isValid;
+    if(isValid) {
+      this.subscribe(this.userService.register(this.registerFormData), {
+        error: (error) => {
+          console.log('Register failed. Error: ', error);
+        },
+        complete: () => {
+          this.router.navigate(['/login']);
+        }
+      });
+    }
   }
-
 }

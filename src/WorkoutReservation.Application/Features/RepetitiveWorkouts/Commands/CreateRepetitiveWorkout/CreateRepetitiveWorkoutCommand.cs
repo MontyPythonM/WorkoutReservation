@@ -4,7 +4,7 @@ namespace WorkoutReservation.Application.Features.RepetitiveWorkouts.Commands.Cr
 
 public class CreateRepetitiveWorkoutCommand : IRequest<int>
 {
-    public int MaxParticipiantNumber { get; set; }
+    public int MaxParticipantNumber { get; set; }
     public TimeOnly StartTime { get; set; }
     public TimeOnly EndTime { get; set; }
     public int WorkoutTypeId { get; set; }
