@@ -1,13 +1,56 @@
 <dx-scheduler
+  [dataSource]="workouts"
   currentView="week"
-  >
+  textExpr="workoutTypeName"
+  appointmentTemplate="workout-template"
+  appointmentTooltipTemplate="workout-details-template"
+  [showAllDayPanel]="false">
   <dxi-view
     type="week"
     [firstDayOfWeek]="1"
     [startDayHour]="6"
-    [endDayHour]="22"
-    max=""
-    >
+    [endDayHour]="22">
   </dxi-view>
+  <dxo-editing [allowDragging]="false"></dxo-editing>
+  <dxi-resource fieldExpr="id" [dataSource]="workouts"></dxi-resource>
 
+  <div class="appointment-background" *dxTemplate="let workout of 'workout-template'">
+    <div class="appointment-container">
+      <div class="appointment-title">{{ workout.targetedAppointmentData.workoutTypeName }}</div>
+      <div class="appointment">Time:
+        {{ workout.targetedAppointmentData.startDate | date: timeFormat }} - {{ workout.targetedAppointmentData.endDate | date: timeFormat }}
+      </div>
+      <div class="appointment">Instructor:
+        {{ workout.targetedAppointmentData.instructorName }}
+      </div>
+      <div class="appointment">Participants:
+        {{ workout.targetedAppointmentData.currentParticipantNumber }}/{{ workout.targetedAppointmentData.maxParticipantNumber }}
+      </div>
+    </div>
+  </div>
+
+  <div *dxTemplate="let workout of 'workout-details-template'">
+    <div class="tooltip-container">
+      <div>
+        <p class="tooltip-title">{{ workout.targetedAppointmentData.workoutTypeName }}</p>
+        <dx-button class="tooltip-button" text="Go to reservation" type="success" (onClick)="routeToReservationPage(workout.targetedAppointmentData.id)"></dx-button>
+        <div [style.clear]="'both'"></div>
+      </div>
+      <div class="tooltip">Instructor:
+        <b>{{ workout.targetedAppointmentData.instructorName }}</b>
+      </div>
+      <div class="tooltip">Date:
+        <b>{{ workout.targetedAppointmentData.startDate | date: dateFormat }}</b>
+      </div>
+      <div class="tooltip">Time:
+        <b>{{ workout.targetedAppointmentData.startDate | date: timeFormat }} - {{ workout.targetedAppointmentData.endDate | date: timeFormat }}</b>
+      </div>
+      <div class="tooltip">Participants:
+        <b>{{ workout.targetedAppointmentData.currentParticipantNumber }}/{{ workout.targetedAppointmentData.maxParticipantNumber }}</b>
+      </div>
+      <div class="tooltip">Workout intensity:
+        <b>{{ workout.targetedAppointmentData.intensity }}</b>
+      </div>
+    </div>
+  </div>
 </dx-scheduler>

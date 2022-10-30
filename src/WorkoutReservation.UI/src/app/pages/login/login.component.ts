@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
 import { UserService } from 'src/app/services/user.service';
-import { ActivatedRoute, Router } from '@angular/router';
 import { LoginForm } from 'src/app/models/login-form.model';
 import { BaseComponent } from 'src/app/common/base.component';
 import { NotificationService } from 'src/app/services/notification.service';
@@ -45,7 +44,7 @@ export class LoginComponent extends BaseComponent{
     if(validationResult.isValid) {
       this.subscribe(this.userService.login(this.loginData), {
         complete: () => {
-          // route to home and set user loggedIn
+          // route to home or userPage and set user loggedIn
         },
         error: (error) => {
           if(error.status !== 200) {

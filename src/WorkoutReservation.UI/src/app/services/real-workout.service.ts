@@ -11,11 +11,11 @@ export class RealWorkoutService {
 
   constructor(private http: HttpClient) { }
 
-  getCurrentWorkouts(): Observable<RealWorkout> {
-    return this.http.get<RealWorkout>(environment.apiUrl + 'real-workout/current-week');
+  getCurrentWorkouts(): Observable<RealWorkout[]> {
+    return this.http.get<RealWorkout[]>(environment.apiUrl + 'real-workout/current-week');
   }
 
-  getUpcomingWorkouts(): Observable<RealWorkout> {
-    return this.http.get<RealWorkout>(environment.apiUrl + 'real-workout/upcoming-week');
+  getUpcomingWorkouts(): Observable<RealWorkout[]> {
+    return this.http.get<RealWorkout[]>(environment.apiUrl + 'real-workout/upcoming-week');
   }
 }

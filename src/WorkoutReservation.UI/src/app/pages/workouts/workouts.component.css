@@ -1,0 +1,39 @@
+.tooltip-container {
+  text-align: left;
+  margin: 5px 5px 5px 15px;
+}
+
+.tooltip-title {
+  font-size: 20px;
+  margin: 5px 0px 10px 0px;
+  float: left;
+}
+
+.tooltip {
+  margin: 2px 0px 2px 0px;
+}
+
+.tooltip-button {
+  margin: 0% 0% 0% 0%;
+  float: right;
+  background-color: rgb(90, 170, 90);
+}
+
+.appointment-background {
+  background-image: linear-gradient(to right, rgb(24, 108, 24), rgb(90, 170, 90));
+}
+
+.appointment-title {
+  font-size: 20px;
+  font-weight: 20px;
+  margin-bottom: 10%;
+  text-align: center;
+}
+
+.appointment-container {
+  margin: 5px 5px 5px 5px;
+}
+
+.appointment {
+  margin: 2px 0px 2px 0px;
+}
