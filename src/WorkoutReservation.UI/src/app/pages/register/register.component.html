@@ -1,5 +1,5 @@
 <div class="form">
-    <dx-form [(formData)]="registerFormData" (onInitialized)="initializeDxForm($event)">
+    <dx-form id="registerForm" [(formData)]="registerFormData" (onInitialized)="initializeDxForm($event)">
         <dxi-item itemType="group" caption="Personal Information">
             <dxi-item dataField="firstName">
                 <dxi-validation-rule
@@ -83,3 +83,5 @@
     </div>
 </div>
 
+<!-- <dx-toast [(visible)]="isToastVisible" [type]="type" [message]="message">
+</dx-toast> -->

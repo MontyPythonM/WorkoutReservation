@@ -1,9 +1,11 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
+import { DxFormComponent } from 'devextreme-angular';
 import dxForm from 'devextreme/ui/form';
 import { BaseComponent } from 'src/app/common/base.component';
 import { EnumObject } from 'src/app/models/enum-object.model';
 import { RegisterForm } from 'src/app/models/register-form.model';
+import { NotificationService } from 'src/app/services/notification.service';
 import { UserService } from 'src/app/services/user.service';
 import { environment } from 'src/environments/environment';
 
@@ -13,13 +15,16 @@ import { environment } from 'src/environments/environment';
   styleUrls: ['./register.component.css']
 })
 export class RegisterComponent extends BaseComponent {
+
+  @ViewChild(DxFormComponent) registerForm!: DxFormComponent;
   registerFormData: RegisterForm;
   gender: EnumObject[];
   namePattern: any;
   dateOptions: any;
   private dxForm!: dxForm;
+  private emailTakenErrorMessage = 'Validation failed: \r\n -- Email: Email address is already taken. Severity: Error'
 
-  constructor(private userService: UserService, private router: Router) {
+  constructor(private userService: UserService, private router: Router, private notificationService: NotificationService) {
     super();
     this.registerFormData = new RegisterForm();
     this.namePattern = /^[^0-9]+$/;
@@ -36,6 +41,10 @@ export class RegisterComponent extends BaseComponent {
     ];
   }
 
+  resetForm() {
+    this.registerForm.instance.resetValues();
+  }
+
   initializeDxForm(event: {component: dxForm}): void {
     this.dxForm = event.component;
   }
@@ -47,10 +56,15 @@ export class RegisterComponent extends BaseComponent {
     if(isValid) {
       this.subscribe(this.userService.register(this.registerFormData), {
         error: (error) => {
-          console.log('Register failed. Error: ', error);
+          this.registerFormData.email = '';
+          this.registerFormData.dateOfBirth = '';
+          error.error == this.emailTakenErrorMessage ?
+            this.notificationService.show('Email address is already taken.', 'error') :
+            this.notificationService.show('Registration failed!', 'error');
         },
         complete: () => {
-          this.router.navigate(['/login']);
+          this.resetForm();
+          this.notificationService.show('Account has been created.', 'success');
         }
       });
     }
