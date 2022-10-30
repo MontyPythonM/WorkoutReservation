@@ -19,8 +19,7 @@ public class UserController : ApiControllerBase
     [SwaggerOperation(Summary = "Register new user account")]
     public async Task<IActionResult> RegisterAccount([FromBody] RegisterCommand command)
     {
-        await Mediator.Send(command);
-        return Ok("Account created.");
+        return Ok(await Mediator.Send(command));
     }
 
     [HttpPost("login")]
@@ -44,8 +43,7 @@ public class UserController : ApiControllerBase
     [SwaggerOperation(Summary = "Assigns a application role to a selected person")]
     public async Task<IActionResult> SetUserRole([FromBody] SetUserRoleCommand command)
     {
-        await Mediator.Send(command);
-        return Ok();
+        return Ok(await Mediator.Send(command));
     }
 
     [HttpDelete("delete-user/{userGuid}")]

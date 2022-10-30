@@ -24,7 +24,7 @@ export class UserService {
     )
   }
 
-  register(registerForm: RegisterForm) {
+  register(registerForm: RegisterForm): Observable<string> {
     registerForm.dateOfBirth = this.datepipe.transform(registerForm.dateOfBirth, 'dd-MM-yyyy')!;
     return this.http.post<any>(this.baseUrl + 'account/register', registerForm);
   }

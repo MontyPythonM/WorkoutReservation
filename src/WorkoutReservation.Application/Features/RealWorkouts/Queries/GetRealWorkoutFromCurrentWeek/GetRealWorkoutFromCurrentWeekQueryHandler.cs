@@ -28,7 +28,7 @@ public class GetRealWorkoutFromCurrentWeekQueryHandler : IRequestHandler<GetReal
         var realWorkouts = await _realWorkoutRepository.GetAllAsync(firstDayOfCurrentWeek, lastDayOfCurrentWeek);
 
         if (!realWorkouts.Any())
-            throw new NotFoundException($"Real workouts from current week not found. [Date from: {firstDayOfCurrentWeek} to {lastDayOfCurrentWeek}]");
+            throw new NotFoundException($"Real workouts from current week not found. [Date from: {firstDayOfCurrentWeek} to {lastDayOfCurrentWeek.AddDays(-1)}]");
 
         return _mapper.Map<List<RealWorkoutFromCurrentWeekDto>>(realWorkouts);
     }

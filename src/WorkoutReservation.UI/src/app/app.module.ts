@@ -19,7 +19,7 @@ import { WorkoutTypeDetailsComponent } from './pages/workout-types/workout-type-
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { DxAccordionModule, DxButtonModule, DxFormModule, DxListModule, DxMenuModule, DxPopupModule, DxSchedulerModule, DxTextBoxModule, DxValidationGroupModule, DxValidationSummaryModule, DxValidatorModule } from 'devextreme-angular';
-import { DxiItemModule } from 'devextreme-angular/ui/nested';
+import { DxiItemModule, DxoNotificationsModule } from 'devextreme-angular/ui/nested';
 import { DatePipe } from '@angular/common';
 
 @NgModule({
@@ -54,7 +54,8 @@ import { DatePipe } from '@angular/common';
     DxPopupModule,
     DxListModule,
     DxAccordionModule,
-    DxSchedulerModule
+    DxSchedulerModule,
+    DxoNotificationsModule
   ],
   providers: [DatePipe],
   bootstrap: [AppComponent]
