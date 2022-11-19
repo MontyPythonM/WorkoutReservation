@@ -24,7 +24,7 @@ import { DatePipe } from '@angular/common';
 import { ReservationsComponent } from './pages/reservations/reservations.component';
 import { AdministrationComponent } from './pages/administration/administration.component';
 import { AccountSettingsComponent } from './pages/account-settings/account-settings.component';
-import { NavBarComponent } from './components/nav-bar/nav-bar.component';
+import { NavBarComponent } from './components/header/nav-bar/nav-bar.component';
 
 @NgModule({
   declarations: [
