@@ -19,3 +19,12 @@
   float: left;
   margin: 3px 5px 0px 0px;
 }
+
+.buttons {
+  clear:both;
+  margin-top: 50px;
+}
+
+.button {
+  margin-right: 10px;
+}

@@ -75,3 +75,7 @@
   margin-top: 2px;
   content: url('/assets/icons/icon_arrow_dropdown.svg');
 }
+
+.logout {
+  cursor: pointer;
+}

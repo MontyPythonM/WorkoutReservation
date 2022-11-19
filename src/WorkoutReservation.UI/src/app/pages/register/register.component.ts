@@ -3,11 +3,11 @@ import { Router } from '@angular/router';
 import { DxFormComponent } from 'devextreme-angular';
 import dxForm from 'devextreme/ui/form';
 import { BaseComponent } from 'src/app/common/base.component';
-import { EnumObject } from 'src/app/models/enum-object.model';
+import { EnumObject, enumToObjects } from 'src/app/models/enums/enum-converter';
+import { Gender } from 'src/app/models/enums/gender.enum';
 import { RegisterForm } from 'src/app/models/register-form.model';
 import { NotificationService } from 'src/app/services/notification.service';
 import { UserService } from 'src/app/services/user.service';
-import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-register',
@@ -35,10 +35,7 @@ export class RegisterComponent extends BaseComponent {
       min: new Date(1900, 0, 1),
       max: new Date(Date.now())
     };
-    this.gender = [
-      { index: 1, description: 'Female' },
-      { index: 2, description: 'Male' }
-    ];
+    this.gender = enumToObjects(Gender);
   }
 
   resetForm() {

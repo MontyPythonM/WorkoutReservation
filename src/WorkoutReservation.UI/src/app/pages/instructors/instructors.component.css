@@ -3,3 +3,11 @@
   justify-content: center;
   display: grid;
 }
+
+.add-button {
+  margin-bottom: 20px;
+}
+
+.popup-button {
+  margin-right: 10px;
+}
