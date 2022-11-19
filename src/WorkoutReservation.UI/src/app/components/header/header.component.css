@@ -1,28 +1,39 @@
- .nav-menu {
-    background-color: whitesmoke;
-    padding: 20px 10px 20px 10px;
-    border-bottom: 1px black solid;
-  }
+.nav-menu {
+  background-color: rgb(49, 47, 47);
+  padding: 20px 40px 20px 40px;
+  border-bottom: 1px black solid;
+  display: flex;
+}
 
-  .nav-button {
-    text-align: right;
-  }
+.workout {
+  float: left;
+  font-size: 18px;
+  font-weight: 900;
+  color: rgb(24, 108, 24);
+  margin-left: 15px;
+}
 
-  .workout {
-    float: left;
-    font-size: 18px;
-    font-weight: 900;
-    color: rgb(24, 108, 24);
-    margin-left: 15px;
-  }
+.reservation {
+  float:left;
+  margin-left: 3px;
+  font-size: 18px;
+  font-weight: 400;
+  color: rgba(245, 245, 245, 0.9);
+}
 
-  .reservation {
-    float:left;
-    margin-left: 3px;
-    font-size: 18px;
-    font-weight: 400;
-  }
+.logo {
+  margin-top: 5px;
+  flex-grow: 1;
+}
 
-  .logo {
-    margin-top: 5px;
-  }
+.page-logo {
+  min-width: 90px;
+  min-height: 31,2px;
+  z-index: 2;
+  cursor: pointer;
+  user-select: none;
+}
+
+.buttons {
+  flex-grow: 2;
+}

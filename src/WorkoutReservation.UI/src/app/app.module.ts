@@ -21,6 +21,10 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { DxAccordionModule, DxButtonModule, DxFormModule, DxListModule, DxMenuModule, DxPopupModule, DxSchedulerModule, DxTextBoxModule, DxValidationGroupModule, DxValidationSummaryModule, DxValidatorModule } from 'devextreme-angular';
 import { DxiItemModule, DxoNotificationsModule } from 'devextreme-angular/ui/nested';
 import { DatePipe } from '@angular/common';
+import { ReservationsComponent } from './pages/reservations/reservations.component';
+import { AdministrationComponent } from './pages/administration/administration.component';
+import { AccountSettingsComponent } from './pages/account-settings/account-settings.component';
+import { NavBarComponent } from './components/nav-bar/nav-bar.component';
 
 @NgModule({
   declarations: [
@@ -36,7 +40,11 @@ import { DatePipe } from '@angular/common';
     RegisterComponent,
     InstructorDetailsComponent,
     WorkoutDetailsComponent,
-    WorkoutTypeDetailsComponent
+    WorkoutTypeDetailsComponent,
+    ReservationsComponent,
+    AdministrationComponent,
+    AccountSettingsComponent,
+    NavBarComponent,
   ],
   imports: [
     BrowserModule,
