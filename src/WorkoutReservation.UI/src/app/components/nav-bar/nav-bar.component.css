@@ -22,7 +22,6 @@
   margin-left: 10px;
   float: left;
   overflow: hidden;
-  cursor: default;
   background-color: rgba(75, 72, 72);
   border-radius: 2px;
 }
@@ -58,7 +57,7 @@
 }
 
 .dropdown-content a:hover {
-  background-color: rgb(174, 170, 170);;
+  background-color: rgb(174, 170, 170);
 }
 
 .dropdown:hover .dropdown-content {
@@ -67,6 +66,7 @@
 
 .account-button {
   display: inline-flex;
+  cursor: pointer;
 }
 
 .arrow-dropdown-icon {
