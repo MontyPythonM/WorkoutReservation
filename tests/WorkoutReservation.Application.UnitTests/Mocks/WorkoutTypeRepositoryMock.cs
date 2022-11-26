@@ -51,11 +51,11 @@ public static class WorkoutTypeRepositoryMock
 
         // GetAllAsync
         repositoryMock
-            .Setup(r => r.GetAllAsync())
+            .Setup(r => r.GetAllAsync(CancellationToken.None))
             .ReturnsAsync(workoutTypes);
 
         // GetByIdAsync
-        repositoryMock.Setup(r => r.GetByIdAsync(It.IsAny<int>()))
+        repositoryMock.Setup(r => r.GetByIdAsync(It.IsAny<int>(), CancellationToken.None))
             .ReturnsAsync((int id) =>
             {
                 var workoutType = workoutTypes.FirstOrDefault(w => w.Id == id);
@@ -63,7 +63,7 @@ public static class WorkoutTypeRepositoryMock
             });
 
         // AddAsync
-        repositoryMock.Setup(r => r.AddAsync(It.IsAny<WorkoutType>()))
+        repositoryMock.Setup(r => r.AddAsync(It.IsAny<WorkoutType>(), CancellationToken.None))
             .ReturnsAsync((WorkoutType workoutType) => 
             { 
                 workoutTypes.Add(workoutType);
@@ -71,14 +71,14 @@ public static class WorkoutTypeRepositoryMock
             });
 
         // DeleteAsync
-        repositoryMock.Setup(r => r.DeleteAsync(It.IsAny<WorkoutType>()))
+        repositoryMock.Setup(r => r.DeleteAsync(It.IsAny<WorkoutType>(), CancellationToken.None))
             .Callback<WorkoutType>((entity) =>                 
             {
                 workoutTypes.Remove(entity);
             });
 
         // UpdateAsync
-        repositoryMock.Setup(r => r.UpdateAsync(It.IsAny<WorkoutType>()))
+        repositoryMock.Setup(r => r.UpdateAsync(It.IsAny<WorkoutType>(), CancellationToken.None))
             .Callback<WorkoutType>((entity) =>
             {
                 workoutTypes.Remove(entity);

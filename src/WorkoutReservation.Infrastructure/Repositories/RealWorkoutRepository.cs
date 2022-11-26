@@ -14,7 +14,7 @@ public class RealWorkoutRepository : IRealWorkoutRepository
         _dbContext = dbContext;
     }
 
-    public async Task<List<RealWorkout>> GetAllAsync(DateOnly startDate, DateOnly endDate)
+    public async Task<List<RealWorkout>> GetAllAsync(DateOnly startDate, DateOnly endDate, CancellationToken token)
     {
         return await _dbContext.RealWorkouts
             .AsNoTracking()
@@ -23,68 +23,68 @@ public class RealWorkoutRepository : IRealWorkoutRepository
             .Where(x => x.Date >= startDate && x.Date < endDate)
             .OrderBy(x => x.Date)
                 .ThenBy(x => x.StartTime)
-            .ToListAsync();
+            .ToListAsync(token);
     }
 
-    public async Task<RealWorkout> GetByIdAsync(int realWorkoutId)
+    public async Task<RealWorkout> GetByIdAsync(int realWorkoutId, CancellationToken token)
     {
         return await _dbContext.RealWorkouts
             .AsNoTracking()
             .Include(x => x.Instructor)
             .Include(x => x.WorkoutType)
-            .FirstOrDefaultAsync(x => x.Id == realWorkoutId);             
+            .FirstOrDefaultAsync(x => x.Id == realWorkoutId, token);             
     }
 
-    public async Task<RealWorkout> GetByIdWithReservationDetailsAsync(int realWorkoutId)
+    public async Task<RealWorkout> GetByIdWithReservationDetailsAsync(int realWorkoutId, CancellationToken token)
     {
         return await _dbContext.RealWorkouts
             .AsNoTracking()
             .Include(x => x.Reservations)
                 .ThenInclude(x => x.User)
-            .FirstOrDefaultAsync(x => x.Id == realWorkoutId);
+            .FirstOrDefaultAsync(x => x.Id == realWorkoutId, token);
     }
 
-    public async Task<RealWorkout> AddAsync(RealWorkout realWorkout)
+    public async Task<RealWorkout> AddAsync(RealWorkout realWorkout, CancellationToken token)
     {
-        await _dbContext.AddAsync(realWorkout);
-        await _dbContext.SaveChangesAsync();
+        await _dbContext.AddAsync(realWorkout, token);
+        await _dbContext.SaveChangesAsync(token);
 
         return realWorkout;
     }
 
-    public async Task DeleteAsync(RealWorkout realWorkout)
+    public async Task DeleteAsync(RealWorkout realWorkout, CancellationToken token)
     {
         _dbContext.Remove(realWorkout);
-        await _dbContext.SaveChangesAsync();
+        await _dbContext.SaveChangesAsync(token);
     }
 
-    public async Task UpdateAsync(RealWorkout realWorkout)
+    public async Task UpdateAsync(RealWorkout realWorkout, CancellationToken token)
     {
         _dbContext.Update(realWorkout);
-        await _dbContext.SaveChangesAsync();
+        await _dbContext.SaveChangesAsync(token);
     }
 
-    public async Task IncrementCurrentParticipantNumber(RealWorkout realWorkout)
+    public async Task IncrementCurrentParticipantNumberAsync(RealWorkout realWorkout, CancellationToken token)
     {
         var result = await _dbContext.RealWorkouts
-            .FirstOrDefaultAsync(x => x.Id == realWorkout.Id);
+            .FirstOrDefaultAsync(x => x.Id == realWorkout.Id, token);
 
         result.CurrentParticipantNumber++; 
-        await _dbContext.SaveChangesAsync();
+        await _dbContext.SaveChangesAsync(token);
     }
-    public async Task DecrementCurrentParticipantNumber(RealWorkout realWorkout)
+    public async Task DecrementCurrentParticipantNumberAsync(RealWorkout realWorkout, CancellationToken token)
     {
         var result = await _dbContext.RealWorkouts
-            .FirstOrDefaultAsync(x => x.Id == realWorkout.Id);
+            .FirstOrDefaultAsync(x => x.Id == realWorkout.Id, token);
 
         result.CurrentParticipantNumber--;
-        await _dbContext.SaveChangesAsync();
+        await _dbContext.SaveChangesAsync(token);
     }
 
-    public async Task AddRangeAsync(List<RealWorkout> realWorkouts)
+    public async Task AddRangeAsync(List<RealWorkout> realWorkouts, CancellationToken token)
     {
-        await _dbContext.AddRangeAsync(realWorkouts);
-        await _dbContext.SaveChangesAsync();
+        await _dbContext.AddRangeAsync(realWorkouts, token);
+        await _dbContext.SaveChangesAsync(token);
     }
 
 }

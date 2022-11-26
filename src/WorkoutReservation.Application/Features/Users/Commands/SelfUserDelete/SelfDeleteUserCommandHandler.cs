@@ -26,7 +26,7 @@ public class SelfDeleteUserCommandHandler : IRequestHandler<SelfDeleteUserComman
     {
         var currentUserGuid = Guid.Parse(_currentUserService.UserId);
 
-        var user = await _userRepository.GetByGuidAsync(currentUserGuid);
+        var user = await _userRepository.GetByGuidAsync(currentUserGuid, cancellationToken);
 
         var passwordCompareResult = _passwordHasher
             .VerifyHashedPassword(user, user.PasswordHash, request.Password);
@@ -34,7 +34,7 @@ public class SelfDeleteUserCommandHandler : IRequestHandler<SelfDeleteUserComman
         var validator = new SelfDeleteUserCommandValidator(passwordCompareResult);
         await validator.ValidateAndThrowAsync(request, cancellationToken);
 
-        await _userRepository.DeleteAsync(user);
+        await _userRepository.DeleteAsync(user, cancellationToken);
 
         return Unit.Value;
     }

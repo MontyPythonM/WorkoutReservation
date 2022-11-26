@@ -18,42 +18,42 @@ public class WorkoutTypeController : ApiControllerBase
     [HttpGet]
     [AllowAnonymous]
     [SwaggerOperation(Summary = "Returns paged list of workout types")]
-    public async Task<IActionResult> GetAllWorkoutTypes([FromQuery] GetWorkoutTypesListQuery query)
+    public async Task<IActionResult> GetAllWorkoutTypes([FromQuery] GetWorkoutTypesListQuery query, CancellationToken token)
     {
-        return Ok(await Mediator.Send(query));
+        return Ok(await Mediator.Send(query, token));
     }
 
     [HttpGet("{workoutTypeId}")]
     [AllowAnonymous]
     [SwaggerOperation(Summary = "Returns selected workout type")]
-    public async Task<IActionResult> GetWorkoutType([FromRoute] int workoutTypeId)
+    public async Task<IActionResult> GetWorkoutType([FromRoute] int workoutTypeId, CancellationToken token)
     {
-        var result = await Mediator.Send(new GetWorkoutTypeDetailQuery() { WorkoutTypeId = workoutTypeId });
+        var result = await Mediator.Send(new GetWorkoutTypeDetailQuery() { WorkoutTypeId = workoutTypeId }, token);
         return Ok(result);
     }
 
     [HttpPost]
     [SwaggerOperation(Summary = "Create new workout type")]
-    public async Task<IActionResult> CreateWorkoutType([FromBody] CreateWorkoutTypeCommand command)
+    public async Task<IActionResult> CreateWorkoutType([FromBody] CreateWorkoutTypeCommand command, CancellationToken token)
     {
-        var workoutTypeId = await Mediator.Send(command);
+        var workoutTypeId = await Mediator.Send(command, token);
         return Created($"/api/workout-type/{workoutTypeId}", null);
     }
 
     [HttpDelete("{workoutTypeId}")]
     [SwaggerOperation(Summary = "Delete selected workout type")]
 
-    public async Task<IActionResult> DeleteWorkoutType([FromRoute] int workoutTypeId)
+    public async Task<IActionResult> DeleteWorkoutType([FromRoute] int workoutTypeId, CancellationToken token)
     {
-        await Mediator.Send(new DeleteWorkoutTypeCommand() { WorkoutTypeId = workoutTypeId });
+        await Mediator.Send(new DeleteWorkoutTypeCommand() { WorkoutTypeId = workoutTypeId }, token);
         return NoContent();
     }
 
     [HttpPut]
     [SwaggerOperation(Summary = "Update selected workout type")]
-    public async Task<IActionResult> UpdateWorkoutType([FromBody] UpdateWorkoutTypeCommand command)
+    public async Task<IActionResult> UpdateWorkoutType([FromBody] UpdateWorkoutTypeCommand command, CancellationToken token)
     {
-        await Mediator.Send(command);
+        await Mediator.Send(command, token);
         return Ok();
     }
 }

@@ -21,12 +21,12 @@ public class DeleteInstructorCommandHandler : IRequestHandler<DeleteInstructorCo
     public async Task<Unit> Handle(DeleteInstructorCommand request, 
                                    CancellationToken cancellationToken)
     {
-        var instructor = await _instructorRepository.GetByIdAsync(request.InstructorId);
+        var instructor = await _instructorRepository.GetByIdAsync(request.InstructorId, cancellationToken);
 
         if (instructor is null)
             throw new NotFoundException($"Instructor with Id: {request.InstructorId} not found.");
 
-        await _instructorRepository.DeleteAsync(instructor);
+        await _instructorRepository.DeleteAsync(instructor, cancellationToken);
 
         _logger.LogInformation($"Instructor with Id: {request.InstructorId} was deleted.");
 

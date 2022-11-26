@@ -26,7 +26,7 @@ public class DeleteWorkoutTypeCommandHandler : IRequestHandler<DeleteWorkoutType
     public async Task<Unit> Handle(DeleteWorkoutTypeCommand request, 
                                    CancellationToken cancellationToken)
     {
-        var workoutType = await _workoutTypeRepository.GetByIdAsync(request.WorkoutTypeId);
+        var workoutType = await _workoutTypeRepository.GetByIdAsync(request.WorkoutTypeId, cancellationToken);
 
         if (workoutType is null)
             throw new NotFoundException($"Workout type with Id: {request.WorkoutTypeId} not found.");
@@ -37,7 +37,7 @@ public class DeleteWorkoutTypeCommandHandler : IRequestHandler<DeleteWorkoutType
         //if (repetitiveWorkouts.Any() || realWorkouts.Any())            
         //    throw new ForbidException($"WorkoutType with Id: {request.WorkoutTypeId} is assigned to workouts (repetitiveWorkout or realWorkout). To delete an WorkoutType, you must first delete or edit the assigned workouts.");
         
-        await _workoutTypeRepository.DeleteAsync(workoutType);
+        await _workoutTypeRepository.DeleteAsync(workoutType, cancellationToken);
 
         _logger.LogInformation($"WorkoutType with Id: {request.WorkoutTypeId} was deleted.");
 

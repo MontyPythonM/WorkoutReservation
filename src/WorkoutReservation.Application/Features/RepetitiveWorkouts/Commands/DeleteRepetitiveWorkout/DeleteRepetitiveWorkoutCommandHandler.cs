@@ -20,12 +20,12 @@ public class DeleteRepetitiveWorkoutCommandHandler : IRequestHandler<DeleteRepet
     public async Task<Unit> Handle(DeleteRepetitiveWorkoutCommand request, 
                                    CancellationToken cancellationToken)
     {
-        var repetitiveWorkout = await _repetitiveWorkoutRepository.GetByIdAsync(request.RepetitiveWorkoutId);
+        var repetitiveWorkout = await _repetitiveWorkoutRepository.GetByIdAsync(request.RepetitiveWorkoutId, cancellationToken);
 
         if (repetitiveWorkout is null)
             throw new NotFoundException($"Repetitive workout with Id: {request.RepetitiveWorkoutId} not found.");
 
-        await _repetitiveWorkoutRepository.DeleteAsync(repetitiveWorkout);
+        await _repetitiveWorkoutRepository.DeleteAsync(repetitiveWorkout, cancellationToken);
 
         _logger.LogInformation($"Repetitive workout with Id: {request.RepetitiveWorkoutId} was deleted.");
 

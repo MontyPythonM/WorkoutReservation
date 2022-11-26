@@ -27,7 +27,7 @@ public class EditReservationStatusCommandHandler : IRequestHandler<EditReservati
                                    CancellationToken cancellationToken)
     {
         var reservation = await _reservationRepository
-            .GetReservationByIdAsync(request.ReservationId);
+            .GetReservationByIdAsync(request.ReservationId, cancellationToken);
 
         if (reservation is null)
             throw new NotFoundException($"Reservation with Id: {request.ReservationId} not found.");
@@ -44,13 +44,13 @@ public class EditReservationStatusCommandHandler : IRequestHandler<EditReservati
         mappedReservation.RealWorkoutId = reservation.RealWorkoutId;
 
         await _reservationRepository
-            .UpdateReservationAsync(mappedReservation);
+            .UpdateReservationAsync(mappedReservation, cancellationToken);
 
         if (reservation.ReservationStatus != ReservationStatus.Cancelled &&
             mappedReservation.ReservationStatus == ReservationStatus.Cancelled)
         {
             await _realWorkoutRepository
-                .DecrementCurrentParticipantNumber(reservation.RealWorkout);
+                .DecrementCurrentParticipantNumberAsync(reservation.RealWorkout, cancellationToken);
         }
 
         return Unit.Value;

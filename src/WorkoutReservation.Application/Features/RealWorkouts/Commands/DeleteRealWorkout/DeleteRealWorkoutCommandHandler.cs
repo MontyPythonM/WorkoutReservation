@@ -20,12 +20,12 @@ public class DeleteRealWorkoutCommandHandler : IRequestHandler<DeleteRealWorkout
     public async Task<Unit> Handle(DeleteRealWorkoutCommand request, 
                                    CancellationToken cancellationToken)
     {
-        var realWorkout = await _realWorkoutRepository.GetByIdAsync(request.RealWorkoutId);
+        var realWorkout = await _realWorkoutRepository.GetByIdAsync(request.RealWorkoutId, cancellationToken);
 
         if (realWorkout is null)
             throw new NotFoundException($"Real workout with Id: {request.RealWorkoutId} not found.");
 
-        await _realWorkoutRepository.DeleteAsync(realWorkout);
+        await _realWorkoutRepository.DeleteAsync(realWorkout, cancellationToken);
 
         _logger.LogInformation($"Real workout with Id: {request.RealWorkoutId} was deleted.");
 

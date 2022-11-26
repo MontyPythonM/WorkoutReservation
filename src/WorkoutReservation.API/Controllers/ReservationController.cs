@@ -16,17 +16,17 @@ public class ReservationController : ApiControllerBase
     [HttpGet]
     [Authorize]
     [SwaggerOperation(Summary = "Returns paged list of user reservations")]
-    public async Task<IActionResult> GetReservation([FromQuery] GetUserReservationsListQuery query)
+    public async Task<IActionResult> GetReservation([FromQuery] GetUserReservationsListQuery query, CancellationToken token)
     {
-        return Ok(await Mediator.Send(query));
+        return Ok(await Mediator.Send(query, token));
     }
 
     [HttpPost]
     [Authorize]
     [SwaggerOperation(Summary = "Creates a user reservation for the selected workout")]
-    public async Task<IActionResult> AddReservation([FromBody] AddReservationCommand command)
+    public async Task<IActionResult> AddReservation([FromBody] AddReservationCommand command, CancellationToken token)
     {
-        var reservationId = await Mediator.Send(command);
+        var reservationId = await Mediator.Send(command, token);
 
         return Created($"/api/reservation/{reservationId}", null);
     }
@@ -34,18 +34,18 @@ public class ReservationController : ApiControllerBase
     [HttpPut("edit-reservation-status")]
     [Authorize(Roles = "Administrator")]
     [SwaggerOperation(Summary = "Change the status of a selected reservation")]
-    public async Task<IActionResult> EditUserReservationStatus([FromBody] EditReservationStatusCommand command)
+    public async Task<IActionResult> EditUserReservationStatus([FromBody] EditReservationStatusCommand command, CancellationToken token)
     {
-        await Mediator.Send(command);
+        await Mediator.Send(command, token);
         return Ok();
     }
 
     [HttpPut("cancel-reservation")]
     [Authorize]
     [SwaggerOperation(Summary = "Cancel a selected reservation")]
-    public async Task<IActionResult> CancelReservation([FromBody] CancelReservationCommand command)
+    public async Task<IActionResult> CancelReservation([FromBody] CancelReservationCommand command, CancellationToken token)
     {
-        await Mediator.Send(command); 
+        await Mediator.Send(command, token); 
         return Ok();
     }
 }
