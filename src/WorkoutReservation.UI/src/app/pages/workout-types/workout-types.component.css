@@ -17,14 +17,14 @@
 
 .tag {
   font-size: 12px;
-  font-weight: 500;
+  font-weight: 600;
   float: left;
   padding: 3px 8px 3px 8px;
-  margin: 3px 8px 0px 0px;
-  background-color: rgb(122, 198, 9);
-  border-radius: 7px 7px 7px 7px;
-  box-shadow: 2px 2px 2px rgb(24, 108, 24);
-  background-image: linear-gradient(to right, rgb(122, 198, 9), rgb(178, 254, 63));
+  margin: 3px 8px 3px 0px;
+  border-radius: 2px 7px 2px 7px;
+  border: solid black 1px;
+  box-shadow: 2px 2px 2px rgb(16, 66, 16);
+  background-image: linear-gradient(to right, rgba(26, 119, 26, 0.85), rgb(84, 168, 84));
 }
 
 .clear-both {
