@@ -43,5 +43,10 @@ export class WorkoutsComponent extends BaseComponent implements OnInit {
     });
   }
 
-  routeToReservationPage = (workoutId: number): Promise<boolean> => this.router.navigate(['/get-reservation']);
+  routeToReservationPage = (workoutId: number): Promise<boolean> => this.router.navigate(['/get-reservation', workoutId]);
+
+  onAppointmentFormOpening(e: any): void {
+    const form = e.form;
+    form.cancel = "true";
+  }
 }

@@ -4,14 +4,26 @@
   textExpr="workoutTypeName"
   appointmentTemplate="workout-template"
   appointmentTooltipTemplate="workout-details-template"
-  [showAllDayPanel]="false">
+  [showAllDayPanel]="false"
+  (onAppointmentFormOpening)="onAppointmentFormOpening($event)"
+  >
   <dxi-view
     type="week"
     [firstDayOfWeek]="1"
     [startDayHour]="6"
-    [endDayHour]="22">
-  </dxi-view>
-  <dxo-editing [allowDragging]="false"></dxo-editing>
+    [endDayHour]="22"
+  ></dxi-view>
+
+  <dxo-editing
+    [allowDragging]="false"
+    [allowAdding]="false"
+    [allowResizing]="false"
+    [allowUpdating]="false"
+    [allowResourceAdding]="false"
+    [allowResourceDeleting]="false"
+  ></dxo-editing>
+
+
   <dxi-resource fieldExpr="id" [dataSource]="workouts"></dxi-resource>
 
   <div class="appointment-background" *dxTemplate="let workout of 'workout-template'">
@@ -21,7 +33,7 @@
         {{ workout.targetedAppointmentData.startDate | date: timeFormat }} - {{ workout.targetedAppointmentData.endDate | date: timeFormat }}
       </div>
       <div class="appointment">Instructor:
-        {{ workout.targetedAppointmentData.instructorName }}
+        {{ workout.targetedAppointmentData.instructorNameShort }}
       </div>
       <div class="appointment">Participants:
         {{ workout.targetedAppointmentData.currentParticipantNumber }}/{{ workout.targetedAppointmentData.maxParticipantNumber }}
@@ -33,7 +45,7 @@
     <div class="tooltip-container">
       <div>
         <p class="tooltip-title">{{ workout.targetedAppointmentData.workoutTypeName }}</p>
-        <dx-button class="tooltip-button" text="Go to reservation" type="success" (onClick)="routeToReservationPage(workout.targetedAppointmentData.id)"></dx-button>
+        <dx-button class="tooltip-button" text="Enroll " type="success" (onClick)="routeToReservationPage(workout.targetedAppointmentData.id)"></dx-button>
         <div [style.clear]="'both'"></div>
       </div>
       <div class="tooltip">Instructor:

@@ -32,6 +32,8 @@ public class GetUserReservationsListHandler : IRequestHandler<GetUserReservation
 
         var userGuid = Guid.Parse(_userService.UserId);
 
+        // TODO: dodać sprawdzenie czy requestUser to currentUser albo currentUser = administrator
+        
         var reservationsQuery = _reservationRepository.GetUserReservationsByGuidQuery(userGuid);
 
         var query = reservationsQuery

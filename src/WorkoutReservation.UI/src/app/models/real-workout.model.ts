@@ -11,6 +11,7 @@ export class RealWorkoutSchedule {
   intensity: string;
   instructorId: number;
   instructorName: string;
+  instructorNameShort: string;
 
   constructor(data: RealWorkout) {
     this.id = data.id,
@@ -22,7 +23,8 @@ export class RealWorkoutSchedule {
     this.workoutTypeName = data.workoutType.name,
     this.intensity = data.workoutType.intensity,
     this.instructorId = data.instructor.id,
-    this.instructorName = data.instructor.firstName + ' ' + data.instructor.lastName
+    this.instructorName = data.instructor.firstName + ' ' + data.instructor.lastName,
+    this.instructorNameShort = data.instructor.firstName.charAt(0) + '. ' + data.instructor.lastName
   }
 }
 
