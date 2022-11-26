@@ -26,7 +26,7 @@ public class RegisterCommandHandler : IRequestHandler<RegisterCommand>
     public async Task<Unit> Handle(RegisterCommand request, 
                                    CancellationToken cancellationToken)
     {
-        var user = await _userRepository.GetByEmailAsync(request.Email);
+        var user = await _userRepository.GetByEmailAsync(request.Email, cancellationToken);
 
         var validator = new RegisterCommandValidator(user);
         await validator.ValidateAndThrowAsync(request, cancellationToken);
@@ -39,7 +39,7 @@ public class RegisterCommandHandler : IRequestHandler<RegisterCommand>
         mappedUser.AccountCreationDate = DateTime.Now;
         mappedUser.UserRole = UserRole.Member;
 
-        await _userRepository.AddAsync(mappedUser);
+        await _userRepository.AddAsync(mappedUser, cancellationToken);
 
         return Unit.Value;
     }

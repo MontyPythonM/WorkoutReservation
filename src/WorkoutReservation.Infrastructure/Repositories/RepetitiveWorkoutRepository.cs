@@ -14,42 +14,42 @@ public class RepetitiveWorkoutRepository : IRepetitiveWorkoutRepository
         _dbContext = dbContext;
     }
 
-    public async Task<RepetitiveWorkout> AddAsync(RepetitiveWorkout repetitiveWorkout)
+    public async Task<RepetitiveWorkout> AddAsync(RepetitiveWorkout repetitiveWorkout, CancellationToken token)
     {
-        await _dbContext.AddAsync(repetitiveWorkout);
-        await _dbContext.SaveChangesAsync();
+        await _dbContext.AddAsync(repetitiveWorkout, token);
+        await _dbContext.SaveChangesAsync(token);
 
         return repetitiveWorkout;
     }
 
-    public async Task DeleteAsync(RepetitiveWorkout repetitiveWorkout)
+    public async Task DeleteAsync(RepetitiveWorkout repetitiveWorkout, CancellationToken token)
     {
         _dbContext.Remove(repetitiveWorkout);
-        await _dbContext.SaveChangesAsync();
+        await _dbContext.SaveChangesAsync(token);
     }
-    public async Task DeleteAllAsync(List<RepetitiveWorkout> repetitiveWorkouts)
+    public async Task DeleteAllAsync(List<RepetitiveWorkout> repetitiveWorkouts, CancellationToken token)
     {
         _dbContext.RemoveRange(repetitiveWorkouts);
-        await _dbContext.SaveChangesAsync();
+        await _dbContext.SaveChangesAsync(token);
     }
 
-    public async Task UpdateAsync(RepetitiveWorkout repetitiveWorkout)
+    public async Task UpdateAsync(RepetitiveWorkout repetitiveWorkout, CancellationToken token)
     {
         _dbContext.Update(repetitiveWorkout);
-        await _dbContext.SaveChangesAsync();
+        await _dbContext.SaveChangesAsync(token);
     }
 
-    public async Task<List<RepetitiveWorkout>> GetAllAsync()
+    public async Task<List<RepetitiveWorkout>> GetAllAsync(CancellationToken token)
     {
         return await _dbContext.RepetitiveWorkouts
             .Include(x => x.Instructor)
             .Include(x => x.WorkoutType)
             .OrderBy(x => x.DayOfWeek)
                 .ThenBy(x => x.StartTime)
-            .ToListAsync();
+            .ToListAsync(token);
     }
 
-    public async Task<List<RepetitiveWorkout>> GetAllFromSelectedDayAsync(DayOfWeek dayOfWeek)
+    public async Task<List<RepetitiveWorkout>> GetAllFromSelectedDayAsync(DayOfWeek dayOfWeek, CancellationToken token)
     {
         return await _dbContext.RepetitiveWorkouts
             .AsNoTracking()
@@ -57,15 +57,15 @@ public class RepetitiveWorkoutRepository : IRepetitiveWorkoutRepository
             .Include(x => x.WorkoutType)
             .Where(x => x.DayOfWeek == dayOfWeek)
             .OrderBy(x => x.StartTime)
-            .ToListAsync();
+            .ToListAsync(token);
     }
 
-    public async Task<RepetitiveWorkout> GetByIdAsync(int repetitiveWorkoutId)
+    public async Task<RepetitiveWorkout> GetByIdAsync(int repetitiveWorkoutId, CancellationToken token)
     {
         return await _dbContext.RepetitiveWorkouts
             .AsNoTracking()
             .Include(x => x.Instructor)
             .Include(x => x.WorkoutType)
-            .FirstOrDefaultAsync(x => x.Id == repetitiveWorkoutId);
+            .FirstOrDefaultAsync(x => x.Id == repetitiveWorkoutId, token);
     }
 }

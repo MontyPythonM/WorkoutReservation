@@ -22,7 +22,7 @@ public class UpdateInstructorCommandHandler : IRequestHandler<UpdateInstructorCo
     public async Task<Unit> Handle(UpdateInstructorCommand request, 
                                    CancellationToken cancellationToken)
     {
-        var instructor = await _instructorRepository.GetByIdAsync(request.InstructorId);
+        var instructor = await _instructorRepository.GetByIdAsync(request.InstructorId, cancellationToken);
 
         if (instructor is null)
             throw new NotFoundException($"Instructor with Id: {request.InstructorId} not found.");
@@ -32,7 +32,7 @@ public class UpdateInstructorCommandHandler : IRequestHandler<UpdateInstructorCo
 
         var mappedWorkoutType = _mapper.Map<Instructor>(request);
 
-        await _instructorRepository.UpdateAsync(mappedWorkoutType);
+        await _instructorRepository.UpdateAsync(mappedWorkoutType, cancellationToken);
 
         return Unit.Value;
 

@@ -75,7 +75,7 @@ public class CreateWorkoutTypeCommandHandlerTest
 
         // act
         var result = await handler.Handle(command, CancellationToken.None);
-        var allWorkoutTypesAfterCount = (await _mockWorkoutTypeRepository.Object.GetAllAsync()).Count;
+        var allWorkoutTypesAfterCount = (await _mockWorkoutTypeRepository.Object.GetAllAsync(CancellationToken.None)).Count;
 
         // assert
         result.Should().NotBe(null);

@@ -21,7 +21,7 @@ public class GetInstructorDetailQueryHandler : IRequestHandler<GetInstructorDeta
     public async Task<InstructorDetailQueryDto> Handle(GetInstructorDetailQuery request, 
                                                  CancellationToken cancellationToken)
     {
-        var instructor = await _instructorRepository.GetByIdAsync(request.InstructorId);
+        var instructor = await _instructorRepository.GetByIdAsync(request.InstructorId, cancellationToken);
 
         if (instructor is null)
             throw new NotFoundException($"Instructor with Id: {request.InstructorId} not found.");

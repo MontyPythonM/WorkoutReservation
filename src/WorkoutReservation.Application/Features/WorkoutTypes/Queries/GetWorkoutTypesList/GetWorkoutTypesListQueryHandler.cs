@@ -26,7 +26,7 @@ public class GetWorkoutTypesListQueryHandler : IRequestHandler<GetWorkoutTypesLi
         var validator = new GetWorkoutTypesListQueryValidator();
         await validator.ValidateAndThrowAsync(request, cancellationToken);
 
-        var workoutTypesQuery = _workoutTypeRepository.GetAllQueriesAsync();
+        var workoutTypesQuery = _workoutTypeRepository.GetAllQuery();
 
         var query = workoutTypesQuery
             .Where(x => request.SearchPhrase == null ||

@@ -28,15 +28,15 @@ public class CreateRepetitiveWorkoutCommandHandler : IRequestHandler<CreateRepet
     public async Task<int> Handle(CreateRepetitiveWorkoutCommand request, 
                                   CancellationToken cancellationToken)
     {
-        var instructor = await _instructorRepository.GetByIdAsync(request.InstructorId);
+        var instructor = await _instructorRepository.GetByIdAsync(request.InstructorId, cancellationToken);
         if (instructor is null)
             throw new NotFoundException($"Instructor with Id: {request.InstructorId} not found.");
 
-        var workoutType = await _workoutTypeRepository.GetByIdAsync(request.WorkoutTypeId);
+        var workoutType = await _workoutTypeRepository.GetByIdAsync(request.WorkoutTypeId, cancellationToken);
         if (workoutType is null)
             throw new NotFoundException($"Workout type with Id: {request.WorkoutTypeId} not found.");
 
-        var dailyWorkoutsList = await _repetitiveWorkoutRepository.GetAllFromSelectedDayAsync(request.DayOfWeek);
+        var dailyWorkoutsList = await _repetitiveWorkoutRepository.GetAllFromSelectedDayAsync(request.DayOfWeek, cancellationToken);
         var validator = new CreateRepetitiveWorkoutCommandValidator(dailyWorkoutsList);
         await validator.ValidateAndThrowAsync(request, cancellationToken);
 
@@ -44,7 +44,7 @@ public class CreateRepetitiveWorkoutCommandHandler : IRequestHandler<CreateRepet
 
         repetitiveWorkout.CreatedDate = DateTime.Now;
 
-        repetitiveWorkout = await _repetitiveWorkoutRepository.AddAsync(repetitiveWorkout);
+        repetitiveWorkout = await _repetitiveWorkoutRepository.AddAsync(repetitiveWorkout, cancellationToken);
 
         return repetitiveWorkout.Id;
     }

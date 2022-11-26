@@ -21,7 +21,7 @@ public class GetInstructorListQueryHandler : IRequestHandler<GetInstructorListQu
     public async Task<List<InstructorListQueryDto>> Handle(GetInstructorListQuery request, 
                                                            CancellationToken cancellationToken)
     {
-        var instructors = await _instructorRepository.GetAllAsync();
+        var instructors = await _instructorRepository.GetAllAsync(cancellationToken);
 
         if(!instructors.Any())
             throw new NotFoundException($"Instructors not found.");

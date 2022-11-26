@@ -22,7 +22,7 @@ public class UpdateWorkoutTypeCommandHandler : IRequestHandler<UpdateWorkoutType
     public async Task<Unit> Handle(UpdateWorkoutTypeCommand request, 
                                    CancellationToken cancellationToken)
     {
-        var workoutType = await _workoutTypeRepository.GetByIdAsync(request.WorkoutTypeId);
+        var workoutType = await _workoutTypeRepository.GetByIdAsync(request.WorkoutTypeId, cancellationToken);
 
         if (workoutType is null)
             throw new NotFoundException($"Workout type with Id: {request.WorkoutTypeId} not found.");
@@ -32,7 +32,7 @@ public class UpdateWorkoutTypeCommandHandler : IRequestHandler<UpdateWorkoutType
 
         var mappedWorkoutType = _mapper.Map<WorkoutType>(request);
 
-        await _workoutTypeRepository.UpdateAsync(mappedWorkoutType);
+        await _workoutTypeRepository.UpdateAsync(mappedWorkoutType, cancellationToken);
 
         return Unit.Value;
     }

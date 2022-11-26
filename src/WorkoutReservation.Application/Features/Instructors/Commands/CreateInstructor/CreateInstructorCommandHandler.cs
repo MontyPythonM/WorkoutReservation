@@ -26,7 +26,7 @@ public class CreateInstructorCommandHandler : IRequestHandler<CreateInstructorCo
 
         var instructor = _mapper.Map<Instructor>(request);
 
-        instructor = await _instructorRepository.AddAsync(instructor);
+        instructor = await _instructorRepository.AddAsync(instructor, cancellationToken);
 
         return instructor.Id;
     }

@@ -32,7 +32,7 @@ public class CancelReservationCommandHandler : IRequestHandler<CancelReservation
     public async Task<Unit> Handle(CancelReservationCommand request, 
                                    CancellationToken cancellationToken)
     {
-        var reservation = await _reservationRepository.GetReservationByIdAsync(request.ReservationId);
+        var reservation = await _reservationRepository.GetReservationByIdAsync(request.ReservationId, cancellationToken);
 
         if (reservation is null)
             throw new NotFoundException($"Reservation with Id: {request.ReservationId} not found.");
@@ -51,10 +51,10 @@ public class CancelReservationCommandHandler : IRequestHandler<CancelReservation
         mappedReservation.RealWorkoutId = reservation.RealWorkoutId;
 
         await _reservationRepository
-            .UpdateReservationAsync(mappedReservation);
+            .UpdateReservationAsync(mappedReservation, cancellationToken);
 
         await _realWorkoutRepository
-            .DecrementCurrentParticipantNumber(reservation.RealWorkout);
+            .DecrementCurrentParticipantNumberAsync(reservation.RealWorkout, cancellationToken);
 
         return Unit.Value;
     }

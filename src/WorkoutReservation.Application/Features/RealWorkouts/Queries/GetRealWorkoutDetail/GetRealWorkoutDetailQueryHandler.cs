@@ -21,7 +21,7 @@ public class GetRealWorkoutDetailQueryHandler : IRequestHandler<GetRealWorkoutDe
     public async Task<RealWorkoutDetailDto> Handle(GetRealWorkoutDetailQuery request, 
                                                    CancellationToken cancellationToken)
     {
-        var realWorkout = await _realWorkoutRepository.GetByIdAsync(request.RealWorkoutId);
+        var realWorkout = await _realWorkoutRepository.GetByIdAsync(request.RealWorkoutId, cancellationToken);
 
         if (realWorkout is null)
             throw new NotFoundException($"Workout with Id: {request.RealWorkoutId} not found.");

@@ -32,14 +32,14 @@ public class AddReservationCommandHandler : IRequestHandler<AddReservationComman
     public async Task<int> Handle(AddReservationCommand request,    
                                   CancellationToken cancellationToken)
     {
-        var realWorkout = await _realWorkoutRepository.GetByIdWithReservationDetailsAsync(request.RealWorkoutId);
+        var realWorkout = await _realWorkoutRepository.GetByIdWithReservationDetailsAsync(request.RealWorkoutId, cancellationToken);
         if (realWorkout is null)
             throw new NotFoundException($"Real workout with Id: {request.RealWorkoutId} not found.");
 
         var currentUserGuid = Guid.Parse(_userService.UserId);
 
         var isUserAlreadyReservedWorkout = await _reservationRepository
-            .CheckUserReservationAsync(request.RealWorkoutId, currentUserGuid);
+            .CheckUserReservationAsync(request.RealWorkoutId, currentUserGuid, cancellationToken);
 
         var validator = new AddReservationCommandValidator(realWorkout, 
                                                            currentUserGuid, 
@@ -47,7 +47,7 @@ public class AddReservationCommandHandler : IRequestHandler<AddReservationComman
 
         await validator.ValidateAndThrowAsync(request, cancellationToken);
 
-        await _realWorkoutRepository.IncrementCurrentParticipantNumber(realWorkout);
+        await _realWorkoutRepository.IncrementCurrentParticipantNumberAsync(realWorkout, cancellationToken);
 
         var reservation = _mapper.Map<Reservation>(request);
 
@@ -56,7 +56,7 @@ public class AddReservationCommandHandler : IRequestHandler<AddReservationComman
         reservation.CreationDate = DateTime.Now;
         reservation.ReservationStatus = ReservationStatus.Reserved;
 
-        reservation = await _reservationRepository.AddReservationAsync(reservation);
+        reservation = await _reservationRepository.AddReservationAsync(reservation, cancellationToken);
 
         return reservation.Id;
     }
