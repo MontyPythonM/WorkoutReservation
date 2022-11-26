@@ -6,10 +6,10 @@ namespace WorkoutReservation.Application.Contracts;
 
 public interface IWorkoutTypeRepository
 {
-    public Task<WorkoutType> AddAsync(WorkoutType workoutType);
-    public Task DeleteAsync(WorkoutType workoutType);
-    public Task UpdateAsync(WorkoutType workoutType);
-    public Task<List<WorkoutType>> GetAllAsync();
-    public Task<WorkoutType> GetByIdAsync(int workoutTypeId);
-    public IQueryable<WorkoutType> GetAllQueriesAsync();
+    public Task<WorkoutType> AddAsync(WorkoutType workoutType, CancellationToken token);
+    public Task DeleteAsync(WorkoutType workoutType, CancellationToken token);
+    public Task UpdateAsync(WorkoutType workoutType, CancellationToken token);
+    public Task<List<WorkoutType>> GetAllAsync(CancellationToken token);
+    public Task<WorkoutType> GetByIdAsync(int workoutTypeId, CancellationToken token);
+    public IQueryable<WorkoutType> GetAllQuery();
 }

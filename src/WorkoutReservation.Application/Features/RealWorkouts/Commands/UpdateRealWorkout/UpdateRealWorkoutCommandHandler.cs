@@ -28,15 +28,15 @@ public class UpdateRealWorkoutCommandHandler : IRequestHandler<UpdateRealWorkout
     public async Task<Unit> Handle(UpdateRealWorkoutCommand request, 
                                    CancellationToken cancellationToken)
     {
-        var realWorkout = await _realWorkoutRepository.GetByIdAsync(request.RealWorkoutId);
+        var realWorkout = await _realWorkoutRepository.GetByIdAsync(request.RealWorkoutId, cancellationToken);
         if (realWorkout is null)
             throw new NotFoundException($"Real workout with Id: {request.RealWorkoutId} not found.");
 
-        var instructor = await _instructorRepository.GetByIdAsync(request.InstructorId);
+        var instructor = await _instructorRepository.GetByIdAsync(request.InstructorId, cancellationToken);
         if (instructor is null)
             throw new NotFoundException($"Instructor with Id: {request.InstructorId} not found.");
 
-        var dailyWorkoutsList = await _realWorkoutRepository.GetAllAsync(request.Date, request.Date.AddDays(1));
+        var dailyWorkoutsList = await _realWorkoutRepository.GetAllAsync(request.Date, request.Date.AddDays(1), cancellationToken);
         var validator = new UpdateRealWorkoutCommandValidator(dailyWorkoutsList, realWorkout);
         await validator.ValidateAndThrowAsync(request, cancellationToken);
 
@@ -45,7 +45,7 @@ public class UpdateRealWorkoutCommandHandler : IRequestHandler<UpdateRealWorkout
         mappedRealWorkout.WorkoutTypeId = realWorkout.WorkoutType.Id;
         mappedRealWorkout.LastModifiedDate = DateTime.Now;
 
-        await _realWorkoutRepository.UpdateAsync(mappedRealWorkout);
+        await _realWorkoutRepository.UpdateAsync(mappedRealWorkout, cancellationToken);
 
         return Unit.Value;
 

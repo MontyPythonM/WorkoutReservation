@@ -24,7 +24,7 @@ public class DeleteUserCommandHandler : IRequestHandler<DeleteUserCommand>
     public async Task<Unit> Handle(DeleteUserCommand request, 
                                    CancellationToken cancellationToken)
     {
-        var userToRemove = await _userRepository.GetByGuidAsync(request.UserGuid);
+        var userToRemove = await _userRepository.GetByGuidAsync(request.UserGuid, cancellationToken);
 
         if (userToRemove is null)
             throw new NotFoundException($"User with Guid: {request.UserGuid} not found.");
@@ -34,7 +34,7 @@ public class DeleteUserCommandHandler : IRequestHandler<DeleteUserCommand>
         var validator = new DeleteUserCommandValidator(currentUserGuid);
         await validator.ValidateAndThrowAsync(request, cancellationToken);
 
-        await _userRepository.DeleteAsync(userToRemove);
+        await _userRepository.DeleteAsync(userToRemove, cancellationToken);
 
         _logger.LogInformation($"User with Id: {request.UserGuid} was deleted by Administrator Id: {currentUserGuid}.");
 

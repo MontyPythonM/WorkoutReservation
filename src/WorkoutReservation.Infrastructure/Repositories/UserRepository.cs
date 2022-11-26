@@ -14,41 +14,41 @@ public class UserRepository : IUserRepository
         _dbContext = dbContext;
     }
 
-    public async Task<User> GetByEmailAsync(string email)
+    public async Task<User> GetByEmailAsync(string email, CancellationToken token)
     {
         return await _dbContext.Users   
             .AsNoTracking()
-            .FirstOrDefaultAsync(x => x.Email == email);
+            .FirstOrDefaultAsync(x => x.Email == email, token);
     }
-    public async Task<User> GetByGuidAsync(Guid guid)
+    public async Task<User> GetByGuidAsync(Guid guid, CancellationToken token)
     {
         return await _dbContext.Users
-            .FirstOrDefaultAsync(x => x.Id == guid);
+            .FirstOrDefaultAsync(x => x.Id == guid, token);
     }
 
-    public async Task<List<User>> GetAllAsync()
+    public async Task<List<User>> GetAllAsync(CancellationToken token)
     {
         return await _dbContext.Users
             .AsNoTracking()
-            .ToListAsync();
+            .ToListAsync(token);
     }
 
-    public async Task AddAsync(User user)
+    public async Task AddAsync(User user, CancellationToken token)
     { 
         await _dbContext.Users.AddAsync(user);
-        await _dbContext.SaveChangesAsync();
+        await _dbContext.SaveChangesAsync(token);
     }
 
-    public async Task UpdateAsync(User user)
+    public async Task UpdateAsync(User user, CancellationToken token)
     {
         _dbContext.Update(user);
-        await _dbContext.SaveChangesAsync();
+        await _dbContext.SaveChangesAsync(token);
     }
 
-    public async Task DeleteAsync(User user)
+    public async Task DeleteAsync(User user, CancellationToken token)
     {
         _dbContext.Remove(user);
-        await _dbContext.SaveChangesAsync();
+        await _dbContext.SaveChangesAsync(token);
     }
 
     public IQueryable<User> GetAllUsersQuery()

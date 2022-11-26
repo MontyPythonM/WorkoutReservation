@@ -20,7 +20,7 @@ public class SetUserRoleCommandHandler : IRequestHandler<SetUserRoleCommand>
     public async Task<Unit> Handle(SetUserRoleCommand request, 
                                    CancellationToken cancellationToken)
     {
-        var user = await _userRepository.GetByGuidAsync(request.UserGuid);
+        var user = await _userRepository.GetByGuidAsync(request.UserGuid, cancellationToken);
 
         if (user is null)
             throw new NotFoundException($"User with Guid: {request.UserGuid} not found.");
@@ -32,7 +32,7 @@ public class SetUserRoleCommandHandler : IRequestHandler<SetUserRoleCommand>
 
         user.UserRole = request.UserRole;
 
-        await _userRepository.UpdateAsync(user);
+        await _userRepository.UpdateAsync(user, cancellationToken);
 
         return Unit.Value;
     }

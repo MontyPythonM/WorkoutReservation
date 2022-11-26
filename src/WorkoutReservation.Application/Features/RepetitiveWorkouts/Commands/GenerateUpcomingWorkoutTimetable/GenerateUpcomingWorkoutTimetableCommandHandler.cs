@@ -34,7 +34,7 @@ public class GenerateUpcomingWorkoutTimetableCommandHandler : IRequestHandler<Ge
                                    CancellationToken cancellationToken)
     {
         // get repetitive workouts timetable
-        var repetitiveWorkouts = await _repetitiveRepository.GetAllAsync();
+        var repetitiveWorkouts = await _repetitiveRepository.GetAllAsync(cancellationToken);
 
         if (!repetitiveWorkouts.Any())
         {
@@ -90,7 +90,7 @@ public class GenerateUpcomingWorkoutTimetableCommandHandler : IRequestHandler<Ge
         await validator.ValidateAndThrowAsync(request, cancellationToken);
 
         // add new real workouts for upcoming week
-        await _realWorkoutRepository.AddRangeAsync(newRealWorkouts);
+        await _realWorkoutRepository.AddRangeAsync(newRealWorkouts, cancellationToken);
 
         _logger.LogInformation("The method generating a new weekly workout plan has been called");
         return Unit.Value;

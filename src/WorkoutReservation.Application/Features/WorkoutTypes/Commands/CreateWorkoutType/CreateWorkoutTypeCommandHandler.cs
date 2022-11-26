@@ -26,7 +26,7 @@ public class CreateWorkoutTypeCommandHandler : IRequestHandler<CreateWorkoutType
 
         var workoutType = _mapper.Map<WorkoutType>(request);
 
-        workoutType = await _workoutRepository.AddAsync(workoutType);
+        workoutType = await _workoutRepository.AddAsync(workoutType, cancellationToken);
 
         return workoutType.Id;
     }

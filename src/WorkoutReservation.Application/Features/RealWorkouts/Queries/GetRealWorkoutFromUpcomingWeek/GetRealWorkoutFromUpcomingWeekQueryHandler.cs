@@ -24,7 +24,7 @@ public class GetRealWorkoutFromUpcomingWeekQueryHandler : IRequestHandler<GetRea
         var firstDayOfCurrentWeek = DateTime.Now.GetFirstDayOfWeek().AddDays(7);
         var lastDayOfCurrentWeek = firstDayOfCurrentWeek.AddDays(7);
 
-        var realWorkouts = await _realWorkoutRepository.GetAllAsync(firstDayOfCurrentWeek, lastDayOfCurrentWeek);
+        var realWorkouts = await _realWorkoutRepository.GetAllAsync(firstDayOfCurrentWeek, lastDayOfCurrentWeek, cancellationToken);
 
         if (!realWorkouts.Any())
             throw new NotFoundException($"Real workouts from current week not found. [Date from: {firstDayOfCurrentWeek} to {lastDayOfCurrentWeek.AddDays(-1)}]");

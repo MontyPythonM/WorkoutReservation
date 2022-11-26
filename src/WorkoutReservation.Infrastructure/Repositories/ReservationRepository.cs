@@ -15,7 +15,7 @@ public class ReservationRepository : IReservationRepository
         _dbContext = dbContext;
     }
 
-    public async Task<List<Reservation>> GetUserReservationsByGuidAsync(Guid userId)
+    public async Task<List<Reservation>> GetUserReservationsByGuidAsync(Guid userId, CancellationToken token)
     {
         return await _dbContext.Reservations
             .AsNoTracking()
@@ -23,41 +23,41 @@ public class ReservationRepository : IReservationRepository
             .Where(x => x.UserId == userId)
             .OrderBy(x => x.RealWorkout.Date)
                 .ThenBy(x => x.RealWorkout.StartTime)
-            .ToListAsync();
+            .ToListAsync(token);
     }
 
-    public async Task<Reservation> AddReservationAsync(Reservation reservation)
+    public async Task<Reservation> AddReservationAsync(Reservation reservation, CancellationToken token)
     {
-        await _dbContext.AddAsync(reservation);
-        await _dbContext.SaveChangesAsync();
+        await _dbContext.AddAsync(reservation, token);
+        await _dbContext.SaveChangesAsync(token);
 
         return reservation;
     }
 
-    public async Task<bool> CheckUserReservationAsync(int workoutId, Guid currentUserId)
+    public async Task<bool> CheckUserReservationAsync(int workoutId, Guid currentUserId, CancellationToken token)
     {
         var isUserAlreadyReserved = await _dbContext.Reservations
             .Include(x => x.User)
             .Include(x => x.RealWorkout)
             .Where(x => x.RealWorkoutId == workoutId)
-            .FirstOrDefaultAsync(x => x.UserId == currentUserId);
+            .FirstOrDefaultAsync(x => x.UserId == currentUserId, token);
       
         return isUserAlreadyReserved is not null;
     }
 
-    public async Task<Reservation> GetReservationByIdAsync(int reservationId)
+    public async Task<Reservation> GetReservationByIdAsync(int reservationId, CancellationToken token)
     {
         return await _dbContext.Reservations
             .AsNoTracking()
             .Include(x => x.RealWorkout)
             .Include(x => x.User)
-            .FirstOrDefaultAsync(x => x.Id == reservationId);
+            .FirstOrDefaultAsync(x => x.Id == reservationId, token);
     }
 
-    public async Task UpdateReservationAsync(Reservation reservation)
+    public async Task UpdateReservationAsync(Reservation reservation, CancellationToken token)
     {
         _dbContext.Update(reservation);
-        await _dbContext.SaveChangesAsync();
+        await _dbContext.SaveChangesAsync(token);
     }
 
     public IQueryable<Reservation> GetUserReservationsByGuidQuery(Guid userId)

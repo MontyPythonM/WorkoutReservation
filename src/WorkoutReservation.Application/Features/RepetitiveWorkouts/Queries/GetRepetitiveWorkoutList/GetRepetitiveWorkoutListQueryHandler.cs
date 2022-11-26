@@ -21,7 +21,7 @@ public class GetRepetitiveWorkoutListQueryHandler : IRequestHandler<GetRepetitiv
     public async Task<List<RepetitiveWorkoutListDto>> Handle(GetRepetitiveWorkoutListQuery request, 
                                                              CancellationToken cancellationToken)
     {
-        var repetitiveWorkouts = await _repetitiveWorkoutRepository.GetAllAsync();
+        var repetitiveWorkouts = await _repetitiveWorkoutRepository.GetAllAsync(cancellationToken);
 
         if (!repetitiveWorkouts.Any())
             throw new NotFoundException("Repetitive workouts not found.");

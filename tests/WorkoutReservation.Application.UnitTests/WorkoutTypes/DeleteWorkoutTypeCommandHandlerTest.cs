@@ -47,7 +47,7 @@ public class DeleteWorkoutTypeCommandHandlerTest
             WorkoutTypeId = workoutTypesBeforeCount
         }, CancellationToken.None);
 
-        var allWorkoutTypesAfterCount = (await _mockWorkoutTypeRepository.Object.GetAllAsync()).Count;
+        var allWorkoutTypesAfterCount = (await _mockWorkoutTypeRepository.Object.GetAllAsync(CancellationToken.None)).Count;
 
         // assert
         allWorkoutTypesAfterCount.Should().Be(workoutTypesBeforeCount - 1);
