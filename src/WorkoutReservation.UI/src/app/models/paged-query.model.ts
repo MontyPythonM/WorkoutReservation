@@ -16,7 +16,7 @@ export class PagedQuery {
   static default(): PagedQuery {
     return new PagedQuery({
       pageNumber: 1,
-      pageSize: 5,
+      pageSize: 10,
       sortByDescending: false,
       sortBy: '',
       searchPhrase: ''

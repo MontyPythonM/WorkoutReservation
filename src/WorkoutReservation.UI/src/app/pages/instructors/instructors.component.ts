@@ -22,7 +22,7 @@ export class InstructorsComponent extends BaseComponent implements OnInit {
   private form!: Form | undefined;
 
   constructor(private instructorService: InstructorService,
-    private notificationService: NotificationService) {
+              private notificationService: NotificationService) {
     super();
     this.instructors = new Array<Instructor>();
     this.isPopupOpened = false;
@@ -45,7 +45,7 @@ export class InstructorsComponent extends BaseComponent implements OnInit {
   createInstructor = () => {
     if(!this.form?.validate().isValid) return;
     this.isSaving = true;
-    this.subscribe(this.instructorService.createInstructor(this.instructorCommand), {
+    this.subscribe(this.instructorService.create(this.instructorCommand), {
       next: () => {
         this.isSaving = false;
         this.closePopup();
@@ -62,7 +62,6 @@ export class InstructorsComponent extends BaseComponent implements OnInit {
   }
 
   openPopup = () => this.isPopupOpened = true;
-
   closePopup = () => this.isPopupOpened = false;
 
   onFormInitialized = (e: any) => this.form = e.component;

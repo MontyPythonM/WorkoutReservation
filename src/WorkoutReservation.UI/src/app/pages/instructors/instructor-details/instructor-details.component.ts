@@ -40,7 +40,7 @@ export class InstructorDetailsComponent extends BaseComponent implements OnInit 
   }
 
   loadInstructorDetails(id: number): void {
-    this.subscribe(this.instructorService.getInstructorDetails(id), {
+    this.subscribe(this.instructorService.getDetails(id), {
       next: (response: InstructorDetails) => {
         this.instructor = response;
       }
@@ -48,21 +48,21 @@ export class InstructorDetailsComponent extends BaseComponent implements OnInit 
   }
 
   deleteInstructor() {
-    this.subscribe(this.instructorService.deleteInstructor(this.instructor!.id), {
+    this.subscribe(this.instructorService.remove(this.instructor!.id), {
       next: () => {
         this.notificationService.show('Instructor delete successfully', 'success')
         this.router.navigate(['instructors']);
       },
       error: () => {
         this.notificationService.show('Failed to delete instructor', 'error')
-      },
+      }
     });
   }
 
   editInstructor = () => {
     if(!this.form?.validate().isValid) return;
     this.isSaving = true;
-    this.subscribe(this.instructorService.updateInstructor(this.instructorId, this.instructorCommand), {
+    this.subscribe(this.instructorService.update(this.instructorId, this.instructorCommand), {
       next: () => {
         this.isSaving = false;
         this.closePopup();

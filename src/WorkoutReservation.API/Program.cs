@@ -103,6 +103,7 @@ try
     app.UseCors(policy => policy
         .AllowAnyOrigin()
         .AllowAnyHeader()
+        .AllowAnyMethod()
         .WithOrigins("http://localhost:4200"));
 
     app.UseAuthentication();

@@ -1,4 +1,11 @@
 <div class="container" *ngIf="workoutTypes">
+  <dx-button
+    class="add-button"
+    icon="plus"
+    text="Add workout type"
+    type="success"
+    (onClick)="openPopup()">
+  </dx-button>
   <dx-accordion
   [dataSource]="workoutTypes.items"
   [collapsible]="true"
@@ -30,6 +37,63 @@
             <div *ngIf="!last" class="comma">,</div>
         </div>
       </div>
+      <div class="buttons clear-both">
+        <dx-button
+          class="accordion-button success-button"
+          text="Edit"
+          icon="rename"
+          type="success"
+          (onClick)="openPopup()">
+        </dx-button>
+        <dx-button
+          class="accordion-button"
+          text="Delete"
+          icon="trash"
+          type="danger"
+          (onClick)="deleteWorkoutType(workoutType.id)">
+        </dx-button>
+      </div>
     </div>
   </dx-accordion>
 </div>
+
+<dx-popup
+  [(visible)]="isPopupOpened"
+  [showTitle]="true"
+  [title]="title"
+  [dragEnabled]="false"
+  [showCloseButton]="false"
+  [width]="500"
+  [height]="400">
+  <div *dxTemplate="let data of 'content'">
+    <dx-form id="form" [(formData)]="workoutTypeCommand" (onInitialized)="onFormInitialized($event)">
+      <dxi-item dataField="name" editorType="dxTextBox">
+        <dxi-validation-rule type="required" message="Workout type name is required"></dxi-validation-rule>
+        <dxi-validation-rule type="stringLength" [max]="50" message="Workout type name must be a maximum of 50 characters"></dxi-validation-rule>
+      </dxi-item>
+      <dxi-item dataField="description" editorType="dxTextArea" [editorOptions]="{ height: 120 }">
+        <dxi-validation-rule type="required" message="Workout type name is required"></dxi-validation-rule>
+        <dxi-validation-rule type="stringLength" [max]="600" message="Workout type name must be a maximum of 50 characters"></dxi-validation-rule>
+      </dxi-item>
+      <dxi-item dataField="intensity" editorType="dxSelectBox"
+        [editorOptions]="{ dataSource: intensity, valueExpr: 'index', displayExpr: 'value' }">
+        <dxi-validation-rule type="required" message="Intensity is required"></dxi-validation-rule>
+      </dxi-item>
+    </dx-form>
+    <dx-load-panel
+      [(visible)]="isSaving"
+      message="Saving...">
+    </dx-load-panel>
+  </div>
+  <dxi-toolbar-item location="after" toolbar="bottom">
+    <dx-button
+      class="popup-button"
+      text="Cancel"
+      type="normal"
+      (onClick)="closePopup()"></dx-button>
+    <dx-button
+      text="Save"
+      type="success"
+      (onClick)="createWorkoutType()"></dx-button>
+  </dxi-toolbar-item>
+</dx-popup>

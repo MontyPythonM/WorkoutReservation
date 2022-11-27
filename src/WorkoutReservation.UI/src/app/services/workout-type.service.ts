@@ -4,21 +4,40 @@ import { map, Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { PagedResult } from '../models/paged-result.model';
 import { WorkoutType } from '../models/workout-types.model';
+import {InstructorDetails} from "../models/instructor-details.model";
+import {ApiUrl} from "../../environments/api-urls";
+import {InstructorDetailsCommand} from "../models/instructor-details-command.model";
+import {BaseService} from "../common/base.service";
+import {WorkoutTypeCommand} from "../models/workout-types-command.model";
 
 @Injectable({
   providedIn: 'root'
 })
-export class WorkoutTypeService {
+export class WorkoutTypeService extends BaseService {
 
-  constructor(private http: HttpClient) {}
+  constructor(protected override http: HttpClient) {
+    super(http);
+  }
 
   getAll(queryParams: any): Observable<PagedResult<WorkoutType>> {
-    return this.http.get<PagedResult<WorkoutType>>(environment.apiUrl + 'workout-type',
-    { params: queryParams }).pipe(
+    return super.get<PagedResult<WorkoutType>>(ApiUrl.workoutType,
+    { ...queryParams }).pipe(
       map((response) => {
         response.items = response.items.map((workoutType) => new WorkoutType(workoutType));
         return response;
       })
     )
+  }
+
+  remove(id: number): Observable<void> {
+    return super.delete<void>(ApiUrl.workoutType + id);
+  }
+
+  create(workoutType: WorkoutTypeCommand): Observable<void> {
+    return super.post(ApiUrl.workoutType, { ...workoutType });
+  }
+
+  update(id: number, workoutType: WorkoutTypeCommand): Observable<void> {
+    return super.put(ApiUrl.workoutType, { id, ...workoutType });
   }
 }
