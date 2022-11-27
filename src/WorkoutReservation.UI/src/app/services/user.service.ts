@@ -5,19 +5,23 @@ import { map, Observable, ReplaySubject } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { LoginForm } from '../models/login-form.model';
 import { RegisterForm } from '../models/register-form.model';
+import {BaseService} from "../common/base.service";
+import {ApiUrl} from "../../environments/api-urls";
 
 @Injectable({
   providedIn: 'root'
 })
-export class UserService {
+export class UserService extends BaseService {
   private currentUserSource = new ReplaySubject<string>(1);
   private baseUrl = environment.apiUrl;
   currentUser$ = this.currentUserSource.asObservable();
 
-  constructor(private http: HttpClient, public datepipe: DatePipe) { }
+  constructor(protected override http: HttpClient, public datepipe: DatePipe) {
+    super(http);
+  }
 
   login(loginForm: LoginForm): Observable<string> {
-    return this.http.post<any>(this.baseUrl + 'account/login', loginForm).pipe(
+    return super.post<any>(ApiUrl.account.login, loginForm).pipe(
       map((token: string) => {
         return token;
       })
@@ -26,6 +30,6 @@ export class UserService {
 
   register(registerForm: RegisterForm): Observable<string> {
     registerForm.dateOfBirth = this.datepipe.transform(registerForm.dateOfBirth, 'dd-MM-yyyy')!;
-    return this.http.post<any>(this.baseUrl + 'account/register', registerForm);
+    return super.post<any>(ApiUrl.account.register, registerForm);
   }
 }

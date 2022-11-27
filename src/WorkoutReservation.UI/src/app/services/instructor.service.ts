@@ -18,7 +18,7 @@ export class InstructorService extends BaseService {
   }
 
   getAll(): Observable<Instructor[]> {
-    return this.http.get<Instructor[]>(environment.apiUrl + 'instructor').pipe(
+    return super.get<Instructor[]>(ApiUrl.instructor).pipe(
       map((response) => {
         response = response.map((instructors) => new Instructor(instructors));
         return response;
@@ -26,19 +26,19 @@ export class InstructorService extends BaseService {
     )
   }
 
-  getInstructorDetails(id: number): Observable<InstructorDetails> {
+  getDetails(id: number): Observable<InstructorDetails> {
     return super.get<InstructorDetails>(ApiUrl.instructor + id);
   }
 
-  deleteInstructor(id: number): Observable<void> {
+  remove(id: number): Observable<void> {
     return super.delete<void>(ApiUrl.instructor + id);
   }
 
-  createInstructor(instructor: InstructorDetailsCommand): Observable<void> {
+  create(instructor: InstructorDetailsCommand): Observable<void> {
     return super.post(ApiUrl.instructor, { ...instructor });
   }
 
-  updateInstructor(instructorId: number, instructor: InstructorDetailsCommand): Observable<void> {
-    return super.put(ApiUrl.instructor, { instructorId, ...instructor });
+  update(id: number, instructor: InstructorDetailsCommand): Observable<void> {
+    return super.put(ApiUrl.instructor, { id, ...instructor });
   }
 }

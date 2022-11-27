@@ -24,7 +24,7 @@
   border-radius: 2px 7px 2px 7px;
   border: solid black 1px;
   box-shadow: 2px 2px 2px rgb(16, 66, 16);
-  background-image: linear-gradient(to right, rgba(26, 119, 26, 0.85), rgb(84, 168, 84));
+  background-image: linear-gradient(to right, rgba(26, 120, 26, 0.85), rgb(90, 180, 90));
 }
 
 .clear-both {
@@ -45,4 +45,30 @@
 .comma {
   float: left;
   margin: 3px 5px 0px 0px;
+}
+
+.add-button {
+  margin-bottom: 20px;
+}
+
+.popup-button {
+  margin-right: 10px;
+}
+
+.accordion-button {
+  text-align: right;
+}
+
+.accordion-button .title {
+  display: inline-block;
+  width: 50%;
+}
+
+.buttons {
+  margin-top: 50px;
+  float: right
+}
+
+.success-button {
+  margin-right: 10px;
 }

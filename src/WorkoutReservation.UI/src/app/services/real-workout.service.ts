@@ -3,19 +3,23 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { RealWorkout } from '../models/real-workout.model';
+import {BaseService} from "../common/base.service";
+import {ApiUrl} from "../../environments/api-urls";
 
 @Injectable({
   providedIn: 'root'
 })
-export class RealWorkoutService {
+export class RealWorkoutService extends BaseService {
 
-  constructor(private http: HttpClient) { }
+  constructor(protected override http: HttpClient) {
+    super(http);
+  }
 
   getCurrentWorkouts(): Observable<RealWorkout[]> {
-    return this.http.get<RealWorkout[]>(environment.apiUrl + 'real-workout/current-week');
+    return super.get<RealWorkout[]>(ApiUrl.realWorkout.current);
   }
 
   getUpcomingWorkouts(): Observable<RealWorkout[]> {
-    return this.http.get<RealWorkout[]>(environment.apiUrl + 'real-workout/upcoming-week');
+    return super.get<RealWorkout[]>(ApiUrl.realWorkout.upcoming);
   }
 }

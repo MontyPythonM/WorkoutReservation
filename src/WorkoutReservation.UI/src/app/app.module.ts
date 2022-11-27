@@ -1,30 +1,43 @@
-import { NgModule } from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
-import { HttpClientModule } from '@angular/common/http';
+import {NgModule} from '@angular/core';
+import {BrowserModule} from '@angular/platform-browser';
+import {HttpClientModule} from '@angular/common/http';
 
-import { AppComponent } from './app.component';
-import { FooterComponent } from './components/footer/footer.component';
-import { HeaderComponent } from './components/header/header.component';
-import { GalleryComponent } from './components/gallery/gallery.component';
-import { HomeComponent } from './pages/home/home.component';
-import { InstructorsComponent } from './pages/instructors/instructors.component';
-import { WorkoutTypesComponent } from './pages/workout-types/workout-types.component';
-import { AppRoutingModule } from './app-routing.module';
-import { WorkoutsComponent } from './pages/workouts/workouts.component';
-import { LoginComponent } from './pages/login/login.component';
-import { RegisterComponent } from './pages/register/register.component';
-import { InstructorDetailsComponent } from './pages/instructors/instructor-details/instructor-details.component';
-import { WorkoutDetailsComponent } from './pages/workouts/workout-details/workout-details.component';
-import { WorkoutTypeDetailsComponent } from './pages/workout-types/workout-type-details/workout-type-details.component';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import {AppComponent} from './app.component';
+import {FooterComponent} from './components/footer/footer.component';
+import {HeaderComponent} from './components/header/header.component';
+import {GalleryComponent} from './components/gallery/gallery.component';
+import {HomeComponent} from './pages/home/home.component';
+import {InstructorsComponent} from './pages/instructors/instructors.component';
+import {WorkoutTypesComponent} from './pages/workout-types/workout-types.component';
+import {AppRoutingModule} from './app-routing.module';
+import {WorkoutsComponent} from './pages/workouts/workouts.component';
+import {LoginComponent} from './pages/login/login.component';
+import {RegisterComponent} from './pages/register/register.component';
+import {InstructorDetailsComponent} from './pages/instructors/instructor-details/instructor-details.component';
+import {WorkoutDetailsComponent} from './pages/workouts/workout-details/workout-details.component';
+import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 
-import { DxAccordionModule, DxButtonModule, DxDataGridModule, DxFormModule, DxListModule, DxLoadPanelModule, DxMenuModule, DxPopupModule, DxSchedulerModule, DxTextBoxModule, DxValidationGroupModule, DxValidationSummaryModule, DxValidatorModule } from 'devextreme-angular';
-import { DxiItemModule, DxoNotificationsModule } from 'devextreme-angular/ui/nested';
-import { DatePipe } from '@angular/common';
-import { ReservationsComponent } from './pages/reservations/reservations.component';
-import { AdministrationComponent } from './pages/administration/administration.component';
-import { AccountSettingsComponent } from './pages/account-settings/account-settings.component';
-import { NavBarComponent } from './components/header/nav-bar/nav-bar.component';
+import {
+  DxAccordionModule,
+  DxButtonModule,
+  DxDataGridModule,
+  DxFormModule,
+  DxListModule,
+  DxLoadPanelModule,
+  DxMenuModule,
+  DxPopupModule,
+  DxSchedulerModule,
+  DxTextBoxModule,
+  DxValidationGroupModule,
+  DxValidationSummaryModule,
+  DxValidatorModule
+} from 'devextreme-angular';
+import {DxiItemModule, DxoNotificationsModule} from 'devextreme-angular/ui/nested';
+import {DatePipe} from '@angular/common';
+import {ReservationsComponent} from './pages/reservations/reservations.component';
+import {AdministrationComponent} from './pages/administration/administration.component';
+import {AccountSettingsComponent} from './pages/account-settings/account-settings.component';
+import {NavBarComponent} from './components/header/nav-bar/nav-bar.component';
 
 @NgModule({
   declarations: [
@@ -40,7 +53,6 @@ import { NavBarComponent } from './components/header/nav-bar/nav-bar.component';
     RegisterComponent,
     InstructorDetailsComponent,
     WorkoutDetailsComponent,
-    WorkoutTypeDetailsComponent,
     ReservationsComponent,
     AdministrationComponent,
     AccountSettingsComponent,
@@ -65,7 +77,7 @@ import { NavBarComponent } from './components/header/nav-bar/nav-bar.component';
     DxSchedulerModule,
     DxoNotificationsModule,
     DxDataGridModule,
-    DxLoadPanelModule
+    DxLoadPanelModule,
   ],
   providers: [DatePipe],
   bootstrap: [AppComponent]
