@@ -1,11 +1,13 @@
 ﻿export class WorkoutTypeCommand {
-  name: string;
-  description: string;
-  intensity: number;
+  workoutTypeid?: number;
+  name?: string;
+  description?: string;
+  intensity?: number;
 
-  constructor(data: { name: string, description: string, intensity: number }) {
-    this.name = data.name;
-    this.description = data.description;
-    this.intensity = data.intensity;
+  constructor(workoutTypeid?: number, name?: string, description?: string, intensity?: number) {
+    this.workoutTypeid = workoutTypeid;
+    this.name = name;
+    this.description = description;
+    this.intensity = intensity;
   }
 }

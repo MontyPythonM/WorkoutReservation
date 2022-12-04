@@ -1,12 +1,9 @@
-import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
-import { map, Observable } from 'rxjs';
-import { environment } from 'src/environments/environment';
-import { PagedResult } from '../models/paged-result.model';
-import { WorkoutType } from '../models/workout-types.model';
-import {InstructorDetails} from "../models/instructor-details.model";
+import {HttpClient} from '@angular/common/http';
+import {Injectable} from '@angular/core';
+import {map, Observable} from 'rxjs';
+import {PagedResult} from '../models/paged-result.model';
+import {WorkoutType} from '../models/workout-types.model';
 import {ApiUrl} from "../../environments/api-urls";
-import {InstructorDetailsCommand} from "../models/instructor-details-command.model";
 import {BaseService} from "../common/base.service";
 import {WorkoutTypeCommand} from "../models/workout-types-command.model";
 
@@ -37,7 +34,7 @@ export class WorkoutTypeService extends BaseService {
     return super.post(ApiUrl.workoutType, { ...workoutType });
   }
 
-  update(id: number, workoutType: WorkoutTypeCommand): Observable<void> {
-    return super.put(ApiUrl.workoutType, { id, ...workoutType });
+  update(workoutType: WorkoutTypeCommand): Observable<void> {
+    return super.put(ApiUrl.workoutType, { ...workoutType });
   }
 }
