@@ -9,7 +9,6 @@ import {NotificationService} from "../../services/notification.service";
 import {EnumObject, enumToObjects} from "../../models/enums/enum-converter";
 import {WorkoutIntensity} from "../../models/enums/workout-intensity.enum";
 import {WorkoutTypeCommand} from "../../models/workout-types-command.model";
-import {InstructorDetailsCommand} from "../../models/instructor-details-command.model";
 
 @Component({
   selector: 'app-workout-types',
@@ -18,12 +17,12 @@ import {InstructorDetailsCommand} from "../../models/instructor-details-command.
 })
 export class WorkoutTypesComponent extends BaseComponent implements OnInit {
   workoutTypes?: PagedResult<WorkoutType>;
-  workoutTypeCommand!: WorkoutTypeCommand;
+  workoutTypeCommand?: WorkoutTypeCommand;
   query: PagedQuery;
-  isPopupOpened: boolean;
+  isCreatePopupOpened: boolean;
+  isUpdatePopupOpened: boolean;
   isSaving: boolean;
   intensity: EnumObject[];
-  title: string;
   private form!: Form | undefined;
 
   constructor(private workoutTypeService: WorkoutTypeService,
@@ -32,10 +31,10 @@ export class WorkoutTypesComponent extends BaseComponent implements OnInit {
     this.workoutTypes = new PagedResult<WorkoutType>();
     this.query = PagedQuery.default();
     this.query.sortBy = 'Name';
-    this.isPopupOpened = false;
+    this.isCreatePopupOpened = false;
+    this.isUpdatePopupOpened = false;
     this.isSaving = false;
     this.intensity = enumToObjects(WorkoutIntensity);
-    this.title = '';
   }
 
   ngOnInit(): void {
@@ -53,7 +52,7 @@ export class WorkoutTypesComponent extends BaseComponent implements OnInit {
   createWorkoutType() {
     if (!this.form?.validate().isValid) return;
     this.isSaving = true;
-    this.subscribe(this.workoutTypeService.create(this.workoutTypeCommand), {
+    this.subscribe(this.workoutTypeService.create(this.workoutTypeCommand!), {
       next: () => {
         this.isSaving = false;
         this.closePopup();
@@ -70,6 +69,23 @@ export class WorkoutTypesComponent extends BaseComponent implements OnInit {
   }
 
   updateWorkoutType() {
+    if (!this.form?.validate().isValid) return;
+    this.isSaving = true;
+    this.subscribe(this.workoutTypeService.update(this.workoutTypeCommand!), {
+      next: () => {
+        this.isSaving = false;
+        this.closePopup();
+      },
+      error: () => {
+        this.notificationService.show('Failed to update workout type', 'error');
+        this.isSaving = false;
+      },
+      complete: () => {
+        this.notificationService.show('Workout type updated successfully', 'success')
+        this.workoutTypeCommand = new WorkoutTypeCommand();
+        this.ngOnInit();
+      }
+    });
   }
 
   deleteWorkoutType(id: number) {
@@ -84,8 +100,25 @@ export class WorkoutTypesComponent extends BaseComponent implements OnInit {
     });
   }
 
-  openPopup = () => this.isPopupOpened = true;
-  closePopup = () => this.isPopupOpened = false;
+  openCreatePopup = () => {
+    this.workoutTypeCommand = new WorkoutTypeCommand();
+    this.isCreatePopupOpened = true;
+  }
+  openUpdatePopup = (workoutType: WorkoutType) => {
+    this.workoutTypeCommand = new WorkoutTypeCommand(
+      workoutType.id,
+      workoutType.name,
+      workoutType.description,
+      this.intensity.find(x => x.value === workoutType.intensity)!.index
+    );
+    this.isUpdatePopupOpened = true;
+  }
+
+  closePopup = () => {
+    this.workoutTypeCommand = new WorkoutTypeCommand();
+    this.isCreatePopupOpened = false;
+    this.isUpdatePopupOpened = false;
+  }
 
   onFormInitialized = (e: any) => this.form = e.component;
 }
