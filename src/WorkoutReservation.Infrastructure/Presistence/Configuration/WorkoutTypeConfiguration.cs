@@ -28,12 +28,12 @@ public class WorkoutTypeConfiguration : IEntityTypeConfiguration<WorkoutType>
                 i => i.HasOne(wi => wi.Instructor)
                 .WithMany()
                 .HasForeignKey(i => i.InstructorId)
-                .OnDelete(DeleteBehavior.NoAction),
+                .OnDelete(DeleteBehavior.Cascade),
 
                 w => w.HasOne(wi => wi.WorkoutType)
                 .WithMany()
                 .HasForeignKey(w => w.WorkoutTypeId)
-                .OnDelete(DeleteBehavior.NoAction),
+                .OnDelete(DeleteBehavior.Cascade),
 
                 wi => wi.HasKey(x => new { x.InstructorId, x.WorkoutTypeId })
             );
