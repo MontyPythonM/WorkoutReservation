@@ -10,5 +10,11 @@ export const ApiUrl = {
   account: {
     register: 'account/register',
     login: 'account/login'
+  },
+  workoutTypeTag: {
+    onlyActive: 'workout-type-tag/only-active',
+    all: 'workout-type-tag/',
+    create: "workout-type-tag/",
+    deactivate: "workout-type-tag/"
   }
 }

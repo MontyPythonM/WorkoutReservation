@@ -22,10 +22,11 @@ public class WorkoutTypeProfile : Profile
         CreateMap<WorkoutTypeTag, WorkoutTypeTagForWorkoutTypeDetailDto>();
 
         // CreateWorkoutTypeCommand
-        CreateMap<CreateWorkoutTypeCommand, WorkoutType>();
+        CreateMap<CreateWorkoutTypeCommand, WorkoutType>()
+            .ForMember(x => x.WorkoutTypeTags, act => act.Ignore());
 
         // UpdateWorkoutTypeCommand
         CreateMap<UpdateWorkoutTypeCommand, WorkoutType>()
-            .ForMember(x => x.Id, y => y.MapFrom(z => z.WorkoutTypeId));
+            .ForMember(x => x.WorkoutTypeTags, act => act.Ignore());
     }
 }

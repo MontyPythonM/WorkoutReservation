@@ -9,6 +9,8 @@ import {NotificationService} from "../../services/notification.service";
 import {EnumObject, enumToObjects} from "../../models/enums/enum-converter";
 import {WorkoutIntensity} from "../../models/enums/workout-intensity.enum";
 import {WorkoutTypeCommand} from "../../models/workout-types-command.model";
+import {WorkoutTypeTagService} from "../../services/workout-type-tag.service";
+import {WorkoutTypeTag} from "../../models/workout-type-tag.model";
 
 @Component({
   selector: 'app-workout-types',
@@ -23,10 +25,12 @@ export class WorkoutTypesComponent extends BaseComponent implements OnInit {
   isUpdatePopupOpened: boolean;
   isSaving: boolean;
   intensity: EnumObject[];
+  workoutTypeTags: WorkoutTypeTag[];
   private form!: Form | undefined;
 
   constructor(private workoutTypeService: WorkoutTypeService,
-              private notificationService: NotificationService) {
+              private notificationService: NotificationService,
+              private workoutTypeTagService: WorkoutTypeTagService) {
     super();
     this.workoutTypes = new PagedResult<WorkoutType>();
     this.query = PagedQuery.default();
@@ -35,6 +39,7 @@ export class WorkoutTypesComponent extends BaseComponent implements OnInit {
     this.isUpdatePopupOpened = false;
     this.isSaving = false;
     this.intensity = enumToObjects(WorkoutIntensity);
+    this.workoutTypeTags = [];
   }
 
   ngOnInit(): void {
@@ -47,6 +52,14 @@ export class WorkoutTypesComponent extends BaseComponent implements OnInit {
         this.workoutTypes = response;
       }
     });
+  }
+
+  loadActiveWorkoutTypeTags(): void {
+    this.subscribe(this.workoutTypeTagService.getActiveWorkoutTypeTags(), {
+      next: (response: WorkoutTypeTag[]) => {
+        this.workoutTypeTags = response;
+      }
+    })
   }
 
   createWorkoutType() {
@@ -101,16 +114,20 @@ export class WorkoutTypesComponent extends BaseComponent implements OnInit {
   }
 
   openCreatePopup = () => {
+    this.loadActiveWorkoutTypeTags();
     this.workoutTypeCommand = new WorkoutTypeCommand();
     this.isCreatePopupOpened = true;
   }
+
   openUpdatePopup = (workoutType: WorkoutType) => {
+    this.loadActiveWorkoutTypeTags();
     this.workoutTypeCommand = new WorkoutTypeCommand(
       workoutType.id,
       workoutType.name,
       workoutType.description,
-      this.intensity.find(x => x.value === workoutType.intensity)!.index
-    );
+      this.intensity.find(x => x.value === workoutType.intensity)!.index,
+      workoutType.workoutTypeTags
+      );
     this.isUpdatePopupOpened = true;
   }
 
@@ -120,5 +137,5 @@ export class WorkoutTypesComponent extends BaseComponent implements OnInit {
     this.isUpdatePopupOpened = false;
   }
 
-  onFormInitialized = (e: any) => this.form = e.component;
+  onFormInitialized = (e: {component: Form}) => this.form = e.component;
 }

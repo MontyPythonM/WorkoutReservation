@@ -7,40 +7,30 @@ namespace WorkoutReservation.Application.Features.WorkoutTypes.Commands.DeleteWo
 
 public class DeleteWorkoutTypeCommandHandler : IRequestHandler<DeleteWorkoutTypeCommand>
 {
-    private readonly IWorkoutTypeRepository _workoutTypeRepository;
-    //private readonly IRepetitiveWorkoutRepository _repetitiveWorkoutRepository;
-    //private readonly IRealWorkoutRepository _realWorkoutRepository;
+    private readonly IWorkoutTypeRepository _workoutTypeRepository;    
     private readonly ILogger<DeleteWorkoutTypeCommandHandler> _logger;
 
     public DeleteWorkoutTypeCommandHandler(IWorkoutTypeRepository workoutTypeRepository,
-                                           //IRepetitiveWorkoutRepository repetitiveWorkoutRepository,
-                                           //IRealWorkoutRepository realWorkoutRepository,
-                                           ILogger<DeleteWorkoutTypeCommandHandler> logger)
+        ILogger<DeleteWorkoutTypeCommandHandler> logger)
     {
         _workoutTypeRepository = workoutTypeRepository;
-        //_repetitiveWorkoutRepository = repetitiveWorkoutRepository;
-        //_realWorkoutRepository = realWorkoutRepository;
         _logger = logger;
     }
 
-    public async Task<Unit> Handle(DeleteWorkoutTypeCommand request, 
-                                   CancellationToken cancellationToken)
+    public async Task<Unit> Handle(DeleteWorkoutTypeCommand request, CancellationToken token)
     {
-        var workoutType = await _workoutTypeRepository.GetByIdAsync(request.WorkoutTypeId, cancellationToken);
+        var workoutType = await _workoutTypeRepository.GetByIdAsync(request.WorkoutTypeId, token);
 
         if (workoutType is null)
             throw new NotFoundException($"Workout type with Id: {request.WorkoutTypeId} not found.");
-
-        //var repetitiveWorkouts = await _repetitiveWorkoutRepository.GetAllAsync();
-        //var realWorkouts = await _realWorkoutRepository.GetAllAsync();
-
-        //if (repetitiveWorkouts.Any() || realWorkouts.Any())            
-        //    throw new ForbidException($"WorkoutType with Id: {request.WorkoutTypeId} is assigned to workouts (repetitiveWorkout or realWorkout). To delete an WorkoutType, you must first delete or edit the assigned workouts.");
         
-        await _workoutTypeRepository.DeleteAsync(workoutType, cancellationToken);
+        if (workoutType.BaseWorkouts.Any())
+            throw new BadRequestException($"WorkoutType with Id: {request.WorkoutTypeId} is assigned to existing workouts (repetitiveWorkout or realWorkout). " +
+                                          $"To delete an WorkoutType, you must first delete or edit the assigned workouts.");
+        
+        await _workoutTypeRepository.DeleteAsync(workoutType, token);
 
         _logger.LogInformation($"WorkoutType with Id: {request.WorkoutTypeId} was deleted.");
-
         return Unit.Value;
     }
 }

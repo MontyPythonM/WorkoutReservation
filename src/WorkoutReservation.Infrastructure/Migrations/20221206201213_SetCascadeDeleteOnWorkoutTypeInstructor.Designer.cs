@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using WorkoutReservation.Infrastructure.Presistence;
 
@@ -11,9 +12,10 @@ using WorkoutReservation.Infrastructure.Presistence;
 namespace WorkoutReservation.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20221206201213_SetCascadeDeleteOnWorkoutTypeInstructor")]
+    partial class SetCascadeDeleteOnWorkoutTypeInstructor
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -228,31 +230,18 @@ namespace WorkoutReservation.Infrastructure.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("bit");
-
                     b.Property<string>("Tag")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("WorkoutTypeId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
+                    b.HasIndex("WorkoutTypeId");
+
                     b.ToTable("WorkoutTypeTags");
-                });
-
-            modelBuilder.Entity("WorkoutTypeWorkoutTypeTag", b =>
-                {
-                    b.Property<int>("WorkoutTypeTagsId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("WorkoutTypesId")
-                        .HasColumnType("int");
-
-                    b.HasKey("WorkoutTypeTagsId", "WorkoutTypesId");
-
-                    b.HasIndex("WorkoutTypesId");
-
-                    b.ToTable("WorkoutTypeWorkoutTypeTag");
                 });
 
             modelBuilder.Entity("WorkoutReservation.Domain.Entities.RealWorkout", b =>
@@ -335,19 +324,15 @@ namespace WorkoutReservation.Infrastructure.Migrations
                     b.Navigation("WorkoutType");
                 });
 
-            modelBuilder.Entity("WorkoutTypeWorkoutTypeTag", b =>
+            modelBuilder.Entity("WorkoutReservation.Domain.Entities.WorkoutTypeTag", b =>
                 {
-                    b.HasOne("WorkoutReservation.Domain.Entities.WorkoutTypeTag", null)
-                        .WithMany()
-                        .HasForeignKey("WorkoutTypeTagsId")
+                    b.HasOne("WorkoutReservation.Domain.Entities.WorkoutType", "WorkoutType")
+                        .WithMany("WorkoutTypeTags")
+                        .HasForeignKey("WorkoutTypeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("WorkoutReservation.Domain.Entities.WorkoutType", null)
-                        .WithMany()
-                        .HasForeignKey("WorkoutTypesId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.Navigation("WorkoutType");
                 });
 
             modelBuilder.Entity("WorkoutReservation.Domain.Entities.Instructor", b =>
@@ -363,6 +348,8 @@ namespace WorkoutReservation.Infrastructure.Migrations
             modelBuilder.Entity("WorkoutReservation.Domain.Entities.WorkoutType", b =>
                 {
                     b.Navigation("BaseWorkouts");
+
+                    b.Navigation("WorkoutTypeTags");
                 });
 
             modelBuilder.Entity("WorkoutReservation.Domain.Entities.RealWorkout", b =>

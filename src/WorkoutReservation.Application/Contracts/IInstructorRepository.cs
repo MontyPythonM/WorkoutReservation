@@ -9,4 +9,5 @@ public interface IInstructorRepository
     public Task UpdateAsync(Instructor instructor, CancellationToken token);
     public Task<List<Instructor>> GetAllAsync(CancellationToken token);
     public Task<Instructor> GetByIdAsync(int instructorId, CancellationToken token);
+    public Task<Instructor> GetByIdAsync(int instructorId, bool asNoTracking, CancellationToken token);
 }

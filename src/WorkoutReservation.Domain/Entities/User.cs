@@ -15,5 +15,5 @@ public class User
     public DateTime AccountCreationDate { get; set; }
     public UserRole? UserRole { get; set; }
 
-    public List<Reservation> Reservations { get; set; } = new List<Reservation>();
+    public ICollection<Reservation> Reservations { get; set; } = new List<Reservation>();
 }

@@ -19,8 +19,7 @@ public class WorkoutTypeConfiguration : IEntityTypeConfiguration<WorkoutType>
         builder.Property(x => x.Intensity)
             .IsRequired()
             .HasConversion<string>();
-
-
+        
         builder.HasMany(x => x.Instructors)
             .WithMany(x => x.WorkoutTypes)
             .UsingEntity<WorkoutTypeInstructor>(
@@ -28,18 +27,14 @@ public class WorkoutTypeConfiguration : IEntityTypeConfiguration<WorkoutType>
                 i => i.HasOne(wi => wi.Instructor)
                 .WithMany()
                 .HasForeignKey(i => i.InstructorId)
-                .OnDelete(DeleteBehavior.NoAction),
+                .OnDelete(DeleteBehavior.Cascade),
 
                 w => w.HasOne(wi => wi.WorkoutType)
                 .WithMany()
                 .HasForeignKey(w => w.WorkoutTypeId)
-                .OnDelete(DeleteBehavior.NoAction),
+                .OnDelete(DeleteBehavior.Cascade),
 
                 wi => wi.HasKey(x => new { x.InstructorId, x.WorkoutTypeId })
             );
-
-        builder.HasMany(x => x.WorkoutTypeTags)
-            .WithOne(x => x.WorkoutType)
-            .HasForeignKey(x => x.WorkoutTypeId);
     }
 }
