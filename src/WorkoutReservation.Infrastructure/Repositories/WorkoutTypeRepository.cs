@@ -47,6 +47,7 @@ public class WorkoutTypeRepository : IWorkoutTypeRepository
             .AsNoTracking()
             .Include(x => x.Instructors)
             .Include(x => x.WorkoutTypeTags)
+            .Include(x => x.BaseWorkouts)
             .FirstOrDefaultAsync(x => x.Id == workoutTypeId, token);
     }
 

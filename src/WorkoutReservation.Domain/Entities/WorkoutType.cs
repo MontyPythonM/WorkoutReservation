@@ -10,7 +10,7 @@ public class WorkoutType
     public string Description { get; set; }
     public WorkoutIntensity Intensity { get; set; }
     
-    public List<Instructor> Instructors { get; set; } = new List<Instructor>();
-    public List<WorkoutTypeTag> WorkoutTypeTags { get; set; } = new List<WorkoutTypeTag>();
-    public List<BaseWorkout> BaseWorkouts { get; set; } = new List<BaseWorkout>();
+    public ICollection<Instructor> Instructors { get; set; } = new List<Instructor>();
+    public ICollection<WorkoutTypeTag> WorkoutTypeTags { get; set; } = new List<WorkoutTypeTag>();
+    public ICollection<BaseWorkout> BaseWorkouts { get; set; } = new List<BaseWorkout>();
 }

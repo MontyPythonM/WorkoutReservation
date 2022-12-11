@@ -16,5 +16,5 @@ public class WorkoutTypesListQueryDto
     public List<InstructorForWorkoutTypeDto> Instructors { get; set; }
 }
 
-public record WorkoutTypeTagForWorkoutTypeDto(string Tag);
+public record WorkoutTypeTagForWorkoutTypeDto(int Id, string Tag, bool IsActive);
 public record InstructorForWorkoutTypeDto(int Id, string FirstName, string LastName);

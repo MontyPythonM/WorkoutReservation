@@ -26,7 +26,7 @@ import {
   DxLoadPanelModule,
   DxMenuModule,
   DxPopupModule,
-  DxSchedulerModule,
+  DxSchedulerModule, DxTagBoxModule,
   DxTextBoxModule,
   DxValidationGroupModule,
   DxValidationSummaryModule,
@@ -78,6 +78,7 @@ import {NavBarComponent} from './components/header/nav-bar/nav-bar.component';
     DxoNotificationsModule,
     DxDataGridModule,
     DxLoadPanelModule,
+    DxTagBoxModule
   ],
   providers: [DatePipe],
   bootstrap: [AppComponent]

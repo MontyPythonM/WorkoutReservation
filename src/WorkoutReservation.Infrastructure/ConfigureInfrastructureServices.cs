@@ -27,6 +27,7 @@ public static class ConfigureInfrastructureServices
         services.AddScoped<IRealWorkoutRepository, RealWorkoutRepository>();
         services.AddScoped<IUserRepository, UserRepository>();
         services.AddScoped<IReservationRepository, ReservationRepository>();
+        services.AddScoped<IWorkoutTypeTagRepository, WorkoutTypeTagRepository>();
 
         services.AddScoped<SeedFirstAdmin>();
         services.AddScoped<SeedDummyData>();

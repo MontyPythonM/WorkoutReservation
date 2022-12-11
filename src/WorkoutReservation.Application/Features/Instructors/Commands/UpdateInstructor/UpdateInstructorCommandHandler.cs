@@ -10,31 +10,29 @@ namespace WorkoutReservation.Application.Features.Instructors.Commands.UpdateIns
 public class UpdateInstructorCommandHandler : IRequestHandler<UpdateInstructorCommand>
 {
     private readonly IInstructorRepository _instructorRepository;
-    private readonly IMapper _mapper;
 
-    public UpdateInstructorCommandHandler(IInstructorRepository instructorRepository, 
-                                          IMapper mapper)
+    public UpdateInstructorCommandHandler(IInstructorRepository instructorRepository)
     {
         _instructorRepository = instructorRepository;
-        _mapper = mapper;
     }
 
-    public async Task<Unit> Handle(UpdateInstructorCommand request, 
-                                   CancellationToken cancellationToken)
+    public async Task<Unit> Handle(UpdateInstructorCommand request, CancellationToken token)
     {
-        var instructor = await _instructorRepository.GetByIdAsync(request.InstructorId, cancellationToken);
+        var instructor = await _instructorRepository.GetByIdAsync(request.InstructorId, false, token);
 
         if (instructor is null)
             throw new NotFoundException($"Instructor with Id: {request.InstructorId} not found.");
 
         var validator = new UpdateInstructorCommandValidator();
-        await validator.ValidateAndThrowAsync(request, cancellationToken);
+        await validator.ValidateAndThrowAsync(request, token);
 
-        var mappedWorkoutType = _mapper.Map<Instructor>(request);
-
-        await _instructorRepository.UpdateAsync(mappedWorkoutType, cancellationToken);
-
+        instructor.FirstName = request.FirstName;
+        instructor.LastName = request.LastName;
+        instructor.Biography = request.Biography;
+        instructor.Email = request.Email;
+        instructor.Gender = request.Gender;
+        
+        await _instructorRepository.UpdateAsync(instructor, token);
         return Unit.Value;
-
     }
 }

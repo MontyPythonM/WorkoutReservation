@@ -1,5 +1,4 @@
 ﻿using MediatR;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using WorkoutReservation.Application.Common.Exceptions;
 using WorkoutReservation.Application.Contracts;
@@ -24,6 +23,10 @@ public class DeleteWorkoutTypeCommandHandler : IRequestHandler<DeleteWorkoutType
 
         if (workoutType is null)
             throw new NotFoundException($"Workout type with Id: {request.WorkoutTypeId} not found.");
+        
+        if (workoutType.BaseWorkouts.Any())
+            throw new BadRequestException($"WorkoutType with Id: {request.WorkoutTypeId} is assigned to existing workouts (repetitiveWorkout or realWorkout). " +
+                                          $"To delete an WorkoutType, you must first delete or edit the assigned workouts.");
         
         await _workoutTypeRepository.DeleteAsync(workoutType, token);
 

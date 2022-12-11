@@ -22,7 +22,7 @@ public class InstructorProfile : Profile
         CreateMap<CreateInstructorCommand, Instructor>();
 
         // UpdateInstructorCommandHandler
-        CreateMap<UpdateInstructorCommand, Instructor> ()
+        CreateMap<UpdateInstructorCommand, Instructor>()
             .ForMember(x => x.Id, y => y.MapFrom(z => z.InstructorId));
     }
 }
