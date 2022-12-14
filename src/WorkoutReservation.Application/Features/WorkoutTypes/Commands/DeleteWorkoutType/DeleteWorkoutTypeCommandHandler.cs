@@ -19,7 +19,7 @@ public class DeleteWorkoutTypeCommandHandler : IRequestHandler<DeleteWorkoutType
 
     public async Task<Unit> Handle(DeleteWorkoutTypeCommand request, CancellationToken token)
     {
-        var workoutType = await _workoutTypeRepository.GetByIdAsync(request.WorkoutTypeId, token);
+        var workoutType = await _workoutTypeRepository.GetByIdAsync(request.WorkoutTypeId, false, token);
 
         if (workoutType is null)
             throw new NotFoundException($"Workout type with Id: {request.WorkoutTypeId} not found.");

@@ -5,7 +5,7 @@ namespace WorkoutReservation.Application.Features.WorkoutTypes.Commands.UpdateWo
 
 public class UpdateWorkoutTypeCommandValidatior : AbstractValidator<UpdateWorkoutTypeCommand>
 {
-    public UpdateWorkoutTypeCommandValidatior(WorkoutType workoutType)
+    public UpdateWorkoutTypeCommandValidatior()
     {
         RuleFor(x => x.Name)
             .MaximumLength(50)

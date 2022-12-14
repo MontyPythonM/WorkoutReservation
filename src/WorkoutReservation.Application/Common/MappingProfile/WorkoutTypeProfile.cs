@@ -26,7 +26,7 @@ public class WorkoutTypeProfile : Profile
             .ForMember(x => x.WorkoutTypeTags, act => act.Ignore());
 
         // UpdateWorkoutTypeCommand
-        CreateMap<UpdateWorkoutTypeCommand, WorkoutType>()
-            .ForMember(x => x.WorkoutTypeTags, act => act.Ignore());
+        CreateMap<UpdateWorkoutTypeCommand, WorkoutType>();
+           // .ForMember(x => x.WorkoutTypeTags, act => act.Ignore());
     }
 }

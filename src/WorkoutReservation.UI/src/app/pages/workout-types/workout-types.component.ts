@@ -26,6 +26,7 @@ export class WorkoutTypesComponent extends BaseComponent implements OnInit {
   isSaving: boolean;
   intensity: EnumObject[];
   workoutTypeTags: WorkoutTypeTag[];
+  activeAndCurrentTags: WorkoutTypeTag[] = [];
   private form!: Form | undefined;
 
   constructor(private workoutTypeService: WorkoutTypeService,
@@ -55,7 +56,7 @@ export class WorkoutTypesComponent extends BaseComponent implements OnInit {
   }
 
   loadActiveWorkoutTypeTags(): void {
-    this.subscribe(this.workoutTypeTagService.getActiveWorkoutTypeTags(), {
+    this.subscribe(this.workoutTypeTagService.getAllWorkoutTypeTags(), {
       next: (response: WorkoutTypeTag[]) => {
         this.workoutTypeTags = response;
       }
@@ -121,13 +122,37 @@ export class WorkoutTypesComponent extends BaseComponent implements OnInit {
 
   openUpdatePopup = (workoutType: WorkoutType) => {
     this.loadActiveWorkoutTypeTags();
+
+    // returns array with active tags and existing non active tags
+    let tags: WorkoutTypeTag[] = [];
+    for (let i = 0; i < this.workoutTypeTags.length; i++) {
+      let tag = this.workoutTypeTags[i];
+      if (tag.isActive) {
+        tags.push(tag);
+      }
+      for (let j =0; j < workoutType.workoutTypeTags.length; j++) {
+        if (workoutType.workoutTypeTags[j].id === tag.id && !workoutType.workoutTypeTags[j].isActive) {
+          tags.push(tag);
+          continue;
+        }
+      }
+    }
+    // distinct a tags array
+    this.activeAndCurrentTags = tags.filter(
+      (thing, i, arr) => arr.findIndex(t => t.id === thing.id) === i
+    );
+
+    console.log('workoutType.workoutTypeTags: ', workoutType.workoutTypeTags);
+    console.log('this.workoutTypeTags: ', this.workoutTypeTags);
+    console.log('this.activeAndCurrentTags: ', this.activeAndCurrentTags);
+
     this.workoutTypeCommand = new WorkoutTypeCommand(
       workoutType.id,
       workoutType.name,
       workoutType.description,
       this.intensity.find(x => x.value === workoutType.intensity)!.index,
       workoutType.workoutTypeTags
-      );
+    );
     this.isUpdatePopupOpened = true;
   }
 

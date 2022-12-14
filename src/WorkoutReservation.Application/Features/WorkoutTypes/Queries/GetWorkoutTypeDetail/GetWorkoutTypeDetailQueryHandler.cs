@@ -21,7 +21,7 @@ public class GetWorkoutTypeDetailQueryHandler : IRequestHandler<GetWorkoutTypeDe
     public async Task<WorkoutTypeDetailQueryDto> Handle(GetWorkoutTypeDetailQuery request, 
                                                         CancellationToken cancellationToken)
     {
-        var workoutType = await _workoutTypeRepository.GetByIdAsync(request.WorkoutTypeId, cancellationToken);
+        var workoutType = await _workoutTypeRepository.GetByIdAsync(request.WorkoutTypeId, true, cancellationToken);
 
         if (workoutType is null)
             throw new NotFoundException($"Workout type with Id: {request.WorkoutTypeId} not found.");
