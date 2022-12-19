@@ -2,11 +2,9 @@
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 using WorkoutReservation.API.Controllers.Base;
-using WorkoutReservation.Application.Common.Dtos;
 using WorkoutReservation.Application.Features.WorkoutTypes.Commands.CreateWorkoutType;
 using WorkoutReservation.Application.Features.WorkoutTypes.Commands.DeleteWorkoutType;
 using WorkoutReservation.Application.Features.WorkoutTypes.Commands.UpdateWorkoutType;
-using WorkoutReservation.Application.Features.WorkoutTypes.Queries.GetWorkoutTypeDetail;
 using WorkoutReservation.Application.Features.WorkoutTypes.Queries.GetWorkoutTypesList;
 
 namespace WorkoutReservation.API.Controllers;
@@ -22,16 +20,7 @@ public class WorkoutTypeController : ApiControllerBase
     {
         return Ok(await Mediator.Send(query, token));
     }
-
-    [HttpGet("{workoutTypeId}")]
-    [AllowAnonymous]
-    [SwaggerOperation(Summary = "Returns selected workout type")]
-    public async Task<IActionResult> GetWorkoutType([FromRoute] int workoutTypeId, CancellationToken token)
-    {
-        var result = await Mediator.Send(new GetWorkoutTypeDetailQuery() { WorkoutTypeId = workoutTypeId }, token);
-        return Ok(result);
-    }
-
+    
     [HttpPost]
     [SwaggerOperation(Summary = "Create new workout type")]
     public async Task<IActionResult> CreateWorkoutType([FromBody] CreateWorkoutTypeCommand command, CancellationToken token)

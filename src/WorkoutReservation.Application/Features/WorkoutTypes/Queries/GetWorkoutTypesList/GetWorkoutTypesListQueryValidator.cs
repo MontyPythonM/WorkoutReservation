@@ -5,8 +5,8 @@ namespace WorkoutReservation.Application.Features.WorkoutTypes.Queries.GetWorkou
 
 public class GetWorkoutTypesListQueryValidator : AbstractValidator<GetWorkoutTypesListQuery>
 {
-    private readonly int[] allowedPageSizes = new[] { 5, 10, 15 };
-    public readonly string[] allowedSortByColumnNames = { nameof(WorkoutType.Name), nameof(WorkoutType.Intensity)};
+    private readonly int[] _allowedPageSizes = new[] { 5, 10, 15 };
+    private readonly string[] _allowedSortByColumnNames = { nameof(WorkoutType.Name), nameof(WorkoutType.Intensity)};
 
     public GetWorkoutTypesListQueryValidator()
     {
@@ -14,24 +14,17 @@ public class GetWorkoutTypesListQueryValidator : AbstractValidator<GetWorkoutTyp
 
         RuleFor(r => r.PageSize).Custom((value, context) =>
         {
-            if (!allowedPageSizes.Contains(value))
+            if (!_allowedPageSizes.Contains(value))
             {
-                context.AddFailure("PageSize", $"PageSize must in [{string.Join(", ", allowedPageSizes)}]");
+                context.AddFailure("PageSize", $"PageSize must in [{string.Join(", ", _allowedPageSizes)}]");
             }
         });
 
         RuleFor(x => x.SortBy).Custom((value, context) =>
         {
-            if (value is not null)
+            if (value is not null && !_allowedSortByColumnNames.Contains(value))
             {
-                foreach (var SortByColumnName in allowedSortByColumnNames)
-                {
-                    if (!allowedSortByColumnNames.Contains(value))
-                    {
-                        context.AddFailure("SortBy", $"SortBy must in [{string.Join(", ", allowedSortByColumnNames)}]");
-                        break;
-                    }
-                }
+                context.AddFailure("SortBy", $"SortBy must in [{string.Join(", ", _allowedSortByColumnNames)}]");
             }
         });
     }

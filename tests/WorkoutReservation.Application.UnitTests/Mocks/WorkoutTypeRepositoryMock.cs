@@ -51,11 +51,11 @@ public static class WorkoutTypeRepositoryMock
 
         // GetAllAsync
         repositoryMock
-            .Setup(r => r.GetAllAsync(CancellationToken.None))
+            .Setup(r => r.GetAllAsync(false, CancellationToken.None))
             .ReturnsAsync(workoutTypes);
 
         // GetByIdAsync
-        repositoryMock.Setup(r => r.GetByIdAsync(It.IsAny<int>(), CancellationToken.None))
+        repositoryMock.Setup(r => r.GetByIdAsync(It.IsAny<int>(), false, CancellationToken.None))
             .ReturnsAsync((int id) =>
             {
                 var workoutType = workoutTypes.FirstOrDefault(w => w.Id == id);

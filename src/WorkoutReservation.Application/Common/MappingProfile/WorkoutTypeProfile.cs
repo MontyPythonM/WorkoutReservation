@@ -1,32 +1,30 @@
 ﻿using AutoMapper;
 using WorkoutReservation.Application.Features.WorkoutTypes.Commands.CreateWorkoutType;
 using WorkoutReservation.Application.Features.WorkoutTypes.Commands.UpdateWorkoutType;
-using WorkoutReservation.Application.Features.WorkoutTypes.Queries.GetWorkoutTypeDetail;
 using WorkoutReservation.Application.Features.WorkoutTypes.Queries.GetWorkoutTypesList;
 using WorkoutReservation.Domain.Entities;
 
-namespace WorkoutReservation.Application.MappingProfile;
+namespace WorkoutReservation.Application.Common.MappingProfile;
 
 public class WorkoutTypeProfile : Profile
 {
     public WorkoutTypeProfile()
     {
-        // WorkoutTypesListQueryDto
-        CreateMap<WorkoutType, WorkoutTypesListQueryDto>();
-        CreateMap<WorkoutTypeTag, WorkoutTypeTagForWorkoutTypeDto>();
-        CreateMap<Instructor, InstructorForWorkoutTypeDto>();
+        // Get list
+        CreateMap<WorkoutType, WorkoutTypesListQueryDto>()
+            .ForMember(dest => dest.WorkoutTypeTags, act =>
+                act.MapFrom(src => src.WorkoutTypeTags.Select(x => x.Id)))
+            .ForMember(dest => dest.Instructors, act =>
+                act.MapFrom(src => src.Instructors.Select(x => x.Id)));
 
-        // WorkoutTypeDetailQueryDto
-        CreateMap<WorkoutType, WorkoutTypeDetailQueryDto>();
-        CreateMap<Instructor, InstructorForWorkoutTypeDetailDto>();
-        CreateMap<WorkoutTypeTag, WorkoutTypeTagForWorkoutTypeDetailDto>();
-
-        // CreateWorkoutTypeCommand
+        // Create
         CreateMap<CreateWorkoutTypeCommand, WorkoutType>()
-            .ForMember(x => x.WorkoutTypeTags, act => act.Ignore());
+            .ForMember(dest => dest.WorkoutTypeTags, act => act.Ignore())
+            .ForMember(dest => dest.Instructors, act => act.Ignore());
 
-        // UpdateWorkoutTypeCommand
+        // Update
         CreateMap<UpdateWorkoutTypeCommand, WorkoutType>()
-            .ForMember(x => x.WorkoutTypeTags, act => act.Ignore());
+            .ForMember(dest => dest.WorkoutTypeTags, act => act.Ignore())
+            .ForMember(dest => dest.Instructors, act => act.Ignore());
     }
 }

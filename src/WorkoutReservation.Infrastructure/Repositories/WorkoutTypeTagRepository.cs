@@ -42,8 +42,8 @@ public class WorkoutTypeTagRepository : IWorkoutTypeTagRepository
         return await baseQuery.FirstOrDefaultAsync(x => x.Id == workoutTypeTagId, token);
     }
     
-    public async Task<WorkoutTypeTag> GetByIdAsync(int workoutTypeTagId, bool asNoTracking, 
-        Expression<Func<WorkoutTypeTag, object>>[] includes, CancellationToken token)
+    public async Task<WorkoutTypeTag> GetByIdAsync(int workoutTypeTagId, 
+        Expression<Func<WorkoutTypeTag, object>>[] includes, bool asNoTracking, CancellationToken token)
     {
         var baseQuery = _dbContext.WorkoutTypeTags.AsQueryable();
                 

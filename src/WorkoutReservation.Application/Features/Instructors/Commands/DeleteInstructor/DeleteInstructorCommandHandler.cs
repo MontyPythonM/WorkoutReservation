@@ -12,24 +12,21 @@ public class DeleteInstructorCommandHandler : IRequestHandler<DeleteInstructorCo
     private readonly ILogger<DeleteInstructorCommandHandler> _logger;
 
     public DeleteInstructorCommandHandler(IInstructorRepository instructorRepository, 
-                                          ILogger<DeleteInstructorCommandHandler> logger)
+        ILogger<DeleteInstructorCommandHandler> logger)
     {
         _instructorRepository = instructorRepository;
         _logger = logger;
     }
 
-    public async Task<Unit> Handle(DeleteInstructorCommand request, 
-                                   CancellationToken cancellationToken)
+    public async Task<Unit> Handle(DeleteInstructorCommand request, CancellationToken token)
     {
-        var instructor = await _instructorRepository.GetByIdAsync(request.InstructorId, cancellationToken);
-
+        var instructor = await _instructorRepository.GetByIdAsync(request.InstructorId, false, token);
         if (instructor is null)
             throw new NotFoundException($"Instructor with Id: {request.InstructorId} not found.");
 
-        await _instructorRepository.DeleteAsync(instructor, cancellationToken);
+        await _instructorRepository.DeleteAsync(instructor, token);
 
         _logger.LogInformation($"Instructor with Id: {request.InstructorId} was deleted.");
-
         return Unit.Value;
     }
 }

@@ -6,7 +6,7 @@ using WorkoutReservation.Application.Contracts;
 namespace WorkoutReservation.Application.Features.Instructors.Queries.GetInstructorDetail;
 
 public class GetInstructorDetailQueryHandler : IRequestHandler<GetInstructorDetailQuery, 
-                                                               InstructorDetailQueryDto>
+    InstructorDetailQueryDto>
 {
     private readonly IInstructorRepository _instructorRepository;
     private readonly IMapper _mapper;
@@ -19,9 +19,10 @@ public class GetInstructorDetailQueryHandler : IRequestHandler<GetInstructorDeta
     }
 
     public async Task<InstructorDetailQueryDto> Handle(GetInstructorDetailQuery request, 
-                                                 CancellationToken cancellationToken)
+        CancellationToken token)
     {
-        var instructor = await _instructorRepository.GetByIdAsync(request.InstructorId, cancellationToken);
+        var instructor = await _instructorRepository
+            .GetByIdAsync(request.InstructorId, true, token);
 
         if (instructor is null)
             throw new NotFoundException($"Instructor with Id: {request.InstructorId} not found.");

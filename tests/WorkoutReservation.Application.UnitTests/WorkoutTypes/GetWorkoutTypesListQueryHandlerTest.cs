@@ -1,9 +1,9 @@
 ﻿using AutoMapper;
 using FluentAssertions;
 using Moq;
+using WorkoutReservation.Application.Common.MappingProfile;
 using WorkoutReservation.Application.Contracts;
 using WorkoutReservation.Application.Features.WorkoutTypes.Queries.GetWorkoutTypesList;
-using WorkoutReservation.Application.MappingProfile;
 using WorkoutReservation.Application.UnitTests.Mocks;
 using Xunit;
 

@@ -18,12 +18,7 @@ export class InstructorService extends BaseService {
   }
 
   getAll(): Observable<Instructor[]> {
-    return super.get<Instructor[]>(ApiUrl.instructor).pipe(
-      map((response) => {
-        response = response.map((instructors) => new Instructor(instructors));
-        return response;
-      })
-    )
+    return super.get<Instructor[]>(ApiUrl.instructor);
   }
 
   getDetails(id: number): Observable<InstructorDetails> {
