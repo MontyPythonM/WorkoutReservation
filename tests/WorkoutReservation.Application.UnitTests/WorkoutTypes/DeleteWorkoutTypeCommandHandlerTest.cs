@@ -3,9 +3,9 @@ using FluentAssertions;
 using Microsoft.Extensions.Logging;
 using Moq;
 using WorkoutReservation.Application.Common.Exceptions;
+using WorkoutReservation.Application.Common.MappingProfile;
 using WorkoutReservation.Application.Contracts;
 using WorkoutReservation.Application.Features.WorkoutTypes.Commands.DeleteWorkoutType;
-using WorkoutReservation.Application.MappingProfile;
 using WorkoutReservation.Application.UnitTests.Mocks;
 using WorkoutReservation.Domain.Entities;
 using Xunit;
@@ -47,7 +47,7 @@ public class DeleteWorkoutTypeCommandHandlerTest
             WorkoutTypeId = workoutTypesBeforeCount
         }, CancellationToken.None);
 
-        var allWorkoutTypesAfterCount = (await _mockWorkoutTypeRepository.Object.GetAllAsync(CancellationToken.None)).Count;
+        var allWorkoutTypesAfterCount = (await _mockWorkoutTypeRepository.Object.GetAllAsync(false, CancellationToken.None)).Count;
 
         // assert
         allWorkoutTypesAfterCount.Should().Be(workoutTypesBeforeCount - 1);

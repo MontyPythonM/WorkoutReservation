@@ -22,9 +22,9 @@ export class RealWorkoutSchedule {
     this.workoutTypeId = data.workoutType.id,
     this.workoutTypeName = data.workoutType.name,
     this.intensity = data.workoutType.intensity,
-    this.instructorId = data.instructor.id,
+    this.instructorId = data.instructor.id!,
     this.instructorName = data.instructor.firstName + ' ' + data.instructor.lastName,
-    this.instructorNameShort = data.instructor.firstName.charAt(0) + '. ' + data.instructor.lastName
+    this.instructorNameShort = data.instructor.firstName?.charAt(0) + '. ' + data.instructor.lastName
   }
 }
 

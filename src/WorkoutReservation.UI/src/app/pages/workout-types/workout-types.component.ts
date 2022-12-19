@@ -28,7 +28,6 @@ export class WorkoutTypesComponent extends BaseComponent implements OnInit {
   isSaving: boolean;
   intensity: EnumObject[];
   workoutTypeTags: WorkoutTypeTag[];
-  activeAndCurrentTags: WorkoutTypeTag[] = [];
   instructors: Instructor[];
   private createPopupForm?: dxForm;
   private updatePopupForm?: dxForm;
@@ -135,7 +134,7 @@ export class WorkoutTypesComponent extends BaseComponent implements OnInit {
       workoutType.description,
       this.intensity.find(x => x.value === workoutType.intensity)!.index,
       workoutType.workoutTypeTags,
-      []
+      workoutType.instructors
     );
     this.isUpdatePopupOpened = true;
   }
@@ -146,8 +145,13 @@ export class WorkoutTypesComponent extends BaseComponent implements OnInit {
     this.isUpdatePopupOpened = false;
   }
 
-  onCreatePopupForm = (e: {component: dxForm}) => this.createPopupForm = e.component;
-  onUpdatePopupForm = (e: {component: dxForm}) => this.updatePopupForm = e.component;
+  onCreatePopupForm = (e: { component: dxForm }) => this.createPopupForm = e.component;
+  onUpdatePopupForm = (e: { component: dxForm }) => this.updatePopupForm = e.component;
 
   getWorkoutTag = (workoutTagId: any): string => this.workoutTypeTags.find(x => x.id === workoutTagId)!.tag!;
+
+  getInstructor = (instructorId: any): string => {
+    const instructor = this.instructors.find(x => x.id === instructorId)!;
+    return `${instructor.firstName} ${instructor.lastName}`;
+  }
 }

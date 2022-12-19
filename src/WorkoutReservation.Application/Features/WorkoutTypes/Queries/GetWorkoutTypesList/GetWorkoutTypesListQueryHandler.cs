@@ -21,10 +21,10 @@ public class GetWorkoutTypesListQueryHandler : IRequestHandler<GetWorkoutTypesLi
     }
 
     public async Task<PagedResultDto<WorkoutTypesListQueryDto>> Handle(GetWorkoutTypesListQuery request, 
-                                                                       CancellationToken cancellationToken)
+        CancellationToken token)
     {
         var validator = new GetWorkoutTypesListQueryValidator();
-        await validator.ValidateAndThrowAsync(request, cancellationToken);
+        await validator.ValidateAndThrowAsync(request, token);
 
         var workoutTypesQuery = _workoutTypeRepository.GetAllQuery();
 
@@ -56,10 +56,7 @@ public class GetWorkoutTypesListQueryHandler : IRequestHandler<GetWorkoutTypesLi
 
         var mappedResult = _mapper.Map<List<WorkoutTypesListQueryDto>>(result);
 
-        var pagedWorkoutTypes = new PagedResultDto<WorkoutTypesListQueryDto>(mappedResult,
-                                                                             totalCount,
-                                                                             request.PageSize,
-                                                                             request.PageNumber);
-        return pagedWorkoutTypes;
+        return new PagedResultDto<WorkoutTypesListQueryDto>(mappedResult, 
+            totalCount, request.PageSize, request.PageNumber);
     }
 }

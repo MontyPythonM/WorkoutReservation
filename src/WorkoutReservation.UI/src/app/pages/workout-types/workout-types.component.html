@@ -34,7 +34,7 @@
       <div>
         <div class="sub-title">Instructors:</div>
         <div *ngFor="let instructor of workoutType.instructors; let last = last">
-            <div class="instructor" [routerLink]="['/instructors/' + instructor.id]">{{ instructor.firstName + ' ' + instructor.lastName }}</div>
+            <div class="instructor" [routerLink]="['/instructors/' + instructor]">{{ getInstructor(instructor) }}</div>
             <div *ngIf="!last" class="comma">,</div>
         </div>
       </div>
@@ -84,6 +84,9 @@
       <dxi-item dataField="workoutTypeTags" editorType="dxTagBox"
         [editorOptions]="{ dataSource: workoutTypeTags, valueExpr: 'id', displayExpr: 'tag' }">
       </dxi-item>
+      <dxi-item dataField="instructors" editorType="dxTagBox"
+                [editorOptions]="{ dataSource: instructors, valueExpr: 'id', displayExpr: 'lastName' }">
+      </dxi-item>
     </dx-form>
     <dx-load-panel
       [(visible)]="isSaving"
@@ -129,6 +132,9 @@
       </dxi-item>
       <dxi-item dataField="workoutTypeTags" editorType="dxTagBox"
                 [editorOptions]="{ dataSource: workoutTypeTags, valueExpr: 'id', displayExpr: 'tag' }">
+      </dxi-item>
+      <dxi-item dataField="instructors" editorType="dxTagBox"
+                [editorOptions]="{ dataSource: instructors, valueExpr: 'id', displayExpr: 'lastName' }">
       </dxi-item>
     </dx-form>
     <dx-load-panel

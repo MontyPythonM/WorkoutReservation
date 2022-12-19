@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System.Linq.Expressions;
+using Microsoft.EntityFrameworkCore;
 using WorkoutReservation.Application.Contracts;
 using WorkoutReservation.Domain.Entities;
 using WorkoutReservation.Infrastructure.Presistence;
@@ -34,20 +35,24 @@ public class InstructorRepository : IInstructorRepository
         await _dbContext.SaveChangesAsync(token);
     }
 
-    public async Task<List<Instructor>> GetAllAsync(CancellationToken token)
+    public async Task<List<Instructor>> GetAllAsync(bool asNoTracking, CancellationToken token)
     {
-        return await _dbContext.Instructors
-            .AsNoTracking()
-            .ToListAsync(token);
+        var query = _dbContext.Instructors.AsQueryable();
+        if (asNoTracking)
+            query.AsNoTracking();
+        
+        return await query.ToListAsync(token);
     }
 
-    public async Task<Instructor> GetByIdAsync(int instructorId, CancellationToken token)
+    public async Task<List<Instructor>> GetAllAsync(Expression<Func<Instructor, bool>> wherePredicate, bool asNoTracking, CancellationToken token)
     {
-        return await _dbContext.Instructors
-            .Include(x => x.WorkoutTypes)
-            .FirstOrDefaultAsync(x => x.Id == instructorId, token);
+        var query = _dbContext.Instructors.AsQueryable().Where(wherePredicate);
+        if (asNoTracking)
+            query.AsNoTracking();
+        
+        return await query.ToListAsync(token);
     }
-    
+
     public async Task<Instructor> GetByIdAsync(int instructorId, bool asNoTracking, CancellationToken token)
     {
         var baseQuery = _dbContext.Instructors.Include(x => x.WorkoutTypes);
@@ -55,5 +60,24 @@ public class InstructorRepository : IInstructorRepository
             baseQuery.AsNoTracking();
         
         return await baseQuery.FirstOrDefaultAsync(x => x.Id == instructorId, token);
+    }
+    
+    public async Task<Instructor> GetByIdAsync(int workoutTypeTagId, 
+        Expression<Func<Instructor, object>>[] includes, bool asNoTracking, CancellationToken token)
+    {
+        var baseQuery = _dbContext.Instructors.AsQueryable();
+                
+        if (asNoTracking)
+            baseQuery.AsNoTracking();
+        
+        if (includes.Any())
+        {
+            foreach (var include in includes)
+            {
+                baseQuery = baseQuery.Include(include);
+            }
+        }
+        
+        return await baseQuery.FirstOrDefaultAsync(x => x.Id == workoutTypeTagId, token);
     }
 }
