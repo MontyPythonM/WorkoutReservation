@@ -11,9 +11,8 @@ public class WorkoutTypeDetailQueryDto
 
     [JsonConverter(typeof(JsonStringEnumConverter))] 
     public WorkoutIntensity Intensity { get; set; }
-
     public List<InstructorForWorkoutTypeDetailDto> Instructors { get; set; }
-    public List<WorkoutTypeTagForWorkoutTypeDetailDto> WorkoutTypeTags { get; set; }
+    public List<int> WorkoutTypeTags { get; set; }
 }
 
 public class InstructorForWorkoutTypeDetailDto
@@ -21,10 +20,4 @@ public class InstructorForWorkoutTypeDetailDto
     public int Id { get; set; }
     public string FirstName { get; set; }
     public string LastName { get; set; }
-}
-
-public class WorkoutTypeTagForWorkoutTypeDetailDto
-{
-    public int Id { get; set; }
-    public string Tag { get; set; }
 }

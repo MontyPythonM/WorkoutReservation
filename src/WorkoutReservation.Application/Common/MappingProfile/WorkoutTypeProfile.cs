@@ -5,28 +5,28 @@ using WorkoutReservation.Application.Features.WorkoutTypes.Queries.GetWorkoutTyp
 using WorkoutReservation.Application.Features.WorkoutTypes.Queries.GetWorkoutTypesList;
 using WorkoutReservation.Domain.Entities;
 
-namespace WorkoutReservation.Application.MappingProfile;
+namespace WorkoutReservation.Application.Common.MappingProfile;
 
 public class WorkoutTypeProfile : Profile
 {
     public WorkoutTypeProfile()
     {
-        // WorkoutTypesListQueryDto
-        CreateMap<WorkoutType, WorkoutTypesListQueryDto>();
-        CreateMap<WorkoutTypeTag, WorkoutTypeTagForWorkoutTypeDto>();
+        // Get list
+        CreateMap<WorkoutType, WorkoutTypesListQueryDto>()
+            .ForMember(dest => dest.WorkoutTypeTags, act => 
+                act.MapFrom(src => src.WorkoutTypeTags.Select(x => x.Id)));
         CreateMap<Instructor, InstructorForWorkoutTypeDto>();
 
-        // WorkoutTypeDetailQueryDto
+        // Get
         CreateMap<WorkoutType, WorkoutTypeDetailQueryDto>();
         CreateMap<Instructor, InstructorForWorkoutTypeDetailDto>();
-        CreateMap<WorkoutTypeTag, WorkoutTypeTagForWorkoutTypeDetailDto>();
 
-        // CreateWorkoutTypeCommand
+        // Create
         CreateMap<CreateWorkoutTypeCommand, WorkoutType>()
-            .ForMember(x => x.WorkoutTypeTags, act => act.Ignore());
+            .ForMember(dest => dest.WorkoutTypeTags, act => act.Ignore());
 
-        // UpdateWorkoutTypeCommand
-        CreateMap<UpdateWorkoutTypeCommand, WorkoutType>();
-           // .ForMember(x => x.WorkoutTypeTags, act => act.Ignore());
+        // Update
+        CreateMap<UpdateWorkoutTypeCommand, WorkoutType>()
+            .ForMember(dest => dest.WorkoutTypeTags, act => act.Ignore());
     }
 }

@@ -1,5 +1,4 @@
 ﻿using MediatR;
-using WorkoutReservation.Domain.Entities;
 using WorkoutReservation.Domain.Enums;
 
 namespace WorkoutReservation.Application.Features.WorkoutTypes.Commands.UpdateWorkoutType;

@@ -1,11 +1,10 @@
+using System.Text;
 using Hangfire;
 using Hangfire.Dashboard;
-using MediatR;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 using NLog;
 using NLog.Web;
-using System.Text;
 using WorkoutReservation.API.Filters;
 using WorkoutReservation.API.Middleware;
 using WorkoutReservation.API.Services;
@@ -17,6 +16,7 @@ using WorkoutReservation.Domain.Entities;
 using WorkoutReservation.Infrastructure;
 using WorkoutReservation.Infrastructure.Presistence;
 using WorkoutReservation.Infrastructure.Seeders;
+using LogLevel = Microsoft.Extensions.Logging.LogLevel;
 
 var logger = LogManager.Setup().LoadConfigurationFromAppSettings().GetCurrentClassLogger();
 logger.Debug("Initialize a main function");
@@ -27,7 +27,7 @@ try
 
     //--- NLog: Setup NLog for Dependency injection
     builder.Logging.ClearProviders();
-    builder.Logging.SetMinimumLevel(Microsoft.Extensions.Logging.LogLevel.Trace);
+    builder.Logging.SetMinimumLevel(LogLevel.Trace);
     builder.Host.UseNLog();
 
     //--- JWT authentication settings configuration

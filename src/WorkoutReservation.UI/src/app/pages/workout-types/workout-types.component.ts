@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import Form from 'devextreme/ui/form';
+import dxForm from 'devextreme/ui/form';
 import {BaseComponent} from 'src/app/common/base.component';
 import {PagedQuery} from 'src/app/models/paged-query.model';
 import {PagedResult} from 'src/app/models/paged-result.model';
@@ -8,9 +8,11 @@ import {WorkoutTypeService} from 'src/app/services/workout-type.service';
 import {NotificationService} from "../../services/notification.service";
 import {EnumObject, enumToObjects} from "../../models/enums/enum-converter";
 import {WorkoutIntensity} from "../../models/enums/workout-intensity.enum";
-import {WorkoutTypeCommand} from "../../models/workout-types-command.model";
 import {WorkoutTypeTagService} from "../../services/workout-type-tag.service";
 import {WorkoutTypeTag} from "../../models/workout-type-tag.model";
+import {InstructorService} from "../../services/instructor.service";
+import {Instructor} from "../../models/instructor.model";
+import {WorkoutTypeCommand} from "../../models/workout-types-command.model";
 
 @Component({
   selector: 'app-workout-types',
@@ -27,44 +29,52 @@ export class WorkoutTypesComponent extends BaseComponent implements OnInit {
   intensity: EnumObject[];
   workoutTypeTags: WorkoutTypeTag[];
   activeAndCurrentTags: WorkoutTypeTag[] = [];
-  private form!: Form | undefined;
+  instructors: Instructor[];
+  private createPopupForm?: dxForm;
+  private updatePopupForm?: dxForm;
 
   constructor(private workoutTypeService: WorkoutTypeService,
               private notificationService: NotificationService,
-              private workoutTypeTagService: WorkoutTypeTagService) {
+              private workoutTypeTagService: WorkoutTypeTagService,
+              private instructorService: InstructorService) {
     super();
     this.workoutTypes = new PagedResult<WorkoutType>();
-    this.query = PagedQuery.default();
-    this.query.sortBy = 'Name';
+    this.query = PagedQuery.default();  // TODO: add pagination
+    this.query.sortBy = 'Name'; // TODO: add pagination
     this.isCreatePopupOpened = false;
     this.isUpdatePopupOpened = false;
     this.isSaving = false;
     this.intensity = enumToObjects(WorkoutIntensity);
     this.workoutTypeTags = [];
+    this.instructors = [];
   }
 
   ngOnInit(): void {
+    this.loadInstructors();
+    this.loadWorkoutTypeTags();
     this.loadWorkoutTypes(this.query);
   }
 
-  loadWorkoutTypes(queryParams: PagedQuery): void {
+  protected loadWorkoutTypes(queryParams: PagedQuery): void {
     this.subscribe(this.workoutTypeService.getAll(queryParams), {
-      next: (response: PagedResult<WorkoutType>) => {
-        this.workoutTypes = response;
-      }
+      next: (response: PagedResult<WorkoutType>) => this.workoutTypes = response
     });
   }
 
-  loadActiveWorkoutTypeTags(): void {
+  protected loadWorkoutTypeTags(): void {
     this.subscribe(this.workoutTypeTagService.getAllWorkoutTypeTags(), {
-      next: (response: WorkoutTypeTag[]) => {
-        this.workoutTypeTags = response;
-      }
+      next: (response: WorkoutTypeTag[]) => this.workoutTypeTags = response
+    })
+  }
+
+  protected loadInstructors(): void {
+    this.subscribe(this.instructorService.getAll(), {
+      next: (response: Instructor[]) => this.instructors = response
     })
   }
 
   createWorkoutType() {
-    if (!this.form?.validate().isValid) return;
+    if (!this.createPopupForm?.validate().isValid) return;
     this.isSaving = true;
     this.subscribe(this.workoutTypeService.create(this.workoutTypeCommand!), {
       next: () => {
@@ -83,7 +93,7 @@ export class WorkoutTypesComponent extends BaseComponent implements OnInit {
   }
 
   updateWorkoutType() {
-    if (!this.form?.validate().isValid) return;
+    if (!this.updatePopupForm?.validate().isValid) return;
     this.isSaving = true;
     this.subscribe(this.workoutTypeService.update(this.workoutTypeCommand!), {
       next: () => {
@@ -95,8 +105,7 @@ export class WorkoutTypesComponent extends BaseComponent implements OnInit {
         this.isSaving = false;
       },
       complete: () => {
-        this.notificationService.show('Workout type updated successfully', 'success')
-        this.workoutTypeCommand = new WorkoutTypeCommand();
+        this.notificationService.show('Workout type updated successfully', 'success');
         this.ngOnInit();
       }
     });
@@ -115,43 +124,18 @@ export class WorkoutTypesComponent extends BaseComponent implements OnInit {
   }
 
   openCreatePopup = () => {
-    this.loadActiveWorkoutTypeTags();
     this.workoutTypeCommand = new WorkoutTypeCommand();
     this.isCreatePopupOpened = true;
   }
 
   openUpdatePopup = (workoutType: WorkoutType) => {
-    this.loadActiveWorkoutTypeTags();
-
-    // returns array with active tags and existing non active tags
-    let tags: WorkoutTypeTag[] = [];
-    for (let i = 0; i < this.workoutTypeTags.length; i++) {
-      let tag = this.workoutTypeTags[i];
-      if (tag.isActive) {
-        tags.push(tag);
-      }
-      for (let j =0; j < workoutType.workoutTypeTags.length; j++) {
-        if (workoutType.workoutTypeTags[j].id === tag.id && !workoutType.workoutTypeTags[j].isActive) {
-          tags.push(tag);
-          continue;
-        }
-      }
-    }
-    // distinct a tags array
-    this.activeAndCurrentTags = tags.filter(
-      (thing, i, arr) => arr.findIndex(t => t.id === thing.id) === i
-    );
-
-    console.log('workoutType.workoutTypeTags: ', workoutType.workoutTypeTags);
-    console.log('this.workoutTypeTags: ', this.workoutTypeTags);
-    console.log('this.activeAndCurrentTags: ', this.activeAndCurrentTags);
-
     this.workoutTypeCommand = new WorkoutTypeCommand(
       workoutType.id,
       workoutType.name,
       workoutType.description,
       this.intensity.find(x => x.value === workoutType.intensity)!.index,
-      workoutType.workoutTypeTags
+      workoutType.workoutTypeTags,
+      []
     );
     this.isUpdatePopupOpened = true;
   }
@@ -162,5 +146,8 @@ export class WorkoutTypesComponent extends BaseComponent implements OnInit {
     this.isUpdatePopupOpened = false;
   }
 
-  onFormInitialized = (e: {component: Form}) => this.form = e.component;
+  onCreatePopupForm = (e: {component: dxForm}) => this.createPopupForm = e.component;
+  onUpdatePopupForm = (e: {component: dxForm}) => this.updatePopupForm = e.component;
+
+  getWorkoutTag = (workoutTagId: any): string => this.workoutTypeTags.find(x => x.id === workoutTagId)!.tag!;
 }

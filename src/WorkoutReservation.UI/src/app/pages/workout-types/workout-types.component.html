@@ -10,11 +10,12 @@
   [dataSource]="workoutTypes.items"
   [collapsible]="true"
   [animationDuration]="150"
-  >
-    <div *dxTemplate="let workoutType of 'title'">
+  itemTemplate="contentData"
+  itemTitleTemplate="titleData">
+    <div *dxTemplate="let workoutType of 'titleData'">
       <p class="title">{{ workoutType.name }}</p>
     </div>
-    <div *dxTemplate="let workoutType of 'item'">
+    <div *dxTemplate="let workoutType of 'contentData'">
       <div>
         <div class="sub-title">Description:</div>
         <div class="margin-bottom">{{ workoutType.description }}</div>
@@ -26,7 +27,7 @@
       <div>
         <div class="sub-title">Tags:</div>
         <div *ngFor="let workoutTag of workoutType.workoutTypeTags">
-             <div class="tag">{{ workoutTag.tag }}</div>
+             <div class="tag">{{ getWorkoutTag(workoutTag) }}</div>
         </div>
       </div>
       <div class="clear-both margin-bottom"></div>
@@ -67,7 +68,7 @@
   [height]="440"
   contentTemplate="popupContent">
   <div *dxTemplate="let data of 'popupContent'">
-    <dx-form [(formData)]="workoutTypeCommand" (onInitialized)="onFormInitialized($event)">
+    <dx-form [(formData)]="workoutTypeCommand" (onInitialized)="onCreatePopupForm($event)">
       <dxi-item dataField="name" editorType="dxTextBox">
         <dxi-validation-rule type="required" message="Workout type name is required"></dxi-validation-rule>
         <dxi-validation-rule type="stringLength" [max]="50" message="Workout type name must be a maximum of 50 characters"></dxi-validation-rule>
@@ -112,7 +113,7 @@
   [height]="500"
   contentTemplate="popupContent">
   <div *dxTemplate="let data of 'popupContent'">
-    <dx-form [(formData)]="workoutTypeCommand" (onInitialized)="onFormInitialized($event)">
+    <dx-form [(formData)]="workoutTypeCommand" (onInitialized)="onUpdatePopupForm($event)">
       <dxi-item dataField="id" editorType="dxTextBox" [disabled]="true"></dxi-item>
       <dxi-item dataField="name" editorType="dxTextBox">
         <dxi-validation-rule type="required" message="Workout type name is required"></dxi-validation-rule>
@@ -127,7 +128,7 @@
         <dxi-validation-rule type="required" message="Intensity is required"></dxi-validation-rule>
       </dxi-item>
       <dxi-item dataField="workoutTypeTags" editorType="dxTagBox"
-                [editorOptions]="{ dataSource: activeAndCurrentTags, valueExpr: 'id', displayExpr: 'tag' }">
+                [editorOptions]="{ dataSource: workoutTypeTags, valueExpr: 'id', displayExpr: 'tag' }">
       </dxi-item>
     </dx-form>
     <dx-load-panel

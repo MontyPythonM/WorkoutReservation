@@ -64,5 +64,5 @@ export class InstructorsComponent extends BaseComponent implements OnInit {
   openPopup = () => this.isPopupOpened = true;
   closePopup = () => this.isPopupOpened = false;
 
-  onFormInitialized = (e: any) => this.form = e.component;
+  onFormInitialized = (e: {component: Form}) => this.form = e.component;
 }
