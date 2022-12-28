@@ -14,17 +14,17 @@ export class RealWorkoutSchedule {
   instructorNameShort: string;
 
   constructor(data: RealWorkout) {
-    this.id = data.id,
-    this.currentParticipantNumber = data.currentParticipantNumber,
-    this.maxParticipantNumber = data.maxParticipantNumber,
-    this.startDate = new Date(data.date + ' ' + data.startTime),
-    this.endDate = new Date(data.date + ' ' + data.endTime),
-    this.workoutTypeId = data.workoutType.id,
-    this.workoutTypeName = data.workoutType.name,
-    this.intensity = data.workoutType.intensity,
-    this.instructorId = data.instructor.id!,
-    this.instructorName = data.instructor.firstName + ' ' + data.instructor.lastName,
-    this.instructorNameShort = data.instructor.firstName?.charAt(0) + '. ' + data.instructor.lastName
+    this.id = data.id;
+    this.currentParticipantNumber = data.currentParticipantNumber;
+    this.maxParticipantNumber = data.maxParticipantNumber;
+    this.startDate = new Date(data.date + ' ' + data.startTime);
+    this.endDate = new Date(data.date + ' ' + data.endTime);
+    this.workoutTypeId = data.workoutType.id;
+    this.workoutTypeName = data.workoutType.name;
+    this.intensity = data.workoutType.intensity;
+    this.instructorId = data.instructor.id!;
+    this.instructorName = data.instructor.firstName + ' ' + data.instructor.lastName;
+    this.instructorNameShort = data.instructor.firstName?.charAt(0) + '. ' + data.instructor.lastName;
   }
 }
 

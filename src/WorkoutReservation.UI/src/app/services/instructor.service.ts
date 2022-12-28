@@ -33,7 +33,7 @@ export class InstructorService extends BaseService {
     return super.post(ApiUrl.instructor, { ...instructor });
   }
 
-  update(instructorId: number, instructor: InstructorDetailsCommand): Observable<void> {
-    return super.put(ApiUrl.instructor, { instructorId, ...instructor });
+  update(instructor: InstructorDetailsCommand): Observable<void> {
+    return super.put(ApiUrl.instructor, { ...instructor });
   }
 }

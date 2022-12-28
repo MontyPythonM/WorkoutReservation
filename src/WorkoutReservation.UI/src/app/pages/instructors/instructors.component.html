@@ -27,7 +27,7 @@
   [dragEnabled]="false"
   [showCloseButton]="false"
   [width]="500"
-  [height]="400">
+  [height]="480">
   <div *dxTemplate="let data of 'content'">
     <dx-form id="form" [(formData)]="instructorCommand" (onInitialized)="onFormInitialized($event)">
       <dxi-item dataField="firstName" editorType="dxTextBox">
@@ -42,7 +42,7 @@
 				[editorOptions]="{ dataSource: gender, valueExpr: 'index', displayExpr: 'value' }">
 				<dxi-validation-rule type="required" message="Gender is required"></dxi-validation-rule>
 			</dxi-item>
-      <dxi-item dataField="biography" editorType="dxTextBox">
+      <dxi-item dataField="biography" editorType="dxTextArea" [editorOptions]="{ height: 120 }">
 				<dxi-validation-rule type="stringLength" [max]="3000" message="Biography must be a maximum of 3000 characters"></dxi-validation-rule>
 			</dxi-item>
       <dxi-item dataField="email" editorType="dxTextBox">
