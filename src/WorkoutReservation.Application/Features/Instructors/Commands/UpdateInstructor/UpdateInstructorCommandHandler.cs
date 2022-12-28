@@ -18,10 +18,10 @@ public class UpdateInstructorCommandHandler : IRequestHandler<UpdateInstructorCo
 
     public async Task<Unit> Handle(UpdateInstructorCommand request, CancellationToken token)
     {
-        var instructor = await _instructorRepository.GetByIdAsync(request.InstructorId, false, token);
+        var instructor = await _instructorRepository.GetByIdAsync(request.Id, false, token);
 
         if (instructor is null)
-            throw new NotFoundException($"Instructor with Id: {request.InstructorId} not found.");
+            throw new NotFoundException($"Instructor with Id: {request.Id} not found.");
 
         var validator = new UpdateInstructorCommandValidator();
         await validator.ValidateAndThrowAsync(request, token);

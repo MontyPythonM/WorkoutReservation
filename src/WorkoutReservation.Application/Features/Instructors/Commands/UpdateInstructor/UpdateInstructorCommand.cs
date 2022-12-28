@@ -5,7 +5,7 @@ namespace WorkoutReservation.Application.Features.Instructors.Commands.UpdateIns
 
 public class UpdateInstructorCommand : IRequest
 {
-    public int InstructorId { get; set; }
+    public int Id { get; set; }
     public string FirstName { get; set; }
     public string LastName { get; set; }
     public Gender? Gender { get; set; }

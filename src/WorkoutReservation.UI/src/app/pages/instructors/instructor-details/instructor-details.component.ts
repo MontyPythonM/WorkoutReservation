@@ -62,7 +62,7 @@ export class InstructorDetailsComponent extends BaseComponent implements OnInit 
   editInstructor = () => {
     if(!this.form?.validate().isValid) return;
     this.isSaving = true;
-    this.subscribe(this.instructorService.update(this.instructorId, this.instructorCommand), {
+    this.subscribe(this.instructorService.update(this.instructorCommand), {
       next: () => {
         this.isSaving = false;
         this.closePopup();
@@ -80,11 +80,12 @@ export class InstructorDetailsComponent extends BaseComponent implements OnInit 
 
   openPopup = () => {
     this.instructorCommand = new InstructorDetailsCommand(
-      this.instructor?.firstName!,
-      this.instructor?.lastName!,
+      this.instructor?.id,
+      this.instructor?.firstName,
+      this.instructor?.lastName,
       this.gender.find(x => x.value === this.instructor?.gender)?.index!,
-      this.instructor?.biography!,
-      this.instructor?.email!
+      this.instructor?.biography,
+      this.instructor?.email
     );
     this.isPopupOpened = true;
   }

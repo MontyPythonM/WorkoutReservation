@@ -11,7 +11,7 @@
     this.name = name;
     this.description = description;
     this.intensity = intensity;
-    this.workoutTypeTags = workoutTypeTags;
-    this.instructors = instructors;
+    this.workoutTypeTags = workoutTypeTags ?? [];
+    this.instructors = instructors ?? [];
   }
 }
