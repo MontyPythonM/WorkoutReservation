@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using WorkoutReservation.Application.Common.Exceptions;
 using WorkoutReservation.Domain.Common;
@@ -17,9 +18,9 @@ public class SeedFirstAdmin
     private readonly FirstAdminSettings _firstAdminSettings;
 
     public SeedFirstAdmin(AppDbContext dbContext,
-                          ILogger<SeedFirstAdmin> logger,
-                          IPasswordHasher<User> passwordHasher,
-                          FirstAdminSettings firstAdminSettings)
+        ILogger<SeedFirstAdmin> logger,
+        IPasswordHasher<User> passwordHasher,
+        FirstAdminSettings firstAdminSettings)
     {
         _dbContext = dbContext;
         _logger = logger;
@@ -27,23 +28,18 @@ public class SeedFirstAdmin
         _firstAdminSettings = firstAdminSettings;
     }
 
-    public void Seed()
+    public async Task SeedAsync(CancellationToken token)
     {
-        if (_dbContext.Database.CanConnect())
-        {
-            var anyAdmin = _dbContext.Users.FirstOrDefault(x => x.UserRole == UserRole.Administrator);
-
-            if (anyAdmin is null)
-            {
-                var firstAdmin = FirstAdminAccount.GerFirstAdmin(_firstAdminSettings, _passwordHasher);
-                _dbContext.Users.Add(firstAdmin);
-                _dbContext.SaveChanges();
-                _logger.LogWarning("Default administrator was seeded into database.");
-            }
-        }
-        else
-        {
+        if (await _dbContext.Database.CanConnectAsync(token) is false)
             throw new InternalServerError("Cannot connect with database.");
-        }
+        
+        var anyAdmin = await _dbContext.Users.FirstOrDefaultAsync(x => x.UserRole == UserRole.Administrator, token);
+        if (anyAdmin is not null)
+            return;
+
+        var firstAdmin = FirstAdminAccount.GerFirstAdmin(_firstAdminSettings, _passwordHasher);
+        await _dbContext.Users.AddAsync(firstAdmin, token);
+        await _dbContext.SaveChangesAsync(token);
+        _logger.LogWarning("Default administrator was seeded into database.");
     }
 }

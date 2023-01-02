@@ -3,13 +3,13 @@ using WorkoutReservation.Domain.Enums;
 
 namespace WorkoutReservation.Infrastructure.Seeders.Data;
 
-internal class DummyUsers
+internal sealed class DummyUsers
 {
-    internal static List<User> GetUsers()
+    internal static IEnumerable<User> GetUsers()
     {
         var users = new List<User>
         {
-            new User()
+            new ()
             {
                 Email = "dummy-member@email.com",
                 FirstName = "dummy",
@@ -19,7 +19,7 @@ internal class DummyUsers
                 UserRole = UserRole.Member
             },
 
-            new User()
+            new()
             {
                 Email = "dummy-manager@email.com",
                 FirstName = "fake",
@@ -29,7 +29,7 @@ internal class DummyUsers
                 UserRole = UserRole.Manager
             },
 
-            new User()
+            new()
             {
                 Email = "dummy-notConfirmMember@email.com",
                 FirstName = "member",
@@ -39,7 +39,6 @@ internal class DummyUsers
                 UserRole = UserRole.NotConfirmedMember
             },
         };
-
         return users;
     }
 }

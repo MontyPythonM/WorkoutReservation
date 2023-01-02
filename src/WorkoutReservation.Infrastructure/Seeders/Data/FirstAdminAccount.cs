@@ -7,10 +7,8 @@ namespace WorkoutReservation.Infrastructure.Seeders.Data;
 
 internal static class FirstAdminAccount
 {
-    internal static User GerFirstAdmin(FirstAdminSettings firstAdmin, 
-                                       IPasswordHasher<User> passwordHasher)
+    internal static User GerFirstAdmin(FirstAdminSettings firstAdmin, IPasswordHasher<User> passwordHasher)
     {
-
         var admin = new User()
         {
             Email = firstAdmin.Email,

@@ -3,15 +3,15 @@ using WorkoutReservation.Domain.Methods;
 
 namespace WorkoutReservation.Infrastructure.Seeders.Data;
 
-internal class DummyRealWorkouts
+internal sealed class DummyRealWorkouts
 {
-    internal static List<RealWorkout> GetWorkouts()
+    internal static IEnumerable<RealWorkout> GetRealWorkouts()
     {
         var currentDate = DateTime.Now.GetFirstDayOfWeek();
         
         var particularWorkouts = new List<RealWorkout>
         {
-            new RealWorkout()
+            new()
             {
                 StartTime = new TimeOnly(10, 00),
                 EndTime = new TimeOnly(11, 00),
@@ -24,7 +24,7 @@ internal class DummyRealWorkouts
                 InstructorId = 1,
                 WorkoutTypeId = 1
             },
-            new RealWorkout()
+            new()
             {
                 StartTime = new TimeOnly(11, 00),
                 EndTime = new TimeOnly(14, 00),
@@ -36,7 +36,7 @@ internal class DummyRealWorkouts
                 InstructorId = 2,
                 WorkoutTypeId = 2
             },
-            new RealWorkout()
+            new()
             {
                 StartTime = new TimeOnly(14, 30),
                 EndTime = new TimeOnly(17, 00),
@@ -48,7 +48,7 @@ internal class DummyRealWorkouts
                 InstructorId = 2,
                 WorkoutTypeId = 1
             },
-            new RealWorkout()
+            new ()
             {
                 StartTime = new TimeOnly(8, 15),
                 EndTime = new TimeOnly(10, 00),
@@ -60,7 +60,7 @@ internal class DummyRealWorkouts
                 InstructorId = 3,
                 WorkoutTypeId = 2
             },
-            new RealWorkout()
+            new ()
             {
                 StartTime = new TimeOnly(10, 15),
                 EndTime = new TimeOnly(12, 00),
@@ -73,8 +73,6 @@ internal class DummyRealWorkouts
                 WorkoutTypeId = 3
             },
         };
-
         return particularWorkouts;
     }
-
 }

@@ -88,8 +88,8 @@ try
     var db = scope.ServiceProvider.GetService<AppDbContext>();
 
     //--- Configure the HTTP request pipeline
-    firstAdminSeeder.Seed();
-    dummyDataSeeder.Seed();
+    await firstAdminSeeder!.SeedAsync(CancellationToken.None);
+    await dummyDataSeeder!.SeedAsync(CancellationToken.None);
 
     if (app.Environment.IsDevelopment())
     {
