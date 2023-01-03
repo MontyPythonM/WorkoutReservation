@@ -3,13 +3,13 @@ using WorkoutReservation.Domain.Enums;
 
 namespace WorkoutReservation.Infrastructure.Seeders.Data;
 
-internal class DummyInstructors
+internal sealed class DummyInstructors
 {
-    internal static List<Instructor> GetInstructors()
+    internal static IEnumerable<Instructor> GetInstructors()
     {
         var instructors = new List<Instructor>
         {
-            new Instructor()
+            new()
             {
                 FirstName = "Tirumalai",
                 LastName = "Krishnamacharya",
@@ -18,7 +18,7 @@ internal class DummyInstructors
                 Gender = Gender.Male
             },
 
-            new Instructor()
+            new()
             {
                 FirstName = "Ewa",
                 LastName = "Chodakowska",
@@ -27,7 +27,7 @@ internal class DummyInstructors
                 Gender = Gender.Female
             },
 
-            new Instructor()
+            new()
             {
                 FirstName = "Melanie",
                 LastName = "Brown",
@@ -36,8 +36,6 @@ internal class DummyInstructors
                 Gender = Gender.Female
             }
         };
-
         return instructors;
     }
-
 }

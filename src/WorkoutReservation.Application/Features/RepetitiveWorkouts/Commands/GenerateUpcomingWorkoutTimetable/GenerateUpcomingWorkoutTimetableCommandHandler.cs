@@ -18,10 +18,10 @@ public class GenerateUpcomingWorkoutTimetableCommandHandler : IRequestHandler<Ge
     private readonly ILogger<GenerateUpcomingWorkoutTimetableCommandHandler> _logger;
 
     public GenerateUpcomingWorkoutTimetableCommandHandler(IRepetitiveWorkoutRepository repetitiveRepository,
-                                                          IRealWorkoutRepository realWorkoutRepository,
-                                                          ICurrentUserService userService,
-                                                          IMapper mapper,
-                                                          ILogger<GenerateUpcomingWorkoutTimetableCommandHandler> logger)
+        IRealWorkoutRepository realWorkoutRepository,
+        ICurrentUserService userService,
+        IMapper mapper,
+        ILogger<GenerateUpcomingWorkoutTimetableCommandHandler> logger)
     {
         _repetitiveRepository = repetitiveRepository;
         _realWorkoutRepository = realWorkoutRepository;
@@ -30,8 +30,7 @@ public class GenerateUpcomingWorkoutTimetableCommandHandler : IRequestHandler<Ge
         _logger = logger;
     }
 
-    public async Task<Unit> Handle(GenerateUpcomingWorkoutTimetableCommand request, 
-                                   CancellationToken cancellationToken)
+    public async Task<Unit> Handle(GenerateUpcomingWorkoutTimetableCommand request, CancellationToken cancellationToken)
     {
         // get repetitive workouts timetable
         var repetitiveWorkouts = await _repetitiveRepository.GetAllAsync(cancellationToken);
@@ -74,8 +73,8 @@ public class GenerateUpcomingWorkoutTimetableCommandHandler : IRequestHandler<Ge
         {
             StartTime = x.StartTime,
             EndTime = x.EndTime,
-            InstructorId = (int)x.InstructorId,
-            WorkoutTypeId = (int)x.WorkoutTypeId,
+            InstructorId = x.InstructorId,
+            WorkoutTypeId = x.WorkoutTypeId,
             MaxParticipantNumber = x.MaxParticipantNumber,
             Date = x.Date,
             CurrentParticipantNumber = 0,
@@ -86,7 +85,7 @@ public class GenerateUpcomingWorkoutTimetableCommandHandler : IRequestHandler<Ge
         .ToList();
 
         // validation
-        var validator = new GenerateUpcomingWorkoutTimetableCommandValidator();
+        var validator = new GenerateUpcomingWorkoutTimetableCommandValidator(newRealWorkouts);
         await validator.ValidateAndThrowAsync(request, cancellationToken);
 
         // add new real workouts for upcoming week

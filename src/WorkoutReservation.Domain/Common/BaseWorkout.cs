@@ -14,4 +14,25 @@ public abstract class BaseWorkout : BaseAuditableEntity
 
     public Instructor Instructor { get; set; }
     public int? InstructorId { get; set; }
+
+    protected BaseWorkout()
+    {
+    }
+    
+    protected BaseWorkout(int maxParticipantNumber, TimeOnly startTime, TimeOnly endTime)
+    {
+        MaxParticipantNumber = maxParticipantNumber;
+        StartTime = startTime;
+        EndTime = endTime;
+        
+    }
+    
+    protected BaseWorkout(int maxParticipantNumber, TimeOnly startTime, TimeOnly endTime, WorkoutType workoutType, Instructor instructor)
+    {
+        MaxParticipantNumber = maxParticipantNumber;
+        StartTime = startTime;
+        EndTime = endTime;
+        WorkoutType = workoutType;
+        Instructor = instructor;
+    }
 }
