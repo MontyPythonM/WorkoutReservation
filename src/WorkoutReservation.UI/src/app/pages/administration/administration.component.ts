@@ -9,21 +9,26 @@ import {PageUrls} from "../../../environments/page-urls";
     <dx-tab-panel
       [dataSource]="tabs"
       [animationEnabled]="true"
-      [swipeEnabled]="true"
       [selectedIndex]="setCurrentTab()"
       itemTemplate="tabContents"
       itemTitleTemplate="tabTitles"
       (onTitleClick)="selectTab($event)"
     >
       <div *dxTemplate="let tab of 'tabTitles'">
-        <p class="tab-title">{{ tab.title }}</p>
+        <p>
+          <span class="{{ tab.icon }} dx-icon-custom-style"></span>
+          <span class="tab-title">{{ tab.title }}</span>
+        </p>
       </div>
       <div *dxTemplate="let tab of 'tabContents'">
         <router-outlet></router-outlet>
       </div>
     </dx-tab-panel>
   `,
-  styles: ['.tab-title { font-weight: 500 }']
+  styles: [`
+    .tab-title { font-weight: 500; font-size: 15px; }
+    .dx-icon-custom-style { font-size: 15px; margin-right: 8px; }
+  `]
 })
 export class AdministrationComponent extends BaseComponent {
   tabs: { title: string, url: string, icon: string }[];
@@ -31,9 +36,9 @@ export class AdministrationComponent extends BaseComponent {
   constructor(private router: Router) {
     super();
     this.tabs = [
-      { title: "Users", url: PageUrls.administration.users, icon: "check" },
-      { title: "Repetitive workouts", url: PageUrls.administration.repetitiveWorkouts, icon: "check" },
-      { title: "Workout type tags", url: PageUrls.administration.workoutTypeTags, icon: "check" },
+      { title: "Users registry", url: PageUrls.administration.users, icon: "dx-icon-group" },
+      { title: "Repetitive workouts", url: PageUrls.administration.repetitiveWorkouts, icon: "dx-icon-tableproperties" },
+      { title: "Workout type tags", url: PageUrls.administration.workoutTypeTags, icon: "dx-icon-tags" },
     ];
    }
 
