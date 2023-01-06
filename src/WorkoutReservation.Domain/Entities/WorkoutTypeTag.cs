@@ -6,4 +6,10 @@ public class WorkoutTypeTag
     public string Tag { get; set; }
     public bool IsActive { get; set; } = true;
     public ICollection<WorkoutType> WorkoutTypes { get; set; } = new List<WorkoutType>();
+
+    public WorkoutTypeTag(string tag)
+    {
+        Tag = tag;
+        IsActive = true;
+    }
 }

@@ -9,7 +9,8 @@ export const ApiUrl = {
   reservation: 'reservation/',
   account: {
     register: 'account/register',
-    login: 'account/login'
+    login: 'account/login',
+    users: 'account/users'
   },
   workoutTypeTag: {
     onlyActive: 'workout-type-tag/only-active',

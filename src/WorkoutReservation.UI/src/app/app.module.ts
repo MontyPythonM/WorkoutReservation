@@ -26,7 +26,8 @@ import {
   DxLoadPanelModule,
   DxMenuModule,
   DxPopupModule,
-  DxSchedulerModule, DxTagBoxModule,
+  DxSchedulerModule,
+  DxTagBoxModule,
   DxTextBoxModule,
   DxValidationGroupModule,
   DxValidationSummaryModule,
@@ -35,9 +36,9 @@ import {
 import {DxiItemModule, DxoNotificationsModule} from 'devextreme-angular/ui/nested';
 import {DatePipe} from '@angular/common';
 import {ReservationsComponent} from './pages/reservations/reservations.component';
-import {AdministrationComponent} from './pages/administration/administration.component';
 import {AccountSettingsComponent} from './pages/account-settings/account-settings.component';
 import {NavBarComponent} from './components/header/nav-bar/nav-bar.component';
+import {AdministrationModule} from "./pages/administration/administration.module";
 
 @NgModule({
   declarations: [
@@ -54,15 +55,15 @@ import {NavBarComponent} from './components/header/nav-bar/nav-bar.component';
     InstructorDetailsComponent,
     WorkoutDetailsComponent,
     ReservationsComponent,
-    AdministrationComponent,
     AccountSettingsComponent,
-    NavBarComponent,
+    NavBarComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
     BrowserAnimationsModule,
+    AdministrationModule,
     DxButtonModule,
     DxFormModule,
     DxTextBoxModule,
