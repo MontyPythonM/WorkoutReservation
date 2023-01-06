@@ -1,4 +1,4 @@
-﻿namespace WorkoutReservation.Domain.Methods;
+﻿namespace WorkoutReservation.Domain.Extensions;
 
 public static class DateTimeExtension
 {
