@@ -5,7 +5,7 @@ using Microsoft.Extensions.Logging;
 using WorkoutReservation.Application.Common.Exceptions;
 using WorkoutReservation.Application.Contracts;
 using WorkoutReservation.Domain.Entities;
-using WorkoutReservation.Domain.Methods;
+using WorkoutReservation.Domain.Extensions;
 
 namespace WorkoutReservation.Application.Features.RepetitiveWorkouts.Commands.GenerateUpcomingWorkoutTimetable;
 

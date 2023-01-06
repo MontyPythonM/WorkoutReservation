@@ -2,7 +2,7 @@
 using MediatR;
 using WorkoutReservation.Application.Common.Exceptions;
 using WorkoutReservation.Application.Contracts;
-using WorkoutReservation.Domain.Methods;
+using WorkoutReservation.Domain.Extensions;
 
 namespace WorkoutReservation.Application.Features.RealWorkouts.Queries.GetRealWorkoutFromCurrentWeek;
 
