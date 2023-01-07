@@ -19,6 +19,7 @@ import {RouterModule} from "@angular/router";
     DxTabPanelModule,
     DxButtonModule,
     DxDataGridModule,
+    DxButtonModule,
     RouterModule.forChild([
       {
         path: '',

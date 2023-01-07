@@ -1,1 +1,27 @@
-<p>repetitive-workouts works!</p>
+<div class="container">
+  <div class="button-section">
+    <p>Open Hangfire Dashboard in new browser window:</p>
+    <dx-button
+      text="Open Hangfire"
+      type="default"
+      (onClick)="openHangfireDashboard($event)">
+    </dx-button>
+  </div>
+  <div class="button-section">
+    <p>Force generate workouts from upcoming week:</p>
+    <dx-button
+      text="Force generate"
+      type="danger"
+      (onClick)="forceGenerateUpcomingWeek($event)">
+    </dx-button>
+  </div>
+  <div class="button-section">
+    <p>Permanently removes all repetitive workouts:</p>
+    <dx-button
+      text="Delete all"
+      type="danger"
+      (onClick)="deleteAllRepetitiveWorkouts($event)">
+    </dx-button>
+  </div>
+</div>
+

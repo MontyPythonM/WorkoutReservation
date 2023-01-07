@@ -23,7 +23,6 @@ public class UpdateInstructorCommandValidator : AbstractValidator<UpdateInstruct
             .NotNull();
 
         RuleFor(x => x.Gender)
-            .Must(gender => gender is >= (Gender)1 and <= (Gender)2)
-            .WithMessage("Gender must be a number 1 or 2. [female / male]");
+            .IsInEnum();
     }
 }
