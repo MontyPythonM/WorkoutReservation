@@ -11,41 +11,37 @@ public class UpdateRealWorkoutCommandHandler : IRequestHandler<UpdateRealWorkout
 {
     private readonly IRealWorkoutRepository _realWorkoutRepository;
     private readonly IInstructorRepository _instructorRepository;
-    private readonly IWorkoutTypeRepository _workoutTypeRepository;
-    private readonly IMapper _mapper;
 
     public UpdateRealWorkoutCommandHandler(IRealWorkoutRepository realWorkoutRepository,
-        IInstructorRepository instructorRepository,
-        IWorkoutTypeRepository workoutTypeRepository,
-        IMapper mapper)
+        IInstructorRepository instructorRepository)
     {
         _realWorkoutRepository = realWorkoutRepository;
         _instructorRepository = instructorRepository;
-        _workoutTypeRepository = workoutTypeRepository;
-        _mapper = mapper;
     }
 
     public async Task<Unit> Handle(UpdateRealWorkoutCommand request, CancellationToken token)
     {
-        var realWorkout = await _realWorkoutRepository.GetByIdAsync(request.RealWorkoutId, token);
+        var realWorkout = await _realWorkoutRepository.GetByIdAsync(request.RealWorkoutId, false, token);
         if (realWorkout is null)
             throw new NotFoundException($"Real workout with Id: {request.RealWorkoutId} not found.");
 
         var instructor = await _instructorRepository.GetByIdAsync(request.InstructorId, false, token);
         if (instructor is null)
             throw new NotFoundException($"Instructor with Id: {request.InstructorId} not found.");
-
-        var dailyWorkoutsList = await _realWorkoutRepository
-            .GetAllAsync(request.Date, request.Date.AddDays(1), token);
+        
+        var dailyWorkoutsList = await _realWorkoutRepository.GetByDayAsync(request.Date, true, token);
         
         var validator = new UpdateRealWorkoutCommandValidator(dailyWorkoutsList, realWorkout);
         await validator.ValidateAndThrowAsync(request, token);
 
-        var mappedRealWorkout = _mapper.Map<RealWorkout>(request);
-        mappedRealWorkout.WorkoutTypeId = realWorkout.WorkoutType.Id;
-        mappedRealWorkout.LastModifiedDate = DateTime.Now;
-
-        await _realWorkoutRepository.UpdateAsync(mappedRealWorkout, token);
+        realWorkout.UpdateLastModifiedDate();
+        realWorkout.MaxParticipantNumber = request.MaxParticipantNumber;
+        realWorkout.Date = request.Date;
+        realWorkout.StartTime = request.StartTime;
+        realWorkout.EndTime = request.EndTime;
+        realWorkout.Instructor = instructor;
+        
+        await _realWorkoutRepository.UpdateAsync(realWorkout, token);
         return Unit.Value;
     }
 }

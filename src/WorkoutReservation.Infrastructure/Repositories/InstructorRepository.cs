@@ -62,8 +62,8 @@ public class InstructorRepository : IInstructorRepository
         return await baseQuery.FirstOrDefaultAsync(x => x.Id == instructorId, token);
     }
     
-    public async Task<Instructor> GetByIdAsync(int workoutTypeTagId, 
-        Expression<Func<Instructor, object>>[] includes, bool asNoTracking, CancellationToken token)
+    public async Task<Instructor> GetByIdAsync(int workoutTypeTagId, bool asNoTracking, 
+        CancellationToken token, params Expression<Func<Instructor, object>>[] includes)
     {
         var baseQuery = _dbContext.Instructors.AsQueryable();
                 

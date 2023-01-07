@@ -5,8 +5,7 @@ namespace WorkoutReservation.Application.Features.RealWorkouts.Commands.UpdateRe
 
 public class UpdateRealWorkoutCommandValidator : AbstractValidator<UpdateRealWorkoutCommand>
 {
-    public UpdateRealWorkoutCommandValidator(List<RealWorkout> dailyWorkouts, 
-                                             RealWorkout editedRealWorkout)
+    public UpdateRealWorkoutCommandValidator(List<RealWorkout> dailyWorkouts, RealWorkout editedRealWorkout)
     {
         RuleFor(x => x.Date)
             .NotEmpty()
@@ -32,7 +31,7 @@ public class UpdateRealWorkoutCommandValidator : AbstractValidator<UpdateRealWor
                     if (existWorkout.Id == editedRealWorkout.Id)
                         continue;
 
-                    // isConflict = internal collision || existing workout time contains new workout endtime || new workout time covers existing 
+                    // isConflict = internal collision OR existing workout time contains new workout endtime OR new workout time covers existing 
                     var isConflict = (newWorkout.StartTime >= existWorkout.StartTime && newWorkout.StartTime < existWorkout.EndTime) ||
                                      (newWorkout.EndTime > existWorkout.StartTime && newWorkout.EndTime <= existWorkout.EndTime) ||
                                      (newWorkout.StartTime < existWorkout.StartTime && newWorkout.EndTime > existWorkout.EndTime);

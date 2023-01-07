@@ -1,7 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System.Linq.Expressions;
+using Microsoft.EntityFrameworkCore;
 using WorkoutReservation.Application.Contracts;
 using WorkoutReservation.Domain.Entities;
-using WorkoutReservation.Domain.Enums;
 using WorkoutReservation.Infrastructure.Presistence;
 
 namespace WorkoutReservation.Infrastructure.Repositories;
@@ -34,17 +34,43 @@ public class ReservationRepository : IReservationRepository
         return reservation;
     }
 
-    public async Task<bool> CheckUserReservationAsync(int workoutId, Guid currentUserId, CancellationToken token)
+    public async Task<bool> CheckIsUserReservedAsync(RealWorkout realWorkout, User currentUser, CancellationToken token)
     {
         var isUserAlreadyReserved = await _dbContext.Reservations
             .Include(x => x.User)
             .Include(x => x.RealWorkout)
-            .Where(x => x.RealWorkoutId == workoutId)
-            .FirstOrDefaultAsync(x => x.UserId == currentUserId, token);
+            .Where(x => x.RealWorkoutId == realWorkout.Id)
+            .FirstOrDefaultAsync(x => x.UserId == currentUser.Id, token);
       
         return isUserAlreadyReserved is not null;
     }
 
+    public async Task<Reservation> GetByIdAsync(int reservationId, bool asNoTracking, CancellationToken token)
+    {
+        var baseQuery = _dbContext.Reservations.AsQueryable();
+        if (asNoTracking)
+            baseQuery.AsNoTracking();
+            
+        return await baseQuery.FirstOrDefaultAsync(x => x.Id == reservationId, token);
+    }
+    
+    public async Task<Reservation> GetByIdAsync(int reservationId, bool asNoTracking, CancellationToken token, params Expression<Func<Reservation, object>>[] includes)
+    {
+        var baseQuery = _dbContext.Reservations.AsQueryable();
+        if (asNoTracking)
+            baseQuery.AsNoTracking();
+            
+        if (includes.Any())
+        {
+            foreach (var include in includes)
+            {
+                baseQuery = baseQuery.Include(include);
+            }
+        }
+        
+        return await baseQuery.FirstOrDefaultAsync(x => x.Id == reservationId, token);
+    }
+    
     public async Task<Reservation> GetReservationByIdAsync(int reservationId, CancellationToken token)
     {
         return await _dbContext.Reservations
@@ -54,7 +80,7 @@ public class ReservationRepository : IReservationRepository
             .FirstOrDefaultAsync(x => x.Id == reservationId, token);
     }
 
-    public async Task UpdateReservationAsync(Reservation reservation, CancellationToken token)
+    public async Task UpdateAsync(Reservation reservation, CancellationToken token)
     {
         _dbContext.Update(reservation);
         await _dbContext.SaveChangesAsync(token);
