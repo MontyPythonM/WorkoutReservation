@@ -1,5 +1,6 @@
 ﻿using System.Net;
 using WorkoutReservation.Application.Common.Exceptions;
+using WorkoutReservation.Domain.Exceptions;
 
 namespace WorkoutReservation.API.Middleware;
 
@@ -17,6 +18,11 @@ public class ExceptionHandlingMiddleware : IMiddleware
         try
         {
             await next.Invoke(context);
+        }
+        catch (DomainException ex)
+        {
+            context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+            await context.Response.WriteAsync(ex.Message);
         }
         catch (BadRequestException ex)
         {
