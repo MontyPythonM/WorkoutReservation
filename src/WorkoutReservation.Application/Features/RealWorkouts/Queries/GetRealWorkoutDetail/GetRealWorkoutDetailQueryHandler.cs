@@ -5,24 +5,25 @@ using WorkoutReservation.Application.Contracts;
 
 namespace WorkoutReservation.Application.Features.RealWorkouts.Queries.GetRealWorkoutDetail;
 
-public class GetRealWorkoutDetailQueryHandler : IRequestHandler<GetRealWorkoutDetailQuery, 
-                                                                RealWorkoutDetailDto>
+public class GetRealWorkoutDetailQueryHandler : IRequestHandler<GetRealWorkoutDetailQuery, RealWorkoutDetailDto>
 {
     private readonly IRealWorkoutRepository _realWorkoutRepository;
     private readonly IMapper _mapper;
 
     public GetRealWorkoutDetailQueryHandler(IRealWorkoutRepository realWorkoutRepository,
-                                            IMapper mapper)
+        IMapper mapper)
     {
         _realWorkoutRepository = realWorkoutRepository;
         _mapper = mapper;
     }
 
     public async Task<RealWorkoutDetailDto> Handle(GetRealWorkoutDetailQuery request, 
-                                                   CancellationToken cancellationToken)
+        CancellationToken token)
     {
-        var realWorkout = await _realWorkoutRepository.GetByIdAsync(request.RealWorkoutId, cancellationToken);
-
+        var realWorkout = await _realWorkoutRepository
+            .GetByIdAsync(request.RealWorkoutId, true, token,
+                incl => incl.WorkoutType, incl => incl.Instructor);
+        
         if (realWorkout is null)
             throw new NotFoundException($"Workout with Id: {request.RealWorkoutId} not found.");
 

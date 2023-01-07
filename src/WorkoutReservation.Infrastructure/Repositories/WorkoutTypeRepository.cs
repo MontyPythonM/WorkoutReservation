@@ -75,7 +75,7 @@ public class WorkoutTypeRepository : IWorkoutTypeRepository
         await _dbContext.SaveChangesAsync(token);
     }
 
-    public async Task DeleteRangeAsync(List<WorkoutType> workoutTypes, CancellationToken token)
+    public async Task DeleteAsync(List<WorkoutType> workoutTypes, CancellationToken token)
     {
         _dbContext.RemoveRange(workoutTypes);
         await _dbContext.SaveChangesAsync(token);

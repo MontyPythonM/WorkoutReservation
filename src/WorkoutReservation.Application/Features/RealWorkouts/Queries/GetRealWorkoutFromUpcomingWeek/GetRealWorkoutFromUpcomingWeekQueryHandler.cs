@@ -7,27 +7,30 @@ using WorkoutReservation.Domain.Extensions;
 namespace WorkoutReservation.Application.Features.RealWorkouts.Queries.GetRealWorkoutFromUpcomingWeek;
 
 public class GetRealWorkoutFromUpcomingWeekQueryHandler : IRequestHandler<GetRealWorkoutFromUpcomingWeekQuery,
-                                                                          List<RealWorkoutFromUpcomingWeekDto>>
+    List<RealWorkoutFromUpcomingWeekDto>>
 {
     private readonly IRealWorkoutRepository _realWorkoutRepository;
     private readonly IMapper _mapper;
 
-    public GetRealWorkoutFromUpcomingWeekQueryHandler(IRealWorkoutRepository realWorkoutRepository,
-                                                      IMapper mapper)
+    public GetRealWorkoutFromUpcomingWeekQueryHandler(IRealWorkoutRepository realWorkoutRepository, IMapper mapper)
     {
         _realWorkoutRepository = realWorkoutRepository;
         _mapper = mapper;
     }
+    
     public async Task<List<RealWorkoutFromUpcomingWeekDto>> Handle(GetRealWorkoutFromUpcomingWeekQuery request, 
-                                                                   CancellationToken cancellationToken)
+        CancellationToken token)
     {
-        var firstDayOfCurrentWeek = DateTime.Now.GetFirstDayOfWeek().AddDays(7);
-        var lastDayOfCurrentWeek = firstDayOfCurrentWeek.AddDays(7);
+        var firstDayOfUpcomingWeek = DateTime.Now.GetFirstDayOfWeek().AddDays(7);
+        var lastDayOfUpcomingWeek = firstDayOfUpcomingWeek.AddDays(6);
 
-        var realWorkouts = await _realWorkoutRepository.GetAllAsync(firstDayOfCurrentWeek, lastDayOfCurrentWeek, cancellationToken);
+        var realWorkouts = await _realWorkoutRepository
+            .GetAllFromDateRangeAsync(firstDayOfUpcomingWeek, lastDayOfUpcomingWeek, true, token,
+                incl => incl.WorkoutType, incl => incl.Instructor);
 
         if (!realWorkouts.Any())
-            throw new NotFoundException($"Real workouts from current week not found. [Date from: {firstDayOfCurrentWeek} to {lastDayOfCurrentWeek.AddDays(-1)}]");
+            throw new NotFoundException($"Real workouts from current week not found. " +
+                                        $"[Date from: {firstDayOfUpcomingWeek} to {lastDayOfUpcomingWeek}]");
 
         return _mapper.Map<List<RealWorkoutFromUpcomingWeekDto>>(realWorkouts);
     }
