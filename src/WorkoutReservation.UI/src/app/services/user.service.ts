@@ -6,7 +6,7 @@ import {environment} from 'src/environments/environment';
 import {LoginForm} from '../models/login-form.model';
 import {RegisterForm} from '../models/register-form.model';
 import {BaseService} from "../common/base.service";
-import {ApiUrl} from "../../environments/api-urls";
+import {apiUrl} from "../../environments/api-urls";
 import {User} from "../models/user.model";
 import {PagedResult} from "../models/paged-result.model";
 
@@ -23,7 +23,7 @@ export class UserService extends BaseService {
   }
 
   login(loginForm: LoginForm): Observable<string> {
-    return super.post<any>(ApiUrl.account.login, loginForm).pipe(
+    return super.post<any>(apiUrl.account.login, loginForm).pipe(
       map((token: string) => {
         return token;
       })
@@ -32,11 +32,11 @@ export class UserService extends BaseService {
 
   register(registerForm: RegisterForm): Observable<string> {
     registerForm.dateOfBirth = this.datepipe.transform(registerForm.dateOfBirth, 'dd-MM-yyyy')!;
-    return super.post<any>(ApiUrl.account.register, registerForm);
+    return super.post<any>(apiUrl.account.register, registerForm);
   }
 
   getUsers(queryParams: any): Observable<PagedResult<User>> {
-    return super.get<PagedResult<User>>(ApiUrl.account.users,
+    return super.get<PagedResult<User>>(apiUrl.account.users,
       { ...queryParams }).pipe(
         map((response) => {
           response.items = response.items.map((user) => new User(user))

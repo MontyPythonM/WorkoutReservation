@@ -1,8 +1,8 @@
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
 import {BaseService} from "../common/base.service";
 import {HttpClient} from "@angular/common/http";
 import {Observable} from "rxjs";
-import {ApiUrl} from "../../environments/api-urls";
+import {apiUrl} from "../../environments/api-urls";
 
 @Injectable({
   providedIn: 'root'
@@ -14,10 +14,10 @@ export class RepetitiveWorkoutService extends BaseService {
   }
 
   generateUpcomingWeek(): Observable<void> {
-    return super.post<void>(ApiUrl.repetitiveWorkout.generateUpcomingWeek);
+    return super.post<void>(apiUrl.repetitiveWorkout.generateUpcomingWeek);
   }
 
   deleteAll(): Observable<void> {
-    return super.delete<void>(ApiUrl.repetitiveWorkout.deleteAll);
+    return super.delete<void>(apiUrl.repetitiveWorkout.deleteAll);
   }
 }

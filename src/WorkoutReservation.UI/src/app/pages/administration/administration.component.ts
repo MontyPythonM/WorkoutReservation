@@ -1,7 +1,7 @@
 import {Component} from '@angular/core';
 import {BaseComponent} from 'src/app/common/base.component';
 import {Router} from "@angular/router";
-import {PageUrls} from "../../../environments/page-urls";
+import {pageUrls} from 'src/environments/page-urls';
 
 @Component({
   selector: 'app-administration',
@@ -36,9 +36,9 @@ export class AdministrationComponent extends BaseComponent {
   constructor(private router: Router) {
     super();
     this.tabs = [
-      { title: "Users registry", url: PageUrls.administration.users, icon: "dx-icon-group" },
-      { title: "Repetitive workouts", url: PageUrls.administration.repetitiveWorkouts, icon: "dx-icon-tableproperties" },
-      { title: "Workout type tags", url: PageUrls.administration.workoutTypeTags, icon: "dx-icon-tags" },
+      { title: "Users registry", url: pageUrls.administration.users, icon: "dx-icon-group" },
+      { title: "Repetitive workouts", url: pageUrls.administration.repetitiveWorkouts, icon: "dx-icon-tableproperties" },
+      { title: "Workout type tags", url: pageUrls.administration.workoutTypeTags, icon: "dx-icon-tags" },
     ];
    }
 

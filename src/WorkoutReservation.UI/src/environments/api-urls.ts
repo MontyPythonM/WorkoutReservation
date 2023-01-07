@@ -1,4 +1,4 @@
-export const ApiUrl = {
+export const apiUrl = {
   instructor: 'instructor/',
   workoutType: 'workout-type/',
   realWorkout: {
