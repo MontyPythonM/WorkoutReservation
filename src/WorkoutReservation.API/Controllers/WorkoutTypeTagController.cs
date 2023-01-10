@@ -4,11 +4,12 @@ using Swashbuckle.AspNetCore.Annotations;
 using WorkoutReservation.API.Controllers.Base;
 using WorkoutReservation.Application.Features.WorkoutTypeTags.Commands.CreateWorkoutTypeTag;
 using WorkoutReservation.Application.Features.WorkoutTypeTags.Commands.DeactivateWorkoutTypeTag;
+using WorkoutReservation.Application.Features.WorkoutTypeTags.Commands.DeleteWorkoutTypeTag;
 using WorkoutReservation.Application.Features.WorkoutTypeTags.Queries.GetWorkoutTypeTagsList;
 
 namespace WorkoutReservation.API.Controllers;
 
-//[Authorize(Roles = "Administrator")]
+[Authorize(Roles = "Administrator")]
 [Route("api/workout-type-tag/")]
 public class WorkoutTypeTagController : ApiControllerBase
 {
@@ -42,6 +43,14 @@ public class WorkoutTypeTagController : ApiControllerBase
     public async Task<IActionResult> DeactivateWorkoutTypeTag([FromRoute] int workoutTypeTagId, CancellationToken token)
     {
         await Mediator.Send(new DeactivateWorkoutTypeTagCommand() { Id = workoutTypeTagId }, token);
+        return NoContent();
+    }
+    
+    [HttpDelete("{workoutTypeTagId}")]
+    [SwaggerOperation(Summary = "Delete selected workout type tag")]
+    public async Task<IActionResult> DeleteWorkoutTypeTag([FromRoute] int workoutTypeTagId, CancellationToken token)
+    {
+        await Mediator.Send(new DeleteWorkoutTypeTagCommand() { Id = workoutTypeTagId }, token);
         return NoContent();
     }
 }
