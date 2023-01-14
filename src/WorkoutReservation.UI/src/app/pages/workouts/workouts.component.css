@@ -14,19 +14,21 @@
 }
 
 .tooltip-button {
-  margin: 0% 0% 0% 0%;
   float: right;
-  background-color: rgb(50, 140, 50);
 }
 
 .appointment-background {
-  background-image: linear-gradient(to right, rgb(24, 108, 24), rgb(90, 170, 90));
+  background-image: linear-gradient(to right, rgb(70,70,70), rgb(100,100,100));
+}
+
+.appointment-background:hover {
+  background-image: linear-gradient(to right, rgba(25, 100, 25), rgb(20, 90, 20));
 }
 
 .appointment-title {
-  font-size: 20px;
-  font-weight: 20px;
-  margin-bottom: 10%;
+  font-size: 15px;
+  font-weight: 500;
+  margin-bottom: 5%;
   text-align: center;
 }
 
@@ -35,5 +37,6 @@
 }
 
 .appointment {
-  margin: 2px 0px 2px 0px;
+  margin: 1px 0px 1px 0px;
+  font-size: 12px;
 }
