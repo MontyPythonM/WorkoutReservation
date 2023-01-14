@@ -13,4 +13,16 @@ public class WorkoutType
     public ICollection<Instructor> Instructors { get; set; } = new List<Instructor>();
     public ICollection<WorkoutTypeTag> WorkoutTypeTags { get; set; } = new List<WorkoutTypeTag>();
     public ICollection<BaseWorkout> BaseWorkouts { get; set; } = new List<BaseWorkout>();
+
+    public WorkoutType()
+    {
+        
+    }
+
+    public WorkoutType(string name, string description, WorkoutIntensity intensity)
+    {
+        Name = name;
+        Description = description;
+        Intensity = intensity;
+    }
 }
