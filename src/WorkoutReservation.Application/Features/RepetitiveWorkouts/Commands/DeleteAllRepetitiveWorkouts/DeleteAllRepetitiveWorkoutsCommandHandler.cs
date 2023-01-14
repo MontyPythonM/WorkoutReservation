@@ -11,24 +11,22 @@ public class DeleteAllRepetitiveWorkoutsCommandHandler : IRequestHandler<DeleteA
     private readonly ILogger<DeleteAllRepetitiveWorkoutsCommandHandler> _logger;
 
     public DeleteAllRepetitiveWorkoutsCommandHandler(IRepetitiveWorkoutRepository repetitiveWorkoutRepository,
-                                                     ILogger<DeleteAllRepetitiveWorkoutsCommandHandler> logger)
+        ILogger<DeleteAllRepetitiveWorkoutsCommandHandler> logger)
     {
         _repetitiveWorkoutRepository = repetitiveWorkoutRepository;
         _logger = logger;
     }
 
-    public async Task<Unit> Handle(DeleteAllRepetitiveWorkoutsCommand request, 
-                                   CancellationToken cancellationToken)
+    public async Task<Unit> Handle(DeleteAllRepetitiveWorkoutsCommand request, CancellationToken token)
     {
-        var repetitiveWorkouts = await _repetitiveWorkoutRepository.GetAllAsync(cancellationToken);
+        var repetitiveWorkouts = await _repetitiveWorkoutRepository.GetAllAsync(token);
 
         if(!repetitiveWorkouts.Any())
             throw new NotFoundException("Repetitive workouts not found.");
 
-        await _repetitiveWorkoutRepository.DeleteAllAsync(repetitiveWorkouts, cancellationToken);
+        await _repetitiveWorkoutRepository.DeleteAsync(repetitiveWorkouts, token);
 
-        _logger.LogWarning($"Repetitive workouts [{repetitiveWorkouts.Count} records] was deleted.");
-
+        _logger.LogWarning($"Repetitive workouts [{repetitiveWorkouts.ToList().Count()} records] was deleted.");
         return Unit.Value;
     }
 }

@@ -22,7 +22,7 @@ public class GetRealWorkoutFromCurrentWeekQueryHandler : IRequestHandler<GetReal
         CancellationToken token)
     {
         var firstDayOfCurrentWeek = DateTime.Now.GetFirstDayOfWeek();
-        var lastDayOfCurrentWeek = firstDayOfCurrentWeek.AddDays(6);
+        var lastDayOfCurrentWeek = DateTime.Now.GetFirstDayOfWeekAndAddDays(6);
 
         var realWorkouts = await _realWorkoutRepository
             .GetAllFromDateRangeAsync(firstDayOfCurrentWeek, lastDayOfCurrentWeek, true, token,

@@ -14,4 +14,18 @@ public class Instructor
 
     public ICollection<WorkoutType> WorkoutTypes { get; set; } = new List<WorkoutType>();
     public ICollection<BaseWorkout> BaseWorkouts { get; set; } = new List<BaseWorkout>();
+
+    public Instructor()
+    {
+        
+    }
+
+    public Instructor(string firstName, string lastName, Gender? gender, string biography, string email)
+    {
+        FirstName = firstName;
+        LastName = lastName;
+        Gender = gender;
+        Biography = biography;
+        Email = email;
+    }
 }

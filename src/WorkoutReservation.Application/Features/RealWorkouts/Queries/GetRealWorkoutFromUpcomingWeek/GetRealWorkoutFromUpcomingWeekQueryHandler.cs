@@ -21,9 +21,9 @@ public class GetRealWorkoutFromUpcomingWeekQueryHandler : IRequestHandler<GetRea
     public async Task<List<RealWorkoutFromUpcomingWeekDto>> Handle(GetRealWorkoutFromUpcomingWeekQuery request, 
         CancellationToken token)
     {
-        var firstDayOfUpcomingWeek = DateTime.Now.GetFirstDayOfWeek().AddDays(7);
-        var lastDayOfUpcomingWeek = firstDayOfUpcomingWeek.AddDays(6);
-
+        var firstDayOfUpcomingWeek = DateTime.Now.GetFirstDayOfWeekAndAddDays(7);
+        var lastDayOfUpcomingWeek = DateTime.Now.GetFirstDayOfWeekAndAddDays(13);
+        
         var realWorkouts = await _realWorkoutRepository
             .GetAllFromDateRangeAsync(firstDayOfUpcomingWeek, lastDayOfUpcomingWeek, true, token,
                 incl => incl.WorkoutType, incl => incl.Instructor);
