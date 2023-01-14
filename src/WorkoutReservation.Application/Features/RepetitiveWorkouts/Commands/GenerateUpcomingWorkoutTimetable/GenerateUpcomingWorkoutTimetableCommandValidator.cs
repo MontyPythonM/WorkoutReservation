@@ -39,7 +39,19 @@ public class GenerateUpcomingWorkoutTimetableCommandValidator : AbstractValidato
                 context.AddFailure("MaxParticipantNumber", "MaxParticipantNumber must be greater than zero.");
             }
 
-            // todo: compare 2 collection of realWorkouts and if any element has the same time range then throw
+            foreach (var newWorkout in newRealWorkouts.Select(n => new { n.StartTime, n.EndTime, n.Date }))
+            {
+                if (existingRealWorkouts.Select(e => new { e.StartTime, e.EndTime, e.Date })
+                    .Select(existingWorkout => (newWorkout.Date == existingWorkout.Date) && (
+                        (newWorkout.StartTime >= existingWorkout.StartTime && newWorkout.StartTime < existingWorkout.EndTime) ||
+                        (newWorkout.EndTime > existingWorkout.StartTime && newWorkout.EndTime <= existingWorkout.EndTime) ||
+                        (newWorkout.StartTime < existingWorkout.StartTime && newWorkout.EndTime > existingWorkout.EndTime)))
+                    .Any(isTimeConflict => isTimeConflict))
+                {
+                    context.AddFailure("StartTime - EndTime", "Time conflict between new generated and existing workouts.");
+                    break;
+                }
+            }
         });
     }
 }

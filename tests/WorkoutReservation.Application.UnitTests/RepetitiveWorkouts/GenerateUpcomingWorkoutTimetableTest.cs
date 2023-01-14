@@ -113,6 +113,36 @@ public class GenerateUpcomingWorkoutTimetableTest : IClassFixture<Program>
     }
 
     [Fact]
+    public async Task Handle_TimeCollisionExistButItNotTheSameDay_NotThrowValidationException()
+    {
+        // arrange
+        SetCorrectInstructorAndWorkoutTypeTestData();
+        _repetitiveWorkoutRepositoryMock
+            .Setup(x => x.GetAllAsync(IsAny<CancellationToken>()))
+            .ReturnsAsync(_repetitiveWorkouts);
+
+        var wednesdayRealWorkouts = new List<RealWorkout>
+        {
+            new(10, new TimeOnly(10,00), new TimeOnly(12,00), WorkoutType, Instructor, DateTime.Now.GetFirstDayOfWeekAndAddDays(9), User), 
+        };
+        
+        _realWorkoutRepositoryMock
+            .Setup(x => x.GetAllFromDateRangeAsync(DateTime.Now.GetFirstDayOfWeekAndAddDays(7), 
+                DateTime.Now.GetFirstDayOfWeekAndAddDays(14), true, IsAny<CancellationToken>()))
+            .ReturnsAsync(wednesdayRealWorkouts);
+        
+        var handler = GetHandler();
+        var command = GetCommand();
+
+        // act
+        Func<Task<Unit>> result = async () => await handler.Handle(command, CancellationToken.None);
+
+        // assert
+        await result.Should().NotThrowAsync<ValidationException>();
+        await result.Should().NotThrowAsync<NotFoundException>();
+    }
+    
+    [Fact]
     public async Task Handle_RepetitiveWorkoutsNotExists_ThrowNotFoundException()
     {
         // arrange
