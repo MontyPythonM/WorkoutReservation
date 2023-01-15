@@ -4,7 +4,7 @@
     <dx-button
       text="Open Hangfire"
       type="default"
-      (onClick)="openHangfireDashboard($event)">
+      (onClick)="openHangfireDashboard()">
     </dx-button>
   </div>
   <div class="button-section">
@@ -12,7 +12,7 @@
     <dx-button
       text="Force generate"
       type="danger"
-      (onClick)="forceGenerateUpcomingWeek($event)">
+      (onClick)="openGeneratePopup()">
     </dx-button>
   </div>
   <div class="button-section">
@@ -20,7 +20,21 @@
     <dx-button
       text="Delete all"
       type="danger"
-      (onClick)="deleteAllRepetitiveWorkouts($event)">
+      (onClick)="openDeletePopup()">
     </dx-button>
   </div>
 </div>
+
+<app-confirmation-popup
+  [(visible)]="isGeneratePopupVisible"
+  [title]="popupTitle"
+  [content]="popupContent"
+  (confirm)="forceGenerateUpcomingWeek()">
+</app-confirmation-popup>
+
+<app-confirmation-popup
+  [(visible)]="isDeletePopupVisible"
+  [title]="popupTitle"
+  [content]="popupContent"
+  (confirm)="deleteAllRepetitiveWorkouts()">
+</app-confirmation-popup>

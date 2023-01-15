@@ -53,12 +53,13 @@ try
     builder.Configuration.GetSection("FirstAdmin").Bind(firstAdminSettings);
 
     //--- Add services to the container
+    GlobalJobFilters.Filters.Add(new AutomaticRetryAttribute { Attempts = 0, OnAttemptsExceeded = AttemptsExceededAction.Delete });
+
     builder.Services.AddSingleton(authenticationSettings);
     builder.Services.AddSingleton(firstAdminSettings);
     builder.Services.AddSingleton<ICurrentUserService, CurrentUserService>();
 
     builder.Services.AddHttpContextAccessor();
-
     builder.Services.AddControllers(options => options.UseDateOnlyTimeOnlyStringConverters())
         .AddJsonOptions(options => options.UseDateOnlyTimeOnlyStringConverters());
 
@@ -107,7 +108,6 @@ try
         Authorization = new[] { new HangfireAuthorizationFilter() },
         IsReadOnlyFunc = _ => true
     });
-
     app.UseRouting();
     app.UseAuthorization();
     app.MapControllers();
