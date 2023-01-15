@@ -11,27 +11,45 @@ import {environment} from "../../../../environments/environment";
   styleUrls: ['./repetitive-workouts.component.css']
 })
 export class RepetitiveWorkoutsComponent extends BaseComponent {
+  isGeneratePopupVisible: boolean;
+  isDeletePopupVisible: boolean;
+  popupTitle: string;
+  popupContent: string;
 
   constructor(private repetitiveWorkoutService: RepetitiveWorkoutService,
               private notificationService: NotificationService) {
     super();
+    this.isGeneratePopupVisible = false;
+    this.isDeletePopupVisible = false;
+    this.popupTitle = "";
+    this.popupContent = "";
   }
 
-  forceGenerateUpcomingWeek(e: any) {
+  forceGenerateUpcomingWeek() {
     this.subscribe(this.repetitiveWorkoutService.generateUpcomingWeek(), {
-      next: () => this.notificationService.show("Forced generation of repetitive workouts successful", "success"),
+      next: () => this.notificationService.show("Workout generator has been launched. Check if the operation was successful!", "info"),
       error: () => this.notificationService.show("Forced generation of repetitive workouts failed", "error")
     });
   }
 
-  openHangfireDashboard(e: any) {
-    window.open(environment.serverUrl + pageUrls.hangfire, "Hangfire Dashboard")
-  }
-
-  deleteAllRepetitiveWorkouts(e: any) {
+  deleteAllRepetitiveWorkouts() {
     this.subscribe(this.repetitiveWorkoutService.deleteAll(), {
       next: () => this.notificationService.show("Successfully removed all repetitive workouts ", "success"),
       error: () => this.notificationService.show("Failed to remove all repetitive workouts", "error")
     });
+  }
+
+  openHangfireDashboard = () => window.open(environment.serverUrl + pageUrls.hangfire, "Hangfire Dashboard");
+
+  openDeletePopup = () => {
+    this.popupTitle = "Delete all workouts";
+    this.popupContent = "Permanent delete all repetitive workouts?";
+    this.isDeletePopupVisible = true;
+  }
+
+  openGeneratePopup = () => {
+    this.popupTitle = "Generate workouts";
+    this.popupContent = "Force-generate workouts for the upcoming week?";
+    this.isGeneratePopupVisible = true;
   }
 }

@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
 import notify from 'devextreme/ui/notify';
 
 @Injectable({
@@ -13,7 +13,7 @@ export class NotificationService {
       type: type,
       minWidth: 150,
       maxWidth: 300,
-      displayTime: 3500,
+      displayTime: 3000,
       animation: {
         show: { type: 'fade', duration: 400, from: 0, to: 1 },
         hide: { type: 'fade', duration: 40, to: 0 }

@@ -53,7 +53,8 @@ try
     builder.Configuration.GetSection("FirstAdmin").Bind(firstAdminSettings);
 
     //--- Add services to the container
-    GlobalJobFilters.Filters.Add(new AutomaticRetryAttribute { Attempts = 0 });
+    GlobalJobFilters.Filters.Add(new AutomaticRetryAttribute { Attempts = 0, OnAttemptsExceeded = AttemptsExceededAction.Delete });
+
     builder.Services.AddSingleton(authenticationSettings);
     builder.Services.AddSingleton(firstAdminSettings);
     builder.Services.AddSingleton<ICurrentUserService, CurrentUserService>();

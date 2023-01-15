@@ -28,21 +28,20 @@
       text="Edit"
       icon="rename"
       type="success"
-      (onClick)="openPopup()">
+      (onClick)="openEditPopup()">
     </dx-button>
-
     <dx-button
       class="button"
       text="Delete"
       icon="trash"
       type="danger"
-      (onClick)="deleteInstructor()">
+      (onClick)="openDeletePopup()">
     </dx-button>
   </div>
 </div>
 
 <dx-popup
-  [(visible)]="isPopupOpened"
+  [(visible)]="isEditPopupOpened"
   [showTitle]="true"
   title="Edit instructor"
   [dragEnabled]="false"
@@ -82,10 +81,17 @@
       class="button"
       text="Cancel"
       type="normal"
-      (onClick)="closePopup()"></dx-button>
+      (onClick)="closeEditPopup()"></dx-button>
     <dx-button
       text="Save"
       type="success"
       (onClick)="editInstructor()"></dx-button>
   </dxi-toolbar-item>
 </dx-popup>
+
+<app-confirmation-popup
+  [(visible)]="isDeletePopupVisible"
+  title="Delete instructor"
+  content="Are you sure you want to permanently delete this instructor?"
+  (confirm)="deleteInstructor()">
+</app-confirmation-popup>

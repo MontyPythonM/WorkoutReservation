@@ -51,7 +51,7 @@
           text="Delete"
           icon="trash"
           type="danger"
-          (onClick)="deleteWorkoutType(workoutType.id)">
+          (onClick)="openDeletePopup(workoutType.id)">
         </dx-button>
       </div>
     </div>
@@ -154,3 +154,10 @@
       (onClick)="updateWorkoutType()"></dx-button>
   </dxi-toolbar-item>
 </dx-popup>
+
+<app-confirmation-popup
+  [(visible)]="isDeletePopupVisible"
+  title="Delete workout type"
+  content="Are you sure you want to permanently delete this workout type?"
+  (confirm)="deleteWorkoutType()">
+</app-confirmation-popup>

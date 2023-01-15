@@ -6,6 +6,7 @@ import {WorkoutTypeTagsComponent} from "./workout-type-tags/workout-type-tags.co
 import {RepetitiveWorkoutsComponent} from "./repetitive-workouts/repetitive-workouts.component";
 import {AdministrationComponent} from "./administration.component";
 import {RouterModule} from "@angular/router";
+import {ConfirmationPopupModule} from "../../components/confirmation-popup/confirmation-popup.module";
 
 @NgModule({
   declarations: [
@@ -20,6 +21,7 @@ import {RouterModule} from "@angular/router";
     DxButtonModule,
     DxDataGridModule,
     DxButtonModule,
+    ConfirmationPopupModule,
     RouterModule.forChild([
       {
         path: '',

@@ -25,10 +25,12 @@ export class WorkoutTypesComponent extends BaseComponent implements OnInit {
   query: PagedQuery;
   isCreatePopupOpened: boolean;
   isUpdatePopupOpened: boolean;
+  isDeletePopupVisible: boolean;
   isSaving: boolean;
   intensity: EnumObject[];
   workoutTypeTags: WorkoutTypeTag[];
   instructors: Instructor[];
+  workoutTypeIdToDelete!: number;
   private createPopupForm?: dxForm;
   private updatePopupForm?: dxForm;
 
@@ -42,6 +44,7 @@ export class WorkoutTypesComponent extends BaseComponent implements OnInit {
     this.query.sortBy = 'Name'; // TODO: add pagination
     this.isCreatePopupOpened = false;
     this.isUpdatePopupOpened = false;
+    this.isDeletePopupVisible = false;
     this.isSaving = false;
     this.intensity = enumToObjects(WorkoutIntensity);
     this.workoutTypeTags = [];
@@ -110,8 +113,8 @@ export class WorkoutTypesComponent extends BaseComponent implements OnInit {
     });
   }
 
-  deleteWorkoutType(id: number) {
-    this.subscribe(this.workoutTypeService.remove(id), {
+  deleteWorkoutType() {
+    this.subscribe(this.workoutTypeService.remove(this.workoutTypeIdToDelete), {
       next: () => {
         this.notificationService.show('Workout type delete successfully', 'success');
         this.ngOnInit();
@@ -137,6 +140,11 @@ export class WorkoutTypesComponent extends BaseComponent implements OnInit {
       workoutType.instructors
     );
     this.isUpdatePopupOpened = true;
+  }
+
+  openDeletePopup = (id: number) => {
+    this.workoutTypeIdToDelete = id;
+    this.isDeletePopupVisible = true;
   }
 
   closePopup = () => {

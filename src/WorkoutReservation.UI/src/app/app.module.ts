@@ -39,6 +39,7 @@ import {ReservationsComponent} from './pages/reservations/reservations.component
 import {AccountSettingsComponent} from './pages/account-settings/account-settings.component';
 import {NavBarComponent} from './components/header/nav-bar/nav-bar.component';
 import {AdministrationModule} from "./pages/administration/administration.module";
+import {ConfirmationPopupModule} from "./components/confirmation-popup/confirmation-popup.module";
 
 @NgModule({
   declarations: [
@@ -79,7 +80,8 @@ import {AdministrationModule} from "./pages/administration/administration.module
     DxoNotificationsModule,
     DxDataGridModule,
     DxLoadPanelModule,
-    DxTagBoxModule
+    DxTagBoxModule,
+    ConfirmationPopupModule
   ],
   providers: [DatePipe],
   bootstrap: [AppComponent]

@@ -1,14 +1,13 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import Form from 'devextreme/ui/form';
-import { ActivatedRoute, Router } from '@angular/router';
-import { BaseComponent } from 'src/app/common/base.component';
-import { InstructorDetailsCommand } from 'src/app/models/instructor-details-command.model';
-import { InstructorDetails } from 'src/app/models/instructor-details.model';
-import { InstructorService } from 'src/app/services/instructor.service';
-import { NotificationService } from 'src/app/services/notification.service';
-import { EnumObject, enumToObjects } from 'src/app/models/enums/enum-converter';
-import { Gender } from 'src/app/models/enums/gender.enum';
-import { from, map } from 'rxjs';
+import {ActivatedRoute, Router} from '@angular/router';
+import {BaseComponent} from 'src/app/common/base.component';
+import {InstructorDetailsCommand} from 'src/app/models/instructor-details-command.model';
+import {InstructorDetails} from 'src/app/models/instructor-details.model';
+import {InstructorService} from 'src/app/services/instructor.service';
+import {NotificationService} from 'src/app/services/notification.service';
+import {EnumObject, enumToObjects} from 'src/app/models/enums/enum-converter';
+import {Gender} from 'src/app/models/enums/gender.enum';
 
 @Component({
   selector: 'app-instructor-details',
@@ -18,7 +17,8 @@ import { from, map } from 'rxjs';
 export class InstructorDetailsComponent extends BaseComponent implements OnInit {
   instructor?: InstructorDetails;
   instructorCommand!: InstructorDetailsCommand;
-  isPopupOpened: boolean;
+  isEditPopupOpened: boolean;
+  isDeletePopupVisible: boolean;
   isSaving: boolean;
   instructorId: number;
   gender: EnumObject[];
@@ -29,7 +29,8 @@ export class InstructorDetailsComponent extends BaseComponent implements OnInit 
     private notificationService: NotificationService,
     private router: Router) {
     super();
-    this.isPopupOpened = false;
+    this.isEditPopupOpened = false;
+    this.isDeletePopupVisible = false;
     this.isSaving = false;
     this.instructorId = this.route.snapshot.params['id'];
     this.gender = enumToObjects(Gender);
@@ -65,7 +66,7 @@ export class InstructorDetailsComponent extends BaseComponent implements OnInit 
     this.subscribe(this.instructorService.update(this.instructorCommand), {
       next: () => {
         this.isSaving = false;
-        this.closePopup();
+        this.closeEditPopup();
       },
       error: () => {
         this.notificationService.show('Failed to update instructor', 'error');
@@ -78,7 +79,7 @@ export class InstructorDetailsComponent extends BaseComponent implements OnInit 
     });
   }
 
-  openPopup = () => {
+  openEditPopup = () => {
     this.instructorCommand = new InstructorDetailsCommand(
       this.instructor?.id,
       this.instructor?.firstName,
@@ -87,10 +88,10 @@ export class InstructorDetailsComponent extends BaseComponent implements OnInit 
       this.instructor?.biography,
       this.instructor?.email
     );
-    this.isPopupOpened = true;
+    this.isEditPopupOpened = true;
   }
 
-  closePopup = () => this.isPopupOpened = false;
-
+  closeEditPopup = () => this.isEditPopupOpened = false;
+  openDeletePopup = () => this.isDeletePopupVisible = true;
   onFormInitialized = (e: any) => this.form = e.component;
 }
