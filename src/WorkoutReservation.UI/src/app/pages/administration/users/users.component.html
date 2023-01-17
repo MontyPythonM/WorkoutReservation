@@ -1,8 +1,29 @@
 <div class="container">
   <dx-data-grid
-    [dataSource]="users!.items"
+    id="grid"
     keyExpr="id"
+    [dataSource]="users!.items"
+    [columnAutoWidth]="true"
+    [showBorders]="true"
+    (onInitialized)="onGridInitialized($event)"
+    (onOptionChanged)="propertyChange($event)"
   >
+    <dxo-search-panel
+      [visible]="true"
+      [highlightCaseSensitive]="true">
+    </dxo-search-panel>
+
+    <dxo-paging [pageSize]="15"></dxo-paging>
+
+    <dxo-pager
+      [visible]="true"
+      [showPageSizeSelector]="true"
+      [showNavigationButtons]="true"
+      [showInfo]="true"
+      [infoText]="pagerInfo"
+      [allowedPageSizes]="[15, 30, 50]">
+    </dxo-pager>
+
   </dx-data-grid>
 </div>
 
