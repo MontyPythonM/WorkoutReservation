@@ -4,26 +4,18 @@
     keyExpr="id"
     [dataSource]="users!.items"
     [columnAutoWidth]="true"
-    [showBorders]="true"
-    (onInitialized)="onGridInitialized($event)"
-    (onOptionChanged)="propertyChange($event)"
-  >
+    [showBorders]="true">
     <dxo-search-panel
       [visible]="true"
       [highlightCaseSensitive]="true">
     </dxo-search-panel>
-
-    <dxo-paging [pageSize]="15"></dxo-paging>
-
-    <dxo-pager
-      [visible]="true"
-      [showPageSizeSelector]="true"
-      [showNavigationButtons]="true"
-      [showInfo]="true"
-      [infoText]="pagerInfo"
-      [allowedPageSizes]="[15, 30, 50]">
-    </dxo-pager>
-
   </dx-data-grid>
+
+  <app-pager
+    [allowedPageSize]="[15, 30, 50]"
+    [totalPages]="users?.totalPages"
+    (pageSizeChanged)="pageSizeChanged($event)"
+    (pageNumberChanged)="pageNumberChanged($event)">
+  </app-pager>
 </div>
 

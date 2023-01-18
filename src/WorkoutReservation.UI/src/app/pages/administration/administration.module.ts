@@ -7,6 +7,7 @@ import {RepetitiveWorkoutsComponent} from "./repetitive-workouts/repetitive-work
 import {AdministrationComponent} from "./administration.component";
 import {RouterModule} from "@angular/router";
 import {ConfirmationPopupModule} from "../../components/confirmation-popup/confirmation-popup.module";
+import {PagerModule} from "../../components/pager/pager.module";
 
 @NgModule({
   declarations: [
@@ -22,6 +23,7 @@ import {ConfirmationPopupModule} from "../../components/confirmation-popup/confi
     DxDataGridModule,
     DxButtonModule,
     ConfirmationPopupModule,
+    PagerModule,
     RouterModule.forChild([
       {
         path: '',

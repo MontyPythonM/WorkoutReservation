@@ -13,10 +13,7 @@ import dxDataGrid = DevExpress.ui.dxDataGrid;
   styleUrls: ['./users.component.css']
 })
 export class UsersComponent extends BaseComponent implements OnInit {
-
   users?: PagedResult<User>;
-  pagerInfo: string;
-  private grid: any;
   private query: PagedQuery;
 
   constructor(private userService: UserService) {
@@ -29,7 +26,6 @@ export class UsersComponent extends BaseComponent implements OnInit {
       sortBy: '',
       searchPhrase: ''
     });
-    this.pagerInfo = "";
   }
 
   ngOnInit(): void {
@@ -40,22 +36,17 @@ export class UsersComponent extends BaseComponent implements OnInit {
     this.subscribe(this.userService.getUsers(query), {
       next: (response: PagedResult<User>) => {
         this.users = response;
-        this.pagerInfo = `Total items: ${ this.users?.totalItemsCount } | Items from ${ this.users?.itemsFrom } to ${ this.users?.itemsTo }`;
       }
     });
   }
 
-  propertyChange(e: any) {
-    if(e.fullName === "paging.pageSize") {
-      this.query.pageSize = e.value
-      this.loadUsers(this.query);
-    }
-
-    if(e.fullName === "paging.pageIndex") {
-      this.query.pageNumber = e.value
-      this.loadUsers(this.query);
-    }
+  pageSizeChanged(e: any) {
+    this.query.pageSize = e;
+    this.loadUsers(this.query);
   }
 
-  onGridInitialized = (e: {component: dxDataGrid}) => this.grid = e.component;
+  pageNumberChanged(e: any) {
+    this.query.pageNumber = e;
+    this.loadUsers(this.query);
+  }
 }
