@@ -40,8 +40,13 @@ export class WorkoutTypesComponent extends BaseComponent implements OnInit {
               private instructorService: InstructorService) {
     super();
     this.workoutTypes = new PagedResult<WorkoutType>();
-    this.query = PagedQuery.default();  // TODO: add pagination
-    this.query.sortBy = 'Name'; // TODO: add pagination
+    this.query = new PagedQuery({
+      pageNumber: 1,
+      pageSize: 10,
+      sortByDescending: false,
+      sortBy: 'Name',
+      searchPhrase: ''
+    });
     this.isCreatePopupOpened = false;
     this.isUpdatePopupOpened = false;
     this.isDeletePopupVisible = false;
@@ -161,5 +166,15 @@ export class WorkoutTypesComponent extends BaseComponent implements OnInit {
   getInstructor = (instructorId: any): string => {
     const instructor = this.instructors.find(x => x.id === instructorId)!;
     return `${instructor.firstName} ${instructor.lastName}`;
+  }
+
+  pageSizeChanged(e: any) {
+    this.query.pageSize = e;
+    this.loadWorkoutTypes(this.query);
+  }
+
+  pageNumberChanged(e: any) {
+    this.query.pageNumber = e;
+    this.loadWorkoutTypes(this.query);
   }
 }

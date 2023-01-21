@@ -40,6 +40,7 @@ import {AccountSettingsComponent} from './pages/account-settings/account-setting
 import {NavBarComponent} from './components/header/nav-bar/nav-bar.component';
 import {AdministrationModule} from "./pages/administration/administration.module";
 import {ConfirmationPopupModule} from "./components/confirmation-popup/confirmation-popup.module";
+import {PagerModule} from "./components/pager/pager.module";
 
 @NgModule({
   declarations: [
@@ -81,7 +82,8 @@ import {ConfirmationPopupModule} from "./components/confirmation-popup/confirmat
     DxDataGridModule,
     DxLoadPanelModule,
     DxTagBoxModule,
-    ConfirmationPopupModule
+    ConfirmationPopupModule,
+    PagerModule
   ],
   providers: [DatePipe],
   bootstrap: [AppComponent]
