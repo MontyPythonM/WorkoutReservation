@@ -5,7 +5,7 @@ namespace WorkoutReservation.Application.Features.Users.Queries.GetUsersList
 {
     public class GetUsersListQueryValidator : AbstractValidator<GetUsersListQuery>
     {
-        private readonly int[] _allowedPageSizes = new[] { 10, 25, 50, 100 };
+        private readonly int[] _allowedPageSizes = new[] { 15, 30, 50 };
         private readonly string[] _allowedSortByColumnNames = { 
             nameof(User.Email), 
             nameof(User.FirstName),

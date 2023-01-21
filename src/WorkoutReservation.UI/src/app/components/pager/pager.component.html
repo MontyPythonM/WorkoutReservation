@@ -1,0 +1,37 @@
+<div class="container">
+  <div class="pager-panel">
+    <div class="page-size-buttons" *ngFor="let size of allowedPageSize">
+      <dx-button
+        class="page-size-button"
+        text="{{ size }}"
+        stylingMode="text"
+        [focusStateEnabled]="false"
+        (onClick)="onPageSizeChanged(size)">
+      </dx-button>
+    </div>
+    <div class="page-change-panel">
+      <dx-button
+        class="change-page-button"
+        icon="chevronprev"
+        stylingMode="text"
+        [focusStateEnabled]="false"
+        (onClick)="previousPage()">
+      </dx-button>
+      <dx-number-box
+        [(value)]="currentPageNumber"
+        [min]=1
+        [max]="totalPages"
+        width="60px"
+        (onValueChanged)="onPageNumberChanged(currentPageNumber)">
+      </dx-number-box>
+      <span class="total-pages">of {{ totalPages }}</span>
+      <dx-button
+        class="change-page-button"
+        icon="chevronnext"
+        stylingMode="text"
+        [focusStateEnabled]="false"
+        (onClick)="nextPage()">
+      </dx-button>
+    </div>
+  </div>
+</div>

@@ -7,6 +7,7 @@ import {pageUrls} from 'src/environments/page-urls';
   selector: 'app-administration',
   template: `
     <dx-tab-panel
+      id="tab-panel"
       [dataSource]="tabs"
       [animationEnabled]="true"
       [selectedIndex]="setCurrentTab()"
@@ -28,6 +29,7 @@ import {pageUrls} from 'src/environments/page-urls';
   styles: [`
     .tab-title { font-weight: 500; font-size: 15px; }
     .dx-icon-custom-style { font-size: 15px; margin-right: 8px; }
+    #tab-panel { background-color: white }
   `]
 })
 export class AdministrationComponent extends BaseComponent {

@@ -1,8 +1,18 @@
 <div class="container">
   <dx-data-grid
-    [dataSource]="users!.items"
+    id="grid"
     keyExpr="id"
-  >
+    [dataSource]="users.items"
+    [columnAutoWidth]="true"
+    [showBorders]="true">
+    <dxo-paging [enabled]="false"> </dxo-paging>
   </dx-data-grid>
+
+  <app-pager
+    [allowedPageSize]="[15, 30, 50]"
+    [totalPages]="users.totalPages"
+    (pageSizeChanged)="pageSizeChanged($event)"
+    (pageNumberChanged)="pageNumberChanged($event)">
+  </app-pager>
 </div>
 

@@ -11,14 +11,19 @@ import {PagedQuery} from "../../../models/paged-query.model";
   styleUrls: ['./users.component.css']
 })
 export class UsersComponent extends BaseComponent implements OnInit {
-
-  users?: PagedResult<User>;
-  query: PagedQuery;
+  users: PagedResult<User>;
+  private query: PagedQuery;
 
   constructor(private userService: UserService) {
     super();
     this.users = new PagedResult<User>();
-    this.query = PagedQuery.default();
+    this.query = new PagedQuery({
+      pageNumber: 1,
+      pageSize: 15,
+      sortByDescending: false,
+      sortBy: '',
+      searchPhrase: ''
+    });
   }
 
   ngOnInit(): void {
@@ -27,7 +32,27 @@ export class UsersComponent extends BaseComponent implements OnInit {
 
   loadUsers(query: PagedQuery) {
     this.subscribe(this.userService.getUsers(query), {
-      next: (response: PagedResult<User>) => this.users = response
+      next: (response: PagedResult<User>) => {
+        this.users = response;
+        this.validPageSize();
+      }
     });
+  }
+
+  validPageSize() {
+    if (this.query.pageNumber > this.users.totalPages) {
+      this.query.pageNumber = this.users.totalPages;
+      this.loadUsers(this.query);
+    }
+  }
+
+  pageSizeChanged(e: any) {
+    this.query.pageSize = e;
+    this.loadUsers(this.query);
+  }
+
+  pageNumberChanged(e: any) {
+    this.query.pageNumber = e;
+    this.loadUsers(this.query);
   }
 }

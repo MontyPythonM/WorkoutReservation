@@ -1,0 +1,25 @@
+.container {
+  /*border: solid 1px red;*/
+  margin: 15px 0 15px 0;
+}
+
+.page-size-buttons {
+  display: inline-block;
+}
+
+.page-size-button {
+  font-size: 13px;
+}
+
+.page-change-panel {
+  display: -webkit-inline-box;
+  float: right;
+}
+
+.total-pages {
+  margin-left: 8px;
+}
+
+.change-page-button {
+  margin: 0 4px 0 4px;
+}
