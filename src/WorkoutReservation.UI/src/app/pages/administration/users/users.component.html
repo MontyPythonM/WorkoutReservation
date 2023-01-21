@@ -2,18 +2,15 @@
   <dx-data-grid
     id="grid"
     keyExpr="id"
-    [dataSource]="users!.items"
+    [dataSource]="users.items"
     [columnAutoWidth]="true"
     [showBorders]="true">
-    <dxo-search-panel
-      [visible]="true"
-      [highlightCaseSensitive]="true">
-    </dxo-search-panel>
+    <dxo-paging [enabled]="false"> </dxo-paging>
   </dx-data-grid>
 
   <app-pager
     [allowedPageSize]="[15, 30, 50]"
-    [totalPages]="users?.totalPages"
+    [totalPages]="users.totalPages"
     (pageSizeChanged)="pageSizeChanged($event)"
     (pageNumberChanged)="pageNumberChanged($event)">
   </app-pager>
