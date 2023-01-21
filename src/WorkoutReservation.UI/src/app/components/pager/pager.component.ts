@@ -27,7 +27,13 @@ export class PagerComponent implements OnInit {
     this.pageSizeChanged.emit(pageSize);
   }
 
-  private onPageNumberChanged = (pageNumber: number) => this.pageNumberChanged.emit(pageNumber);
+  onPageNumberChanged = (pageNumber: number) => {
+    if (pageNumber == null) {
+      pageNumber = 1;
+      this.currentPageNumber = 1;
+    }
+    this.pageNumberChanged.emit(pageNumber);
+  }
 
   nextPage = () => {
     if (this.currentPageNumber < this.totalPages!) {

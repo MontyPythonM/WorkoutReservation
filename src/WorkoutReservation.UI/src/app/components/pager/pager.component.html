@@ -19,9 +19,10 @@
       </dx-button>
       <dx-number-box
         [(value)]="currentPageNumber"
-        [min]="1"
+        [min]=1
         [max]="totalPages"
-        width="60px">
+        width="60px"
+        (onValueChanged)="onPageNumberChanged(currentPageNumber)">
       </dx-number-box>
       <span class="total-pages">of {{ totalPages }}</span>
       <dx-button
