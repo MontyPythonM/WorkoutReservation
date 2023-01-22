@@ -19,6 +19,7 @@ export const apiUrl = {
     onlyActive: 'workout-type-tag/only-active',
     all: 'workout-type-tag/',
     create: "workout-type-tag/",
-    deactivate: "workout-type-tag/"
+    deactivate: "workout-type-tag/",
+    delete: "workout-type-tag/"
   }
 }

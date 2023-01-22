@@ -4,6 +4,7 @@ import {UserService} from "../../../services/user.service";
 import {PagedResult} from "../../../models/paged-result.model";
 import {User} from "../../../models/user.model";
 import {PagedQuery} from "../../../models/paged-query.model";
+import {DATETIME_FORMAT} from "../../../constants/constants";
 
 @Component({
   selector: 'app-users',
@@ -13,6 +14,7 @@ import {PagedQuery} from "../../../models/paged-query.model";
 export class UsersComponent extends BaseComponent implements OnInit {
   users: PagedResult<User>;
   query: PagedQuery;
+  dateFormat = DATETIME_FORMAT;
 
   constructor(private userService: UserService) {
     super();

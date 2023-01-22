@@ -69,15 +69,15 @@ export class WorkoutTypesComponent extends BaseComponent implements OnInit {
   }
 
   protected loadWorkoutTypeTags(): void {
-    this.subscribe(this.workoutTypeTagService.getAllWorkoutTypeTags(), {
+    this.subscribe(this.workoutTypeTagService.getAll(), {
       next: (response: WorkoutTypeTag[]) => this.workoutTypeTags = response
-    })
+    });
   }
 
   protected loadInstructors(): void {
     this.subscribe(this.instructorService.getAll(), {
       next: (response: Instructor[]) => this.instructors = response
-    })
+    });
   }
 
   createWorkoutType() {

@@ -14,16 +14,20 @@ export class WorkoutTypeTagService extends BaseService  {
     super(http);
   }
 
-  getActiveWorkoutTypeTags(): Observable<WorkoutTypeTag[]> {
+  getActive(): Observable<WorkoutTypeTag[]> {
     return super.get<WorkoutTypeTag[]>(apiUrl.workoutTypeTag.onlyActive);
   }
 
-  getAllWorkoutTypeTags(): Observable<WorkoutTypeTag[]> {
+  getAll(): Observable<WorkoutTypeTag[]> {
     return super.get<WorkoutTypeTag[]>(apiUrl.workoutTypeTag.all);
   }
 
   deactivate(id: number): Observable<void> {
     return super.patch<void>(apiUrl.workoutTypeTag.deactivate + id);
+  }
+
+  remove(id: number): Observable<void> {
+    return super.delete<void>(apiUrl.workoutTypeTag.delete + id);
   }
 
   create(tag: string): Observable<void> {
