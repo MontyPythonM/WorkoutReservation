@@ -12,7 +12,7 @@ import {PagedQuery} from "../../../models/paged-query.model";
 })
 export class UsersComponent extends BaseComponent implements OnInit {
   users: PagedResult<User>;
-  private query: PagedQuery;
+  query: PagedQuery;
 
   constructor(private userService: UserService) {
     super();
@@ -34,16 +34,8 @@ export class UsersComponent extends BaseComponent implements OnInit {
     this.subscribe(this.userService.getUsers(query), {
       next: (response: PagedResult<User>) => {
         this.users = response;
-        this.validPageSize();
       }
     });
-  }
-
-  validPageSize() {
-    if (this.query.pageNumber > this.users.totalPages) {
-      this.query.pageNumber = this.users.totalPages;
-      this.loadUsers(this.query);
-    }
   }
 
   pageSizeChanged(e: any) {
