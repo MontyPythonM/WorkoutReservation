@@ -5,7 +5,8 @@ namespace WorkoutReservation.Application.Contracts;
 
 public interface IWorkoutTypeTagRepository
 {
-    public Task<List<WorkoutTypeTag>> GetAllAsync(bool asNoTracking, CancellationToken token);
+    public Task<List<WorkoutTypeTag>> GetAllAsync(bool asNoTracking, CancellationToken token,
+        params Expression<Func<WorkoutTypeTag, object>>[] includes);
     public Task<List<WorkoutTypeTag>> GetAllAsync(Expression<Func<WorkoutTypeTag, bool>> wherePredicate, 
         bool asNoTracking, CancellationToken token);
     public Task<WorkoutTypeTag> GetByIdAsync(int workoutTypeTagId, bool asNoTracking, CancellationToken token);

@@ -4,6 +4,7 @@ import {HttpClient} from "@angular/common/http";
 import {Observable} from "rxjs";
 import {apiUrl} from "../../environments/api-urls";
 import {WorkoutTypeTag} from "../models/workout-type-tag.model";
+import {WorkoutTypeTagActive} from "../models/workout-type-tag-active.model";
 
 @Injectable({
   providedIn: 'root'
@@ -14,8 +15,8 @@ export class WorkoutTypeTagService extends BaseService  {
     super(http);
   }
 
-  getActive(): Observable<WorkoutTypeTag[]> {
-    return super.get<WorkoutTypeTag[]>(apiUrl.workoutTypeTag.onlyActive);
+  getActive(): Observable<WorkoutTypeTagActive[]> {
+    return super.get<WorkoutTypeTagActive[]>(apiUrl.workoutTypeTag.onlyActive);
   }
 
   getAll(): Observable<WorkoutTypeTag[]> {

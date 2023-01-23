@@ -4,6 +4,7 @@ import {WorkoutTypeTag} from "../../../models/workout-type-tag.model";
 import {WorkoutTypeTagService} from "../../../services/workout-type-tag.service";
 import Form from "devextreme/ui/form";
 import {NotificationService} from "../../../services/notification.service";
+import {DATETIME_FORMAT} from "../../../constants/constants";
 
 @Component({
   selector: 'app-workout-type-tags',
@@ -16,6 +17,7 @@ export class WorkoutTypeTagsComponent extends BaseComponent implements OnInit {
   workoutTypeTagCommand?: WorkoutTypeTag;
   isAddPopupOpened: boolean;
   isSaving: boolean;
+  dateFormat = DATETIME_FORMAT;
 
   private form!: Form | undefined;
 
@@ -25,7 +27,6 @@ export class WorkoutTypeTagsComponent extends BaseComponent implements OnInit {
     this.workoutTypeTags = [];
     this.isAddPopupOpened = false;
     this.isSaving = false;
-
   }
 
   ngOnInit(): void {
@@ -59,6 +60,11 @@ export class WorkoutTypeTagsComponent extends BaseComponent implements OnInit {
 
   openAddPopup = () => this.isAddPopupOpened = true;
   closeAddPopup = () => this.isAddPopupOpened = false;
+
+  editWorkoutTypeTag = () => {}
+
+  deleteWorkoutTypeTag = () => {}
+
 
   onFormInitialized = (e: {component: Form}) => this.form = e.component;
 }

@@ -13,10 +13,20 @@
     keyExpr="id"
     [dataSource]="workoutTypeTags"
     [columnAutoWidth]="true"
-    [showBorders]="true">
+    [showBorders]="true"
+    [showRowLines]="true">
     <dxi-column dataField="id" alignment="center" dataType="string"></dxi-column>
-    <dxi-column dataField="tag" alignment="center" dataType="string"></dxi-column>
-    <dxi-column dataField="isActive" alignment="center" dataType="boolean"></dxi-column>
+    <dxi-column dataField="tag" alignment="center" dataType="string" [minWidth]="300"></dxi-column>
+    <dxi-column dataField="numberOfUses" alignment="center" dataType="number" [width]="150"></dxi-column>
+    <dxi-column dataField="isActive" alignment="center" dataType="boolean" [width]="100"></dxi-column>
+    <dxi-column dataField="createdBy" alignment="center" dataType="string" [width]="300"></dxi-column>
+    <dxi-column dataField="createdDate" alignment="center" dataType="date" [format]="dateFormat" [width]="150"></dxi-column>
+    <dxi-column type="buttons" caption="Edit tag">
+      <dxi-button icon="edit" [onClick]="editWorkoutTypeTag"></dxi-button>
+    </dxi-column>
+    <dxi-column type="buttons" caption="Delete tag">
+      <dxi-button cssClass="delete-button" icon="trash" [onClick]="deleteWorkoutTypeTag"></dxi-button>
+    </dxi-column>
     <dxo-paging
       [pageIndex]="0"
       [pageSize]="20">
