@@ -20,6 +20,7 @@ export const apiUrl = {
     all: 'workout-type-tag/',
     create: "workout-type-tag/",
     deactivate: "workout-type-tag/",
-    delete: "workout-type-tag/"
+    delete: "workout-type-tag/",
+    update: "workout-type-tag/"
   }
 }

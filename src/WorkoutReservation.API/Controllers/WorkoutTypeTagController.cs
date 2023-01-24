@@ -47,6 +47,14 @@ public class WorkoutTypeTagController : ApiControllerBase
         return NoContent();
     }
     
+    [HttpPut]
+    [SwaggerOperation(Summary = "Edit selected workout type tag")]
+    public async Task<IActionResult> UpdateWorkoutTypeTag([FromBody] UpdateWorkoutTypeTagCommand command, CancellationToken token)
+    {
+        await Mediator.Send(command, token);
+        return Ok();
+    }
+    
     [HttpDelete("{workoutTypeTagId}")]
     [SwaggerOperation(Summary = "Delete selected workout type tag")]
     public async Task<IActionResult> DeleteWorkoutTypeTag([FromRoute] int workoutTypeTagId, CancellationToken token)

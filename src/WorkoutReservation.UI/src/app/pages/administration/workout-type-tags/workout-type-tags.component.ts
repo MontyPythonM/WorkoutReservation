@@ -5,6 +5,8 @@ import {WorkoutTypeTagService} from "../../../services/workout-type-tag.service"
 import Form from "devextreme/ui/form";
 import {NotificationService} from "../../../services/notification.service";
 import {DATETIME_FORMAT} from "../../../constants/constants";
+import {WorkoutTypeTagCommand} from "../../../models/workout-type-tag-command.model";
+import {Row} from "devextreme/ui/data_grid";
 
 @Component({
   selector: 'app-workout-type-tags',
@@ -14,19 +16,29 @@ import {DATETIME_FORMAT} from "../../../constants/constants";
 export class WorkoutTypeTagsComponent extends BaseComponent implements OnInit {
 
   workoutTypeTags: WorkoutTypeTag[];
-  workoutTypeTagCommand?: WorkoutTypeTag;
-  isAddPopupOpened: boolean;
+  workoutTypeTagCommand?: WorkoutTypeTagCommand;
+  isAddPopupVisible: boolean;
+  isEditPopupVisible: boolean;
+  isDeletePopupVisible: boolean;
   isSaving: boolean;
   dateFormat = DATETIME_FORMAT;
-
-  private form!: Form | undefined;
+  isActiveTypes: { name: string, value: boolean }[];
+  private addPopupform!: Form | undefined;
+  private updatePopupForm!: Form | undefined;
+  private workoutTypeTagIdToDelete?: number;
 
   constructor(private workoutTypeTagService: WorkoutTypeTagService,
               private notificationService: NotificationService) {
     super();
     this.workoutTypeTags = [];
-    this.isAddPopupOpened = false;
+    this.isAddPopupVisible = false;
+    this.isEditPopupVisible = false;
+    this.isDeletePopupVisible = false;
     this.isSaving = false;
+    this.isActiveTypes = [
+      { name: "true", value: true },
+      { name: "false", value: false },
+    ];
   }
 
   ngOnInit(): void {
@@ -40,31 +52,69 @@ export class WorkoutTypeTagsComponent extends BaseComponent implements OnInit {
   }
 
   createWorkoutTypeTag() {
-    if(!this.form?.validate().isValid) return;
+    if(!this.addPopupform?.validate().isValid) return;
     this.isSaving = true;
     this.subscribe(this.workoutTypeTagService.create(this.workoutTypeTagCommand?.tag!), {
       next: () => {
         this.isSaving = false;
+        this.notificationService.show('Workout type tag added successfully', 'success')
         this.closeAddPopup();
+        this.ngOnInit();
       },
       error: () => {
         this.notificationService.show('Failed to add workout type tag', 'error');
         this.isSaving = false;
-      },
-      complete: () => {
-        this.notificationService.show('Workout type tag added successfully', 'success')
-        this.ngOnInit();
       }
     });
   }
 
-  openAddPopup = () => this.isAddPopupOpened = true;
-  closeAddPopup = () => this.isAddPopupOpened = false;
+  openAddPopup = () => {
+    this.addPopupform?.resetValues();
+    this.isAddPopupVisible = true;
+  }
 
-  editWorkoutTypeTag = () => {}
+  closeAddPopup = () => this.isAddPopupVisible = false;
 
-  deleteWorkoutTypeTag = () => {}
+  editWorkoutTypeTag = (): void => {
+    if (!this.updatePopupForm?.validate().isValid) return;
+    this.isSaving = true;
+    this.subscribe(this.workoutTypeTagService.update(this.workoutTypeTagCommand!), {
+      next: () => {
+        this.notificationService.show('Workout type tag updated successfully', 'success');
+        this.isSaving = false;
+        this.closeEditPopup();
+        this.ngOnInit();
+      },
+      error: () => {
+        this.notificationService.show('Failed to update workout type tag', 'error');
+        this.isSaving = false;
+      }
+    });
+  }
 
+  openEditPopup = (e: {row: Row}) => {
+    const row = e.row.data;
+    console.log(row.isActive);
+    this.workoutTypeTagCommand = new WorkoutTypeTagCommand(row.id, row.tag, row.isActive);
+    this.isEditPopupVisible= true;
+  }
+  closeEditPopup = () => this.isEditPopupVisible = false;
 
-  onFormInitialized = (e: {component: Form}) => this.form = e.component;
+  deleteWorkoutTypeTag = () => {
+    this.subscribe(this.workoutTypeTagService.remove(this.workoutTypeTagIdToDelete!), {
+      next: () => {
+        this.notificationService.show('Workout type tag delete successfully', 'success');
+        this.ngOnInit();
+      },
+      error: () => this.notificationService.show('Failed to delete workout type tag', 'error')
+    });
+  }
+
+  openDeletePopup = (e: {row: Row}) => {
+    this.workoutTypeTagIdToDelete = e.row.data.id;
+    this.isDeletePopupVisible = true;
+  }
+
+  updatePopupFormInitialize = (e: {component: Form}) => this.updatePopupForm = e.component;
+  createPopupFromInitialize = (e: {component: Form}) => this.addPopupform = e.component;
 }

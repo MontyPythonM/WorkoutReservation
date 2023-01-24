@@ -5,6 +5,7 @@ import {Observable} from "rxjs";
 import {apiUrl} from "../../environments/api-urls";
 import {WorkoutTypeTag} from "../models/workout-type-tag.model";
 import {WorkoutTypeTagActive} from "../models/workout-type-tag-active.model";
+import {WorkoutTypeTagCommand} from "../models/workout-type-tag-command.model";
 
 @Injectable({
   providedIn: 'root'
@@ -33,5 +34,9 @@ export class WorkoutTypeTagService extends BaseService  {
 
   create(tag: string): Observable<void> {
     return super.post<void>(apiUrl.workoutTypeTag.create, { tag });
+  }
+
+  update(workoutTypeTagCommand: WorkoutTypeTagCommand): Observable<void> {
+    return super.put<void>(apiUrl.workoutTypeTag.update, { ...workoutTypeTagCommand });
   }
 }
