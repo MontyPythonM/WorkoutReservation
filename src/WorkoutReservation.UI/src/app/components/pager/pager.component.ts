@@ -38,14 +38,12 @@ export class PagerComponent implements OnInit {
   nextPage = () => {
     if (this.currentPageNumber < this.totalPages!) {
       this.currentPageNumber++;
-      this.onPageNumberChanged(this.currentPageNumber);
     }
   }
 
   previousPage = () => {
     if (this.currentPageNumber > 1) {
       this.currentPageNumber--;
-      this.onPageNumberChanged(this.currentPageNumber);
     }
   }
 }

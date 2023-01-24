@@ -4,6 +4,8 @@ import {HttpClient} from "@angular/common/http";
 import {Observable} from "rxjs";
 import {apiUrl} from "../../environments/api-urls";
 import {WorkoutTypeTag} from "../models/workout-type-tag.model";
+import {WorkoutTypeTagActive} from "../models/workout-type-tag-active.model";
+import {WorkoutTypeTagCommand} from "../models/workout-type-tag-command.model";
 
 @Injectable({
   providedIn: 'root'
@@ -14,11 +16,11 @@ export class WorkoutTypeTagService extends BaseService  {
     super(http);
   }
 
-  getActiveWorkoutTypeTags(): Observable<WorkoutTypeTag[]> {
-    return super.get<WorkoutTypeTag[]>(apiUrl.workoutTypeTag.onlyActive);
+  getActive(): Observable<WorkoutTypeTagActive[]> {
+    return super.get<WorkoutTypeTagActive[]>(apiUrl.workoutTypeTag.onlyActive);
   }
 
-  getAllWorkoutTypeTags(): Observable<WorkoutTypeTag[]> {
+  getAll(): Observable<WorkoutTypeTag[]> {
     return super.get<WorkoutTypeTag[]>(apiUrl.workoutTypeTag.all);
   }
 
@@ -26,7 +28,15 @@ export class WorkoutTypeTagService extends BaseService  {
     return super.patch<void>(apiUrl.workoutTypeTag.deactivate + id);
   }
 
+  remove(id: number): Observable<void> {
+    return super.delete<void>(apiUrl.workoutTypeTag.delete + id);
+  }
+
   create(tag: string): Observable<void> {
     return super.post<void>(apiUrl.workoutTypeTag.create, { tag });
+  }
+
+  update(workoutTypeTagCommand: WorkoutTypeTagCommand): Observable<void> {
+    return super.put<void>(apiUrl.workoutTypeTag.update, { ...workoutTypeTagCommand });
   }
 }

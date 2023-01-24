@@ -13,6 +13,7 @@ import {WorkoutTypeTag} from "../../models/workout-type-tag.model";
 import {InstructorService} from "../../services/instructor.service";
 import {Instructor} from "../../models/instructor.model";
 import {WorkoutTypeCommand} from "../../models/workout-types-command.model";
+import {WorkoutTypeTagActive} from "../../models/workout-type-tag-active.model";
 
 @Component({
   selector: 'app-workout-types',
@@ -28,7 +29,8 @@ export class WorkoutTypesComponent extends BaseComponent implements OnInit {
   isDeletePopupVisible: boolean;
   isSaving: boolean;
   intensity: EnumObject[];
-  workoutTypeTags: WorkoutTypeTag[];
+  workoutTypeTags: WorkoutTypeTagActive[];
+  onlyActiveWorkoutTypeTags: WorkoutTypeTagActive[];
   instructors: Instructor[];
   workoutTypeIdToDelete!: number;
   private createPopupForm?: dxForm;
@@ -40,14 +42,20 @@ export class WorkoutTypesComponent extends BaseComponent implements OnInit {
               private instructorService: InstructorService) {
     super();
     this.workoutTypes = new PagedResult<WorkoutType>();
-    this.query = PagedQuery.default();  // TODO: add pagination
-    this.query.sortBy = 'Name'; // TODO: add pagination
+    this.query = new PagedQuery({
+      pageNumber: 1,
+      pageSize: 10,
+      sortByDescending: false,
+      sortBy: 'Name',
+      searchPhrase: ''
+    });
     this.isCreatePopupOpened = false;
     this.isUpdatePopupOpened = false;
     this.isDeletePopupVisible = false;
     this.isSaving = false;
     this.intensity = enumToObjects(WorkoutIntensity);
     this.workoutTypeTags = [];
+    this.onlyActiveWorkoutTypeTags = [];
     this.instructors = [];
   }
 
@@ -64,15 +72,18 @@ export class WorkoutTypesComponent extends BaseComponent implements OnInit {
   }
 
   protected loadWorkoutTypeTags(): void {
-    this.subscribe(this.workoutTypeTagService.getAllWorkoutTypeTags(), {
-      next: (response: WorkoutTypeTag[]) => this.workoutTypeTags = response
-    })
+    this.subscribe(this.workoutTypeTagService.getActive(), {
+      next: (response: WorkoutTypeTagActive[]) => {
+        this.workoutTypeTags = response
+        this.onlyActiveWorkoutTypeTags = response.filter(x => x.isActive)
+      }
+    });
   }
 
   protected loadInstructors(): void {
     this.subscribe(this.instructorService.getAll(), {
       next: (response: Instructor[]) => this.instructors = response
-    })
+    });
   }
 
   createWorkoutType() {
@@ -161,5 +172,15 @@ export class WorkoutTypesComponent extends BaseComponent implements OnInit {
   getInstructor = (instructorId: any): string => {
     const instructor = this.instructors.find(x => x.id === instructorId)!;
     return `${instructor.firstName} ${instructor.lastName}`;
+  }
+
+  pageSizeChanged(e: any) {
+    this.query.pageSize = e;
+    this.loadWorkoutTypes(this.query);
+  }
+
+  pageNumberChanged(e: any) {
+    this.query.pageNumber = e;
+    this.loadWorkoutTypes(this.query);
   }
 }

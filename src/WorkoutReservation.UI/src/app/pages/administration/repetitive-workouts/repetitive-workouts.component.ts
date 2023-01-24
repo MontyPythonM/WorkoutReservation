@@ -48,8 +48,8 @@ export class RepetitiveWorkoutsComponent extends BaseComponent {
   }
 
   openGeneratePopup = () => {
-    this.popupTitle = "Generate workouts";
-    this.popupContent = "Force-generate workouts for the upcoming week?";
+    this.popupTitle = "Generate workouts for upcoming week";
+    this.popupContent = "This action does not guarantee the execution of the generation. Check the hangfire dashboard to make sure the operation was successful.";
     this.isGeneratePopupVisible = true;
   }
 }

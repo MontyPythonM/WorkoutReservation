@@ -19,7 +19,7 @@ public static class WorkoutTypeRepositoryMock
                 Name = "Test-Hatha yoga",
                 Description = "The purpose of Hatha Yoga is relief from three types of pain.",
                 Intensity = WorkoutIntensity.Low,
-                WorkoutTypeTags = new List<WorkoutTypeTag>() { new("Relax") }
+                WorkoutTypeTags = new List<WorkoutTypeTag>() { new("Relax", Guid.Empty) }
             },
 
             new WorkoutType()
@@ -28,7 +28,7 @@ public static class WorkoutTypeRepositoryMock
                 Name = "Test-Vinyasa yoga",
                 Description = "Vinyasa is a style of yoga",
                 Intensity = WorkoutIntensity.Moderate,
-                WorkoutTypeTags = new List<WorkoutTypeTag>() { new("Stretch") }
+                WorkoutTypeTags = new List<WorkoutTypeTag>() { new("Stretch", Guid.Empty) }
             },               
         };
 

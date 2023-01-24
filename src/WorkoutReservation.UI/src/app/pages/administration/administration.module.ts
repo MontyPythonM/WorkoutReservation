@@ -1,6 +1,13 @@
 import {NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
-import {DxButtonModule, DxDataGridModule, DxTabPanelModule} from "devextreme-angular";
+import {
+  DxButtonModule,
+  DxDataGridModule,
+  DxFormModule,
+  DxLoadPanelModule,
+  DxPopupModule,
+  DxTabPanelModule
+} from "devextreme-angular";
 import {UsersComponent} from "./users/users.component";
 import {WorkoutTypeTagsComponent} from "./workout-type-tags/workout-type-tags.component";
 import {RepetitiveWorkoutsComponent} from "./repetitive-workouts/repetitive-workouts.component";
@@ -22,6 +29,9 @@ import {PagerModule} from "../../components/pager/pager.module";
     DxButtonModule,
     DxDataGridModule,
     DxButtonModule,
+    DxPopupModule,
+    DxFormModule,
+    DxLoadPanelModule,
     ConfirmationPopupModule,
     PagerModule,
     RouterModule.forChild([

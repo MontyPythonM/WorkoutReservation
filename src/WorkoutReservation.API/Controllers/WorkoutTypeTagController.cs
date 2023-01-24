@@ -5,7 +5,8 @@ using WorkoutReservation.API.Controllers.Base;
 using WorkoutReservation.Application.Features.WorkoutTypeTags.Commands.CreateWorkoutTypeTag;
 using WorkoutReservation.Application.Features.WorkoutTypeTags.Commands.DeactivateWorkoutTypeTag;
 using WorkoutReservation.Application.Features.WorkoutTypeTags.Commands.DeleteWorkoutTypeTag;
-using WorkoutReservation.Application.Features.WorkoutTypeTags.Queries.GetWorkoutTypeTagsList;
+using WorkoutReservation.Application.Features.WorkoutTypeTags.Queries.GetActiveWorkoutTypeTags;
+using WorkoutReservation.Application.Features.WorkoutTypeTags.Queries.GetWorkoutTypeTags;
 
 namespace WorkoutReservation.API.Controllers;
 
@@ -18,7 +19,7 @@ public class WorkoutTypeTagController : ApiControllerBase
     [SwaggerOperation(Summary = "Returns list of active workout type tags")]
     public async Task<IActionResult> GetActiveWorkoutTypeTags(CancellationToken token)
     {
-        var result = await Mediator.Send(new GetWorkoutTypeTagsListQuery() { OnlyActive = true }, token);
+        var result = await Mediator.Send(new GetActiveWorkoutTypeTagsQuery(), token);
         return Ok(result);
     }
     
@@ -26,7 +27,7 @@ public class WorkoutTypeTagController : ApiControllerBase
     [SwaggerOperation(Summary = "Returns list of workout type tags")]
     public async Task<IActionResult> GetWorkoutTypeTags(CancellationToken token)
     {
-        var result = await Mediator.Send(new GetWorkoutTypeTagsListQuery() { OnlyActive = false }, token);
+        var result = await Mediator.Send(new GetWorkoutTypeTagsQuery(), token);
         return Ok(result);
     }
 
@@ -44,6 +45,14 @@ public class WorkoutTypeTagController : ApiControllerBase
     {
         await Mediator.Send(new DeactivateWorkoutTypeTagCommand() { Id = workoutTypeTagId }, token);
         return NoContent();
+    }
+    
+    [HttpPut]
+    [SwaggerOperation(Summary = "Edit selected workout type tag")]
+    public async Task<IActionResult> UpdateWorkoutTypeTag([FromBody] UpdateWorkoutTypeTagCommand command, CancellationToken token)
+    {
+        await Mediator.Send(command, token);
+        return Ok();
     }
     
     [HttpDelete("{workoutTypeTagId}")]

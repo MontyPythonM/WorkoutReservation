@@ -5,7 +5,7 @@ namespace WorkoutReservation.Application.Features.WorkoutTypes.Queries.GetWorkou
 
 public class GetWorkoutTypesListQueryValidator : AbstractValidator<GetWorkoutTypesListQuery>
 {
-    private readonly int[] _allowedPageSizes = new[] { 5, 10, 15 };
+    private readonly int[] _allowedPageSizes = new[] { 10, 20, 50 };
     private readonly string[] _allowedSortByColumnNames = { nameof(WorkoutType.Name), nameof(WorkoutType.Intensity)};
 
     public GetWorkoutTypesListQueryValidator()

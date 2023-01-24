@@ -16,7 +16,7 @@ internal sealed class DummyWorkoutTypes
                 Intensity = WorkoutIntensity.Low,
                 WorkoutTypeTags = new List<WorkoutTypeTag>()
                 {
-                    new("Relax"),
+                    new("Relax", Guid.Empty),
                 }
             },
 
@@ -27,7 +27,7 @@ internal sealed class DummyWorkoutTypes
                 Intensity = WorkoutIntensity.Moderate,
                 WorkoutTypeTags = new List<WorkoutTypeTag>()
                 {
-                    new("Stretch")
+                    new("Stretch", Guid.Empty)
                 }
             },
 
@@ -38,8 +38,8 @@ internal sealed class DummyWorkoutTypes
                 Intensity = WorkoutIntensity.Extreme,
                 WorkoutTypeTags = new List<WorkoutTypeTag>()
                 {
-                    new("Strength"),
-                    new("Fat burning")
+                    new("Strength", Guid.Empty),
+                    new("Fat burning", Guid.Empty)
                 }
             },
 

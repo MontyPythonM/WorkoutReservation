@@ -15,11 +15,20 @@ public class WorkoutTypeTagRepository : IWorkoutTypeTagRepository
         _dbContext = dbContext;
     }
 
-    public async Task<List<WorkoutTypeTag>> GetAllAsync(bool asNoTracking, CancellationToken token)
+    public async Task<List<WorkoutTypeTag>> GetAllAsync(bool asNoTracking, CancellationToken token, params Expression<Func<WorkoutTypeTag, object>>[] includes)
     {
         var query = _dbContext.WorkoutTypeTags.AsQueryable();
+        
         if (asNoTracking)
             query.AsNoTracking();
+        
+        if (includes.Any())
+        {
+            foreach (var include in includes)
+            {
+                query = query.Include(include);
+            }
+        }
         
         return await query.ToListAsync(token);
     }
