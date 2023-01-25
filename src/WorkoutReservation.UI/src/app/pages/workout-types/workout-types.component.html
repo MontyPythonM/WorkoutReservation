@@ -90,7 +90,7 @@
         <dxi-validation-rule type="required" message="Intensity is required"></dxi-validation-rule>
       </dxi-item>
       <dxi-item dataField="workoutTypeTags" editorType="dxTagBox"
-        [editorOptions]="{ dataSource: onlyActiveWorkoutTypeTags, valueExpr: 'id', displayExpr: 'tag' }">
+        [editorOptions]="{ dataSource: activeWorkoutTypeTags, valueExpr: 'id', displayExpr: 'tag' }">
       </dxi-item>
       <dxi-item dataField="instructors" editorType="dxTagBox"
                 [editorOptions]="{ dataSource: instructors, valueExpr: 'id', displayExpr: 'lastName' }">
@@ -139,7 +139,7 @@
         <dxi-validation-rule type="required" message="Intensity is required"></dxi-validation-rule>
       </dxi-item>
       <dxi-item dataField="workoutTypeTags" editorType="dxTagBox"
-                [editorOptions]="{ dataSource: workoutTypeTags, valueExpr: 'id', displayExpr: 'tag' }">
+                [editorOptions]="{ dataSource: activeAndExistingWorkoutTypeTags, valueExpr: 'id', displayExpr: 'tag' }">
       </dxi-item>
       <dxi-item dataField="instructors" editorType="dxTagBox"
                 [editorOptions]="{ dataSource: instructors, valueExpr: 'id', displayExpr: 'lastName' }">

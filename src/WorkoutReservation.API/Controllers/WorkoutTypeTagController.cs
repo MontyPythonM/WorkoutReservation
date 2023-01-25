@@ -5,6 +5,7 @@ using WorkoutReservation.API.Controllers.Base;
 using WorkoutReservation.Application.Features.WorkoutTypeTags.Commands.CreateWorkoutTypeTag;
 using WorkoutReservation.Application.Features.WorkoutTypeTags.Commands.DeactivateWorkoutTypeTag;
 using WorkoutReservation.Application.Features.WorkoutTypeTags.Commands.DeleteWorkoutTypeTag;
+using WorkoutReservation.Application.Features.WorkoutTypeTags.Commands.UpdateWorkoutTypeTag;
 using WorkoutReservation.Application.Features.WorkoutTypeTags.Queries.GetActiveWorkoutTypeTags;
 using WorkoutReservation.Application.Features.WorkoutTypeTags.Queries.GetWorkoutTypeTags;
 
