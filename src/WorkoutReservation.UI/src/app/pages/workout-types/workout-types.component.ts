@@ -9,7 +9,6 @@ import {NotificationService} from "../../services/notification.service";
 import {EnumObject, enumToObjects} from "../../models/enums/enum-converter";
 import {WorkoutIntensity} from "../../models/enums/workout-intensity.enum";
 import {WorkoutTypeTagService} from "../../services/workout-type-tag.service";
-import {WorkoutTypeTag} from "../../models/workout-type-tag.model";
 import {InstructorService} from "../../services/instructor.service";
 import {Instructor} from "../../models/instructor.model";
 import {WorkoutTypeCommand} from "../../models/workout-types-command.model";
@@ -30,7 +29,8 @@ export class WorkoutTypesComponent extends BaseComponent implements OnInit {
   isSaving: boolean;
   intensity: EnumObject[];
   workoutTypeTags: WorkoutTypeTagActive[];
-  onlyActiveWorkoutTypeTags: WorkoutTypeTagActive[];
+  activeWorkoutTypeTags: WorkoutTypeTagActive[];
+  activeAndExistingWorkoutTypeTags: WorkoutTypeTagActive[];
   instructors: Instructor[];
   workoutTypeIdToDelete!: number;
   private createPopupForm?: dxForm;
@@ -55,7 +55,8 @@ export class WorkoutTypesComponent extends BaseComponent implements OnInit {
     this.isSaving = false;
     this.intensity = enumToObjects(WorkoutIntensity);
     this.workoutTypeTags = [];
-    this.onlyActiveWorkoutTypeTags = [];
+    this.activeWorkoutTypeTags = [];
+    this.activeAndExistingWorkoutTypeTags = [];
     this.instructors = [];
   }
 
@@ -74,8 +75,8 @@ export class WorkoutTypesComponent extends BaseComponent implements OnInit {
   protected loadWorkoutTypeTags(): void {
     this.subscribe(this.workoutTypeTagService.getActive(), {
       next: (response: WorkoutTypeTagActive[]) => {
-        this.workoutTypeTags = response
-        this.onlyActiveWorkoutTypeTags = response.filter(x => x.isActive)
+        this.workoutTypeTags = response;
+        this.activeWorkoutTypeTags = response.filter(x => x.isActive);
       }
     });
   }
@@ -142,6 +143,7 @@ export class WorkoutTypesComponent extends BaseComponent implements OnInit {
   }
 
   openUpdatePopup = (workoutType: WorkoutType) => {
+    this.activeAndExistingWorkoutTypeTags = this.getActiveAndExistingTags(workoutType);
     this.workoutTypeCommand = new WorkoutTypeCommand(
       workoutType.id,
       workoutType.name,
@@ -167,7 +169,7 @@ export class WorkoutTypesComponent extends BaseComponent implements OnInit {
   onCreatePopupForm = (e: { component: dxForm }) => this.createPopupForm = e.component;
   onUpdatePopupForm = (e: { component: dxForm }) => this.updatePopupForm = e.component;
 
-  getWorkoutTag = (workoutTagId: any): string => this.workoutTypeTags.find(x => x.id === workoutTagId)!.tag!;
+  getWorkoutTag = (workoutTagId: number): string => this.workoutTypeTags.find(x => x.id === workoutTagId)!.tag;
 
   getInstructor = (instructorId: any): string => {
     const instructor = this.instructors.find(x => x.id === instructorId)!;
@@ -182,5 +184,13 @@ export class WorkoutTypesComponent extends BaseComponent implements OnInit {
   pageNumberChanged(e: any) {
     this.query.pageNumber = e;
     this.loadWorkoutTypes(this.query);
+  }
+
+  private getActiveAndExistingTags = (workoutType: WorkoutType): WorkoutTypeTagActive[] => {
+    const activeTags = this.activeWorkoutTypeTags;
+    const existingNotActiveTagIds = workoutType.workoutTypeTags.filter(tagId => !activeTags.map(x => x.id).includes(tagId));
+    const existingTags = this.workoutTypeTags.filter(tag => existingNotActiveTagIds.includes(tag.id));
+
+    return [...activeTags, ...existingTags];
   }
 }
