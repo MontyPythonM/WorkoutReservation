@@ -30,7 +30,7 @@ public class UserController : ApiControllerBase
         return Ok(await Mediator.Send(query, token));
     }
 
-    [HttpGet]
+    [HttpGet("users")]
     [Authorize(Roles = "Administrator")]
     [SwaggerOperation(Summary = "Returns paged list of application users")]
     public async Task<IActionResult> GetAllUsers([FromQuery] GetUsersListQuery query, CancellationToken token)

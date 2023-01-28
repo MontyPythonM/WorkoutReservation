@@ -1,6 +1,6 @@
 import {NgModule} from '@angular/core';
 import {BrowserModule} from '@angular/platform-browser';
-import {HttpClientModule} from '@angular/common/http';
+import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
 
 import {AppComponent} from './app.component';
 import {FooterComponent} from './components/footer/footer.component';
@@ -41,6 +41,7 @@ import {NavBarComponent} from './components/header/nav-bar/nav-bar.component';
 import {AdministrationModule} from "./pages/administration/administration.module";
 import {ConfirmationPopupModule} from "./components/confirmation-popup/confirmation-popup.module";
 import {PagerModule} from "./components/pager/pager.module";
+import {TokenAuthorizationInterceptor} from "./interceptors/token-authorization.interceptor";
 
 @NgModule({
   declarations: [
@@ -85,7 +86,14 @@ import {PagerModule} from "./components/pager/pager.module";
     ConfirmationPopupModule,
     PagerModule
   ],
-  providers: [DatePipe],
+  providers: [
+    DatePipe,
+      {
+        provide: HTTP_INTERCEPTORS,
+        useClass: TokenAuthorizationInterceptor,
+        multi: true
+      }
+    ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

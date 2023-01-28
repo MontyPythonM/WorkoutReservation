@@ -1,7 +1,6 @@
 ﻿using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
-using AutoMapper;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
@@ -20,8 +19,7 @@ public class LoginQueryHandler : IRequestHandler<LoginQuery, string>
 
     public LoginQueryHandler(IUserRepository userRepository,
         IPasswordHasher<User> passwordHasher,
-        AuthenticationSettings authenticationSettings,
-        IMapper mapper)
+        AuthenticationSettings authenticationSettings)
     {
         _userRepository = userRepository;
         _passwordHasher = passwordHasher;
@@ -53,7 +51,7 @@ public class LoginQueryHandler : IRequestHandler<LoginQuery, string>
         var expires = DateTime.Now.AddMinutes(_authenticationSettings.JwtExpireMinutes);
 
         var token = new JwtSecurityToken(_authenticationSettings.JwtIssuer,
-            _authenticationSettings.JwtIssuer,
+            _authenticationSettings.JwtAudience,
             claims,
             expires: expires,
             signingCredentials: cred);

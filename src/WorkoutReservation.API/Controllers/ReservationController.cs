@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 using WorkoutReservation.API.Controllers.Base;
-using WorkoutReservation.Application.Common.Dtos;
 using WorkoutReservation.Application.Features.Reservations.Commands.AddReservation;
 using WorkoutReservation.Application.Features.Reservations.Commands.CancelReservation;
 using WorkoutReservation.Application.Features.Reservations.Commands.EditReservationStatus;

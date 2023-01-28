@@ -43,7 +43,7 @@ try
         config.TokenValidationParameters = new TokenValidationParameters
         {
             ValidIssuer = authenticationSettings.JwtIssuer,
-            ValidAudience = authenticationSettings.JwtIssuer,
+            ValidAudience = authenticationSettings.JwtAudience,
             IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(authenticationSettings.JwtKey)),
             ClockSkew = TimeSpan.Zero
         };
@@ -97,10 +97,10 @@ try
     app.UseMiddleware<ExceptionHandlingMiddleware>();
     
     app.UseCors(policy => policy
-        .AllowAnyOrigin()
         .AllowAnyHeader()
-        .AllowAnyMethod()
-        .WithOrigins("http://localhost:4200"));
+        .WithMethods("POST", "PUT", "PATCH", "DELETE", "UPDATE", "OPTIONS")
+        .WithOrigins("http://localhost:4200")
+        .AllowCredentials());
     
     app.UseAuthentication();
     app.UseHangfireDashboard("/hangfire", new DashboardOptions
