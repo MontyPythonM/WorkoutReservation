@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using WorkoutReservation.Application.Common.Exceptions;
 using WorkoutReservation.Domain.Entities;
+using WorkoutReservation.Infrastructure.Interfaces;
 using WorkoutReservation.Infrastructure.Persistence;
 using WorkoutReservation.Infrastructure.Seeders.Data;
 using WorkoutReservation.Infrastructure.Settings;
@@ -15,16 +16,17 @@ public class SystemAdministratorSeeder
     private readonly ILogger<SystemAdministratorSeeder> _logger;
     private readonly IPasswordHasher<ApplicationUser> _passwordHasher;
     private readonly SystemAdministratorSettings _firstAdminSettings;
-
-    public SystemAdministratorSeeder(AppDbContext dbContext,
-        ILogger<SystemAdministratorSeeder> logger,
-        IPasswordHasher<ApplicationUser> passwordHasher,
-        SystemAdministratorSettings firstAdminSettings)
+    private readonly IFirstSystemAdministrator _firstSystemAdministrator;
+    
+    public SystemAdministratorSeeder(AppDbContext dbContext, ILogger<SystemAdministratorSeeder> logger,
+        IPasswordHasher<ApplicationUser> passwordHasher, SystemAdministratorSettings firstAdminSettings, 
+        IFirstSystemAdministrator firstSystemAdministrator)
     {
         _dbContext = dbContext;
         _logger = logger;
         _passwordHasher = passwordHasher;
         _firstAdminSettings = firstAdminSettings;
+        _firstSystemAdministrator = firstSystemAdministrator;
     }
 
     public async Task SeedAsync(CancellationToken token)
@@ -40,13 +42,10 @@ public class SystemAdministratorSeeder
             return;
         }
         
-        var firstAdmin = FirstSystemAdministrator.Create(_firstAdminSettings, _passwordHasher);
+        var firstAdmin = await _firstSystemAdministrator.Create(_firstAdminSettings, _passwordHasher, token);
         
-        // TODO: sql error to resolve
-        //firstAdmin.Id = Guid.NewGuid();
-        
-        //await _dbContext.AddAsync(firstAdmin, token);
-        //await _dbContext.SaveChangesAsync(token);
+        await _dbContext.AddAsync(firstAdmin, token);
+        await _dbContext.SaveChangesAsync(token);
         _logger.LogWarning("Default administrator was seeded into database.");
     }
 }

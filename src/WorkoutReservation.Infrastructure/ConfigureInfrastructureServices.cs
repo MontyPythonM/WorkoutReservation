@@ -8,9 +8,11 @@ using WorkoutReservation.Domain.Entities;
 using WorkoutReservation.Infrastructure.Authentication;
 using WorkoutReservation.Infrastructure.Authorization;
 using WorkoutReservation.Infrastructure.Identity;
+using WorkoutReservation.Infrastructure.Interfaces;
 using WorkoutReservation.Infrastructure.Persistence;
 using WorkoutReservation.Infrastructure.Repositories;
 using WorkoutReservation.Infrastructure.Seeders;
+using WorkoutReservation.Infrastructure.Seeders.Data;
 
 namespace WorkoutReservation.Infrastructure;
 
@@ -25,8 +27,9 @@ public static class ConfigureInfrastructureServices
             options.UseSqlServerStorage(configuration.GetConnectionString("localDbConnection")));
 
         services.AddHangfireServer();
-        
         services.AddScoped<ICurrentUserAccessor, CurrentUserAccessor>();
+        
+        services.AddScoped<IApplicationRoleRepository, ApplicationRoleRepository>();
         services.AddScoped<IApplicationUserRepository, ApplicationUserRepository>();
         services.AddScoped<IInstructorRepository, InstructorRepository>();
         services.AddScoped<IWorkoutTypeRepository, WorkoutTypeRepository>();
@@ -34,6 +37,8 @@ public static class ConfigureInfrastructureServices
         services.AddScoped<IRealWorkoutRepository, RealWorkoutRepository>();
         services.AddScoped<IReservationRepository, ReservationRepository>();
         services.AddScoped<IWorkoutTypeTagRepository, WorkoutTypeTagRepository>();
+        
+        services.AddScoped<IFirstSystemAdministrator, FirstSystemAdministrator>();
         services.AddScoped<IJwtProvider, JwtProvider>();
         services.AddScoped<IPasswordHasher<ApplicationUser>, PasswordHasher<ApplicationUser>>();
         services.AddScoped<IPermissionService, PermissionService>();

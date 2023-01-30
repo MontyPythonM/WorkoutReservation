@@ -33,4 +33,11 @@ public class ApplicationUser
 
     public void SetRole(ApplicationRole role) => ApplicationRoles.Add(role);
     public void SetPasswordHash(string passwordHash) => PasswordHash = passwordHash;
+
+    public bool IsInRole(Role role)
+    {
+        var appRole = ApplicationRole.FromValue((int)role);
+        return ApplicationRoles.Any(role => role.Id.Equals(appRole.Id));
+    }
+
 }

@@ -10,12 +10,6 @@ public class UserProfile : Profile
 {
     public UserProfile()
     {
-        // register
-        CreateMap<RegisterCommand, ApplicationUser>();
-
-        // login
-        CreateMap<LoginQuery, ApplicationUser>();
-
         // GetUsersList
         CreateMap<ApplicationUser, UsersListDto>()
             .ForMember(desc => desc.UserRoles, src => src.MapFrom(user => user.ApplicationRoles.Select(role => role.Name)));

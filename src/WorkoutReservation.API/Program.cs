@@ -4,9 +4,8 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.IdentityModel.Tokens;
 using NLog;
 using NLog.Web;
-using WorkoutReservation.API.Filters;
+using WorkoutReservation.API.Extensions;
 using WorkoutReservation.API.Middleware;
-using WorkoutReservation.API.Services;
 using WorkoutReservation.Application;
 using WorkoutReservation.Application.Contracts;
 using WorkoutReservation.Infrastructure;
@@ -108,7 +107,7 @@ try
     app.UseAuthentication();
     app.UseHangfireDashboard("/hangfire", new DashboardOptions
     {
-        Authorization = new[] { new HangfireAuthorizationFilter() },
+        Authorization = new[] { new HangfireAuthorizationFilter(app.Services) },
         IsReadOnlyFunc = _ => true
     });
     app.UseRouting();

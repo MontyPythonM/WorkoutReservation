@@ -8,13 +8,14 @@ public class SetUserRoleCommandHandler : IRequestHandler<SetUserRoleCommand>
 {
     private readonly IApplicationUserRepository _userRepository;
     private readonly ICurrentUserAccessor _currentUserAccessor;
-    //private readonly IApplicationRolesRepository _rolesRepository;
+    private readonly IApplicationRoleRepository _roleRepository;
 
     public SetUserRoleCommandHandler(IApplicationUserRepository userRepository, 
-        ICurrentUserAccessor currentUserAccessor)
+        ICurrentUserAccessor currentUserAccessor, IApplicationRoleRepository roleRepository)
     {
         _userRepository = userRepository;
         _currentUserAccessor = currentUserAccessor;
+        _roleRepository = roleRepository;
     }
 
     public async Task<Unit> Handle(SetUserRoleCommand request, CancellationToken token)
@@ -24,9 +25,8 @@ public class SetUserRoleCommandHandler : IRequestHandler<SetUserRoleCommand>
         var validator = new SetUserRoleCommandValidation(_currentUserAccessor.GetCurrentUserId());
         await validator.ValidateAndThrowAsync(request, token);
 
-        // TODO: role repository???
-        //var role = _rolesRepository.GetAsync(request.RoleId, token);
-        //user.SetRole(role);
+        var role = await _roleRepository.GetAsync(request.Role, token);
+        user.SetRole(role);
         
         await _userRepository.UpdateAsync(user, token);
         return Unit.Value;

@@ -1,5 +1,4 @@
 ﻿using FluentValidation;
-using WorkoutReservation.Domain.Entities;
 
 namespace WorkoutReservation.Application.Features.Users.Commands.SetUserRole;
 
@@ -7,7 +6,7 @@ public class SetUserRoleCommandValidation : AbstractValidator<SetUserRoleCommand
 {
     public SetUserRoleCommandValidation(Guid currentUser)
     {
-        RuleFor(x => x.RoleId)
+        RuleFor(x => x.Role)
             .IsInEnum()
             .NotEmpty();
 

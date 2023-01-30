@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using FluentValidation;
+﻿using FluentValidation;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
 using WorkoutReservation.Application.Contracts;
@@ -12,15 +11,15 @@ public class RegisterCommandHandler : IRequestHandler<RegisterCommand>
 {
     private readonly IApplicationUserRepository _userRepository; 
     private readonly IPasswordHasher<ApplicationUser> _passwordHasher;
-    private readonly IMapper _mapper;
+    private readonly IApplicationRoleRepository _roleRepository;
 
     public RegisterCommandHandler(IApplicationUserRepository userRepository, 
         IPasswordHasher<ApplicationUser> passwordHasher, 
-        IMapper mapper)
+        IApplicationRoleRepository roleRepository)
     {
         _userRepository = userRepository;
         _passwordHasher = passwordHasher;
-        _mapper = mapper;
+        _roleRepository = roleRepository;
     }
 
     public async Task<Unit> Handle(RegisterCommand request, CancellationToken token)
@@ -33,13 +32,11 @@ public class RegisterCommandHandler : IRequestHandler<RegisterCommand>
         var newUser = new ApplicationUser(request.Email, request.FirstName, 
             request.LastName, request.Gender, request.DateOfBirth, "");
         
-        //var mappedUser = _mapper.Map<ApplicationUser>(request);
         var hashPassword = _passwordHasher.HashPassword(newUser, request.Password);
-        
         newUser.SetPasswordHash(hashPassword);
-        
-        //TODO: dont work
-        //newUser.SetRole(ApplicationRole.Member);
+
+        var role = await _roleRepository.GetAsync(Role.Member, token);
+        newUser.SetRole(role);
         
         await _userRepository.AddAsync(newUser, token);
         return Unit.Value;
