@@ -1,4 +1,4 @@
-﻿using WorkoutReservation.Domain.Common;
+﻿using WorkoutReservation.Domain.Abstractions;
 using WorkoutReservation.Domain.Enums;
 
 namespace WorkoutReservation.Domain.Entities;
@@ -17,7 +17,7 @@ public class Instructor
 
     public Instructor()
     {
-        
+        // fore EF
     }
 
     public Instructor(string firstName, string lastName, Gender? gender, string biography, string email)

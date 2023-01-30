@@ -3,7 +3,6 @@ using MediatR;
 using WorkoutReservation.Application.Common.Exceptions;
 using WorkoutReservation.Application.Contracts;
 using WorkoutReservation.Domain.Entities;
-using WorkoutReservation.Domain.Extensions;
 
 namespace WorkoutReservation.Application.Features.RealWorkouts.Commands.CreateRealWorkout;
 
@@ -12,26 +11,21 @@ public class CreateRealWorkoutCommandHandler : IRequestHandler<CreateRealWorkout
     private readonly IRealWorkoutRepository _realWorkoutRepository;
     private readonly IInstructorRepository _instructorRepository;
     private readonly IWorkoutTypeRepository _workoutTypeRepository;
-    private readonly ICurrentUserService _userService;    
-    private readonly IUserRepository _userRepository;
+    private readonly ICurrentUserAccessor _currentUserAccessor;    
 
     public CreateRealWorkoutCommandHandler(IRealWorkoutRepository realWorkoutRepository,
-        IInstructorRepository instructorRepository,
-        IWorkoutTypeRepository workoutTypeRepository, 
-        ICurrentUserService userService, 
-        IUserRepository userRepository)
+        IInstructorRepository instructorRepository, IWorkoutTypeRepository workoutTypeRepository, 
+        ICurrentUserAccessor currentUserAccessor)
     {
         _realWorkoutRepository = realWorkoutRepository;
         _instructorRepository = instructorRepository;
         _workoutTypeRepository = workoutTypeRepository;
-        _userService = userService;
-        _userRepository = userRepository;
+        _currentUserAccessor = currentUserAccessor;
     }
 
     public async Task<int> Handle(CreateRealWorkoutCommand request, CancellationToken token)
     {
-        var currentUserId = _userService.UserId.ToGuid();
-        var user = await _userRepository.GetByGuidAsync(currentUserId, token);
+        var user = await _currentUserAccessor.GetCurrentUserAsync(token);
 
         var instructor = await _instructorRepository.GetByIdAsync(request.InstructorId, false, token);
         if (instructor is null)

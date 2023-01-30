@@ -7,10 +7,10 @@ using WorkoutReservation.Application.Features.Instructors.Commands.DeleteInstruc
 using WorkoutReservation.Application.Features.Instructors.Commands.UpdateInstructor;
 using WorkoutReservation.Application.Features.Instructors.Queries.GetInstructorDetail;
 using WorkoutReservation.Application.Features.Instructors.Queries.GetInstructorList;
+using WorkoutReservation.Infrastructure.Authorization;
 
 namespace WorkoutReservation.API.Controllers;
 
-[Authorize(Roles = "Manager, Administrator")]
 [Route("api/instructor/")]
 public class InstructorController : ApiControllerBase
 {
@@ -33,6 +33,7 @@ public class InstructorController : ApiControllerBase
     }
 
     [HttpPost]
+    [HasPermission(Permission.CreateInstructor)]
     [SwaggerOperation(Summary = "Create new instructor")]
     public async Task<IActionResult> CreateInstructor([FromBody] CreateInstructorCommand command, CancellationToken token)
     {
@@ -41,6 +42,7 @@ public class InstructorController : ApiControllerBase
     }
 
     [HttpDelete("{instructorId}")]
+    [HasPermission(Permission.DeleteInstructor)]
     [SwaggerOperation(Summary = "Delete selected instructor")]
     public async Task<IActionResult> DeleteInstructor([FromRoute] int instructorId, CancellationToken token)
     {
@@ -49,6 +51,7 @@ public class InstructorController : ApiControllerBase
     }
 
     [HttpPut]
+    [HasPermission(Permission.UpdateInstructor)]
     [SwaggerOperation(Summary = "Update selected instructor")]
     public async Task<IActionResult> UpdateInstructor([FromBody] UpdateInstructorCommand command, CancellationToken token)
     {

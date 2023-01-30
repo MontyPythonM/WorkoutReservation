@@ -8,10 +8,10 @@ using WorkoutReservation.Application.Features.RealWorkouts.Commands.UpdateRealWo
 using WorkoutReservation.Application.Features.RealWorkouts.Queries.GetRealWorkoutDetail;
 using WorkoutReservation.Application.Features.RealWorkouts.Queries.GetRealWorkoutFromCurrentWeek;
 using WorkoutReservation.Application.Features.RealWorkouts.Queries.GetRealWorkoutFromUpcomingWeek;
+using WorkoutReservation.Infrastructure.Authorization;
 
 namespace WorkoutReservation.API.Controllers;
 
-[Authorize(Roles = "Manager, Administrator")]
 [Route("api/real-workout/")]
 public class RealWorkoutController : ApiControllerBase
 {
@@ -24,14 +24,6 @@ public class RealWorkoutController : ApiControllerBase
         return Ok(realWorkouts);
     }
 
-    [HttpGet("{realWorkoutId}")]
-    [SwaggerOperation(Summary = "Returns selected workout")]
-    public async Task<IActionResult> GetRealWorkoutById([FromRoute] int realWorkoutId, CancellationToken token)
-    {
-        var realWorkout = await Mediator.Send(new GetRealWorkoutDetailQuery { RealWorkoutId = realWorkoutId }, token);
-        return Ok(realWorkout);
-    }
-
     [HttpGet("upcoming-week")]
     [AllowAnonymous]
     [SwaggerOperation(Summary = "Returns a list of workouts for upcoming week")]
@@ -40,8 +32,18 @@ public class RealWorkoutController : ApiControllerBase
         var realWorkouts = await Mediator.Send(new GetRealWorkoutFromUpcomingWeekQuery(), token);
         return Ok(realWorkouts);
     }
+    
+    [HttpGet("{realWorkoutId}")]
+    [HasPermission(Permission.GetRealWorkoutDetails)]
+    [SwaggerOperation(Summary = "Returns selected workout")]
+    public async Task<IActionResult> GetRealWorkoutDetails([FromRoute] int realWorkoutId, CancellationToken token)
+    {
+        var realWorkout = await Mediator.Send(new GetRealWorkoutDetailQuery { RealWorkoutId = realWorkoutId }, token);
+        return Ok(realWorkout);
+    }
 
-    [HttpPost]
+    [HttpPost]   
+    [HasPermission(Permission.CreateRealWorkout)]
     [SwaggerOperation(Summary = "Create new workout")]
     public async Task<IActionResult> CreateRealWorkout([FromBody] CreateRealWorkoutCommand command, CancellationToken token)
     {
@@ -50,6 +52,7 @@ public class RealWorkoutController : ApiControllerBase
     }
 
     [HttpDelete("{realWorkoutId}")]
+    [HasPermission(Permission.DeleteRealWorkout)]
     [SwaggerOperation(Summary = "Delete selected workout")]
     public async Task<IActionResult> DeleteRealWorkout([FromRoute] int realWorkoutId, CancellationToken token)
     {
@@ -58,6 +61,7 @@ public class RealWorkoutController : ApiControllerBase
     }
 
     [HttpPut]
+    [HasPermission(Permission.UpdateRealWorkout)]
     [SwaggerOperation(Summary = "Update selected workout")]
     public async Task<IActionResult> UpdateRealWorkout([FromBody] UpdateRealWorkoutCommand command, CancellationToken token)
     {

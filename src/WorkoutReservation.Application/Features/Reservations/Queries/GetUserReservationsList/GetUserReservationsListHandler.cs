@@ -9,32 +9,30 @@ using WorkoutReservation.Domain.Entities;
 namespace WorkoutReservation.Application.Features.Reservations.Queries.GetUserReservationsList;
 
 public class GetUserReservationsListHandler : IRequestHandler<GetUserReservationsListQuery,
-                                                              PagedResultDto<UserReservationsListDto>>
+    PagedResultDto<UserReservationsListDto>>
 {
     private readonly IReservationRepository _reservationRepository;
-    private readonly ICurrentUserService _userService;
+    private readonly ICurrentUserAccessor _currentUserAccessor;
     private readonly IMapper _mapper;
 
     public GetUserReservationsListHandler(IReservationRepository reservationRepository, 
-                                          ICurrentUserService userService,
-                                          IMapper mapper)
+        ICurrentUserAccessor currentUserAccessor,
+        IMapper mapper)
     {
         _reservationRepository = reservationRepository;
-        _userService = userService;
+        _currentUserAccessor = currentUserAccessor;
         _mapper = mapper;
     }
 
     public async Task<PagedResultDto<UserReservationsListDto>> Handle(GetUserReservationsListQuery request, 
-                                                                      CancellationToken cancellationToken)
+        CancellationToken token)
     {
         var validator = new GetUserReservationsListValidator();
-        await validator.ValidateAndThrowAsync(request, cancellationToken);
-
-        var userGuid = Guid.Parse(_userService.UserId);
-
-        // TODO: dodać sprawdzenie czy requestUser to currentUser albo currentUser = administrator
+        await validator.ValidateAndThrowAsync(request, token);
         
-        var reservationsQuery = _reservationRepository.GetUserReservationsByGuidQuery(userGuid);
+        // TODO: dodać sprawdzenie czy requestUser to currentUser albo currentUser = administrator
+        var reservationsQuery = _reservationRepository
+            .GetUserReservationsByGuidQuery(_currentUserAccessor.GetCurrentUserId());
 
         var query = reservationsQuery
             .Where(x => request.SearchPhrase == null ||
@@ -66,10 +64,7 @@ public class GetUserReservationsListHandler : IRequestHandler<GetUserReservation
 
         var mappedResult = _mapper.Map<List<UserReservationsListDto>>(result);
 
-        var pagedWorkoutTypes = new PagedResultDto<UserReservationsListDto>(mappedResult,
-                                                                            totalCount,
-                                                                            request.PageSize,
-                                                                            request.PageNumber);
-        return pagedWorkoutTypes;
+        return new PagedResultDto<UserReservationsListDto>(mappedResult,
+            totalCount, request.PageSize, request.PageNumber);
     }
 }

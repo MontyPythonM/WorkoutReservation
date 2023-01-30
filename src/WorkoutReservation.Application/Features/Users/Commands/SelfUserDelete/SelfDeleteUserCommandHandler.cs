@@ -8,34 +8,30 @@ namespace WorkoutReservation.Application.Features.Users.Commands.SelfUserDelete;
 
 public class SelfDeleteUserCommandHandler : IRequestHandler<SelfDeleteUserCommand>
 {
-    private readonly IUserRepository _userRepository;
-    private readonly ICurrentUserService _currentUserService;
-    private readonly IPasswordHasher<User> _passwordHasher;
+    private readonly IApplicationUserRepository _userRepository;
+    private readonly ICurrentUserAccessor _currentUserAccessor;
+    private readonly IPasswordHasher<ApplicationUser> _passwordHasher;
 
-    public SelfDeleteUserCommandHandler(IUserRepository userRepository,
-                                        ICurrentUserService currentUserService,
-                                        IPasswordHasher<User> passwordHasher)
+    public SelfDeleteUserCommandHandler(IApplicationUserRepository userRepository,
+        ICurrentUserAccessor currentUserAccessor,
+        IPasswordHasher<ApplicationUser> passwordHasher)
     {
         _userRepository = userRepository;
-        _currentUserService = currentUserService;
+        _currentUserAccessor = currentUserAccessor;
         _passwordHasher = passwordHasher;
     }
 
-    public async Task<Unit> Handle(SelfDeleteUserCommand request, 
-                                   CancellationToken cancellationToken)
+    public async Task<Unit> Handle(SelfDeleteUserCommand request, CancellationToken token)
     {
-        var currentUserGuid = Guid.Parse(_currentUserService.UserId);
-
-        var user = await _userRepository.GetByGuidAsync(currentUserGuid, cancellationToken);
+        var user = await _currentUserAccessor.GetCurrentUserAsync(token);
 
         var passwordCompareResult = _passwordHasher
             .VerifyHashedPassword(user, user.PasswordHash, request.Password);
 
         var validator = new SelfDeleteUserCommandValidator(passwordCompareResult);
-        await validator.ValidateAndThrowAsync(request, cancellationToken);
+        await validator.ValidateAndThrowAsync(request, token);
 
-        await _userRepository.DeleteAsync(user, cancellationToken);
-
+        await _userRepository.DeleteAsync(user, token);
         return Unit.Value;
     }
 }

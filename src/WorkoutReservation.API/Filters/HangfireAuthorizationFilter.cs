@@ -9,12 +9,8 @@ public class HangfireAuthorizationFilter : IDashboardAuthorizationFilter
 {
     public bool Authorize([NotNull] DashboardContext context)
     {
+        // TODO: check OpenHangfireDashboard permission
         var httpCtx = context.GetHttpContext();
-
-#if DEBUG
-        return true;
-
-#elif RELEASE
         var userRole = httpCtx.User.FindFirst(c => c.Type == ClaimTypes.Role);
 
         if (userRole == null)
@@ -28,6 +24,5 @@ public class HangfireAuthorizationFilter : IDashboardAuthorizationFilter
         }
 
         throw new ForbidException("Access forbidden. Only administrators can open HangFire dashboard.");
-#endif
     }
 }

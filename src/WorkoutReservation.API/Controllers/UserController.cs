@@ -8,6 +8,7 @@ using WorkoutReservation.Application.Features.Users.Commands.SelfUserDelete;
 using WorkoutReservation.Application.Features.Users.Commands.SetUserRole;
 using WorkoutReservation.Application.Features.Users.Queries.GetUsersList;
 using WorkoutReservation.Application.Features.Users.Queries.Login;
+using WorkoutReservation.Infrastructure.Authorization;
 
 namespace WorkoutReservation.API.Controllers;
 
@@ -31,7 +32,7 @@ public class UserController : ApiControllerBase
     }
 
     [HttpGet("users")]
-    [Authorize(Roles = "Administrator")]
+    [HasPermission(Permission.GetAllUsers)]
     [SwaggerOperation(Summary = "Returns paged list of application users")]
     public async Task<IActionResult> GetAllUsers([FromQuery] GetUsersListQuery query, CancellationToken token)
     {
@@ -39,7 +40,7 @@ public class UserController : ApiControllerBase
     }
 
     [HttpPut("set-user-role")]
-    [Authorize(Roles = "Administrator")]
+    [HasPermission(Permission.SetUserRole)]
     [SwaggerOperation(Summary = "Assigns a application role to a selected person")]
     public async Task<IActionResult> SetUserRole([FromBody] SetUserRoleCommand command, CancellationToken token)
     {
@@ -47,7 +48,7 @@ public class UserController : ApiControllerBase
     }
 
     [HttpDelete("delete-user/{userGuid}")]
-    [Authorize(Roles = "Administrator")]
+    [HasPermission(Permission.DeleteUserAccount)]
     [SwaggerOperation(Summary = "Delete the selected application user account")]
     public async Task<IActionResult> DeleteUserAccount([FromRoute] Guid userGuid, CancellationToken token)
     {
@@ -56,7 +57,7 @@ public class UserController : ApiControllerBase
     }
 
     [HttpDelete("delete-account")]
-    [Authorize]
+    [HasPermission(Permission.DeleteOwnAccount)]
     [SwaggerOperation(Summary = "Delete the currently logged-in user account")]
     public async Task<IActionResult> DeleteOwnAccount([FromBody] SelfDeleteUserCommand command, CancellationToken token)
     {

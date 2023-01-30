@@ -1,9 +1,14 @@
 ﻿using Hangfire;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using WorkoutReservation.Application.Contracts;
-using WorkoutReservation.Infrastructure.Presistence;
+using WorkoutReservation.Domain.Entities;
+using WorkoutReservation.Infrastructure.Authentication;
+using WorkoutReservation.Infrastructure.Authorization;
+using WorkoutReservation.Infrastructure.Identity;
+using WorkoutReservation.Infrastructure.Persistence;
 using WorkoutReservation.Infrastructure.Repositories;
 using WorkoutReservation.Infrastructure.Seeders;
 
@@ -20,17 +25,21 @@ public static class ConfigureInfrastructureServices
             options.UseSqlServerStorage(configuration.GetConnectionString("localDbConnection")));
 
         services.AddHangfireServer();
-
+        
+        services.AddScoped<ICurrentUserAccessor, CurrentUserAccessor>();
+        services.AddScoped<IApplicationUserRepository, ApplicationUserRepository>();
         services.AddScoped<IInstructorRepository, InstructorRepository>();
         services.AddScoped<IWorkoutTypeRepository, WorkoutTypeRepository>();
         services.AddScoped<IRepetitiveWorkoutRepository, RepetitiveWorkoutRepository>();
         services.AddScoped<IRealWorkoutRepository, RealWorkoutRepository>();
-        services.AddScoped<IUserRepository, UserRepository>();
         services.AddScoped<IReservationRepository, ReservationRepository>();
         services.AddScoped<IWorkoutTypeTagRepository, WorkoutTypeTagRepository>();
-
-        services.AddScoped<SeedFirstAdmin>();
-        services.AddScoped<SeedDummyData>();
+        services.AddScoped<IJwtProvider, JwtProvider>();
+        services.AddScoped<IPasswordHasher<ApplicationUser>, PasswordHasher<ApplicationUser>>();
+        services.AddScoped<IPermissionService, PermissionService>();
+        
+        services.AddScoped<SystemAdministratorSeeder>();
+        services.AddScoped<ApplicationDataSeeder>();
 
         return services;
     }

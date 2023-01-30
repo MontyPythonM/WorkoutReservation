@@ -1,26 +1,24 @@
 ﻿using MediatR;
 using WorkoutReservation.Application.Contracts;
 using WorkoutReservation.Domain.Entities;
-using WorkoutReservation.Domain.Extensions;
 
 namespace WorkoutReservation.Application.Features.WorkoutTypeTags.Commands.CreateWorkoutTypeTag;
 
 public class CreateWorkoutTypeTagCommandHandler : IRequestHandler<CreateWorkoutTypeTagCommand, int>
 {
     private readonly IWorkoutTypeTagRepository _workoutTypeTagRepository;
-    private readonly ICurrentUserService _currentUserService;
+    private readonly ICurrentUserAccessor _currentUserAccessor;
 
     public CreateWorkoutTypeTagCommandHandler(IWorkoutTypeTagRepository workoutTypeTagRepository, 
-        ICurrentUserService currentUserService)
+        ICurrentUserAccessor currentUserAccessor)
     {
         _workoutTypeTagRepository = workoutTypeTagRepository;
-        _currentUserService = currentUserService;
+        _currentUserAccessor = currentUserAccessor;
     }
 
     public async Task<int> Handle(CreateWorkoutTypeTagCommand request, CancellationToken token)
     {
-        var currentUser = _currentUserService.UserId.ToGuid();
-        var workoutTypeTag = new WorkoutTypeTag(request.Tag, currentUser);
+        var workoutTypeTag = new WorkoutTypeTag(request.Tag, _currentUserAccessor.GetCurrentUserId());
         
         workoutTypeTag = await _workoutTypeTagRepository.AddAsync(workoutTypeTag, token);
         return workoutTypeTag.Id;

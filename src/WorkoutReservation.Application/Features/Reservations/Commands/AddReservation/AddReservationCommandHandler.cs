@@ -3,7 +3,6 @@ using MediatR;
 using WorkoutReservation.Application.Common.Exceptions;
 using WorkoutReservation.Application.Contracts;
 using WorkoutReservation.Domain.Entities;
-using WorkoutReservation.Domain.Extensions;
 
 namespace WorkoutReservation.Application.Features.Reservations.Commands.AddReservation;
 
@@ -11,24 +10,20 @@ public class AddReservationCommandHandler : IRequestHandler<AddReservationComman
 {
     private readonly IReservationRepository _reservationRepository;
     private readonly IRealWorkoutRepository _realWorkoutRepository;
-    private readonly IUserRepository _userRepository;
-    private readonly ICurrentUserService _userService;
+    private readonly ICurrentUserAccessor _currentUserAccessor;
 
     public AddReservationCommandHandler(IReservationRepository reservationRepository, 
         IRealWorkoutRepository realWorkoutRepository,
-        ICurrentUserService userService, 
-        IUserRepository userRepository)
+        ICurrentUserAccessor currentUserAccessor)
     {
         _reservationRepository = reservationRepository;
         _realWorkoutRepository = realWorkoutRepository;
-        _userService = userService;
-        _userRepository = userRepository;
+        _currentUserAccessor = currentUserAccessor;
     }
 
     public async Task<int> Handle(AddReservationCommand request, CancellationToken token)
     {
-        var currentUserGuid = _userService.UserId.ToGuid();
-        var user = await _userRepository.GetByGuidAsync(currentUserGuid, token);
+        var user = await _currentUserAccessor.GetCurrentUserAsync(token);
 
         var realWorkout = await _realWorkoutRepository
             .GetByIdAsync(request.RealWorkoutId, false, token);
@@ -37,7 +32,7 @@ public class AddReservationCommandHandler : IRequestHandler<AddReservationComman
         
         var isUserAlreadyReservedWorkout = await _reservationRepository
             .CheckIsUserReservedAsync(realWorkout, user, token);
-        var validator = new AddReservationCommandValidator(realWorkout, currentUserGuid, isUserAlreadyReservedWorkout);
+        var validator = new AddReservationCommandValidator(realWorkout, user.Id, isUserAlreadyReservedWorkout);
         await validator.ValidateAndThrowAsync(request, token);
 
         realWorkout.IncrementCurrentParticipantNumber();

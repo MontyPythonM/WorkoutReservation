@@ -7,10 +7,9 @@ namespace WorkoutReservation.Application.Features.Users.Queries.GetUsersList
     {
         private readonly int[] _allowedPageSizes = new[] { 15, 30, 50 };
         private readonly string[] _allowedSortByColumnNames = { 
-            nameof(User.Email), 
-            nameof(User.FirstName),
-            nameof(User.LastName),
-            nameof(User.UserRole)
+            nameof(ApplicationUser.Email), 
+            nameof(ApplicationUser.FirstName),
+            nameof(ApplicationUser.LastName),
         };
 
         public GetUsersListQueryValidator()

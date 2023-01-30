@@ -3,28 +3,26 @@ using MediatR;
 using WorkoutReservation.Application.Common.Exceptions;
 using WorkoutReservation.Application.Contracts;
 using WorkoutReservation.Domain.Enums;
-using WorkoutReservation.Domain.Extensions;
 
 namespace WorkoutReservation.Application.Features.Reservations.Commands.CancelReservation;
 
 public class CancelReservationCommandHandler : IRequestHandler<CancelReservationCommand>
 {
     private readonly IReservationRepository _reservationRepository;
-    private readonly ICurrentUserService _userService;
+    private readonly ICurrentUserAccessor _currentUserAccessor;
     private readonly IRealWorkoutRepository _realWorkoutRepository;
 
     public CancelReservationCommandHandler(IReservationRepository reservationRepository,
-        ICurrentUserService userService,
+        ICurrentUserAccessor currentUserAccessor,
         IRealWorkoutRepository realWorkoutRepository)
     {
         _reservationRepository = reservationRepository;
-        _userService = userService;
+        _currentUserAccessor = currentUserAccessor;
         _realWorkoutRepository = realWorkoutRepository;
     }
 
     public async Task<Unit> Handle(CancelReservationCommand request, CancellationToken token)
     {
-        var currentUserGuid = _userService.UserId.ToGuid();
         var reservation = await _reservationRepository
             .GetByIdAsync(request.ReservationId, false, token, 
                 incl => incl.User, incl => incl.RealWorkout);
@@ -32,7 +30,7 @@ public class CancelReservationCommandHandler : IRequestHandler<CancelReservation
         if (reservation is null)
             throw new NotFoundException($"Reservation with Id: {request.ReservationId} not found.");
         
-        var validator = new CancelReservationCommandValidator(reservation, currentUserGuid);
+        var validator = new CancelReservationCommandValidator(reservation, _currentUserAccessor.GetCurrentUserId());
         await validator.ValidateAndThrowAsync(request, token);
         
         reservation.UpdateLastModificationDate();

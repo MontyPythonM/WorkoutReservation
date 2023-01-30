@@ -1,4 +1,4 @@
-﻿using WorkoutReservation.Domain.Common;
+﻿using WorkoutReservation.Domain.Abstractions;
 
 namespace WorkoutReservation.Domain.Entities;
 
@@ -14,7 +14,7 @@ public class RealWorkout : BaseWorkout
     }
     
     public RealWorkout(int maxParticipantNumber, TimeOnly startTime, TimeOnly endTime, 
-        WorkoutType workoutType, Instructor instructor, DateOnly date, User currentUser) 
+        WorkoutType workoutType, Instructor instructor, DateOnly date, ApplicationUser currentUser) 
         : base(maxParticipantNumber, startTime, endTime, workoutType, instructor)
     {
         Date = date;

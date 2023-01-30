@@ -3,15 +3,14 @@ using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 using WorkoutReservation.API.Controllers.Base;
 using WorkoutReservation.Application.Features.WorkoutTypeTags.Commands.CreateWorkoutTypeTag;
-using WorkoutReservation.Application.Features.WorkoutTypeTags.Commands.DeactivateWorkoutTypeTag;
 using WorkoutReservation.Application.Features.WorkoutTypeTags.Commands.DeleteWorkoutTypeTag;
 using WorkoutReservation.Application.Features.WorkoutTypeTags.Commands.UpdateWorkoutTypeTag;
 using WorkoutReservation.Application.Features.WorkoutTypeTags.Queries.GetActiveWorkoutTypeTags;
 using WorkoutReservation.Application.Features.WorkoutTypeTags.Queries.GetWorkoutTypeTags;
+using WorkoutReservation.Infrastructure.Authorization;
 
 namespace WorkoutReservation.API.Controllers;
 
-[Authorize(Roles = "Administrator")]
 [Route("api/workout-type-tag/")]
 public class WorkoutTypeTagController : ApiControllerBase
 {
@@ -25,6 +24,7 @@ public class WorkoutTypeTagController : ApiControllerBase
     }
     
     [HttpGet]
+    [HasPermission(Permission.GetAllWorkoutTypeTags)]
     [SwaggerOperation(Summary = "Returns list of workout type tags")]
     public async Task<IActionResult> GetWorkoutTypeTags(CancellationToken token)
     {
@@ -33,22 +33,16 @@ public class WorkoutTypeTagController : ApiControllerBase
     }
 
     [HttpPost]
+    [HasPermission(Permission.CreateWorkoutTypeTag)]
     [SwaggerOperation(Summary = "Create new workout type tag")]
     public async Task<IActionResult> CreateWorkoutTypeTag([FromBody] CreateWorkoutTypeTagCommand command, CancellationToken token)
     {        
         var workoutTypeTagId = await Mediator.Send(command, token);
         return Created($"Workout type tag with Id: {workoutTypeTagId} was created", null);
     }
-
-    [HttpPatch("{workoutTypeTagId}")]
-    [SwaggerOperation(Summary = "Deactivate selected workout type tag")]
-    public async Task<IActionResult> DeactivateWorkoutTypeTag([FromRoute] int workoutTypeTagId, CancellationToken token)
-    {
-        await Mediator.Send(new DeactivateWorkoutTypeTagCommand() { Id = workoutTypeTagId }, token);
-        return NoContent();
-    }
     
     [HttpPut]
+    [HasPermission(Permission.UpdateWorkoutTypeTag)]
     [SwaggerOperation(Summary = "Edit selected workout type tag")]
     public async Task<IActionResult> UpdateWorkoutTypeTag([FromBody] UpdateWorkoutTypeTagCommand command, CancellationToken token)
     {
@@ -57,6 +51,7 @@ public class WorkoutTypeTagController : ApiControllerBase
     }
     
     [HttpDelete("{workoutTypeTagId}")]
+    [HasPermission(Permission.DeleteWorkoutTypeTag)]
     [SwaggerOperation(Summary = "Delete selected workout type tag")]
     public async Task<IActionResult> DeleteWorkoutTypeTag([FromRoute] int workoutTypeTagId, CancellationToken token)
     {

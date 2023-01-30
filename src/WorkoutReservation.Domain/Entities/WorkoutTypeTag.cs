@@ -9,7 +9,7 @@ public class WorkoutTypeTag
     public DateTime CreatedDate { get; set; }
     public ICollection<WorkoutType> WorkoutTypes { get; set; } = new List<WorkoutType>();
 
-    private WorkoutTypeTag()
+    protected WorkoutTypeTag()
     {
         // for EF
     }
