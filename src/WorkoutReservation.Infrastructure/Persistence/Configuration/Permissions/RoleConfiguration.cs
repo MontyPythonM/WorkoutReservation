@@ -20,8 +20,5 @@ internal class RoleConfiguration : IEntityTypeConfiguration<ApplicationRole>
             .UsingEntity<ApplicationUserRole>();
 
         builder.HasData(ApplicationRole.Create());
-        
-        // var permissions = Enum.GetValues<Role>()
-        //     .Select(r => new ApplicationRole((int)r, r.ToString()));
     }
 }

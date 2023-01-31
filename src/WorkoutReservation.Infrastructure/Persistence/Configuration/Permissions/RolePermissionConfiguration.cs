@@ -12,12 +12,6 @@ public class RolePermissionConfiguration : IEntityTypeConfiguration<ApplicationR
         builder.ToTable("RolesPermissions", "WorkoutReservation.Permissions");
 
         builder.HasKey(x => new { x.ApplicationRoleId, x.ApplicationPermissionId });
-
-        // builder.HasIndex(index => new
-        // {
-        //     index.ApplicationPermissionId, 
-        //     index.ApplicationRoleId
-        // }).IsUnique();
         
         builder.HasData(RolePermissionMatrix.Create());
     }
