@@ -20,7 +20,8 @@ public class SetUserRoleCommandHandler : IRequestHandler<SetUserRoleCommand>
 
     public async Task<Unit> Handle(SetUserRoleCommand request, CancellationToken token)
     {
-        var user = await _userRepository.GetByGuidAsync(request.UserId, token);
+        var user = await _userRepository
+            .GetByGuidAsync(request.UserId, false, token, incl => incl.ApplicationRoles);
         
         var validator = new SetUserRoleCommandValidation(_currentUserAccessor.GetCurrentUserId());
         await validator.ValidateAndThrowAsync(request, token);

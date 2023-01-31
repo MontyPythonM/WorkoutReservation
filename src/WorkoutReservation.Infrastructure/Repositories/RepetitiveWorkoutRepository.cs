@@ -27,6 +27,7 @@ public class RepetitiveWorkoutRepository : IRepetitiveWorkoutRepository
         _dbContext.Remove(repetitiveWorkout);
         await _dbContext.SaveChangesAsync(token);
     }
+    
     public async Task DeleteAsync(IEnumerable<RepetitiveWorkout> repetitiveWorkouts, CancellationToken token)
     {
         _dbContext.RemoveRange(repetitiveWorkouts);

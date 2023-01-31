@@ -23,7 +23,7 @@ public class DeleteUserCommandHandler : IRequestHandler<DeleteUserCommand>
 
     public async Task<Unit> Handle(DeleteUserCommand request, CancellationToken token)
     {
-        var userToRemove = await _userRepository.GetByGuidAsync(request.UserGuid, token);
+        var userToRemove = await _userRepository.GetByGuidAsync(request.UserGuid, false, token);
 
         if (userToRemove is null)
             throw new NotFoundException($"User with Guid: {request.UserGuid} not found.");

@@ -21,10 +21,10 @@ public class GetUsersListQueryHandler : IRequestHandler<GetUsersListQuery,
     }
 
     public async Task<PagedResultDto<UsersListDto>> Handle(GetUsersListQuery request, 
-                                                           CancellationToken cancellationToken)
+        CancellationToken token)
     {
         var validator = new GetUsersListQueryValidator();
-        await validator.ValidateAndThrowAsync(request, cancellationToken);
+        await validator.ValidateAndThrowAsync(request, token);
 
         var usersQuery = _userRepository.GetAllUsersQuery();
 

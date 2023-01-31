@@ -31,7 +31,14 @@ public class ApplicationUser
         AccountCreationDate = DateTime.Now;
     }
 
-    public void SetRole(ApplicationRole role) => ApplicationRoles.Add(role);
+    public void SetRole(ApplicationRole role)
+    {
+        if (!ApplicationRoles.Contains(role))
+        {
+            ApplicationRoles.Add(role);
+        }
+    }
+    
     public void SetPasswordHash(string passwordHash) => PasswordHash = passwordHash;
 
     public bool IsInRole(Role role)
@@ -39,5 +46,4 @@ public class ApplicationUser
         var appRole = ApplicationRole.FromValue((int)role);
         return ApplicationRoles.Any(role => role.Id.Equals(appRole.Id));
     }
-
 }

@@ -24,7 +24,8 @@ public class RegisterCommandHandler : IRequestHandler<RegisterCommand>
 
     public async Task<Unit> Handle(RegisterCommand request, CancellationToken token)
     {
-        var user = await _userRepository.GetByEmailAsync(request.Email, token);
+        var user = await _userRepository
+            .GetByEmailAsync(request.Email, false, token, incl => incl.ApplicationRoles);
         
         var validator = new RegisterCommandValidator(user);
         await validator.ValidateAndThrowAsync(request, token);

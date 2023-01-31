@@ -11,6 +11,7 @@ using WorkoutReservation.Infrastructure.Identity;
 using WorkoutReservation.Infrastructure.Interfaces;
 using WorkoutReservation.Infrastructure.Persistence;
 using WorkoutReservation.Infrastructure.Repositories;
+using WorkoutReservation.Infrastructure.Repositories.Common;
 using WorkoutReservation.Infrastructure.Seeders;
 using WorkoutReservation.Infrastructure.Seeders.Data;
 
@@ -27,6 +28,7 @@ public static class ConfigureInfrastructureServices
             options.UseSqlServerStorage(configuration.GetConnectionString("localDbConnection")));
 
         services.AddHangfireServer();
+        services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
         services.AddScoped<ICurrentUserAccessor, CurrentUserAccessor>();
         
         services.AddScoped<IApplicationRoleRepository, ApplicationRoleRepository>();

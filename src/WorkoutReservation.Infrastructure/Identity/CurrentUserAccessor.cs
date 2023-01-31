@@ -19,9 +19,9 @@ public sealed class CurrentUserAccessor : ICurrentUserAccessor
         _userRepository = userRepository;
     }
 
-    public async Task<ApplicationUser> GetCurrentUserAsync(CancellationToken cancellationToken)
+    public async Task<ApplicationUser> GetCurrentUserAsync(CancellationToken token)
     {
-        var user = await _userRepository.GetByGuidAsync(GetCurrentUserId(), cancellationToken);
+        var user = await _userRepository.GetByGuidAsync(GetCurrentUserId(), false, token);
         
         if (user is null)
             throw new NotFoundException("Application user not exist");

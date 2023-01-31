@@ -22,7 +22,7 @@ public class LoginQueryHandler : IRequestHandler<LoginQuery, string>
 
     public async Task<string> Handle(LoginQuery request, CancellationToken token)
     {
-        var user = await _userRepository.GetByEmailAsync(request.Email, token);
+        var user = await _userRepository.GetByEmailAsync(request.Email, true, token);
 
         if (user is null)
             throw new InvalidCredentialsException("Invalid email address or password.");
