@@ -6,7 +6,6 @@ namespace WorkoutReservation.Application.Features.Reservations.Queries.GetUserRe
 
 public class GetUserReservationsListQuery : IRequest<PagedResultDto<UserReservationsListDto>>, IPagedQuery
 {
-    //TODO: public string UserId { get; set; }
     public string SearchPhrase { get; set; }
     public string SortBy { get; set; }
     public bool SortByDescending { get; set; }

@@ -30,7 +30,6 @@ public class GetUserReservationsListHandler : IRequestHandler<GetUserReservation
         var validator = new GetUserReservationsListValidator();
         await validator.ValidateAndThrowAsync(request, token);
         
-        // TODO: dodać sprawdzenie czy requestUser to currentUser albo currentUser = administrator
         var reservationsQuery = _reservationRepository
             .GetUserReservationsByGuidQuery(_currentUserAccessor.GetCurrentUserId());
 
