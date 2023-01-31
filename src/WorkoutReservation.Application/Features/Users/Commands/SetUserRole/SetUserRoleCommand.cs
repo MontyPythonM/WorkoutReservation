@@ -5,6 +5,6 @@ namespace WorkoutReservation.Application.Features.Users.Commands.SetUserRole;
 
 public class SetUserRoleCommand : IRequest
 {
-    public Guid UserGuid { get; set; }
-    public UserRole UserRole { get; set; }
+    public Guid UserId { get; set; }
+    public Role Role { get; set; }
 }

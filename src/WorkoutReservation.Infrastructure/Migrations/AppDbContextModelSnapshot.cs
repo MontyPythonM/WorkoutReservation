@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using WorkoutReservation.Infrastructure.Presistence;
+using WorkoutReservation.Infrastructure.Persistence;
 
 #nullable disable
 
@@ -22,7 +22,7 @@ namespace WorkoutReservation.Infrastructure.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
 
-            modelBuilder.Entity("WorkoutReservation.Domain.Common.BaseWorkout", b =>
+            modelBuilder.Entity("WorkoutReservation.Domain.Abstractions.BaseWorkout", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -35,10 +35,6 @@ namespace WorkoutReservation.Infrastructure.Migrations
 
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
-
-                    b.Property<string>("Discriminator")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<TimeSpan>("EndTime")
                         .HasColumnType("time");
@@ -67,9 +63,648 @@ namespace WorkoutReservation.Infrastructure.Migrations
 
                     b.HasIndex("WorkoutTypeId");
 
-                    b.ToTable("Workouts", (string)null);
+                    b.ToTable("BaseWorkouts", "WorkoutReservation");
+                });
 
-                    b.HasDiscriminator<string>("Discriminator").HasValue("BaseWorkout");
+            modelBuilder.Entity("WorkoutReservation.Domain.Entities.ApplicationPermission", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Name")
+                        .IsUnique()
+                        .HasFilter("[Name] IS NOT NULL");
+
+                    b.ToTable("Permissions", "WorkoutReservation.Permissions");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Name = "CreateInstructor"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Name = "UpdateInstructor"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Name = "DeleteInstructor"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Name = "CreateWorkoutType"
+                        },
+                        new
+                        {
+                            Id = 5,
+                            Name = "UpdateWorkoutType"
+                        },
+                        new
+                        {
+                            Id = 6,
+                            Name = "DeleteWorkoutType"
+                        },
+                        new
+                        {
+                            Id = 7,
+                            Name = "GetAllWorkoutTypeTags"
+                        },
+                        new
+                        {
+                            Id = 8,
+                            Name = "CreateWorkoutTypeTag"
+                        },
+                        new
+                        {
+                            Id = 9,
+                            Name = "UpdateWorkoutTypeTag"
+                        },
+                        new
+                        {
+                            Id = 10,
+                            Name = "DeleteWorkoutTypeTag"
+                        },
+                        new
+                        {
+                            Id = 11,
+                            Name = "GetRealWorkoutDetails"
+                        },
+                        new
+                        {
+                            Id = 12,
+                            Name = "CreateRealWorkout"
+                        },
+                        new
+                        {
+                            Id = 13,
+                            Name = "UpdateRealWorkout"
+                        },
+                        new
+                        {
+                            Id = 14,
+                            Name = "DeleteRealWorkout"
+                        },
+                        new
+                        {
+                            Id = 15,
+                            Name = "GetRepetitiveWorkouts"
+                        },
+                        new
+                        {
+                            Id = 16,
+                            Name = "CreateRepetitiveWorkout"
+                        },
+                        new
+                        {
+                            Id = 17,
+                            Name = "UpdateRepetitiveWorkout"
+                        },
+                        new
+                        {
+                            Id = 18,
+                            Name = "DeleteRepetitiveWorkout"
+                        },
+                        new
+                        {
+                            Id = 19,
+                            Name = "DeleteAllRepetitiveWorkouts"
+                        },
+                        new
+                        {
+                            Id = 20,
+                            Name = "GenerateNewUpcomingWeek"
+                        },
+                        new
+                        {
+                            Id = 21,
+                            Name = "OpenHangfireDashboard"
+                        },
+                        new
+                        {
+                            Id = 22,
+                            Name = "GetOwnReservations"
+                        },
+                        new
+                        {
+                            Id = 23,
+                            Name = "GetSomeoneReservations"
+                        },
+                        new
+                        {
+                            Id = 24,
+                            Name = "CreateReservation"
+                        },
+                        new
+                        {
+                            Id = 25,
+                            Name = "CancelReservation"
+                        },
+                        new
+                        {
+                            Id = 26,
+                            Name = "UpdateReservationStatus"
+                        },
+                        new
+                        {
+                            Id = 27,
+                            Name = "GetAllUsers"
+                        },
+                        new
+                        {
+                            Id = 28,
+                            Name = "SetUserRole"
+                        },
+                        new
+                        {
+                            Id = 29,
+                            Name = "DeleteUserAccount"
+                        },
+                        new
+                        {
+                            Id = 30,
+                            Name = "DeleteOwnAccount"
+                        });
+                });
+
+            modelBuilder.Entity("WorkoutReservation.Domain.Entities.ApplicationRole", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Name")
+                        .IsUnique()
+                        .HasFilter("[Name] IS NOT NULL");
+
+                    b.ToTable("Roles", "WorkoutReservation.Permissions");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Name = "SystemAdministrator"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Name = "BusinessAdministrator"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Name = "Manager"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Name = "Member"
+                        });
+                });
+
+            modelBuilder.Entity("WorkoutReservation.Domain.Entities.ApplicationRolePermission", b =>
+                {
+                    b.Property<int>("ApplicationRoleId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ApplicationPermissionId")
+                        .HasColumnType("int");
+
+                    b.HasKey("ApplicationRoleId", "ApplicationPermissionId");
+
+                    b.HasIndex("ApplicationPermissionId");
+
+                    b.ToTable("RolesPermissions", "WorkoutReservation.Permissions");
+
+                    b.HasData(
+                        new
+                        {
+                            ApplicationRoleId = 1,
+                            ApplicationPermissionId = 1
+                        },
+                        new
+                        {
+                            ApplicationRoleId = 1,
+                            ApplicationPermissionId = 2
+                        },
+                        new
+                        {
+                            ApplicationRoleId = 1,
+                            ApplicationPermissionId = 3
+                        },
+                        new
+                        {
+                            ApplicationRoleId = 1,
+                            ApplicationPermissionId = 4
+                        },
+                        new
+                        {
+                            ApplicationRoleId = 1,
+                            ApplicationPermissionId = 5
+                        },
+                        new
+                        {
+                            ApplicationRoleId = 1,
+                            ApplicationPermissionId = 6
+                        },
+                        new
+                        {
+                            ApplicationRoleId = 1,
+                            ApplicationPermissionId = 7
+                        },
+                        new
+                        {
+                            ApplicationRoleId = 1,
+                            ApplicationPermissionId = 8
+                        },
+                        new
+                        {
+                            ApplicationRoleId = 1,
+                            ApplicationPermissionId = 9
+                        },
+                        new
+                        {
+                            ApplicationRoleId = 1,
+                            ApplicationPermissionId = 10
+                        },
+                        new
+                        {
+                            ApplicationRoleId = 1,
+                            ApplicationPermissionId = 11
+                        },
+                        new
+                        {
+                            ApplicationRoleId = 1,
+                            ApplicationPermissionId = 12
+                        },
+                        new
+                        {
+                            ApplicationRoleId = 1,
+                            ApplicationPermissionId = 13
+                        },
+                        new
+                        {
+                            ApplicationRoleId = 1,
+                            ApplicationPermissionId = 14
+                        },
+                        new
+                        {
+                            ApplicationRoleId = 1,
+                            ApplicationPermissionId = 15
+                        },
+                        new
+                        {
+                            ApplicationRoleId = 1,
+                            ApplicationPermissionId = 16
+                        },
+                        new
+                        {
+                            ApplicationRoleId = 1,
+                            ApplicationPermissionId = 17
+                        },
+                        new
+                        {
+                            ApplicationRoleId = 1,
+                            ApplicationPermissionId = 18
+                        },
+                        new
+                        {
+                            ApplicationRoleId = 1,
+                            ApplicationPermissionId = 19
+                        },
+                        new
+                        {
+                            ApplicationRoleId = 1,
+                            ApplicationPermissionId = 20
+                        },
+                        new
+                        {
+                            ApplicationRoleId = 1,
+                            ApplicationPermissionId = 21
+                        },
+                        new
+                        {
+                            ApplicationRoleId = 1,
+                            ApplicationPermissionId = 22
+                        },
+                        new
+                        {
+                            ApplicationRoleId = 1,
+                            ApplicationPermissionId = 23
+                        },
+                        new
+                        {
+                            ApplicationRoleId = 1,
+                            ApplicationPermissionId = 24
+                        },
+                        new
+                        {
+                            ApplicationRoleId = 1,
+                            ApplicationPermissionId = 25
+                        },
+                        new
+                        {
+                            ApplicationRoleId = 1,
+                            ApplicationPermissionId = 26
+                        },
+                        new
+                        {
+                            ApplicationRoleId = 1,
+                            ApplicationPermissionId = 27
+                        },
+                        new
+                        {
+                            ApplicationRoleId = 1,
+                            ApplicationPermissionId = 28
+                        },
+                        new
+                        {
+                            ApplicationRoleId = 1,
+                            ApplicationPermissionId = 29
+                        },
+                        new
+                        {
+                            ApplicationRoleId = 2,
+                            ApplicationPermissionId = 1
+                        },
+                        new
+                        {
+                            ApplicationRoleId = 2,
+                            ApplicationPermissionId = 2
+                        },
+                        new
+                        {
+                            ApplicationRoleId = 2,
+                            ApplicationPermissionId = 3
+                        },
+                        new
+                        {
+                            ApplicationRoleId = 2,
+                            ApplicationPermissionId = 4
+                        },
+                        new
+                        {
+                            ApplicationRoleId = 2,
+                            ApplicationPermissionId = 5
+                        },
+                        new
+                        {
+                            ApplicationRoleId = 2,
+                            ApplicationPermissionId = 6
+                        },
+                        new
+                        {
+                            ApplicationRoleId = 2,
+                            ApplicationPermissionId = 7
+                        },
+                        new
+                        {
+                            ApplicationRoleId = 2,
+                            ApplicationPermissionId = 8
+                        },
+                        new
+                        {
+                            ApplicationRoleId = 2,
+                            ApplicationPermissionId = 9
+                        },
+                        new
+                        {
+                            ApplicationRoleId = 2,
+                            ApplicationPermissionId = 10
+                        },
+                        new
+                        {
+                            ApplicationRoleId = 2,
+                            ApplicationPermissionId = 11
+                        },
+                        new
+                        {
+                            ApplicationRoleId = 2,
+                            ApplicationPermissionId = 12
+                        },
+                        new
+                        {
+                            ApplicationRoleId = 2,
+                            ApplicationPermissionId = 13
+                        },
+                        new
+                        {
+                            ApplicationRoleId = 2,
+                            ApplicationPermissionId = 14
+                        },
+                        new
+                        {
+                            ApplicationRoleId = 2,
+                            ApplicationPermissionId = 15
+                        },
+                        new
+                        {
+                            ApplicationRoleId = 2,
+                            ApplicationPermissionId = 16
+                        },
+                        new
+                        {
+                            ApplicationRoleId = 2,
+                            ApplicationPermissionId = 17
+                        },
+                        new
+                        {
+                            ApplicationRoleId = 2,
+                            ApplicationPermissionId = 18
+                        },
+                        new
+                        {
+                            ApplicationRoleId = 2,
+                            ApplicationPermissionId = 19
+                        },
+                        new
+                        {
+                            ApplicationRoleId = 2,
+                            ApplicationPermissionId = 21
+                        },
+                        new
+                        {
+                            ApplicationRoleId = 2,
+                            ApplicationPermissionId = 23
+                        },
+                        new
+                        {
+                            ApplicationRoleId = 2,
+                            ApplicationPermissionId = 26
+                        },
+                        new
+                        {
+                            ApplicationRoleId = 2,
+                            ApplicationPermissionId = 27
+                        },
+                        new
+                        {
+                            ApplicationRoleId = 2,
+                            ApplicationPermissionId = 28
+                        },
+                        new
+                        {
+                            ApplicationRoleId = 2,
+                            ApplicationPermissionId = 30
+                        },
+                        new
+                        {
+                            ApplicationRoleId = 3,
+                            ApplicationPermissionId = 7
+                        },
+                        new
+                        {
+                            ApplicationRoleId = 3,
+                            ApplicationPermissionId = 11
+                        },
+                        new
+                        {
+                            ApplicationRoleId = 3,
+                            ApplicationPermissionId = 12
+                        },
+                        new
+                        {
+                            ApplicationRoleId = 3,
+                            ApplicationPermissionId = 13
+                        },
+                        new
+                        {
+                            ApplicationRoleId = 3,
+                            ApplicationPermissionId = 14
+                        },
+                        new
+                        {
+                            ApplicationRoleId = 3,
+                            ApplicationPermissionId = 15
+                        },
+                        new
+                        {
+                            ApplicationRoleId = 3,
+                            ApplicationPermissionId = 22
+                        },
+                        new
+                        {
+                            ApplicationRoleId = 3,
+                            ApplicationPermissionId = 23
+                        },
+                        new
+                        {
+                            ApplicationRoleId = 3,
+                            ApplicationPermissionId = 24
+                        },
+                        new
+                        {
+                            ApplicationRoleId = 3,
+                            ApplicationPermissionId = 25
+                        },
+                        new
+                        {
+                            ApplicationRoleId = 3,
+                            ApplicationPermissionId = 26
+                        },
+                        new
+                        {
+                            ApplicationRoleId = 3,
+                            ApplicationPermissionId = 27
+                        },
+                        new
+                        {
+                            ApplicationRoleId = 3,
+                            ApplicationPermissionId = 30
+                        },
+                        new
+                        {
+                            ApplicationRoleId = 4,
+                            ApplicationPermissionId = 11
+                        },
+                        new
+                        {
+                            ApplicationRoleId = 4,
+                            ApplicationPermissionId = 22
+                        },
+                        new
+                        {
+                            ApplicationRoleId = 4,
+                            ApplicationPermissionId = 24
+                        },
+                        new
+                        {
+                            ApplicationRoleId = 4,
+                            ApplicationPermissionId = 25
+                        },
+                        new
+                        {
+                            ApplicationRoleId = 4,
+                            ApplicationPermissionId = 30
+                        });
+                });
+
+            modelBuilder.Entity("WorkoutReservation.Domain.Entities.ApplicationUser", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("AccountCreationDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("DateOfBirth")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("FirstName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Gender")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("LastName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PasswordHash")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Users", "WorkoutReservation.Permissions");
+                });
+
+            modelBuilder.Entity("WorkoutReservation.Domain.Entities.ApplicationUserRole", b =>
+                {
+                    b.Property<Guid>("ApplicationUserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("ApplicationRoleId")
+                        .HasColumnType("int");
+
+                    b.HasKey("ApplicationUserId", "ApplicationRoleId");
+
+                    b.HasIndex("ApplicationRoleId");
+
+                    b.ToTable("UsersRoles", "WorkoutReservation.Permissions");
                 });
 
             modelBuilder.Entity("WorkoutReservation.Domain.Entities.Instructor", b =>
@@ -101,7 +736,7 @@ namespace WorkoutReservation.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Instructors");
+                    b.ToTable("Instructors", "WorkoutReservation");
                 });
 
             modelBuilder.Entity("WorkoutReservation.Domain.Entities.Reservation", b =>
@@ -133,49 +768,7 @@ namespace WorkoutReservation.Infrastructure.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Reservations");
-                });
-
-            modelBuilder.Entity("WorkoutReservation.Domain.Entities.User", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime>("AccountCreationDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("ConfirmationToken")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("DateOfBirth")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Email")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("FirstName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Gender")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("LastName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("PasswordHash")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("UserRole")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Users");
+                    b.ToTable("Reservations", "WorkoutReservation");
                 });
 
             modelBuilder.Entity("WorkoutReservation.Domain.Entities.WorkoutType", b =>
@@ -202,7 +795,7 @@ namespace WorkoutReservation.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("WorkoutTypes");
+                    b.ToTable("WorkoutTypes", "WorkoutReservation");
                 });
 
             modelBuilder.Entity("WorkoutReservation.Domain.Entities.WorkoutTypeInstructor", b =>
@@ -217,7 +810,7 @@ namespace WorkoutReservation.Infrastructure.Migrations
 
                     b.HasIndex("WorkoutTypeId");
 
-                    b.ToTable("WorkoutTypeInstructors");
+                    b.ToTable("WorkoutTypeInstructors", "WorkoutReservation");
                 });
 
             modelBuilder.Entity("WorkoutReservation.Domain.Entities.WorkoutTypeTag", b =>
@@ -243,7 +836,7 @@ namespace WorkoutReservation.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("WorkoutTypeTags");
+                    b.ToTable("WorkoutTypeTags", "WorkoutReservation");
                 });
 
             modelBuilder.Entity("WorkoutTypeWorkoutTypeTag", b =>
@@ -258,12 +851,12 @@ namespace WorkoutReservation.Infrastructure.Migrations
 
                     b.HasIndex("WorkoutTypesId");
 
-                    b.ToTable("WorkoutTypeWorkoutTypeTag");
+                    b.ToTable("WorkoutTypeWorkoutTypeTag", "WorkoutReservation");
                 });
 
             modelBuilder.Entity("WorkoutReservation.Domain.Entities.RealWorkout", b =>
                 {
-                    b.HasBaseType("WorkoutReservation.Domain.Common.BaseWorkout");
+                    b.HasBaseType("WorkoutReservation.Domain.Abstractions.BaseWorkout");
 
                     b.Property<int>("CurrentParticipantNumber")
                         .HasColumnType("int");
@@ -274,21 +867,21 @@ namespace WorkoutReservation.Infrastructure.Migrations
                     b.Property<bool>("IsAutoGenerated")
                         .HasColumnType("bit");
 
-                    b.HasDiscriminator().HasValue("RealWorkout");
+                    b.ToTable("RealWorkouts", "WorkoutReservation");
                 });
 
             modelBuilder.Entity("WorkoutReservation.Domain.Entities.RepetitiveWorkout", b =>
                 {
-                    b.HasBaseType("WorkoutReservation.Domain.Common.BaseWorkout");
+                    b.HasBaseType("WorkoutReservation.Domain.Abstractions.BaseWorkout");
 
                     b.Property<string>("DayOfWeek")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasDiscriminator().HasValue("RepetitiveWorkout");
+                    b.ToTable("RepetitiveWorkouts", "WorkoutReservation");
                 });
 
-            modelBuilder.Entity("WorkoutReservation.Domain.Common.BaseWorkout", b =>
+            modelBuilder.Entity("WorkoutReservation.Domain.Abstractions.BaseWorkout", b =>
                 {
                     b.HasOne("WorkoutReservation.Domain.Entities.Instructor", "Instructor")
                         .WithMany("BaseWorkouts")
@@ -303,6 +896,36 @@ namespace WorkoutReservation.Infrastructure.Migrations
                     b.Navigation("WorkoutType");
                 });
 
+            modelBuilder.Entity("WorkoutReservation.Domain.Entities.ApplicationRolePermission", b =>
+                {
+                    b.HasOne("WorkoutReservation.Domain.Entities.ApplicationPermission", null)
+                        .WithMany()
+                        .HasForeignKey("ApplicationPermissionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("WorkoutReservation.Domain.Entities.ApplicationRole", null)
+                        .WithMany()
+                        .HasForeignKey("ApplicationRoleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("WorkoutReservation.Domain.Entities.ApplicationUserRole", b =>
+                {
+                    b.HasOne("WorkoutReservation.Domain.Entities.ApplicationRole", null)
+                        .WithMany()
+                        .HasForeignKey("ApplicationRoleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("WorkoutReservation.Domain.Entities.ApplicationUser", null)
+                        .WithMany()
+                        .HasForeignKey("ApplicationUserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("WorkoutReservation.Domain.Entities.Reservation", b =>
                 {
                     b.HasOne("WorkoutReservation.Domain.Entities.RealWorkout", "RealWorkout")
@@ -311,7 +934,7 @@ namespace WorkoutReservation.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("WorkoutReservation.Domain.Entities.User", "User")
+                    b.HasOne("WorkoutReservation.Domain.Entities.ApplicationUser", "User")
                         .WithMany("Reservations")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -356,14 +979,32 @@ namespace WorkoutReservation.Infrastructure.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("WorkoutReservation.Domain.Entities.RealWorkout", b =>
+                {
+                    b.HasOne("WorkoutReservation.Domain.Abstractions.BaseWorkout", null)
+                        .WithOne()
+                        .HasForeignKey("WorkoutReservation.Domain.Entities.RealWorkout", "Id")
+                        .OnDelete(DeleteBehavior.ClientCascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("WorkoutReservation.Domain.Entities.RepetitiveWorkout", b =>
+                {
+                    b.HasOne("WorkoutReservation.Domain.Abstractions.BaseWorkout", null)
+                        .WithOne()
+                        .HasForeignKey("WorkoutReservation.Domain.Entities.RepetitiveWorkout", "Id")
+                        .OnDelete(DeleteBehavior.ClientCascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("WorkoutReservation.Domain.Entities.ApplicationUser", b =>
+                {
+                    b.Navigation("Reservations");
+                });
+
             modelBuilder.Entity("WorkoutReservation.Domain.Entities.Instructor", b =>
                 {
                     b.Navigation("BaseWorkouts");
-                });
-
-            modelBuilder.Entity("WorkoutReservation.Domain.Entities.User", b =>
-                {
-                    b.Navigation("Reservations");
                 });
 
             modelBuilder.Entity("WorkoutReservation.Domain.Entities.WorkoutType", b =>

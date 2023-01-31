@@ -1,4 +1,4 @@
-﻿using WorkoutReservation.Domain.Common;
+﻿using WorkoutReservation.Domain.Abstractions;
 using WorkoutReservation.Domain.Enums;
 
 namespace WorkoutReservation.Domain.Entities;
@@ -16,7 +16,6 @@ public class WorkoutType
 
     public WorkoutType()
     {
-        
     }
 
     public WorkoutType(string name, string description, WorkoutIntensity intensity)

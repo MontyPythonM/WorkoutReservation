@@ -13,7 +13,5 @@ public class UsersListDto
     [JsonConverter(typeof(JsonStringEnumConverter))]
     public Gender Gender { get; set; }
     public DateTime AccountCreationDate { get; set; }
-
-    [JsonConverter(typeof(JsonStringEnumConverter))]
-    public UserRole UserRole { get; set; }
+    public List<string> UserRoles { get; set; }
 }

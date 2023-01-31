@@ -1,21 +1,21 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 using WorkoutReservation.API.Controllers.Base;
-using WorkoutReservation.API.Services;
+using WorkoutReservation.API.Extensions;
 using WorkoutReservation.Application.Features.RepetitiveWorkouts.Commands.CreateRepetitiveWorkout;
 using WorkoutReservation.Application.Features.RepetitiveWorkouts.Commands.DeleteAllRepetitiveWorkouts;
 using WorkoutReservation.Application.Features.RepetitiveWorkouts.Commands.DeleteRepetitiveWorkout;
 using WorkoutReservation.Application.Features.RepetitiveWorkouts.Commands.UpdateRepetitiveWorkout;
 using WorkoutReservation.Application.Features.RepetitiveWorkouts.Queries.GetRepetitiveWorkoutList;
+using WorkoutReservation.Infrastructure.Authorization;
 
 namespace WorkoutReservation.API.Controllers;
 
-[Authorize(Roles = "Manager, Administrator")]
 [Route("api/repetitive-workout/")]
 public class RepetitiveWorkoutController : ApiControllerBase
 {
     [HttpGet]
+    [HasPermission(Permission.GetRepetitiveWorkouts)]
     [SwaggerOperation(Summary = "Returns a list of repetitive workouts")]
     public async Task<IActionResult> GetAllRepetitiveWorkoutsPlan(CancellationToken token)
     {
@@ -24,6 +24,7 @@ public class RepetitiveWorkoutController : ApiControllerBase
     }
 
     [HttpPost]
+    [HasPermission(Permission.CreateRepetitiveWorkout)]
     [SwaggerOperation(Summary = "Create new repetitive workout")]
     public async Task<IActionResult> CreateRepetitiveWorkout([FromBody] CreateRepetitiveWorkoutCommand command, CancellationToken token)
     {
@@ -32,6 +33,7 @@ public class RepetitiveWorkoutController : ApiControllerBase
     }
 
     [HttpDelete("{repetitiveWorkoutId}")]
+    [HasPermission(Permission.DeleteRepetitiveWorkout)]
     [SwaggerOperation(Summary = "Delete selected repetitive workout")]
     public async Task<IActionResult> DeleteRepetitiveWorkout([FromRoute] int repetitiveWorkoutId, CancellationToken token)
     {
@@ -40,6 +42,7 @@ public class RepetitiveWorkoutController : ApiControllerBase
     }
 
     [HttpDelete("delete-all")]
+    [HasPermission(Permission.DeleteAllRepetitiveWorkouts)]
     [SwaggerOperation(Summary = "Delete all repetitive workouts")]
     public async Task<IActionResult> DeleteAllRepetitiveWorkout(CancellationToken token)
     {
@@ -48,6 +51,7 @@ public class RepetitiveWorkoutController : ApiControllerBase
     }
 
     [HttpPut]
+    [HasPermission(Permission.UpdateRepetitiveWorkout)]
     [SwaggerOperation(Summary = "Update selected repetitive workout")]
     public async Task<IActionResult> UpdateRepetitiveWorkout([FromBody] UpdateRepetitiveWorkoutCommand command, CancellationToken token)
     {
@@ -56,7 +60,7 @@ public class RepetitiveWorkoutController : ApiControllerBase
     }
 
     [HttpPost("generate-upcoming-week")]
-    [Authorize(Roles = "Administrator")]
+    [HasPermission(Permission.GenerateNewUpcomingWeek)]
     [SwaggerOperation(Summary = "Forces generation of a new repetitive workouts list for the coming week")]
     public Task<IActionResult> GenerateNewUpcomingWeek(CancellationToken token)
     {

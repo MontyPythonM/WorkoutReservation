@@ -1,6 +1,7 @@
 ﻿using System.Net;
 using WorkoutReservation.Application.Common.Exceptions;
 using WorkoutReservation.Domain.Exceptions;
+using WorkoutReservation.Infrastructure.Exceptions;
 
 namespace WorkoutReservation.API.Middleware;
 
@@ -22,6 +23,16 @@ public class ExceptionHandlingMiddleware : IMiddleware
         catch (DomainException ex)
         {
             context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+            await context.Response.WriteAsync(ex.Message);
+        }
+        catch (InfrastructureException ex)
+        {
+            context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+            await context.Response.WriteAsync(ex.Message);
+        }
+        catch (InvalidCredentialsException ex)
+        {
+            context.Response.StatusCode = (int)HttpStatusCode.Conflict;
             await context.Response.WriteAsync(ex.Message);
         }
         catch (BadRequestException ex)
@@ -48,14 +59,14 @@ public class ExceptionHandlingMiddleware : IMiddleware
         {
             _logger.LogError("Cannot connect with database.", ex);
 
-            context.Response.StatusCode = 500;
+            context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;;
             await context.Response.WriteAsync(ex.Message);
         }
         catch (Exception ex)
         {
             _logger.LogError("Internal server error.", ex);
 
-            context.Response.StatusCode = 500;
+            context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;;
             await context.Response.WriteAsync(ex.Message);
         }
     }

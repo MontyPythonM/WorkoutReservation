@@ -1,14 +1,14 @@
-import { HttpClient, HttpHeaders, HttpParams, HttpResponse } from "@angular/common/http";
-import { Injectable } from "@angular/core";
-import { map, Observable } from "rxjs";
-import { environment } from "src/environments/environment";
+import {HttpClient, HttpHeaders, HttpParams, HttpResponse} from "@angular/common/http";
+import {Injectable} from "@angular/core";
+import {map, Observable} from "rxjs";
+import {environment} from "src/environments/environment";
 
 export const httpOptions = {
   headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
   body: {},
   observe: 'response' as 'body',
   params: {},
-  withCredentials: false  // TODO: set true when authorization is ready
+  withCredentials: true
 };
 
 @Injectable({providedIn: 'root'})

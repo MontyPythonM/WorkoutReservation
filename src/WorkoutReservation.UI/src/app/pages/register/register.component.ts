@@ -1,13 +1,12 @@
-import { Component, ViewChild } from '@angular/core';
-import { Router } from '@angular/router';
-import { DxFormComponent } from 'devextreme-angular';
+import {Component} from '@angular/core';
+import {Router} from '@angular/router';
 import dxForm from 'devextreme/ui/form';
-import { BaseComponent } from 'src/app/common/base.component';
-import { EnumObject, enumToObjects } from 'src/app/models/enums/enum-converter';
-import { Gender } from 'src/app/models/enums/gender.enum';
-import { RegisterForm } from 'src/app/models/register-form.model';
-import { NotificationService } from 'src/app/services/notification.service';
-import { UserService } from 'src/app/services/user.service';
+import {BaseComponent} from 'src/app/common/base.component';
+import {EnumObject, enumToObjects} from 'src/app/models/enums/enum-converter';
+import {Gender} from 'src/app/models/enums/gender.enum';
+import {RegisterForm} from 'src/app/models/register-form.model';
+import {NotificationService} from 'src/app/services/notification.service';
+import {UserService} from 'src/app/services/user.service';
 
 @Component({
   selector: 'app-register',
@@ -15,14 +14,12 @@ import { UserService } from 'src/app/services/user.service';
   styleUrls: ['./register.component.css']
 })
 export class RegisterComponent extends BaseComponent {
-
-  @ViewChild(DxFormComponent) registerForm!: DxFormComponent;
   registerFormData: RegisterForm;
   gender: EnumObject[];
   namePattern: any;
   dateOptions: any;
   private dxForm!: dxForm;
-  private emailTakenErrorMessage = 'Validation failed: \r\n -- Email: Email address is already taken. Severity: Error'
+  private readonly emailTakenErrorMessage = 'Validation failed: \r\n -- Email: Email address is already taken. Severity: Error'
 
   constructor(private userService: UserService, private router: Router, private notificationService: NotificationService) {
     super();
@@ -38,32 +35,30 @@ export class RegisterComponent extends BaseComponent {
     this.gender = enumToObjects(Gender);
   }
 
-  resetForm() {
-    this.registerForm.instance.resetValues();
-  }
-
-  initializeDxForm(event: {component: dxForm}): void {
-    this.dxForm = event.component;
-  }
-
-  passwordComparison = () => this.registerFormData.password;
-
   signUp() {
     const isValid = this.dxForm.validate().isValid;
     if(isValid) {
       this.subscribe(this.userService.register(this.registerFormData), {
+        next: () => {
+          this.dxForm.resetValues();
+          this.notificationService.show('Account has been created', 'success');
+        },
         error: (error) => {
           this.registerFormData.email = '';
           this.registerFormData.dateOfBirth = '';
-          error.error == this.emailTakenErrorMessage ?
-            this.notificationService.show('Email address is already taken.', 'error') :
-            this.notificationService.show('Registration failed!', 'error');
-        },
-        complete: () => {
-          this.resetForm();
-          this.notificationService.show('Account has been created.', 'success');
+          this.displayErrorMessage(error.error);
         }
       });
     }
+  }
+
+  passwordComparison = () => this.registerFormData.password;
+
+  initializeDxForm = (event: {component: dxForm}) => this.dxForm = event.component;
+
+  private displayErrorMessage(error: string) {
+    error == this.emailTakenErrorMessage ?
+      this.notificationService.show('Email address is already taken', 'error') :
+      this.notificationService.show('Registration failed', 'error');
   }
 }

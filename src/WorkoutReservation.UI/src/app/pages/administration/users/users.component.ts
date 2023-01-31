@@ -2,9 +2,9 @@ import {Component, OnInit} from '@angular/core';
 import {BaseComponent} from "../../../common/base.component";
 import {UserService} from "../../../services/user.service";
 import {PagedResult} from "../../../models/paged-result.model";
-import {User} from "../../../models/user.model";
 import {PagedQuery} from "../../../models/paged-query.model";
 import {DATETIME_FORMAT} from "../../../constants/constants";
+import {ApplicationUser} from "../../../models/application-user.model";
 
 @Component({
   selector: 'app-users',
@@ -12,13 +12,13 @@ import {DATETIME_FORMAT} from "../../../constants/constants";
   styleUrls: ['./users.component.css']
 })
 export class UsersComponent extends BaseComponent implements OnInit {
-  users: PagedResult<User>;
+  users: PagedResult<ApplicationUser>;
   query: PagedQuery;
   dateFormat = DATETIME_FORMAT;
 
   constructor(private userService: UserService) {
     super();
-    this.users = new PagedResult<User>();
+    this.users = new PagedResult<ApplicationUser>();
     this.query = new PagedQuery({
       pageNumber: 1,
       pageSize: 15,
@@ -34,7 +34,7 @@ export class UsersComponent extends BaseComponent implements OnInit {
 
   loadUsers(query: PagedQuery) {
     this.subscribe(this.userService.getUsers(query), {
-      next: (response: PagedResult<User>) => {
+      next: (response: PagedResult<ApplicationUser>) => {
         this.users = response;
       }
     });

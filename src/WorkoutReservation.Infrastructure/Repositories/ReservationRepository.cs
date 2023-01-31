@@ -2,17 +2,20 @@
 using Microsoft.EntityFrameworkCore;
 using WorkoutReservation.Application.Contracts;
 using WorkoutReservation.Domain.Entities;
-using WorkoutReservation.Infrastructure.Presistence;
+using WorkoutReservation.Infrastructure.Interfaces;
+using WorkoutReservation.Infrastructure.Persistence;
 
 namespace WorkoutReservation.Infrastructure.Repositories;
 
 public class ReservationRepository : IReservationRepository
 {
     private readonly AppDbContext _dbContext;
+    private readonly IRepository<Reservation> _repository;
 
-    public ReservationRepository(AppDbContext dbContext)
+    public ReservationRepository(AppDbContext dbContext, IRepository<Reservation> repository)
     {
         _dbContext = dbContext;
+        _repository = repository;
     }
 
     public async Task<List<Reservation>> GetUserReservationsByGuidAsync(Guid userId, CancellationToken token)
@@ -34,7 +37,7 @@ public class ReservationRepository : IReservationRepository
         return reservation;
     }
 
-    public async Task<bool> CheckIsUserReservedAsync(RealWorkout realWorkout, User currentUser, CancellationToken token)
+    public async Task<bool> CheckIsUserReservedAsync(RealWorkout realWorkout, ApplicationUser currentUser, CancellationToken token)
     {
         var isUserAlreadyReserved = await _dbContext.Reservations
             .Include(x => x.User)
@@ -47,28 +50,19 @@ public class ReservationRepository : IReservationRepository
 
     public async Task<Reservation> GetByIdAsync(int reservationId, bool asNoTracking, CancellationToken token)
     {
-        var baseQuery = _dbContext.Reservations.AsQueryable();
-        if (asNoTracking)
-            baseQuery.AsNoTracking();
+        var query = _dbContext.Reservations.AsQueryable();
+        query = _repository.ApplyAsNoTracking(asNoTracking, query);
             
-        return await baseQuery.FirstOrDefaultAsync(x => x.Id == reservationId, token);
+        return await query.FirstOrDefaultAsync(x => x.Id == reservationId, token);
     }
     
     public async Task<Reservation> GetByIdAsync(int reservationId, bool asNoTracking, CancellationToken token, params Expression<Func<Reservation, object>>[] includes)
     {
-        var baseQuery = _dbContext.Reservations.AsQueryable();
-        if (asNoTracking)
-            baseQuery.AsNoTracking();
-            
-        if (includes.Any())
-        {
-            foreach (var include in includes)
-            {
-                baseQuery = baseQuery.Include(include);
-            }
-        }
+        var query = _dbContext.Reservations.AsQueryable();
+        query = _repository.ApplyAsNoTracking(asNoTracking, query);
+        query = _repository.ApplyIncludes(includes, query);
         
-        return await baseQuery.FirstOrDefaultAsync(x => x.Id == reservationId, token);
+        return await query.FirstOrDefaultAsync(x => x.Id == reservationId, token);
     }
     
     public async Task<Reservation> GetReservationByIdAsync(int reservationId, CancellationToken token)

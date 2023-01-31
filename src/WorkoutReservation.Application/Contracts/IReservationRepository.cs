@@ -7,7 +7,7 @@ public interface IReservationRepository
 {
     public Task<List<Reservation>> GetUserReservationsByGuidAsync(Guid userId, CancellationToken token);
     public Task<Reservation> AddReservationAsync(Reservation reservation, CancellationToken token);
-    public Task<bool> CheckIsUserReservedAsync(RealWorkout realWorkout, User currentUser, CancellationToken token);
+    public Task<bool> CheckIsUserReservedAsync(RealWorkout realWorkout, ApplicationUser currentUser, CancellationToken token);
     public Task<Reservation> GetReservationByIdAsync(int reservationId, CancellationToken token);
     public Task<Reservation> GetByIdAsync(int reservationId, bool asNoTracking, CancellationToken token);
     public Task<Reservation> GetByIdAsync(int reservationId, bool asNoTracking, CancellationToken token,

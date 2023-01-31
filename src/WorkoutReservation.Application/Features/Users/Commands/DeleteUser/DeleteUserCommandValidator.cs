@@ -8,7 +8,7 @@ public class DeleteUserCommandValidator : AbstractValidator<DeleteUserCommand>
     {
         RuleFor(x => x.UserGuid)
             .NotEmpty()
-            .Must(x => x != currentUserGuid)
-            .WithMessage("You cannot delete your own account by this endpoint. Use route: */api/account/delete-account");
+            .Must(userToRemoveGuid => userToRemoveGuid != currentUserGuid)
+            .WithMessage("You cannot delete your own account by this endpoint. Use route: ../api/account/delete-account");
     }
 }

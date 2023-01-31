@@ -21,26 +21,22 @@ public class GenerateUpcomingWorkoutTimetableTest : IClassFixture<Program>
 {
     private static readonly Instructor Instructor = new("FirstName", "LastName", Gender.Unspecified, "Biography", "EmailAddress");
     private static readonly WorkoutType WorkoutType = new("Name", "Description", WorkoutIntensity.Extreme);
-    private static readonly User User = new("email", "firstName", "lastName", Gender.Female, new DateOnly(1996, 10, 20), "passwordHash", "", new DateTime(2023, 01, 14), UserRole.Member);
+    private static readonly ApplicationUser User = new("email", "firstName", "lastName", Gender.Female, new DateOnly(1996, 10, 20), "passwordHash");
     private readonly List<RepetitiveWorkout> _repetitiveWorkouts = new()
     {
         new RepetitiveWorkout(10, new TimeOnly(10,00), new TimeOnly(12,00), DayOfWeek.Monday, WorkoutType, Instructor), 
     };
 
     private readonly IMapper _mapperMock;
-    private readonly Mock<IRepetitiveWorkoutRepository> _repetitiveWorkoutRepositoryMock;
-    private readonly Mock<ICurrentUserService> _currentUserServiceMock;
-    private readonly Mock<IRealWorkoutRepository> _realWorkoutRepositoryMock;
-    private readonly Mock<ILogger<GenerateUpcomingWorkoutTimetableCommandHandler>> _loggerMock;
+    private readonly Mock<IRepetitiveWorkoutRepository> _repetitiveWorkoutRepositoryMock = new();
+    private readonly Mock<ICurrentUserAccessor> _currentUserAccessorMock = new();
+    private readonly Mock<IRealWorkoutRepository> _realWorkoutRepositoryMock = new();
+    private readonly Mock<ILogger<GenerateUpcomingWorkoutTimetableCommandHandler>> _loggerMock = new();
 
     public GenerateUpcomingWorkoutTimetableTest()
     {
         var configurationProvider = new MapperConfiguration(cfg => { cfg.AddProfile<RepetitiveWorkoutProfile>(); });
         _mapperMock = configurationProvider.CreateMapper();
-        _repetitiveWorkoutRepositoryMock = new Mock<IRepetitiveWorkoutRepository>();
-        _realWorkoutRepositoryMock = new Mock<IRealWorkoutRepository>();
-        _loggerMock = new Mock<ILogger<GenerateUpcomingWorkoutTimetableCommandHandler>>();
-        _currentUserServiceMock = new Mock<ICurrentUserService>();
     }
 
     [Theory]
@@ -300,7 +296,7 @@ public class GenerateUpcomingWorkoutTimetableTest : IClassFixture<Program>
     
     private GenerateUpcomingWorkoutTimetableCommandHandler GetHandler() => 
         new(_repetitiveWorkoutRepositoryMock.Object, _realWorkoutRepositoryMock.Object, 
-            _currentUserServiceMock.Object, _mapperMock, _loggerMock.Object);
+            _currentUserAccessorMock.Object, _mapperMock, _loggerMock.Object);
     
     private void SetCorrectInstructorAndWorkoutTypeTestData()
     {

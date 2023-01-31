@@ -2,33 +2,27 @@
 using Microsoft.EntityFrameworkCore;
 using WorkoutReservation.Application.Contracts;
 using WorkoutReservation.Domain.Entities;
-using WorkoutReservation.Infrastructure.Presistence;
+using WorkoutReservation.Infrastructure.Interfaces;
+using WorkoutReservation.Infrastructure.Persistence;
 
 namespace WorkoutReservation.Infrastructure.Repositories;
 
 public class WorkoutTypeTagRepository : IWorkoutTypeTagRepository
 {    
     private readonly AppDbContext _dbContext;
+    private readonly IRepository<WorkoutTypeTag> _repository;
 
-    public WorkoutTypeTagRepository(AppDbContext dbContext)
+    public WorkoutTypeTagRepository(AppDbContext dbContext, IRepository<WorkoutTypeTag> repository)
     {
         _dbContext = dbContext;
+        _repository = repository;
     }
 
     public async Task<List<WorkoutTypeTag>> GetAllAsync(bool asNoTracking, CancellationToken token, params Expression<Func<WorkoutTypeTag, object>>[] includes)
     {
         var query = _dbContext.WorkoutTypeTags.AsQueryable();
-        
-        if (asNoTracking)
-            query.AsNoTracking();
-        
-        if (includes.Any())
-        {
-            foreach (var include in includes)
-            {
-                query = query.Include(include);
-            }
-        }
+        query = _repository.ApplyAsNoTracking(asNoTracking, query);
+        query = _repository.ApplyIncludes(includes, query);
         
         return await query.ToListAsync(token);
     }
@@ -36,38 +30,27 @@ public class WorkoutTypeTagRepository : IWorkoutTypeTagRepository
     public async Task<List<WorkoutTypeTag>> GetAllAsync(Expression<Func<WorkoutTypeTag, bool>> wherePredicate, bool asNoTracking, CancellationToken token)
     {
         var query = _dbContext.WorkoutTypeTags.AsQueryable().Where(wherePredicate);
-        if (asNoTracking)
-            query.AsNoTracking();
+        query = _repository.ApplyAsNoTracking(asNoTracking, query);
         
         return await query.ToListAsync(token);
     }
 
     public async Task<WorkoutTypeTag> GetByIdAsync(int workoutTypeTagId, bool asNoTracking, CancellationToken token)
     {
-        var baseQuery = _dbContext.WorkoutTypeTags;
-        if (asNoTracking)
-            baseQuery.AsNoTracking();
+        var query = _dbContext.WorkoutTypeTags.AsQueryable();
+        query = _repository.ApplyAsNoTracking(asNoTracking, query);
         
-        return await baseQuery.FirstOrDefaultAsync(x => x.Id == workoutTypeTagId, token);
+        return await query.FirstOrDefaultAsync(x => x.Id == workoutTypeTagId, token);
     }
     
     public async Task<WorkoutTypeTag> GetByIdAsync(int workoutTypeTagId, bool asNoTracking, 
         CancellationToken token, params Expression<Func<WorkoutTypeTag, object>>[] includes)
     {
-        var baseQuery = _dbContext.WorkoutTypeTags.AsQueryable();
-                
-        if (asNoTracking)
-            baseQuery.AsNoTracking();
+        var query = _dbContext.WorkoutTypeTags.AsQueryable();
+        query = _repository.ApplyAsNoTracking(asNoTracking, query);
+        query = _repository.ApplyIncludes(includes, query);
         
-        if (includes.Any())
-        {
-            foreach (var include in includes)
-            {
-                baseQuery = baseQuery.Include(include);
-            }
-        }
-        
-        return await baseQuery.FirstOrDefaultAsync(x => x.Id == workoutTypeTagId, token);
+        return await query.FirstOrDefaultAsync(x => x.Id == workoutTypeTagId, token);
     }
 
     public async Task<WorkoutTypeTag> AddAsync(WorkoutTypeTag workoutTypeTag, CancellationToken token)

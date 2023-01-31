@@ -9,22 +9,22 @@ using WorkoutReservation.Domain.Entities;
 namespace WorkoutReservation.Application.Features.Users.Queries.GetUsersList;
 
 public class GetUsersListQueryHandler : IRequestHandler<GetUsersListQuery,
-                                                        PagedResultDto<UsersListDto>>
+    PagedResultDto<UsersListDto>>
 {
-    private readonly IUserRepository _userRepository;
+    private readonly IApplicationUserRepository _userRepository;
     private readonly IMapper _mapper;
 
-    public GetUsersListQueryHandler(IUserRepository userRepository, IMapper mapper)
+    public GetUsersListQueryHandler(IApplicationUserRepository userRepository, IMapper mapper)
     {
         _userRepository = userRepository;
         _mapper = mapper;
     }
 
     public async Task<PagedResultDto<UsersListDto>> Handle(GetUsersListQuery request, 
-                                                           CancellationToken cancellationToken)
+        CancellationToken token)
     {
         var validator = new GetUsersListQueryValidator();
-        await validator.ValidateAndThrowAsync(request, cancellationToken);
+        await validator.ValidateAndThrowAsync(request, token);
 
         var usersQuery = _userRepository.GetAllUsersQuery();
 
@@ -38,12 +38,11 @@ public class GetUsersListQueryHandler : IRequestHandler<GetUsersListQuery,
 
         if (!string.IsNullOrEmpty(request.SortBy))
         {
-            var columnsSelector = new Dictionary<string, Expression<Func<User, object>>>
+            var columnsSelector = new Dictionary<string, Expression<Func<ApplicationUser, object>>>
             {
-                { nameof(User.Email), u => u.Email},
-                { nameof(User.FirstName), u => u.FirstName},
-                { nameof(User.LastName), u => u.LastName},
-                { nameof(User.UserRole), u => u.UserRole},
+                { nameof(ApplicationUser.Email), u => u.Email},
+                { nameof(ApplicationUser.FirstName), u => u.FirstName},
+                { nameof(ApplicationUser.LastName), u => u.LastName},
             };
 
             var sortByExpression = columnsSelector[request.SortBy];
@@ -60,10 +59,7 @@ public class GetUsersListQueryHandler : IRequestHandler<GetUsersListQuery,
 
         var mappedResult = _mapper.Map<List<UsersListDto>>(result);
 
-        var pagedWorkoutTypes = new PagedResultDto<UsersListDto>(mappedResult,
-                                                                 totalCount,
-                                                                 request.PageSize,
-                                                                 request.PageNumber);
-        return pagedWorkoutTypes;
+        return new PagedResultDto<UsersListDto>(mappedResult, totalCount, 
+            request.PageSize, request.PageNumber);
     }
 }

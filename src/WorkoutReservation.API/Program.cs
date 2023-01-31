@@ -1,18 +1,19 @@
 using System.Text;
 using Hangfire;
-using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.IdentityModel.Tokens;
 using NLog;
 using NLog.Web;
-using WorkoutReservation.API.Filters;
+using WorkoutReservation.API.Extensions;
 using WorkoutReservation.API.Middleware;
-using WorkoutReservation.API.Services;
 using WorkoutReservation.Application;
 using WorkoutReservation.Application.Contracts;
-using WorkoutReservation.Domain.Common;
-using WorkoutReservation.Domain.Entities;
 using WorkoutReservation.Infrastructure;
+using WorkoutReservation.Infrastructure.Authentication;
+using WorkoutReservation.Infrastructure.Authorization;
+using WorkoutReservation.Infrastructure.Identity;
 using WorkoutReservation.Infrastructure.Seeders;
+using WorkoutReservation.Infrastructure.Settings;
 using LogLevel = Microsoft.Extensions.Logging.LogLevel;
 
 var logger = LogManager.Setup().LoadConfigurationFromAppSettings().GetCurrentClassLogger();
@@ -43,21 +44,24 @@ try
         config.TokenValidationParameters = new TokenValidationParameters
         {
             ValidIssuer = authenticationSettings.JwtIssuer,
-            ValidAudience = authenticationSettings.JwtIssuer,
+            ValidAudience = authenticationSettings.JwtAudience,
             IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(authenticationSettings.JwtKey)),
             ClockSkew = TimeSpan.Zero
         };
     });
 
-    var firstAdminSettings = new FirstAdminSettings();
-    builder.Configuration.GetSection("FirstAdmin").Bind(firstAdminSettings);
+    builder.Services.AddAuthorization();
+    builder.Services.AddSingleton<IAuthorizationHandler, PermissionAuthorizationHandler>();
+    builder.Services.AddSingleton<IAuthorizationPolicyProvider, PermissionAuthorizationPolicyProvider>();
+    
+    var systemAdministratorSettings = new SystemAdministratorSettings();
+    builder.Configuration.GetSection("FirstAdmin").Bind(systemAdministratorSettings);
 
     //--- Add services to the container
     GlobalJobFilters.Filters.Add(new AutomaticRetryAttribute { Attempts = 0, OnAttemptsExceeded = AttemptsExceededAction.Delete });
 
     builder.Services.AddSingleton(authenticationSettings);
-    builder.Services.AddSingleton(firstAdminSettings);
-    builder.Services.AddSingleton<ICurrentUserService, CurrentUserService>();
+    builder.Services.AddSingleton(systemAdministratorSettings);
 
     builder.Services.AddHttpContextAccessor();
     builder.Services.AddControllers(options => options.UseDateOnlyTimeOnlyStringConverters())
@@ -72,7 +76,6 @@ try
     builder.Services.AddInfrastructureServices(builder.Configuration);
     builder.Services.AddApplicationServices(builder.Configuration);
     builder.Services.AddScoped<ExceptionHandlingMiddleware>();
-    builder.Services.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();
     builder.Services.AddCors();
 
     //--- Build application
@@ -80,13 +83,12 @@ try
 
     //--- Get service instances
     using var scope = app.Services.CreateScope();
-
-    var firstAdminSeeder = scope.ServiceProvider.GetService<SeedFirstAdmin>(); 
-    var dummyDataSeeder = scope.ServiceProvider.GetService<SeedDummyData>();
+    var systemAdministratorSeeder = scope.ServiceProvider.GetService<SystemAdministratorSeeder>(); 
+    var applicationDataSeeder = scope.ServiceProvider.GetService<ApplicationDataSeeder>();
 
     //--- Configure the HTTP request pipeline
-    await firstAdminSeeder!.SeedAsync(CancellationToken.None);
-    await dummyDataSeeder!.SeedAsync(CancellationToken.None);
+    await systemAdministratorSeeder!.SeedAsync(CancellationToken.None);
+    await applicationDataSeeder!.SeedAsync(CancellationToken.None);
 
     if (app.Environment.IsDevelopment())
     {
@@ -97,15 +99,15 @@ try
     app.UseMiddleware<ExceptionHandlingMiddleware>();
     
     app.UseCors(policy => policy
-        .AllowAnyOrigin()
         .AllowAnyHeader()
-        .AllowAnyMethod()
-        .WithOrigins("http://localhost:4200"));
+        .WithMethods("POST", "PUT", "PATCH", "DELETE", "UPDATE", "OPTIONS")
+        .WithOrigins("http://localhost:4200")
+        .AllowCredentials());
     
     app.UseAuthentication();
     app.UseHangfireDashboard("/hangfire", new DashboardOptions
     {
-        Authorization = new[] { new HangfireAuthorizationFilter() },
+        Authorization = new[] { new HangfireAuthorizationFilter(app.Services) },
         IsReadOnlyFunc = _ => true
     });
     app.UseRouting();
@@ -115,7 +117,7 @@ try
     HangfireExtension.AddGenerateUpcomingWorkoutsRecurringJob();
     
     logger.Debug("Application run");
-    app.Run(); 
+    app.Run();
 }
 catch (Exception ex)
 {

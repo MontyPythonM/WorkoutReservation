@@ -8,36 +8,34 @@ namespace WorkoutReservation.Application.Features.Users.Commands.DeleteUser;
 
 public class DeleteUserCommandHandler : IRequestHandler<DeleteUserCommand>
 {
-    private readonly IUserRepository _userRepository;
-    private readonly ICurrentUserService _currentUserService;
+    private readonly IApplicationUserRepository _userRepository;
+    private readonly ICurrentUserAccessor _currentUserAccessor;
     private readonly ILogger<DeleteUserCommandHandler> _logger;
 
-    public DeleteUserCommandHandler(IUserRepository userRepository,
-                                    ICurrentUserService currentUserService,
-                                    ILogger<DeleteUserCommandHandler> logger)
+    public DeleteUserCommandHandler(IApplicationUserRepository userRepository,
+        ICurrentUserAccessor currentUserAccessor,
+        ILogger<DeleteUserCommandHandler> logger)
     {
         _userRepository = userRepository;
-        _currentUserService = currentUserService;
+        _currentUserAccessor = currentUserAccessor;
         _logger = logger;
     }
 
-    public async Task<Unit> Handle(DeleteUserCommand request, 
-                                   CancellationToken cancellationToken)
+    public async Task<Unit> Handle(DeleteUserCommand request, CancellationToken token)
     {
-        var userToRemove = await _userRepository.GetByGuidAsync(request.UserGuid, cancellationToken);
+        var userToRemove = await _userRepository.GetByGuidAsync(request.UserGuid, false, token);
 
         if (userToRemove is null)
             throw new NotFoundException($"User with Guid: {request.UserGuid} not found.");
 
-        var currentUserGuid = Guid.Parse(_currentUserService.UserId);
+        var currentUserGuid = _currentUserAccessor.GetCurrentUserId();
 
         var validator = new DeleteUserCommandValidator(currentUserGuid);
-        await validator.ValidateAndThrowAsync(request, cancellationToken);
+        await validator.ValidateAndThrowAsync(request, token);
 
-        await _userRepository.DeleteAsync(userToRemove, cancellationToken);
-
+        await _userRepository.DeleteAsync(userToRemove, token);
+        
         _logger.LogInformation($"User with Id: {request.UserGuid} was deleted by Administrator Id: {currentUserGuid}.");
-
         return Unit.Value;
     }
 }

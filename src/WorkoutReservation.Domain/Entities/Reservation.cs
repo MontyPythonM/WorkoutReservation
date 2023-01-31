@@ -10,14 +10,14 @@ public class Reservation
     public ReservationStatus ReservationStatus { get; set; }
     public RealWorkout RealWorkout { get; set; }
     public int RealWorkoutId { get; set; }
-    public User User { get; set; }
+    public ApplicationUser User { get; set; }
     public Guid UserId { get; set; }
 
-    public Reservation()
+    protected Reservation()
     {
     }
     
-    public Reservation(RealWorkout realWorkout, User user)
+    public Reservation(RealWorkout realWorkout, ApplicationUser user)
     {
         RealWorkout = realWorkout;
         User = user;

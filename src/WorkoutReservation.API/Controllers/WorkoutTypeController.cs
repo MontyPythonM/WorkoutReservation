@@ -6,10 +6,10 @@ using WorkoutReservation.Application.Features.WorkoutTypes.Commands.CreateWorkou
 using WorkoutReservation.Application.Features.WorkoutTypes.Commands.DeleteWorkoutType;
 using WorkoutReservation.Application.Features.WorkoutTypes.Commands.UpdateWorkoutType;
 using WorkoutReservation.Application.Features.WorkoutTypes.Queries.GetWorkoutTypesList;
+using WorkoutReservation.Infrastructure.Authorization;
 
 namespace WorkoutReservation.API.Controllers;
 
-[Authorize(Roles = "Manager, Administrator")]
 [Route("api/workout-type/")]
 public class WorkoutTypeController : ApiControllerBase
 {
@@ -22,6 +22,7 @@ public class WorkoutTypeController : ApiControllerBase
     }
     
     [HttpPost]
+    [HasPermission(Permission.CreateWorkoutType)]
     [SwaggerOperation(Summary = "Create new workout type")]
     public async Task<IActionResult> CreateWorkoutType([FromBody] CreateWorkoutTypeCommand command, CancellationToken token)
     {
@@ -30,6 +31,7 @@ public class WorkoutTypeController : ApiControllerBase
     }
 
     [HttpDelete("{workoutTypeId}")]
+    [HasPermission(Permission.DeleteWorkoutType)]
     [SwaggerOperation(Summary = "Delete selected workout type")]
     public async Task<IActionResult> DeleteWorkoutType([FromRoute] int workoutTypeId, CancellationToken token)
     {
@@ -38,6 +40,7 @@ public class WorkoutTypeController : ApiControllerBase
     }
 
     [HttpPut]
+    [HasPermission(Permission.UpdateWorkoutType)]
     [SwaggerOperation(Summary = "Update selected workout type")]
     public async Task<IActionResult> UpdateWorkoutType([FromBody] UpdateWorkoutTypeCommand command, CancellationToken token)
     {
