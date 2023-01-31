@@ -6,7 +6,9 @@ using WorkoutReservation.Domain.Enums;
 
 namespace WorkoutReservation.Application.Features.Reservations.Commands.EditReservationStatus;
 
-public class EditReservationStatusCommandHandler : IRequestHandler<EditReservationStatusCommand>
+public record EditReservationStatusCommand(int ReservationId, ReservationStatus ReservationStatus) : IRequest;
+
+internal sealed class EditReservationStatusCommandHandler : IRequestHandler<EditReservationStatusCommand>
 {
     private readonly IReservationRepository _reservationRepository;
     private readonly IRealWorkoutRepository _realWorkoutRepository;

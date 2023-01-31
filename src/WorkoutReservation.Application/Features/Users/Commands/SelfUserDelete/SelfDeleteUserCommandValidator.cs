@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Identity;
 
 namespace WorkoutReservation.Application.Features.Users.Commands.SelfUserDelete;
 
-public class SelfDeleteUserCommandValidator : AbstractValidator<SelfDeleteUserCommand>
+internal sealed class SelfDeleteUserCommandValidator : AbstractValidator<SelfDeleteUserCommand>
 {
     public SelfDeleteUserCommandValidator(PasswordVerificationResult passwordCompareResult)
     {

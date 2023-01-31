@@ -2,7 +2,7 @@
 
 namespace WorkoutReservation.Application.Features.Users.Commands.DeleteUser;
 
-public class DeleteUserCommandValidator : AbstractValidator<DeleteUserCommand>
+internal sealed class DeleteUserCommandValidator : AbstractValidator<DeleteUserCommand>
 {
     public DeleteUserCommandValidator(Guid currentUserGuid)
     {

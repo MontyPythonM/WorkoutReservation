@@ -5,7 +5,9 @@ using WorkoutReservation.Application.Contracts;
 
 namespace WorkoutReservation.Application.Features.Instructors.Queries.GetInstructorList;
 
-public class GetInstructorListQueryHandler : IRequestHandler<GetInstructorListQuery, 
+public record GetInstructorListQuery() : IRequest<List<InstructorListQueryDto>>;
+
+internal sealed class GetInstructorListQueryHandler : IRequestHandler<GetInstructorListQuery, 
     List<InstructorListQueryDto>>
 {
     private readonly IInstructorRepository _instructorRepository;

@@ -7,7 +7,10 @@ using WorkoutReservation.Domain.Entities;
 
 namespace WorkoutReservation.Application.Features.RepetitiveWorkouts.Commands.UpdateRepetitiveWorkout;
 
-public class UpdateRepetitiveWorkoutCommandHandler : IRequestHandler<UpdateRepetitiveWorkoutCommand>
+public record UpdateRepetitiveWorkoutCommand(int RepetitiveWorkoutId, int MaxParticipantNumber, TimeOnly StartTime, 
+    TimeOnly EndTime, int InstructorId, DayOfWeek DayOfWeek) : IRequest;
+
+internal sealed class UpdateRepetitiveWorkoutCommandHandler : IRequestHandler<UpdateRepetitiveWorkoutCommand>
 {
     private readonly IRepetitiveWorkoutRepository _repetitiveWorkoutRepository;
     private readonly IInstructorRepository _instructorRepository;

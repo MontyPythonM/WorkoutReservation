@@ -4,7 +4,7 @@ using WorkoutReservation.Domain.Enums;
 
 namespace WorkoutReservation.Application.Features.Reservations.Commands.CancelReservation;
 
-public class CancelReservationCommandValidator : AbstractValidator<CancelReservationCommand>
+internal sealed class CancelReservationCommandValidator : AbstractValidator<CancelReservationCommand>
 {
     public CancelReservationCommandValidator(Reservation reservation, Guid userGuid)
     {

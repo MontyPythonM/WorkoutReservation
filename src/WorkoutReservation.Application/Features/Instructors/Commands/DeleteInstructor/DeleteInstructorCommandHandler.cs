@@ -3,10 +3,11 @@ using Microsoft.Extensions.Logging;
 using WorkoutReservation.Application.Common.Exceptions;
 using WorkoutReservation.Application.Contracts;
 
-
 namespace WorkoutReservation.Application.Features.Instructors.Commands.DeleteInstructor;
 
-public class DeleteInstructorCommandHandler : IRequestHandler<DeleteInstructorCommand>
+public record DeleteInstructorCommand(int InstructorId) : IRequest;
+
+internal sealed class DeleteInstructorCommandHandler : IRequestHandler<DeleteInstructorCommand>
 {
     private readonly IInstructorRepository _instructorRepository;
     private readonly ILogger<DeleteInstructorCommandHandler> _logger;

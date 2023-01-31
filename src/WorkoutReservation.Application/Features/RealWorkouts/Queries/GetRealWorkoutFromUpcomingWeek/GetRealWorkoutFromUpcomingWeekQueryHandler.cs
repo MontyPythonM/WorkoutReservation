@@ -6,7 +6,9 @@ using WorkoutReservation.Domain.Extensions;
 
 namespace WorkoutReservation.Application.Features.RealWorkouts.Queries.GetRealWorkoutFromUpcomingWeek;
 
-public class GetRealWorkoutFromUpcomingWeekQueryHandler : IRequestHandler<GetRealWorkoutFromUpcomingWeekQuery,
+public record GetRealWorkoutFromUpcomingWeekQuery : IRequest<List<RealWorkoutFromUpcomingWeekDto>>;
+
+internal sealed class GetRealWorkoutFromUpcomingWeekQueryHandler : IRequestHandler<GetRealWorkoutFromUpcomingWeekQuery,
     List<RealWorkoutFromUpcomingWeekDto>>
 {
     private readonly IRealWorkoutRepository _realWorkoutRepository;

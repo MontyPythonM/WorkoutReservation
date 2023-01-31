@@ -6,7 +6,9 @@ using WorkoutReservation.Domain.Entities;
 
 namespace WorkoutReservation.Application.Features.Reservations.Commands.AddReservation;
 
-public class AddReservationCommandHandler : IRequestHandler<AddReservationCommand, int>
+public record AddReservationCommand(int RealWorkoutId) : IRequest<int>;
+
+internal sealed class AddReservationCommandHandler : IRequestHandler<AddReservationCommand, int>
 {
     private readonly IReservationRepository _reservationRepository;
     private readonly IRealWorkoutRepository _realWorkoutRepository;

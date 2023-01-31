@@ -3,7 +3,7 @@ using WorkoutReservation.Domain.Entities;
 
 namespace WorkoutReservation.Application.Features.WorkoutTypes.Queries.GetWorkoutTypesList;
 
-public class GetWorkoutTypesListQueryValidator : AbstractValidator<GetWorkoutTypesListQuery>
+internal sealed class GetWorkoutTypesListQueryValidator : AbstractValidator<GetWorkoutTypesListQuery>
 {
     private readonly int[] _allowedPageSizes = new[] { 10, 20, 50 };
     private readonly string[] _allowedSortByColumnNames = { nameof(WorkoutType.Name), nameof(WorkoutType.Intensity)};

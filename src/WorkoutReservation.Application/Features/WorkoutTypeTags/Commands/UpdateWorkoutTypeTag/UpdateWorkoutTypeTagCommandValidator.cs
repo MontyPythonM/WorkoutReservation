@@ -2,7 +2,7 @@
 
 namespace WorkoutReservation.Application.Features.WorkoutTypeTags.Commands.UpdateWorkoutTypeTag;
 
-public class UpdateWorkoutTypeTagCommandValidator : AbstractValidator<UpdateWorkoutTypeTagCommand>
+internal sealed class UpdateWorkoutTypeTagCommandValidator : AbstractValidator<UpdateWorkoutTypeTagCommand>
 {
     public UpdateWorkoutTypeTagCommandValidator()
     {

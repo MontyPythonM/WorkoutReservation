@@ -5,7 +5,9 @@ using WorkoutReservation.Application.Contracts;
 
 namespace WorkoutReservation.Application.Features.RepetitiveWorkouts.Commands.DeleteRepetitiveWorkout;
 
-public class DeleteRepetitiveWorkoutCommandHandler : IRequestHandler<DeleteRepetitiveWorkoutCommand>
+public record DeleteRepetitiveWorkoutCommand(int RepetitiveWorkoutId) : IRequest;
+
+internal sealed class DeleteRepetitiveWorkoutCommandHandler : IRequestHandler<DeleteRepetitiveWorkoutCommand>
 {
     private readonly IRepetitiveWorkoutRepository _repetitiveWorkoutRepository;
     private readonly ILogger<DeleteRepetitiveWorkoutCommandHandler> _logger;

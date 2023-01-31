@@ -3,7 +3,7 @@ using WorkoutReservation.Domain.Entities;
 
 namespace WorkoutReservation.Application.Features.RealWorkouts.Commands.UpdateRealWorkout;
 
-public class UpdateRealWorkoutCommandValidator : AbstractValidator<UpdateRealWorkoutCommand>
+internal sealed class UpdateRealWorkoutCommandValidator : AbstractValidator<UpdateRealWorkoutCommand>
 {
     public UpdateRealWorkoutCommandValidator(List<RealWorkout> dailyWorkouts, RealWorkout editedRealWorkout)
     {

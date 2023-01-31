@@ -37,7 +37,7 @@ public class RepetitiveWorkoutController : ApiControllerBase
     [SwaggerOperation(Summary = "Delete selected repetitive workout")]
     public async Task<IActionResult> DeleteRepetitiveWorkout([FromRoute] int repetitiveWorkoutId, CancellationToken token)
     {
-        await Mediator.Send(new DeleteRepetitiveWorkoutCommand() { RepetitiveWorkoutId = repetitiveWorkoutId }, token);
+        await Mediator.Send(new DeleteRepetitiveWorkoutCommand(repetitiveWorkoutId), token);
         return NoContent();
     }
 

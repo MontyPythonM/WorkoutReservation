@@ -5,7 +5,9 @@ using WorkoutReservation.Application.Contracts;
 
 namespace WorkoutReservation.Application.Features.RealWorkouts.Queries.GetRealWorkoutDetail;
 
-public class GetRealWorkoutDetailQueryHandler : IRequestHandler<GetRealWorkoutDetailQuery, RealWorkoutDetailDto>
+public record GetRealWorkoutDetailQuery(int RealWorkoutId) : IRequest<RealWorkoutDetailDto>;
+
+internal sealed class GetRealWorkoutDetailQueryHandler : IRequestHandler<GetRealWorkoutDetailQuery, RealWorkoutDetailDto>
 {
     private readonly IRealWorkoutRepository _realWorkoutRepository;
     private readonly IMapper _mapper;

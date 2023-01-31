@@ -1,10 +1,13 @@
 ﻿using FluentValidation;
 using MediatR;
 using WorkoutReservation.Application.Contracts;
+using WorkoutReservation.Domain.Enums;
 
 namespace WorkoutReservation.Application.Features.Users.Commands.SetUserRole;
 
-public class SetUserRoleCommandHandler : IRequestHandler<SetUserRoleCommand>
+public record SetUserRoleCommand(Guid UserId, Role Role) : IRequest;
+
+internal sealed class SetUserRoleCommandHandler : IRequestHandler<SetUserRoleCommand>
 {
     private readonly IApplicationUserRepository _userRepository;
     private readonly ICurrentUserAccessor _currentUserAccessor;

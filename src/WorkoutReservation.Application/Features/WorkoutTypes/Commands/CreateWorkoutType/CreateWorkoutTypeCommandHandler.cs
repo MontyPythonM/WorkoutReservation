@@ -3,10 +3,14 @@ using FluentValidation;
 using MediatR;
 using WorkoutReservation.Application.Contracts;
 using WorkoutReservation.Domain.Entities;
+using WorkoutReservation.Domain.Enums;
 
 namespace WorkoutReservation.Application.Features.WorkoutTypes.Commands.CreateWorkoutType;
 
-public class CreateWorkoutTypeCommandHandler : IRequestHandler<CreateWorkoutTypeCommand, int>
+public record CreateWorkoutTypeCommand(string Name, string Description, WorkoutIntensity Intensity, 
+    List<int> WorkoutTypeTags, List<int> Instructors) : IRequest<int>;
+
+internal sealed class CreateWorkoutTypeCommandHandler : IRequestHandler<CreateWorkoutTypeCommand, int>
 {    
     private readonly IMapper _mapper;
     private readonly IWorkoutTypeRepository _workoutRepository;

@@ -1,13 +1,14 @@
-﻿using AutoMapper;
-using FluentValidation;
+﻿using FluentValidation;
 using MediatR;
 using WorkoutReservation.Application.Common.Exceptions;
 using WorkoutReservation.Application.Contracts;
-using WorkoutReservation.Domain.Entities;
 
 namespace WorkoutReservation.Application.Features.RealWorkouts.Commands.UpdateRealWorkout;
 
-public class UpdateRealWorkoutCommandHandler : IRequestHandler<UpdateRealWorkoutCommand>
+public record UpdateRealWorkoutCommand(int RealWorkoutId, int MaxParticipantNumber, DateOnly Date, 
+    TimeOnly StartTime, TimeOnly EndTime, int InstructorId) : IRequest;
+
+internal sealed class UpdateRealWorkoutCommandHandler : IRequestHandler<UpdateRealWorkoutCommand>
 {
     private readonly IRealWorkoutRepository _realWorkoutRepository;
     private readonly IInstructorRepository _instructorRepository;

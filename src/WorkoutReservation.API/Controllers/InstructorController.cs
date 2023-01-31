@@ -28,7 +28,7 @@ public class InstructorController : ApiControllerBase
     [SwaggerOperation(Summary = "Returns selected instructor with list of related workout types")]
     public async Task<IActionResult> GetInstructor([FromRoute] int instructorId, CancellationToken token)
     {
-        var result = await Mediator.Send(new GetInstructorDetailQuery() { InstructorId = instructorId }, token);
+        var result = await Mediator.Send(new GetInstructorDetailQuery(instructorId), token);
         return Ok(result);
     }
 
@@ -46,7 +46,7 @@ public class InstructorController : ApiControllerBase
     [SwaggerOperation(Summary = "Delete selected instructor")]
     public async Task<IActionResult> DeleteInstructor([FromRoute] int instructorId, CancellationToken token)
     {
-        await Mediator.Send(new DeleteInstructorCommand() { InstructorId = instructorId }, token);
+        await Mediator.Send(new DeleteInstructorCommand(instructorId), token);
         return NoContent();
     }
 

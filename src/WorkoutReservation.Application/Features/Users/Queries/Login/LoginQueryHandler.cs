@@ -6,7 +6,9 @@ using WorkoutReservation.Domain.Entities;
 
 namespace WorkoutReservation.Application.Features.Users.Queries.Login;
 
-public class LoginQueryHandler : IRequestHandler<LoginQuery, string>
+public record LoginQuery(string Email, string Password) : IRequest<string>;
+
+internal sealed class LoginQueryHandler : IRequestHandler<LoginQuery, string>
 {
     private readonly IPasswordHasher<ApplicationUser> _passwordHasher;
     private readonly IApplicationUserRepository _userRepository;

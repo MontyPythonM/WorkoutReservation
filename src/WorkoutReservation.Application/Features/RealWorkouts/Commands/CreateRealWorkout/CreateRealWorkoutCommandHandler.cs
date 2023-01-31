@@ -6,7 +6,10 @@ using WorkoutReservation.Domain.Entities;
 
 namespace WorkoutReservation.Application.Features.RealWorkouts.Commands.CreateRealWorkout;
 
-public class CreateRealWorkoutCommandHandler : IRequestHandler<CreateRealWorkoutCommand, int>
+public record CreateRealWorkoutCommand(int MaxParticipantNumber, DateOnly Date, TimeOnly StartTime, 
+    TimeOnly EndTime, int WorkoutTypeId, int InstructorId) : IRequest<int>;
+
+internal sealed class CreateRealWorkoutCommandHandler : IRequestHandler<CreateRealWorkoutCommand, int>
 {
     private readonly IRealWorkoutRepository _realWorkoutRepository;
     private readonly IInstructorRepository _instructorRepository;

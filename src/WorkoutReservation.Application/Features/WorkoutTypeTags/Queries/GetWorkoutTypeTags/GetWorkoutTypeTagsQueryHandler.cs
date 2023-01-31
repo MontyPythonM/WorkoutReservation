@@ -5,7 +5,9 @@ using WorkoutReservation.Application.Contracts;
 
 namespace WorkoutReservation.Application.Features.WorkoutTypeTags.Queries.GetWorkoutTypeTags;
 
-public class GetWorkoutTypeTagsListQueryHandler : IRequestHandler<GetWorkoutTypeTagsQuery, List<WorkoutTypeTagsDto>>
+public record GetWorkoutTypeTagsQuery : IRequest<List<WorkoutTypeTagsDto>>;
+
+internal sealed class GetWorkoutTypeTagsListQueryHandler : IRequestHandler<GetWorkoutTypeTagsQuery, List<WorkoutTypeTagsDto>>
 {
     private readonly IWorkoutTypeTagRepository _workoutTypeTagRepository;
     private readonly IMapper _mapper;

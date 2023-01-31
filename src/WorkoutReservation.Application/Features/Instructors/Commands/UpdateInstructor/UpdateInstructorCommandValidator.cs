@@ -3,7 +3,7 @@ using WorkoutReservation.Domain.Enums;
 
 namespace WorkoutReservation.Application.Features.Instructors.Commands.UpdateInstructor;
 
-public class UpdateInstructorCommandValidator : AbstractValidator<UpdateInstructorCommand>
+internal sealed class UpdateInstructorCommandValidator : AbstractValidator<UpdateInstructorCommand>
 {
     public UpdateInstructorCommandValidator()
     {

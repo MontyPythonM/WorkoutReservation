@@ -2,7 +2,7 @@
 
 namespace WorkoutReservation.Application.Features.Reservations.Commands.EditReservationStatus;
 
-public class EditReservationStatusCommandValidator : AbstractValidator<EditReservationStatusCommand>
+internal sealed class EditReservationStatusCommandValidator : AbstractValidator<EditReservationStatusCommand>
 {
     public EditReservationStatusCommandValidator()
     {

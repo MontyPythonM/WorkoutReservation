@@ -4,7 +4,9 @@ using WorkoutReservation.Domain.Entities;
 
 namespace WorkoutReservation.Application.Features.WorkoutTypeTags.Commands.CreateWorkoutTypeTag;
 
-public class CreateWorkoutTypeTagCommandHandler : IRequestHandler<CreateWorkoutTypeTagCommand, int>
+public record CreateWorkoutTypeTagCommand(string Tag) : IRequest<int>;
+
+internal sealed class CreateWorkoutTypeTagCommandHandler : IRequestHandler<CreateWorkoutTypeTagCommand, int>
 {
     private readonly IWorkoutTypeTagRepository _workoutTypeTagRepository;
     private readonly ICurrentUserAccessor _currentUserAccessor;

@@ -8,8 +8,17 @@ using WorkoutReservation.Domain.Entities;
 
 namespace WorkoutReservation.Application.Features.WorkoutTypes.Queries.GetWorkoutTypesList;
 
-public class GetWorkoutTypesListQueryHandler : IRequestHandler<GetWorkoutTypesListQuery,
-                                                               PagedResultDto<WorkoutTypesListQueryDto>>
+public record GetWorkoutTypesListQuery : IRequest<PagedResultDto<WorkoutTypesListQueryDto>>, IPagedQuery
+{
+    public string SearchPhrase { get; set; }
+    public string SortBy { get; set; }
+    public bool SortByDescending { get; set; }
+    public int PageNumber { get; set; }
+    public int PageSize { get; set; }
+}
+
+internal sealed class GetWorkoutTypesListQueryHandler : IRequestHandler<GetWorkoutTypesListQuery,
+    PagedResultDto<WorkoutTypesListQueryDto>>
 {
     private readonly IWorkoutTypeRepository _workoutTypeRepository;
     private readonly IMapper _mapper;
@@ -19,7 +28,7 @@ public class GetWorkoutTypesListQueryHandler : IRequestHandler<GetWorkoutTypesLi
         _workoutTypeRepository = workoutTypeRepository;
         _mapper = mapper;
     }
-
+    
     public async Task<PagedResultDto<WorkoutTypesListQueryDto>> Handle(GetWorkoutTypesListQuery request, 
         CancellationToken token)
     {

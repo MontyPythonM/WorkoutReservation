@@ -2,7 +2,7 @@
 
 namespace WorkoutReservation.Application.Features.WorkoutTypes.Commands.CreateWorkoutType;
 
-public class CreateWorkoutTypeCommandValidator : AbstractValidator<CreateWorkoutTypeCommand>
+internal sealed class CreateWorkoutTypeCommandValidator : AbstractValidator<CreateWorkoutTypeCommand>
 {
     public CreateWorkoutTypeCommandValidator()
     {

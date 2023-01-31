@@ -1,12 +1,15 @@
-﻿using AutoMapper;
-using FluentValidation;
+﻿using FluentValidation;
 using MediatR;
 using WorkoutReservation.Application.Common.Exceptions;
 using WorkoutReservation.Application.Contracts;
+using WorkoutReservation.Domain.Enums;
 
 namespace WorkoutReservation.Application.Features.WorkoutTypes.Commands.UpdateWorkoutType;
 
-public class UpdateWorkoutTypeCommandHandler : IRequestHandler<UpdateWorkoutTypeCommand>
+public record UpdateWorkoutTypeCommand(int Id, string Name, string Description, WorkoutIntensity Intensity, 
+    List<int> WorkoutTypeTags, List<int> Instructors) : IRequest;
+
+internal sealed class UpdateWorkoutTypeCommandHandler : IRequestHandler<UpdateWorkoutTypeCommand>
 {
     private readonly IWorkoutTypeRepository _workoutTypeRepository;
     private readonly IWorkoutTypeTagRepository _workoutTypeTagRepository;
