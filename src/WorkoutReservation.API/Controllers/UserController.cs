@@ -52,7 +52,7 @@ public class UserController : ApiControllerBase
     [SwaggerOperation(Summary = "Delete the selected application user account")]
     public async Task<IActionResult> DeleteUserAccount([FromRoute] Guid userGuid, CancellationToken token)
     {
-        await Mediator.Send(new DeleteUserCommand { UserGuid = userGuid }, token);
+        await Mediator.Send(new DeleteUserCommand(userGuid), token);
         return NoContent();
     }
 

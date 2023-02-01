@@ -28,6 +28,10 @@
     <ProjectReference Include="..\..\src\WorkoutReservation.Infrastructure\WorkoutReservation.Infrastructure.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Mocks" />
+  </ItemGroup>
+
 
 </Project>
     
