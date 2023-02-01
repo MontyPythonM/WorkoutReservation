@@ -5,23 +5,25 @@ using WorkoutReservation.Application.Contracts;
 
 namespace WorkoutReservation.Application.Features.RepetitiveWorkouts.Queries.GetRepetitiveWorkoutList;
 
-public class GetRepetitiveWorkoutListQueryHandler : IRequestHandler<GetRepetitiveWorkoutListQuery, 
-                                                                    List<RepetitiveWorkoutListDto>>
+public record GetRepetitiveWorkoutListQuery : IRequest<List<RepetitiveWorkoutListDto>>;
+
+internal sealed class GetRepetitiveWorkoutListQueryHandler : IRequestHandler<GetRepetitiveWorkoutListQuery, 
+    List<RepetitiveWorkoutListDto>>
 {
     private readonly IRepetitiveWorkoutRepository _repetitiveWorkoutRepository;
     private readonly IMapper _mapper;
 
     public GetRepetitiveWorkoutListQueryHandler(IRepetitiveWorkoutRepository repetitiveWorkoutRepository, 
-                                                IMapper mapper)
+        IMapper mapper)
     {
         _repetitiveWorkoutRepository = repetitiveWorkoutRepository;
         _mapper = mapper;
     }
 
     public async Task<List<RepetitiveWorkoutListDto>> Handle(GetRepetitiveWorkoutListQuery request, 
-                                                             CancellationToken cancellationToken)
+        CancellationToken token)
     {
-        var repetitiveWorkouts = await _repetitiveWorkoutRepository.GetAllAsync(cancellationToken);
+        var repetitiveWorkouts = await _repetitiveWorkoutRepository.GetAllAsync(token);
 
         if (!repetitiveWorkouts.Any())
             throw new NotFoundException("Repetitive workouts not found.");

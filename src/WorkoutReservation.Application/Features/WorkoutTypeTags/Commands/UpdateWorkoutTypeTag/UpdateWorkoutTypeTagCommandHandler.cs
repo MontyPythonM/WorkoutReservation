@@ -5,7 +5,9 @@ using WorkoutReservation.Application.Contracts;
 
 namespace WorkoutReservation.Application.Features.WorkoutTypeTags.Commands.UpdateWorkoutTypeTag;
 
-public class UpdateWorkoutTypeTagCommandHandler : IRequestHandler<UpdateWorkoutTypeTagCommand>
+public record UpdateWorkoutTypeTagCommand(int Id, string Tag, bool IsActive) : IRequest;
+
+internal sealed class UpdateWorkoutTypeTagCommandHandler : IRequestHandler<UpdateWorkoutTypeTagCommand>
 {
     private readonly IWorkoutTypeTagRepository _workoutTypeTagRepository;
     

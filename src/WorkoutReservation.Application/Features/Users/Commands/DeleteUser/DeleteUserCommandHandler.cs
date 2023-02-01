@@ -6,7 +6,9 @@ using WorkoutReservation.Application.Contracts;
 
 namespace WorkoutReservation.Application.Features.Users.Commands.DeleteUser;
 
-public class DeleteUserCommandHandler : IRequestHandler<DeleteUserCommand>
+public record DeleteUserCommand(Guid UserGuid) : IRequest;
+
+internal sealed class DeleteUserCommandHandler : IRequestHandler<DeleteUserCommand>
 {
     private readonly IApplicationUserRepository _userRepository;
     private readonly ICurrentUserAccessor _currentUserAccessor;

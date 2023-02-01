@@ -3,7 +3,7 @@ using WorkoutReservation.Domain.Entities;
 
 namespace WorkoutReservation.Application.Features.WorkoutTypes.Commands.UpdateWorkoutType;
 
-public class UpdateWorkoutTypeCommandValidatior : AbstractValidator<UpdateWorkoutTypeCommand>
+internal sealed class UpdateWorkoutTypeCommandValidatior : AbstractValidator<UpdateWorkoutTypeCommand>
 {
     public UpdateWorkoutTypeCommandValidatior()
     {

@@ -6,7 +6,9 @@ using WorkoutReservation.Domain.Entities;
 
 namespace WorkoutReservation.Application.Features.Users.Commands.SelfUserDelete;
 
-public class SelfDeleteUserCommandHandler : IRequestHandler<SelfDeleteUserCommand>
+public record SelfDeleteUserCommand(string Password) : IRequest;
+
+internal sealed class SelfDeleteUserCommandHandler : IRequestHandler<SelfDeleteUserCommand>
 {
     private readonly IApplicationUserRepository _userRepository;
     private readonly ICurrentUserAccessor _currentUserAccessor;

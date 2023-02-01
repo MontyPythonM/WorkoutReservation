@@ -4,7 +4,7 @@ using WorkoutReservation.Domain.Extensions;
 
 namespace WorkoutReservation.Application.Features.RealWorkouts.Commands.CreateRealWorkout;
 
-public class CreateRealWorkoutCommandValidator : AbstractValidator<CreateRealWorkoutCommand>
+internal sealed class CreateRealWorkoutCommandValidator : AbstractValidator<CreateRealWorkoutCommand>
 {
     public CreateRealWorkoutCommandValidator(List<RealWorkout> dailyWorkouts)
     {

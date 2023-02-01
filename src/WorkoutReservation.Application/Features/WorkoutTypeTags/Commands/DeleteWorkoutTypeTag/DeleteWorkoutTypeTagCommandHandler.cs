@@ -4,7 +4,9 @@ using WorkoutReservation.Application.Contracts;
 
 namespace WorkoutReservation.Application.Features.WorkoutTypeTags.Commands.DeleteWorkoutTypeTag;
 
-public class DeleteWorkoutTypeTagCommandHandler : IRequestHandler<DeleteWorkoutTypeTagCommand>
+public record DeleteWorkoutTypeTagCommand(int Id) : IRequest;
+
+internal sealed class DeleteWorkoutTypeTagCommandHandler : IRequestHandler<DeleteWorkoutTypeTagCommand>
 {
     private readonly IWorkoutTypeTagRepository _workoutTypeTagRepository;
 

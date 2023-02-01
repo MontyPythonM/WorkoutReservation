@@ -8,7 +8,16 @@ using WorkoutReservation.Domain.Entities;
 
 namespace WorkoutReservation.Application.Features.Users.Queries.GetUsersList;
 
-public class GetUsersListQueryHandler : IRequestHandler<GetUsersListQuery,
+public record GetUsersListQuery : IRequest<PagedResultDto<UsersListDto>>, IPagedQuery
+{
+    public string SearchPhrase { get; set; }
+    public string SortBy { get; set; }
+    public bool SortByDescending { get; set; }
+    public int PageNumber { get; set; }
+    public int PageSize { get; set; }
+}
+
+internal sealed class GetUsersListQueryHandler : IRequestHandler<GetUsersListQuery,
     PagedResultDto<UsersListDto>>
 {
     private readonly IApplicationUserRepository _userRepository;

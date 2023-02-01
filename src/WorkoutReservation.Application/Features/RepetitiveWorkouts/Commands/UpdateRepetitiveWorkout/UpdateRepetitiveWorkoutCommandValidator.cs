@@ -3,7 +3,7 @@ using WorkoutReservation.Domain.Entities;
 
 namespace WorkoutReservation.Application.Features.RepetitiveWorkouts.Commands.UpdateRepetitiveWorkout;
 
-public class UpdateRepetitiveWorkoutCommandValidator : AbstractValidator<UpdateRepetitiveWorkoutCommand>
+internal sealed class UpdateRepetitiveWorkoutCommandValidator : AbstractValidator<UpdateRepetitiveWorkoutCommand>
 {
     public UpdateRepetitiveWorkoutCommandValidator(RepetitiveWorkout newRepetitiveWorkout,
         IEnumerable<RepetitiveWorkout> dailyWorkouts)

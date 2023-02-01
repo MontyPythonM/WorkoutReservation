@@ -3,7 +3,7 @@ using WorkoutReservation.Domain.Entities;
 
 namespace WorkoutReservation.Application.Features.Reservations.Commands.AddReservation;
 
-public class AddReservationCommandValidator : AbstractValidator<AddReservationCommand>
+internal sealed class AddReservationCommandValidator : AbstractValidator<AddReservationCommand>
 {
     public AddReservationCommandValidator(RealWorkout realWorkout, Guid currentUserGuid, bool isUserAlreadyReservedWorkout)
     {

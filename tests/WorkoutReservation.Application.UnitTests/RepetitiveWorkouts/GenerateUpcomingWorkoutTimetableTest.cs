@@ -3,6 +3,7 @@ using FluentAssertions;
 using FluentValidation;
 using MediatR;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.VisualStudio.TestPlatform.TestHost;
 using Moq;
 using WorkoutReservation.Application.Common.Exceptions;
@@ -31,8 +32,8 @@ public class GenerateUpcomingWorkoutTimetableTest : IClassFixture<Program>
     private readonly Mock<IRepetitiveWorkoutRepository> _repetitiveWorkoutRepositoryMock = new();
     private readonly Mock<ICurrentUserAccessor> _currentUserAccessorMock = new();
     private readonly Mock<IRealWorkoutRepository> _realWorkoutRepositoryMock = new();
-    private readonly Mock<ILogger<GenerateUpcomingWorkoutTimetableCommandHandler>> _loggerMock = new();
-
+    private readonly ILogger<GenerateUpcomingWorkoutTimetableCommandHandler> _loggerMock = new Logger<GenerateUpcomingWorkoutTimetableCommandHandler>(new NullLoggerFactory());
+    
     public GenerateUpcomingWorkoutTimetableTest()
     {
         var configurationProvider = new MapperConfiguration(cfg => { cfg.AddProfile<RepetitiveWorkoutProfile>(); });
@@ -62,11 +63,8 @@ public class GenerateUpcomingWorkoutTimetableTest : IClassFixture<Program>
         };
 
         var selectedRealWorkout = new List<RealWorkout> { existingRealWorkouts[testScenario] };
-        _realWorkoutRepositoryMock
-            .Setup(x => x.GetAllFromDateRangeAsync(DateTime.Now.GetFirstDayOfWeekAndAddDays(7), 
-                DateTime.Now.GetFirstDayOfWeekAndAddDays(14), true, IsAny<CancellationToken>()))
-            .ReturnsAsync(selectedRealWorkout);
-        
+        PrepareRealWorkouts(selectedRealWorkout);
+
         var handler = GetHandler();
         var command = GetCommand();
 
@@ -92,10 +90,7 @@ public class GenerateUpcomingWorkoutTimetableTest : IClassFixture<Program>
             new(10, new TimeOnly(8,00), new TimeOnly(10,00), WorkoutType, Instructor, DateTime.Now.GetFirstDayOfWeekAndAddDays(7), User)
         };
         
-        _realWorkoutRepositoryMock
-            .Setup(x => x.GetAllFromDateRangeAsync(DateTime.Now.GetFirstDayOfWeekAndAddDays(7), 
-                DateTime.Now.GetFirstDayOfWeekAndAddDays(14), true, IsAny<CancellationToken>()))
-            .ReturnsAsync(mondayRealWorkouts);
+        PrepareRealWorkouts(mondayRealWorkouts);
         
         var handler = GetHandler();
         var command = GetCommand();
@@ -122,10 +117,7 @@ public class GenerateUpcomingWorkoutTimetableTest : IClassFixture<Program>
             new(10, new TimeOnly(10,00), new TimeOnly(12,00), WorkoutType, Instructor, DateTime.Now.GetFirstDayOfWeekAndAddDays(9), User), 
         };
         
-        _realWorkoutRepositoryMock
-            .Setup(x => x.GetAllFromDateRangeAsync(DateTime.Now.GetFirstDayOfWeekAndAddDays(7), 
-                DateTime.Now.GetFirstDayOfWeekAndAddDays(14), true, IsAny<CancellationToken>()))
-            .ReturnsAsync(wednesdayRealWorkouts);
+        PrepareRealWorkouts(wednesdayRealWorkouts);
         
         var handler = GetHandler();
         var command = GetCommand();
@@ -137,7 +129,15 @@ public class GenerateUpcomingWorkoutTimetableTest : IClassFixture<Program>
         await result.Should().NotThrowAsync<ValidationException>();
         await result.Should().NotThrowAsync<NotFoundException>();
     }
-    
+
+    private void PrepareRealWorkouts(List<RealWorkout> returns)
+    {
+        _realWorkoutRepositoryMock
+            .Setup(x => x.GetAllFromDateRangeAsync(DateTime.Now.GetFirstDayOfWeekAndAddDays(7),
+                DateTime.Now.GetFirstDayOfWeekAndAddDays(14), true, IsAny<CancellationToken>()))
+            .ReturnsAsync(returns);
+    }
+
     [Fact]
     public async Task Handle_RepetitiveWorkoutsNotExists_ThrowNotFoundException()
     {
@@ -207,6 +207,8 @@ public class GenerateUpcomingWorkoutTimetableTest : IClassFixture<Program>
         _repetitiveWorkouts[0].StartTime = startTime;
         _repetitiveWorkouts[0].EndTime = endTime;
 
+        PrepareRealWorkouts(new List<RealWorkout>());
+        
         SetCorrectInstructorAndWorkoutTypeTestData();
         _repetitiveWorkoutRepositoryMock
             .Setup(x => x.GetAllAsync(IsAny<CancellationToken>()))
@@ -236,6 +238,8 @@ public class GenerateUpcomingWorkoutTimetableTest : IClassFixture<Program>
             .Setup(x => x.GetAllAsync(IsAny<CancellationToken>()))
             .ReturnsAsync(_repetitiveWorkouts);
         
+        PrepareRealWorkouts(new List<RealWorkout>());
+
         var handler = GetHandler();
         var command = GetCommand();
         
@@ -259,6 +263,8 @@ public class GenerateUpcomingWorkoutTimetableTest : IClassFixture<Program>
             .Setup(x => x.GetAllAsync(IsAny<CancellationToken>()))
             .ReturnsAsync(_repetitiveWorkouts);
         
+        PrepareRealWorkouts(new List<RealWorkout>());
+
         var handler = GetHandler();
         var command = GetCommand();
         
@@ -282,6 +288,8 @@ public class GenerateUpcomingWorkoutTimetableTest : IClassFixture<Program>
             .Setup(x => x.GetAllAsync(IsAny<CancellationToken>()))
             .ReturnsAsync(_repetitiveWorkouts);
         
+        PrepareRealWorkouts(new List<RealWorkout>());
+
         var handler = GetHandler();
         var command = GetCommand();
         
@@ -292,11 +300,11 @@ public class GenerateUpcomingWorkoutTimetableTest : IClassFixture<Program>
         await result.Should().ThrowAsync<ValidationException>();
     }
 
-    private GenerateUpcomingWorkoutTimetableCommand GetCommand() => new() { IsAutoGenerated = true };
+    private GenerateUpcomingWorkoutTimetableCommand GetCommand() => new(false);
     
     private GenerateUpcomingWorkoutTimetableCommandHandler GetHandler() => 
         new(_repetitiveWorkoutRepositoryMock.Object, _realWorkoutRepositoryMock.Object, 
-            _currentUserAccessorMock.Object, _mapperMock, _loggerMock.Object);
+            _currentUserAccessorMock.Object, _mapperMock, _loggerMock);
     
     private void SetCorrectInstructorAndWorkoutTypeTestData()
     {

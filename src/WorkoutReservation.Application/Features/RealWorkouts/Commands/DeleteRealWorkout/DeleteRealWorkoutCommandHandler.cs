@@ -5,7 +5,9 @@ using WorkoutReservation.Application.Contracts;
 
 namespace WorkoutReservation.Application.Features.RealWorkouts.Commands.DeleteRealWorkout;
 
-public class DeleteRealWorkoutCommandHandler : IRequestHandler<DeleteRealWorkoutCommand>
+public record DeleteRealWorkoutCommand(int RealWorkoutId) : IRequest;
+
+internal sealed class DeleteRealWorkoutCommandHandler : IRequestHandler<DeleteRealWorkoutCommand>
 {
     private readonly IRealWorkoutRepository _realWorkoutRepository;
     private readonly ILogger<DeleteRealWorkoutCommandHandler> _logger;
@@ -21,6 +23,7 @@ public class DeleteRealWorkoutCommandHandler : IRequestHandler<DeleteRealWorkout
     {
         var realWorkout = await _realWorkoutRepository
             .GetByIdAsync(request.RealWorkoutId, false, token);
+        
         if (realWorkout is null)
             throw new NotFoundException($"Real workout with Id: {request.RealWorkoutId} not found.");
 

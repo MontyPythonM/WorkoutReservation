@@ -7,7 +7,10 @@ using WorkoutReservation.Domain.Enums;
 
 namespace WorkoutReservation.Application.Features.Users.Commands.Register;
 
-public class RegisterCommandHandler : IRequestHandler<RegisterCommand>
+public record RegisterCommand(string Email, string Password, string ConfirmPassword, string FirstName, 
+    string LastName, Gender? Gender, DateOnly? DateOfBirth) : IRequest;
+
+internal sealed class RegisterCommandHandler : IRequestHandler<RegisterCommand>
 {
     private readonly IApplicationUserRepository _userRepository; 
     private readonly IPasswordHasher<ApplicationUser> _passwordHasher;

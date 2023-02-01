@@ -1,13 +1,15 @@
-﻿using AutoMapper;
-using FluentValidation;
+﻿using FluentValidation;
 using MediatR;
 using WorkoutReservation.Application.Common.Exceptions;
 using WorkoutReservation.Application.Contracts;
-using WorkoutReservation.Domain.Entities;
+using WorkoutReservation.Domain.Enums;
 
 namespace WorkoutReservation.Application.Features.Instructors.Commands.UpdateInstructor;
 
-public class UpdateInstructorCommandHandler : IRequestHandler<UpdateInstructorCommand>
+public record UpdateInstructorCommand(int Id, string FirstName, string LastName, Gender? Gender, 
+    string Biography, string Email) : IRequest;
+
+internal sealed class UpdateInstructorCommandHandler : IRequestHandler<UpdateInstructorCommand>
 {
     private readonly IInstructorRepository _instructorRepository;
 

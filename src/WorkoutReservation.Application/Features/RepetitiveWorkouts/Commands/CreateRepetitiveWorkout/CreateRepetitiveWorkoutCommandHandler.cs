@@ -7,7 +7,10 @@ using WorkoutReservation.Domain.Entities;
 
 namespace WorkoutReservation.Application.Features.RepetitiveWorkouts.Commands.CreateRepetitiveWorkout;
 
-public class CreateRepetitiveWorkoutCommandHandler : IRequestHandler<CreateRepetitiveWorkoutCommand, int>
+public record CreateRepetitiveWorkoutCommand(int MaxParticipantNumber, TimeOnly StartTime, TimeOnly EndTime, 
+    int WorkoutTypeId, int InstructorId, DayOfWeek DayOfWeek) : IRequest<int>;
+
+internal sealed class CreateRepetitiveWorkoutCommandHandler : IRequestHandler<CreateRepetitiveWorkoutCommand, int>
 {
     private readonly IRepetitiveWorkoutRepository _repetitiveWorkoutRepository;
     private readonly IInstructorRepository _instructorRepository;

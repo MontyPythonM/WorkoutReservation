@@ -2,7 +2,7 @@
 
 namespace WorkoutReservation.Application.Features.Users.Commands.SetUserRole;
 
-public class SetUserRoleCommandValidation : AbstractValidator<SetUserRoleCommand>
+internal sealed class SetUserRoleCommandValidation : AbstractValidator<SetUserRoleCommand>
 {
     public SetUserRoleCommandValidation(Guid currentUser)
     {

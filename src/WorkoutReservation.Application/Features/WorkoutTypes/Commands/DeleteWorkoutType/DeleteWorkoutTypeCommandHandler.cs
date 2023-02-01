@@ -5,7 +5,9 @@ using WorkoutReservation.Application.Contracts;
 
 namespace WorkoutReservation.Application.Features.WorkoutTypes.Commands.DeleteWorkoutType;
 
-public class DeleteWorkoutTypeCommandHandler : IRequestHandler<DeleteWorkoutTypeCommand>
+public record DeleteWorkoutTypeCommand(int WorkoutTypeId) : IRequest;
+
+internal sealed class DeleteWorkoutTypeCommandHandler : IRequestHandler<DeleteWorkoutTypeCommand>
 {
     private readonly IWorkoutTypeRepository _workoutTypeRepository;    
     private readonly ILogger<DeleteWorkoutTypeCommandHandler> _logger;

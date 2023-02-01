@@ -6,7 +6,9 @@ using WorkoutReservation.Domain.Enums;
 
 namespace WorkoutReservation.Application.Features.Reservations.Commands.CancelReservation;
 
-public class CancelReservationCommandHandler : IRequestHandler<CancelReservationCommand>
+public record CancelReservationCommand(int ReservationId) : IRequest;
+
+internal sealed class CancelReservationCommandHandler : IRequestHandler<CancelReservationCommand>
 {
     private readonly IReservationRepository _reservationRepository;
     private readonly ICurrentUserAccessor _currentUserAccessor;

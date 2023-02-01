@@ -1,32 +1,32 @@
 ﻿using FluentValidation;
 using WorkoutReservation.Domain.Entities;
 
-namespace WorkoutReservation.Application.Features.Reservations.Queries.GetUserReservationsList
+namespace WorkoutReservation.Application.Features.Reservations.Queries.GetUserReservationsList;
+
+internal sealed class GetUserReservationsListValidator : AbstractValidator<GetUserReservationsListQuery>
 {
-    public class GetUserReservationsListValidator : AbstractValidator<GetUserReservationsListQuery>
+    private readonly int[] _allowedPageSizes = new[] { 10, 25, 50, 100 };
+    private readonly string[] _allowedSortByColumnNames = { nameof(Reservation.ReservationStatus), "WorkoutDate" };
+
+    public GetUserReservationsListValidator()
     {
-        private readonly int[] _allowedPageSizes = new[] { 10, 25, 50, 100 };
-        private readonly string[] _allowedSortByColumnNames = { nameof(Reservation.ReservationStatus), "WorkoutDate" };
+        RuleFor(r => r.PageNumber).GreaterThanOrEqualTo(1);
 
-        public GetUserReservationsListValidator()
+        RuleFor(r => r.PageSize).Custom((value, context) =>
         {
-            RuleFor(r => r.PageNumber).GreaterThanOrEqualTo(1);
-
-            RuleFor(r => r.PageSize).Custom((value, context) =>
+            if (!_allowedPageSizes.Contains(value))
             {
-                if (!_allowedPageSizes.Contains(value))
-                {
-                    context.AddFailure("PageSize", $"PageSize must in [{string.Join(", ", _allowedPageSizes)}]");
-                }
-            });
+                context.AddFailure("PageSize", $"PageSize must in [{string.Join(", ", _allowedPageSizes)}]");
+            }
+        });
 
-            RuleFor(x => x.SortBy).Custom((value, context) =>
+        RuleFor(x => x.SortBy).Custom((value, context) =>
+        {
+            if (value is not null && !_allowedSortByColumnNames.Contains(value))
             {
-                if (value is not null && !_allowedSortByColumnNames.Contains(value))
-                {
-                    context.AddFailure("SortBy", $"SortBy must in [{string.Join(", ", _allowedSortByColumnNames)}]");
-                }
-            });
-        }
+                context.AddFailure("SortBy", $"SortBy must in [{string.Join(", ", _allowedSortByColumnNames)}]");
+            }
+        });
     }
 }
+
