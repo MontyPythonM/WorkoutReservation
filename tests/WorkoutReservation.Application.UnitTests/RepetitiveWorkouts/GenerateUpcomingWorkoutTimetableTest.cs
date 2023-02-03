@@ -300,7 +300,7 @@ public class GenerateUpcomingWorkoutTimetableTest : IClassFixture<Program>
         await result.Should().ThrowAsync<ValidationException>();
     }
 
-    private GenerateUpcomingWorkoutTimetableCommand GetCommand() => new(false);
+    private GenerateUpcomingWorkoutTimetableCommand GetCommand() => new(true);
     
     private GenerateUpcomingWorkoutTimetableCommandHandler GetHandler() => 
         new(_repetitiveWorkoutRepositoryMock.Object, _realWorkoutRepositoryMock.Object, 
