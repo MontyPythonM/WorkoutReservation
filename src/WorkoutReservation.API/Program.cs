@@ -1,5 +1,6 @@
 using System.Text;
 using Hangfire;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.IdentityModel.Tokens;
 using NLog;
@@ -7,11 +8,8 @@ using NLog.Web;
 using WorkoutReservation.API.Extensions;
 using WorkoutReservation.API.Middleware;
 using WorkoutReservation.Application;
-using WorkoutReservation.Application.Contracts;
 using WorkoutReservation.Infrastructure;
-using WorkoutReservation.Infrastructure.Authentication;
 using WorkoutReservation.Infrastructure.Authorization;
-using WorkoutReservation.Infrastructure.Identity;
 using WorkoutReservation.Infrastructure.Seeders;
 using WorkoutReservation.Infrastructure.Settings;
 using LogLevel = Microsoft.Extensions.Logging.LogLevel;
@@ -32,23 +30,19 @@ try
     var authenticationSettings = new AuthenticationSettings();
     builder.Configuration.GetSection("Authentication").Bind(authenticationSettings);
 
-    builder.Services.AddAuthentication(option =>
-    {
-        option.DefaultAuthenticateScheme = "Bearer";
-        option.DefaultChallengeScheme = "Bearer";
-        option.DefaultScheme = "Bearer";
-    }).AddJwtBearer(config =>
-    {
-        config.RequireHttpsMetadata = false;
-        config.SaveToken = true;
-        config.TokenValidationParameters = new TokenValidationParameters
+    builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+        .AddJwtBearer(config =>
         {
-            ValidIssuer = authenticationSettings.JwtIssuer,
-            ValidAudience = authenticationSettings.JwtAudience,
-            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(authenticationSettings.JwtKey)),
-            ClockSkew = TimeSpan.Zero
-        };
-    });
+            config.RequireHttpsMetadata = false;
+            config.SaveToken = true;
+            config.TokenValidationParameters = new TokenValidationParameters
+            {
+                ValidIssuer = authenticationSettings.JwtIssuer,
+                ValidAudience = authenticationSettings.JwtAudience,
+                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(authenticationSettings.JwtKey)),
+                ClockSkew = TimeSpan.Zero
+            };
+        });
 
     builder.Services.AddAuthorization();
     builder.Services.AddSingleton<IAuthorizationHandler, PermissionAuthorizationHandler>();
@@ -58,8 +52,6 @@ try
     builder.Configuration.GetSection("FirstAdmin").Bind(systemAdministratorSettings);
 
     //--- Add services to the container
-    GlobalJobFilters.Filters.Add(new AutomaticRetryAttribute { Attempts = 0, OnAttemptsExceeded = AttemptsExceededAction.Delete });
-
     builder.Services.AddSingleton(authenticationSettings);
     builder.Services.AddSingleton(systemAdministratorSettings);
 
@@ -92,7 +84,7 @@ try
 
     if (app.Environment.IsDevelopment())
     {
-        app.UseDeveloperExceptionPage();
+        app.UseRouting();
         app.UseSwagger();
         app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Workout Reservation REST API Application"));
     }
@@ -105,6 +97,8 @@ try
         .AllowCredentials());
     
     app.UseAuthentication();
+    app.UseAuthorization();
+    
     app.UseHangfireDashboard("/hangfire", new DashboardOptions
     {
         Authorization = new[] { new HangfireAuthorizationFilter(app.Services) },
@@ -114,7 +108,7 @@ try
     app.UseAuthorization();
     app.MapControllers();
     
-    HangfireExtension.AddGenerateUpcomingWorkoutsRecurringJob();
+    HangfireExtension.AddGenerateWorkoutsRecurringJob();
     
     logger.Debug("Application run");
     app.Run();

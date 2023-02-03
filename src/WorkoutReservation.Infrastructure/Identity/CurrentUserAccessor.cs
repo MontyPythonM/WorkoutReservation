@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Http;
 using WorkoutReservation.Application.Common.Exceptions;
 using WorkoutReservation.Application.Contracts;
 using WorkoutReservation.Domain.Entities;
-using WorkoutReservation.Domain.Extensions;
 using WorkoutReservation.Infrastructure.Exceptions;
 
 namespace WorkoutReservation.Infrastructure.Identity;

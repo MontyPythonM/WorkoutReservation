@@ -1,10 +1,13 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Hangfire;
+using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 using WorkoutReservation.API.Controllers.Base;
 using WorkoutReservation.API.Extensions;
+using WorkoutReservation.Application.Contracts;
 using WorkoutReservation.Application.Features.RepetitiveWorkouts.Commands.CreateRepetitiveWorkout;
 using WorkoutReservation.Application.Features.RepetitiveWorkouts.Commands.DeleteAllRepetitiveWorkouts;
 using WorkoutReservation.Application.Features.RepetitiveWorkouts.Commands.DeleteRepetitiveWorkout;
+using WorkoutReservation.Application.Features.RepetitiveWorkouts.Commands.GenerateUpcomingWorkoutTimetable;
 using WorkoutReservation.Application.Features.RepetitiveWorkouts.Commands.UpdateRepetitiveWorkout;
 using WorkoutReservation.Application.Features.RepetitiveWorkouts.Queries.GetRepetitiveWorkoutList;
 using WorkoutReservation.Infrastructure.Authorization;
@@ -14,6 +17,13 @@ namespace WorkoutReservation.API.Controllers;
 [Route("api/repetitive-workout/")]
 public class RepetitiveWorkoutController : ApiControllerBase
 {
+    private readonly ICurrentUserAccessor _currentUserAccessor;
+
+    public RepetitiveWorkoutController(ICurrentUserAccessor currentUserAccessor)
+    {
+        _currentUserAccessor = currentUserAccessor;
+    }
+    
     [HttpGet]
     [HasPermission(Permission.GetRepetitiveWorkouts)]
     [SwaggerOperation(Summary = "Returns a list of repetitive workouts")]
@@ -62,9 +72,10 @@ public class RepetitiveWorkoutController : ApiControllerBase
     [HttpPost("generate-upcoming-week")]
     [HasPermission(Permission.GenerateNewUpcomingWeek)]
     [SwaggerOperation(Summary = "Forces generation of a new repetitive workouts list for the coming week")]
-    public Task<IActionResult> GenerateNewUpcomingWeek(CancellationToken token)
+    public async Task<IActionResult> GenerateNewUpcomingWeek(CancellationToken token)
     {
-        HangfireExtension.GenerateUpcomingWeekWorkouts();
-        return Task.FromResult<IActionResult>(Ok());
+        var command = new GenerateUpcomingWorkoutTimetableCommand(_currentUserAccessor.GetCurrentUserId());
+        HangfireExtension.EnqueueGenerateWorkoutsJob(command);
+        return Ok();
     }
 }
