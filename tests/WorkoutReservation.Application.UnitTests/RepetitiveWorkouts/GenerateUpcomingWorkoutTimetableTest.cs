@@ -30,7 +30,6 @@ public class GenerateUpcomingWorkoutTimetableTest : IClassFixture<Program>
 
     private readonly IMapper _mapperMock;
     private readonly Mock<IRepetitiveWorkoutRepository> _repetitiveWorkoutRepositoryMock = new();
-    private readonly Mock<ICurrentUserAccessor> _currentUserAccessorMock = new();
     private readonly Mock<IRealWorkoutRepository> _realWorkoutRepositoryMock = new();
     private readonly ILogger<GenerateUpcomingWorkoutTimetableCommandHandler> _loggerMock = new Logger<GenerateUpcomingWorkoutTimetableCommandHandler>(new NullLoggerFactory());
     
@@ -300,11 +299,10 @@ public class GenerateUpcomingWorkoutTimetableTest : IClassFixture<Program>
         await result.Should().ThrowAsync<ValidationException>();
     }
 
-    private GenerateUpcomingWorkoutTimetableCommand GetCommand() => new(false);
+    private GenerateUpcomingWorkoutTimetableCommand GetCommand() => new(Guid.NewGuid());
     
     private GenerateUpcomingWorkoutTimetableCommandHandler GetHandler() => 
-        new(_repetitiveWorkoutRepositoryMock.Object, _realWorkoutRepositoryMock.Object, 
-            _currentUserAccessorMock.Object, _mapperMock, _loggerMock);
+        new(_repetitiveWorkoutRepositoryMock.Object, _realWorkoutRepositoryMock.Object, _mapperMock, _loggerMock);
     
     private void SetCorrectInstructorAndWorkoutTypeTestData()
     {

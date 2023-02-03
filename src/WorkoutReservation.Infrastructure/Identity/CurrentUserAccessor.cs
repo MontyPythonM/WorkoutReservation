@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Http;
 using WorkoutReservation.Application.Common.Exceptions;
 using WorkoutReservation.Application.Contracts;
 using WorkoutReservation.Domain.Entities;
-using WorkoutReservation.Domain.Extensions;
+using WorkoutReservation.Infrastructure.Exceptions;
 
 namespace WorkoutReservation.Infrastructure.Identity;
 
@@ -29,7 +29,8 @@ public sealed class CurrentUserAccessor : ICurrentUserAccessor
         return user;
     }
     
-    public Guid GetCurrentUserId() => _httpContextAccessor.HttpContext?.User
-        .FindFirstValue(ClaimTypes.NameIdentifier)
-        .ToGuid() ?? throw new NotFoundException("Current user Id not exist");
+    public Guid GetCurrentUserId() => 
+        Guid.TryParse(_httpContextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier), out var parsedUserId) ? 
+            parsedUserId : 
+            throw new UnauthorizedException("Access forbidden. Invalid current user name identifier.");
 }
