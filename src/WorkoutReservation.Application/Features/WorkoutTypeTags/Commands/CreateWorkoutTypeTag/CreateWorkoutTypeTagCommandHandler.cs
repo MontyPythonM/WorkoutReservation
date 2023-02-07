@@ -20,7 +20,7 @@ internal sealed class CreateWorkoutTypeTagCommandHandler : IRequestHandler<Creat
 
     public async Task<int> Handle(CreateWorkoutTypeTagCommand request, CancellationToken token)
     {
-        var workoutTypeTag = new WorkoutTypeTag(request.Tag, _currentUserAccessor.GetCurrentUserId());
+        var workoutTypeTag = new WorkoutTypeTag(request.Tag, _currentUserAccessor.GetUserId());
         
         workoutTypeTag = await _workoutTypeTagRepository.AddAsync(workoutTypeTag, token);
         return workoutTypeTag.Id;

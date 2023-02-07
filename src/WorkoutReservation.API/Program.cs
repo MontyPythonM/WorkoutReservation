@@ -68,8 +68,17 @@ try
     builder.Services.AddInfrastructureServices(builder.Configuration);
     builder.Services.AddApplicationServices(builder.Configuration);
     builder.Services.AddScoped<ExceptionHandlingMiddleware>();
-    builder.Services.AddCors();
-
+    builder.Services.AddCors(options =>
+    {
+        options.AddPolicy("WorkoutReservationUIOrigin", policy =>
+        {
+            policy.WithOrigins(builder.Configuration["WorkoutReservationUIOrigin"])
+                .AllowAnyHeader()
+                .WithMethods("POST", "PUT", "PATCH", "DELETE", "UPDATE", "OPTIONS")
+                .AllowCredentials();
+        });
+    });
+    
     //--- Build application
     var app = builder.Build();
 
@@ -84,18 +93,14 @@ try
 
     if (app.Environment.IsDevelopment())
     {
-        app.UseRouting();
         app.UseSwagger();
-        app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Workout Reservation REST API Application"));
+        app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "WorkoutReservation REST API"));
     }
+
+    app.UseCors("WorkoutReservationUIOrigin");
     app.UseMiddleware<ExceptionHandlingMiddleware>();
-    
-    app.UseCors(policy => policy
-        .AllowAnyHeader()
-        .WithMethods("POST", "PUT", "PATCH", "DELETE", "UPDATE", "OPTIONS")
-        .WithOrigins("http://localhost:4200")
-        .AllowCredentials());
-    
+    app.UseRouting();
+    //app.UseHttpsRedirection();
     app.UseAuthentication();
     app.UseAuthorization();
     
@@ -104,13 +109,9 @@ try
         Authorization = new[] { new HangfireAuthorizationFilter(app.Services) },
         IsReadOnlyFunc = _ => true
     });
-    app.UseRouting();
-    app.UseAuthorization();
-    app.MapControllers();
-    
     HangfireExtension.AddGenerateWorkoutsRecurringJob();
     
-    logger.Debug("Application run");
+    app.MapControllers();
     app.Run();
 }
 catch (Exception ex)

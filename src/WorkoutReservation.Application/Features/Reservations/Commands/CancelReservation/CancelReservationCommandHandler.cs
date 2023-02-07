@@ -32,7 +32,7 @@ internal sealed class CancelReservationCommandHandler : IRequestHandler<CancelRe
         if (reservation is null)
             throw new NotFoundException($"Reservation with Id: {request.ReservationId} not found.");
         
-        var validator = new CancelReservationCommandValidator(reservation, _currentUserAccessor.GetCurrentUserId());
+        var validator = new CancelReservationCommandValidator(reservation, _currentUserAccessor.GetUserId());
         await validator.ValidateAndThrowAsync(request, token);
         
         reservation.UpdateLastModificationDate();

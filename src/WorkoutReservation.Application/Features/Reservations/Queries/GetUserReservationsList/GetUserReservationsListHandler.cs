@@ -40,7 +40,7 @@ internal sealed class GetUserReservationsListHandler : IRequestHandler<GetUserRe
         await validator.ValidateAndThrowAsync(request, token);
         
         var reservationsQuery = _reservationRepository
-            .GetUserReservationsByGuidQuery(_currentUserAccessor.GetCurrentUserId());
+            .GetUserReservationsByGuidQuery(_currentUserAccessor.GetUserId());
 
         var query = reservationsQuery
             .Where(x => request.SearchPhrase == null ||

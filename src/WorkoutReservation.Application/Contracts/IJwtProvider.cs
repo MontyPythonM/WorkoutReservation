@@ -4,5 +4,5 @@ namespace WorkoutReservation.Application.Contracts;
 
 public interface IJwtProvider
 {
-    string Generate(ApplicationUser user);
+    Task<string> GenerateAsync(ApplicationUser user, CancellationToken token);
 }
