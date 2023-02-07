@@ -10,36 +10,43 @@ import {Router} from "@angular/router";
 import {JwtHelperService} from '@auth0/angular-jwt';
 import {ApplicationUser} from "../models/application-user.model";
 import {LoginForm} from "../models/interfaces/login-form.model";
+import {StorageKeys} from "../common/storage-keys.enum";
+import {NotificationService} from "./notification.service";
+import {CurrentUser} from "../models/current-user.model";
 
 @Injectable({
   providedIn: 'root'
 })
 export class UserService extends BaseService {
-  private readonly jwtToken: string = "token";
 
   constructor(protected override http: HttpClient,
               private datePipe: DatePipe,
-              private router: Router) {
+              private router: Router,
+              private notificationService: NotificationService) {
     super(http);
   }
 
   public get isAuthenticated(): boolean {
-    return !!sessionStorage.getItem(this.jwtToken);
+    return !!sessionStorage.getItem(StorageKeys.Token);
   }
 
   login(loginForm: LoginForm): Observable<void> {
     return super.post<string>(apiUrl.account.login, loginForm, {}, {
       responseType: 'text'
-    }).pipe(map((token: string) => sessionStorage.setItem(this.jwtToken, token)));
+    }).pipe(map((token: string) => sessionStorage.setItem(StorageKeys.Token, token)));
   }
 
   logout(): void {
-    sessionStorage.removeItem(this.jwtToken);
-    this.router.navigateByUrl('/');
+    if (this.isAuthenticated) {
+      sessionStorage.removeItem(StorageKeys.Token);
+      sessionStorage.removeItem(StorageKeys.Permissions);
+      this.notificationService.show("Successfully logged out", "success");
+      this.router.navigateByUrl('/home');
+    }
   }
 
   getToken(): string | null {
-    const token = sessionStorage.getItem(this.jwtToken);
+    const token = sessionStorage.getItem(StorageKeys.Token);
     const jwtHelper = new JwtHelperService();
     if (token && jwtHelper.isTokenExpired(token)) {
       this.logout();
@@ -59,5 +66,9 @@ export class UserService extends BaseService {
           return response;
         })
     )
+  }
+
+  getCurrentUser(): Observable<CurrentUser> {
+    return super.get<CurrentUser>(apiUrl.account.currentUser);
   }
 }

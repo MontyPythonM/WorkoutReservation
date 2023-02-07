@@ -29,11 +29,14 @@ public class ApplicationUserRepository : IApplicationUserRepository
     }
     
     public async Task<ApplicationUser> GetByGuidAsync(Guid guid, bool asNoTracking = false, 
-        CancellationToken token = default, params Expression<Func<ApplicationUser, object>>[] includes)
+        CancellationToken token = default)
     { 
-        var query = _dbContext.ApplicationUsers.AsQueryable();
+        var query = _dbContext.ApplicationUsers
+            .Include(user => user.ApplicationRoles)
+            .ThenInclude(role => role.ApplicationPermissions)
+            .AsQueryable();
+        
         query = _repository.ApplyAsNoTracking(asNoTracking, query);
-        query = _repository.ApplyIncludes(includes, query);
         
         return await query.FirstOrDefaultAsync(x => x.Id == guid, token);
     }

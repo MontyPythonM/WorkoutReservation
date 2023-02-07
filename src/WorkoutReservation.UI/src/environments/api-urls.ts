@@ -13,7 +13,8 @@ export const apiUrl = {
   account: {
     register: 'account/register',
     login: 'account/login',
-    users: 'account/users'
+    users: 'account/users',
+    currentUser: 'current-user'
   },
   workoutTypeTag: {
     onlyActive: 'workout-type-tag/only-active',

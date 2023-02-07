@@ -11,16 +11,10 @@ import {NotificationService} from "../../../services/notification.service";
 export class NavBarComponent extends BaseComponent{
   isUserAuthenticated: boolean;
 
-  constructor(private userService: UserService,
-              private notificationService: NotificationService) {
+  constructor(private userService: UserService) {
     super();
     this.isUserAuthenticated = this.userService.isAuthenticated;
   }
 
-  onLogout = () => {
-    if (this.isUserAuthenticated) {
-      this.userService.logout();
-      this.notificationService.show("Successfully logged out", "success");
-    }
-  }
+  onLogout = () => this.userService.logout();
 }

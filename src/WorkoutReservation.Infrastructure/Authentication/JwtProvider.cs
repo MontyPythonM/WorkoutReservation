@@ -25,8 +25,6 @@ internal sealed class JwtProvider : IJwtProvider
         var claims = new List<Claim>
         {
             new(JwtRegisteredClaimNames.Sub, user.Id.ToString()),
-            new(JwtRegisteredClaimNames.Email, user.Email),
-            new(JwtRegisteredClaimNames.Name, $"{user.FirstName} {user.LastName}")
         };
 
         var permissions = await _permissionService.GetPermissionsAsync(user.Id, token);

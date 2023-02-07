@@ -6,6 +6,7 @@ using WorkoutReservation.Application.Features.Users.Commands.DeleteUser;
 using WorkoutReservation.Application.Features.Users.Commands.Register;
 using WorkoutReservation.Application.Features.Users.Commands.SelfUserDelete;
 using WorkoutReservation.Application.Features.Users.Commands.SetUserRole;
+using WorkoutReservation.Application.Features.Users.Queries.GetCurrentUser;
 using WorkoutReservation.Application.Features.Users.Queries.GetUsersList;
 using WorkoutReservation.Application.Features.Users.Queries.Login;
 using WorkoutReservation.Infrastructure.Authorization;
@@ -63,5 +64,13 @@ public class UserController : ApiControllerBase
     {
         await Mediator.Send(command, token);
         return NoContent();
+    }
+
+    [HttpGet("current-user")]
+    [Authorize]
+    [SwaggerOperation(Summary = "Get information about current user")]
+    public async Task<IActionResult> GetCurrentUser(CancellationToken token)
+    {
+        return Ok(await Mediator.Send(new GetCurrentUserQuery(), token));
     }
 }
