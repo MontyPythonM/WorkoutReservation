@@ -26,7 +26,7 @@ internal sealed class SetUserRoleCommandHandler : IRequestHandler<SetUserRoleCom
         var user = await _userRepository
             .GetByGuidAsync(request.UserId, false, token, incl => incl.ApplicationRoles);
         
-        var validator = new SetUserRoleCommandValidation(_currentUserAccessor.GetCurrentUserId());
+        var validator = new SetUserRoleCommandValidation(_currentUserAccessor.GetUserId());
         await validator.ValidateAndThrowAsync(request, token);
 
         var role = await _roleRepository.GetAsync(request.Role, token);

@@ -34,6 +34,6 @@ internal sealed class LoginQueryHandler : IRequestHandler<LoginQuery, string>
         if (result == PasswordVerificationResult.Failed)
             throw new InvalidCredentialsException("Invalid email address or password.");
 
-        return _jwtProvider.Generate(user);
+        return await _jwtProvider.GenerateAsync(user, token);
     }
 }

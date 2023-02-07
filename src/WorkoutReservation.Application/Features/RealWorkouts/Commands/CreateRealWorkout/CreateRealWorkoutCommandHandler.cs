@@ -28,7 +28,7 @@ internal sealed class CreateRealWorkoutCommandHandler : IRequestHandler<CreateRe
 
     public async Task<int> Handle(CreateRealWorkoutCommand request, CancellationToken token)
     {
-        var user = await _currentUserAccessor.GetCurrentUserAsync(token);
+        var user = await _currentUserAccessor.GetUserAsync(token);
 
         var instructor = await _instructorRepository.GetByIdAsync(request.InstructorId, false, token);
         if (instructor is null)

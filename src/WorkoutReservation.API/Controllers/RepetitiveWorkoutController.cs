@@ -74,7 +74,7 @@ public class RepetitiveWorkoutController : ApiControllerBase
     [SwaggerOperation(Summary = "Forces generation of a new repetitive workouts list for the coming week")]
     public async Task<IActionResult> GenerateNewUpcomingWeek(CancellationToken token)
     {
-        var command = new GenerateUpcomingWorkoutTimetableCommand(_currentUserAccessor.GetCurrentUserId());
+        var command = new GenerateUpcomingWorkoutTimetableCommand(_currentUserAccessor.GetUserId());
         HangfireExtension.EnqueueGenerateWorkoutsJob(command);
         return Ok();
     }

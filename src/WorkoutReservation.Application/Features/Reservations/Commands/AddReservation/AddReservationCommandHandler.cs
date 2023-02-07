@@ -25,7 +25,7 @@ internal sealed class AddReservationCommandHandler : IRequestHandler<AddReservat
 
     public async Task<int> Handle(AddReservationCommand request, CancellationToken token)
     {
-        var user = await _currentUserAccessor.GetCurrentUserAsync(token);
+        var user = await _currentUserAccessor.GetUserAsync(token);
 
         var realWorkout = await _realWorkoutRepository
             .GetByIdAsync(request.RealWorkoutId, false, token);

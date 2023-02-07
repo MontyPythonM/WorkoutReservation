@@ -30,7 +30,7 @@ internal sealed class DeleteUserCommandHandler : IRequestHandler<DeleteUserComma
         if (userToRemove is null)
             throw new NotFoundException($"User with Guid: {request.UserGuid} not found.");
 
-        var currentUserGuid = _currentUserAccessor.GetCurrentUserId();
+        var currentUserGuid = _currentUserAccessor.GetUserId();
 
         var validator = new DeleteUserCommandValidator(currentUserGuid);
         await validator.ValidateAndThrowAsync(request, token);

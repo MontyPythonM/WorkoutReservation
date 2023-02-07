@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using WorkoutReservation.Domain.Entities;
+using WorkoutReservation.Infrastructure.Interfaces;
 using WorkoutReservation.Infrastructure.Persistence;
 
 namespace WorkoutReservation.Infrastructure.Authorization;
@@ -13,14 +14,14 @@ public class PermissionService : IPermissionService
         _dbContext = dbContext;
     }
 
-    public async Task<HashSet<string>> GetPermissionsAsync(Guid? userId)
+    public async Task<HashSet<string>> GetPermissionsAsync(Guid? userId, CancellationToken token)
     {
         var roles = await _dbContext.Set<ApplicationUser>()
             .Include(user => user.ApplicationRoles)
             .ThenInclude(role => role.ApplicationPermissions)
             .Where(user => user.Id == userId)
             .Select(user => user.ApplicationRoles)
-            .ToArrayAsync();
+            .ToArrayAsync(token);
 
         return roles
             .SelectMany(role => role)

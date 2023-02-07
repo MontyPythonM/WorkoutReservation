@@ -25,7 +25,7 @@ internal sealed class SelfDeleteUserCommandHandler : IRequestHandler<SelfDeleteU
 
     public async Task<Unit> Handle(SelfDeleteUserCommand request, CancellationToken token)
     {
-        var user = await _currentUserAccessor.GetCurrentUserAsync(token);
+        var user = await _currentUserAccessor.GetUserAsync(token);
 
         var passwordCompareResult = _passwordHasher
             .VerifyHashedPassword(user, user.PasswordHash, request.Password);

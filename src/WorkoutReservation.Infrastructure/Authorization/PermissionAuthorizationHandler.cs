@@ -14,19 +14,19 @@ public class PermissionAuthorizationHandler
         _serviceScopeFactory = serviceScopeFactory;
     }
 
-    protected override async Task HandleRequirementAsync(AuthorizationHandlerContext context,
+    protected override Task HandleRequirementAsync(AuthorizationHandlerContext context,
         PermissionRequirement requirement)
     {
         using var scope = _serviceScopeFactory.CreateScope();
-        var permissionService = scope.ServiceProvider.GetRequiredService<IPermissionService>();
         var currentUserAccessor = scope.ServiceProvider.GetRequiredService<ICurrentUserAccessor>();
         
-        var permissions = await permissionService
-            .GetPermissionsAsync(currentUserAccessor.GetCurrentUserId());
-
+        var permissions = currentUserAccessor.GetUserPermissions();
+        
         if (permissions.Contains(requirement.Permission))
         {
             context.Succeed(requirement);
         }
+        
+        return Task.CompletedTask;
     }
 }
