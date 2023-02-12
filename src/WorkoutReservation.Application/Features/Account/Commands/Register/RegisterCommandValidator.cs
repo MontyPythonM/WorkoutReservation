@@ -1,7 +1,7 @@
 ﻿using FluentValidation;
 using WorkoutReservation.Domain.Entities;
 
-namespace WorkoutReservation.Application.Features.Users.Commands.Register;
+namespace WorkoutReservation.Application.Features.Account.Commands.Register;
 
 internal sealed class RegisterCommandValidator : AbstractValidator<RegisterCommand>
 {

@@ -1,9 +1,9 @@
 import {Component} from '@angular/core';
-import {UserService} from 'src/app/services/user.service';
 import {BaseComponent} from 'src/app/common/base.component';
 import {NotificationService} from 'src/app/services/notification.service';
 import {Router} from "@angular/router";
 import {LoginForm} from "../../models/interfaces/login-form.model";
+import {AccountService} from "../../services/account.service";
 
 @Component({
   selector: 'app-login',
@@ -16,7 +16,7 @@ export class LoginComponent extends BaseComponent{
   loggedIn: boolean;
   loginData: LoginForm;
 
-  constructor(private userService: UserService,
+  constructor(private accountService: AccountService,
               private notificationService: NotificationService,
               private router: Router) {
     super();
@@ -45,7 +45,7 @@ export class LoginComponent extends BaseComponent{
   signIn(form: any) {
     const validationResult = form.validationGroup.validate();
     if(validationResult.isValid) {
-      this.subscribe(this.userService.login(this.loginData), {
+      this.subscribe(this.accountService.login(this.loginData), {
         next: () => {
           this.notificationService.show('Successfully logged in!', 'success');
           this.router.navigateByUrl('/home')

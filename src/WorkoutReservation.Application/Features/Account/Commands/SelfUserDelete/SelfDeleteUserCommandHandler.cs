@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Identity;
 using WorkoutReservation.Application.Contracts;
 using WorkoutReservation.Domain.Entities;
 
-namespace WorkoutReservation.Application.Features.Users.Commands.SelfUserDelete;
+namespace WorkoutReservation.Application.Features.Account.Commands.SelfUserDelete;
 
 public record SelfDeleteUserCommand(string Password) : IRequest;
 

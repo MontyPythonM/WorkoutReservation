@@ -1,33 +1,38 @@
-import {DatePipe} from '@angular/common';
-import {HttpClient} from '@angular/common/http';
 import {Injectable} from '@angular/core';
-import {map, Observable} from 'rxjs';
-import {RegisterForm} from '../models/register-form.model';
+import {BehaviorSubject, map, Observable} from "rxjs";
+import {HttpClient} from "@angular/common/http";
 import {BaseService} from "../common/base.service";
-import {apiUrl} from "../../environments/api-urls";
-import {PagedResult} from "../models/paged-result.model";
-import {Router} from "@angular/router";
-import {JwtHelperService} from '@auth0/angular-jwt';
-import {ApplicationUser} from "../models/application-user.model";
+import {UserAccount} from "../models/user-account.model";
 import {LoginForm} from "../models/interfaces/login-form.model";
+import {apiUrl} from "../../environments/api-urls";
 import {StorageKeys} from "../common/storage-keys.enum";
+import {JwtHelperService} from "@auth0/angular-jwt";
+import {RegisterForm} from "../models/register-form.model";
+import {DatePipe} from "@angular/common";
+import {Router} from "@angular/router";
 import {NotificationService} from "./notification.service";
-import {CurrentUser} from "../models/current-user.model";
 
 @Injectable({
   providedIn: 'root'
 })
-export class UserService extends BaseService {
+export class AccountService extends BaseService {
+
+  private userAccount$: BehaviorSubject<UserAccount>;
 
   constructor(protected override http: HttpClient,
               private datePipe: DatePipe,
               private router: Router,
               private notificationService: NotificationService) {
     super(http);
+    this.userAccount$ = new BehaviorSubject<UserAccount>({} as UserAccount);
   }
 
-  public get isAuthenticated(): boolean {
-    return !!sessionStorage.getItem(StorageKeys.Token);
+  setUserAccount = (account: UserAccount) => this.userAccount$.next(account);
+
+  hasPermission(permissions: string[]): Observable<boolean> {
+    return this.userAccount$.pipe(
+      map((currentUser: UserAccount) => permissions.some(p => currentUser.permissions.includes(p)))
+    );
   }
 
   login(loginForm: LoginForm): Observable<void> {
@@ -54,21 +59,16 @@ export class UserService extends BaseService {
     return token;
   }
 
+  getCurrentUser(): Observable<UserAccount> {
+    return super.get<UserAccount>(apiUrl.account.currentUser);
+  }
+
+  public get isAuthenticated(): boolean {
+    return !!sessionStorage.getItem(StorageKeys.Token);
+  }
+
   register(registerForm: RegisterForm): Observable<string> {
     registerForm.dateOfBirth = this.datePipe.transform(registerForm.dateOfBirth, 'dd-MM-yyyy')!;
     return super.post<any>(apiUrl.account.register, registerForm);
-  }
-
-  getUsers(queryParams: any): Observable<PagedResult<ApplicationUser>> {
-    return super.get<PagedResult<ApplicationUser>>(apiUrl.account.users, { ...queryParams }).pipe(
-        map((response) => {
-          response.items = response.items.map((user) => new ApplicationUser(user))
-          return response;
-        })
-    )
-  }
-
-  getCurrentUser(): Observable<CurrentUser> {
-    return super.get<CurrentUser>(apiUrl.account.currentUser);
   }
 }

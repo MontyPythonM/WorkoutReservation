@@ -1,6 +1,6 @@
 ﻿using WorkoutReservation.Domain.Enums;
 
-namespace WorkoutReservation.Application.Features.Users.Queries.GetCurrentUser;
+namespace WorkoutReservation.Application.Features.Account.Queries.GetCurrentUser;
 
 public class CurrentUserDto
 {

@@ -2,7 +2,7 @@
 using MediatR;
 using WorkoutReservation.Application.Contracts;
 
-namespace WorkoutReservation.Application.Features.Users.Queries.GetCurrentUser;
+namespace WorkoutReservation.Application.Features.Account.Queries.GetCurrentUser;
 
 public record GetCurrentUserQuery : IRequest<CurrentUserDto>;
 
