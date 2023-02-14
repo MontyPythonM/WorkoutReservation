@@ -1,6 +1,7 @@
 import {Component} from '@angular/core';
 import {BaseComponent} from 'src/app/common/base.component';
-import {AccountService} from "../../../services/account.service";
+import {PermissionService} from "../../../services/identity/permission.service";
+import {AccountService} from "../../../services/identity/account.service";
 
 @Component({
   selector: 'app-nav-bar',
@@ -8,11 +9,10 @@ import {AccountService} from "../../../services/account.service";
   styleUrls: ['./nav-bar.component.css']
 })
 export class NavBarComponent extends BaseComponent{
-  isUserAuthenticated: boolean;
 
-  constructor(private accountService: AccountService) {
+  constructor(private accountService: AccountService,
+              private permissionService: PermissionService) {
     super();
-    this.isUserAuthenticated = this.accountService.isAuthenticated;
   }
 
   onLogout = () => this.accountService.logout();

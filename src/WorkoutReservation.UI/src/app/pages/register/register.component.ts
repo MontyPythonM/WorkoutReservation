@@ -6,7 +6,7 @@ import {EnumObject, enumToObjects} from 'src/app/models/enums/enum-converter';
 import {Gender} from 'src/app/models/enums/gender.enum';
 import {RegisterForm} from 'src/app/models/register-form.model';
 import {NotificationService} from 'src/app/services/notification.service';
-import {AccountService} from "../../services/account.service";
+import {AccountService} from "../../services/identity/account.service";
 
 @Component({
   selector: 'app-register',
@@ -42,6 +42,7 @@ export class RegisterComponent extends BaseComponent {
         next: () => {
           this.dxForm.resetValues();
           this.notificationService.show('Account has been created', 'success');
+          this.router.navigateByUrl('/login')
         },
         error: (error) => {
           this.registerFormData.email = '';

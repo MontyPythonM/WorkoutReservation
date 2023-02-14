@@ -37,6 +37,7 @@ internal static class RolePermissionMatrix
             Create(ApplicationRole.SystemAdministrator, Permission.GetAllUsers),
             Create(ApplicationRole.SystemAdministrator, Permission.SetUserRole),
             Create(ApplicationRole.SystemAdministrator, Permission.DeleteUserAccount),
+            Create(ApplicationRole.SystemAdministrator, Permission.OpenAdministrationPage),
             
             Create(ApplicationRole.BusinessAdministrator, Permission.CreateInstructor),
             Create(ApplicationRole.BusinessAdministrator, Permission.UpdateInstructor),
@@ -63,7 +64,8 @@ internal static class RolePermissionMatrix
             Create(ApplicationRole.BusinessAdministrator, Permission.GetAllUsers),
             Create(ApplicationRole.BusinessAdministrator, Permission.SetUserRole),
             Create(ApplicationRole.BusinessAdministrator, Permission.DeleteOwnAccount),
-            
+            Create(ApplicationRole.BusinessAdministrator, Permission.OpenAdministrationPage),
+
             Create(ApplicationRole.Manager, Permission.GetAllWorkoutTypeTags),
             Create(ApplicationRole.Manager, Permission.GetRealWorkoutDetails),
             Create(ApplicationRole.Manager, Permission.CreateRealWorkout),
@@ -77,7 +79,8 @@ internal static class RolePermissionMatrix
             Create(ApplicationRole.Manager, Permission.UpdateReservationStatus),
             Create(ApplicationRole.Manager, Permission.GetAllUsers),
             Create(ApplicationRole.Manager, Permission.DeleteOwnAccount),
-            
+            Create(ApplicationRole.Manager, Permission.OpenAdministrationPage),
+
             Create(ApplicationRole.Member, Permission.GetRealWorkoutDetails),
             Create(ApplicationRole.Member, Permission.GetOwnReservations),
             Create(ApplicationRole.Member, Permission.CreateReservation),

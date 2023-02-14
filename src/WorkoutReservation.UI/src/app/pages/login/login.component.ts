@@ -3,7 +3,7 @@ import {BaseComponent} from 'src/app/common/base.component';
 import {NotificationService} from 'src/app/services/notification.service';
 import {Router} from "@angular/router";
 import {LoginForm} from "../../models/interfaces/login-form.model";
-import {AccountService} from "../../services/account.service";
+import {AccountService} from "../../services/identity/account.service";
 
 @Component({
   selector: 'app-login',
