@@ -1,7 +1,7 @@
 import {Component} from '@angular/core';
 import {BaseComponent} from 'src/app/common/base.component';
-import {UserService} from "../../../services/user.service";
-import {NotificationService} from "../../../services/notification.service";
+import {PermissionService} from "../../../services/identity/permission.service";
+import {AccountService} from "../../../services/identity/account.service";
 
 @Component({
   selector: 'app-nav-bar',
@@ -9,18 +9,11 @@ import {NotificationService} from "../../../services/notification.service";
   styleUrls: ['./nav-bar.component.css']
 })
 export class NavBarComponent extends BaseComponent{
-  isUserAuthenticated: boolean;
 
-  constructor(private userService: UserService,
-              private notificationService: NotificationService) {
+  constructor(private accountService: AccountService,
+              private permissionService: PermissionService) {
     super();
-    this.isUserAuthenticated = this.userService.isAuthenticated;
   }
 
-  onLogout = () => {
-    if (this.isUserAuthenticated) {
-      this.userService.logout();
-      this.notificationService.show("Successfully logged out", "success");
-    }
-  }
+  onLogout = () => this.accountService.logout();
 }

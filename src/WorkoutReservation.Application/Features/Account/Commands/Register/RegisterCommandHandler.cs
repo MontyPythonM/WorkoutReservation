@@ -5,7 +5,7 @@ using WorkoutReservation.Application.Contracts;
 using WorkoutReservation.Domain.Entities;
 using WorkoutReservation.Domain.Enums;
 
-namespace WorkoutReservation.Application.Features.Users.Commands.Register;
+namespace WorkoutReservation.Application.Features.Account.Commands.Register;
 
 public record RegisterCommand(string Email, string Password, string ConfirmPassword, string FirstName, 
     string LastName, Gender? Gender, DateOnly? DateOfBirth) : IRequest;

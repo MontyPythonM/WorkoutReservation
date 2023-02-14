@@ -25,11 +25,10 @@ internal sealed class JwtProvider : IJwtProvider
         var claims = new List<Claim>
         {
             new(JwtRegisteredClaimNames.Sub, user.Id.ToString()),
-            new(JwtRegisteredClaimNames.Email, user.Email),
             new(JwtRegisteredClaimNames.Name, $"{user.FirstName} {user.LastName}")
         };
 
-        var permissions = await _permissionService.GetPermissionsAsync(user.Id, token);
+        var permissions = await _permissionService.GetUserPermissionsAsync(user.Id, token);
         claims.AddRange(permissions.Select(permission => new Claim(CustomClaims.Permissions, permission)));
 
         var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_authenticationSettings.JwtKey));

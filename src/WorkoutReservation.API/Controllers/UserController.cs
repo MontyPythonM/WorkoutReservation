@@ -1,36 +1,16 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 using WorkoutReservation.API.Controllers.Base;
 using WorkoutReservation.Application.Features.Users.Commands.DeleteUser;
-using WorkoutReservation.Application.Features.Users.Commands.Register;
-using WorkoutReservation.Application.Features.Users.Commands.SelfUserDelete;
 using WorkoutReservation.Application.Features.Users.Commands.SetUserRole;
 using WorkoutReservation.Application.Features.Users.Queries.GetUsersList;
-using WorkoutReservation.Application.Features.Users.Queries.Login;
 using WorkoutReservation.Infrastructure.Authorization;
 
 namespace WorkoutReservation.API.Controllers;
 
-[Route("api/account/")]
+[Route("api/user/")]
 public class UserController : ApiControllerBase
 {
-    [HttpPost("register")]
-    [AllowAnonymous]
-    [SwaggerOperation(Summary = "Register new user account")]
-    public async Task<IActionResult> RegisterAccount([FromBody] RegisterCommand command, CancellationToken token)
-    {
-        return Ok(await Mediator.Send(command, token));
-    }
-
-    [HttpPost("login")]
-    [AllowAnonymous]
-    [SwaggerOperation(Summary = "Login user. If credentials is valid returns JWT Bearer token")]
-    public async Task<IActionResult> Login([FromBody] LoginQuery query, CancellationToken token)
-    {
-        return Ok(await Mediator.Send(query, token));
-    }
-
     [HttpGet("users")]
     [HasPermission(Permission.GetAllUsers)]
     [SwaggerOperation(Summary = "Returns paged list of application users")]
@@ -53,15 +33,6 @@ public class UserController : ApiControllerBase
     public async Task<IActionResult> DeleteUserAccount([FromRoute] Guid userGuid, CancellationToken token)
     {
         await Mediator.Send(new DeleteUserCommand(userGuid), token);
-        return NoContent();
-    }
-
-    [HttpDelete("delete-account")]
-    [HasPermission(Permission.DeleteOwnAccount)]
-    [SwaggerOperation(Summary = "Delete the currently logged-in user account")]
-    public async Task<IActionResult> DeleteOwnAccount([FromBody] SelfDeleteUserCommand command, CancellationToken token)
-    {
-        await Mediator.Send(command, token);
         return NoContent();
     }
 }

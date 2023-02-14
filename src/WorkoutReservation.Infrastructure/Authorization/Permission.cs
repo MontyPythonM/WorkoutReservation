@@ -38,4 +38,6 @@ public enum Permission
     SetUserRole,
     DeleteUserAccount,
     DeleteOwnAccount,
+    
+    OpenAdministrationPage
 }

@@ -6,7 +6,7 @@ import {EnumObject, enumToObjects} from 'src/app/models/enums/enum-converter';
 import {Gender} from 'src/app/models/enums/gender.enum';
 import {RegisterForm} from 'src/app/models/register-form.model';
 import {NotificationService} from 'src/app/services/notification.service';
-import {UserService} from 'src/app/services/user.service';
+import {AccountService} from "../../services/identity/account.service";
 
 @Component({
   selector: 'app-register',
@@ -21,7 +21,7 @@ export class RegisterComponent extends BaseComponent {
   private dxForm!: dxForm;
   private readonly emailTakenErrorMessage = 'Validation failed: \r\n -- Email: Email address is already taken. Severity: Error'
 
-  constructor(private userService: UserService, private router: Router, private notificationService: NotificationService) {
+  constructor(private accountService: AccountService, private router: Router, private notificationService: NotificationService) {
     super();
     this.registerFormData = new RegisterForm();
     this.namePattern = /^[^0-9]+$/;
@@ -38,10 +38,11 @@ export class RegisterComponent extends BaseComponent {
   signUp() {
     const isValid = this.dxForm.validate().isValid;
     if(isValid) {
-      this.subscribe(this.userService.register(this.registerFormData), {
+      this.subscribe(this.accountService.register(this.registerFormData), {
         next: () => {
           this.dxForm.resetValues();
           this.notificationService.show('Account has been created', 'success');
+          this.router.navigateByUrl('/login')
         },
         error: (error) => {
           this.registerFormData.email = '';

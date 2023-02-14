@@ -15,6 +15,8 @@ import {AdministrationComponent} from "./administration.component";
 import {RouterModule} from "@angular/router";
 import {ConfirmationPopupModule} from "../../components/confirmation-popup/confirmation-popup.module";
 import {PagerModule} from "../../components/pager/pager.module";
+import {AuthGuardService} from "../../services/identity/auth-guard.service";
+import {Permission} from "../../models/enums/permission.enum";
 
 @NgModule({
   declarations: [
@@ -37,6 +39,10 @@ import {PagerModule} from "../../components/pager/pager.module";
     RouterModule.forChild([
       {
         path: '',
+        canActivate: [AuthGuardService],
+        data: {
+          permission: Permission.OpenAdministrationPage
+        },
         component: AdministrationComponent,
         children: [
           {

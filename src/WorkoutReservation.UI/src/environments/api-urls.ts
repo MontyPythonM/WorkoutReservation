@@ -10,10 +10,16 @@ export const apiUrl = {
     deleteAll: "repetitive-workout/delete-all"
   },
   reservation: 'reservation/',
+  user: {
+    users: 'user/users/',
+    setUserRole: 'user/set-user-role/',
+    deleteUser: 'user/delete-user/',
+  },
   account: {
     register: 'account/register',
     login: 'account/login',
-    users: 'account/users'
+    users: 'account/users',
+    currentUser: 'account/current-user'
   },
   workoutTypeTag: {
     onlyActive: 'workout-type-tag/only-active',

@@ -4,7 +4,7 @@ using WorkoutReservation.Application.Common.Exceptions;
 using WorkoutReservation.Application.Contracts;
 using WorkoutReservation.Domain.Entities;
 
-namespace WorkoutReservation.Application.Features.Users.Queries.Login;
+namespace WorkoutReservation.Application.Features.Account.Queries.Login;
 
 public record LoginQuery(string Email, string Password) : IRequest<string>;
 

@@ -1,7 +1,7 @@
 ﻿using FluentValidation;
 using Microsoft.AspNetCore.Identity;
 
-namespace WorkoutReservation.Application.Features.Users.Commands.SelfUserDelete;
+namespace WorkoutReservation.Application.Features.Account.Commands.SelfUserDelete;
 
 internal sealed class SelfDeleteUserCommandValidator : AbstractValidator<SelfDeleteUserCommand>
 {
