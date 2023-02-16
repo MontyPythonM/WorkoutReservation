@@ -1,7 +1,6 @@
 import {Injectable} from '@angular/core';
 import {ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot, UrlTree} from "@angular/router";
-import {Observable} from "rxjs";
-import {AccountService} from "./account.service";
+import {map, Observable} from "rxjs";
 import {PermissionService} from "./permission.service";
 
 @Injectable({
@@ -9,8 +8,7 @@ import {PermissionService} from "./permission.service";
 })
 export class AuthGuardService implements CanActivate {
 
-  constructor(private accountService: AccountService,
-              private permissionService: PermissionService,
+  constructor(private permissionService: PermissionService,
               private router: Router) {}
 
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot)
@@ -20,10 +18,10 @@ export class AuthGuardService implements CanActivate {
       return this.router.createUrlTree(['home'])
     }
 
-    if (this.permissionService.hasPermission(route.data['permission'])) {
-      return true;
-    }
-
-    return this.router.createUrlTree(['home'])
+    return this.permissionService.hasPermission(route.data['permission'])
+      .pipe(map((result: boolean) => {
+        return result ? true : this.router.createUrlTree(['home'])
+      }
+    ));
   }
 }

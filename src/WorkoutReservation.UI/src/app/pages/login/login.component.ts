@@ -51,8 +51,11 @@ export class LoginComponent extends BaseComponent{
           this.router.navigateByUrl('/home')
         },
         error: (error) => {
-          if(error.status !== 200) {
+          if(error.status === 409) {
             this.notificationService.show('Invalid email address or password.', 'error');
+          }
+          else if(error.status !== 200) {
+            this.notificationService.show('Unknown error occured.', 'error');
           }
         }
       });

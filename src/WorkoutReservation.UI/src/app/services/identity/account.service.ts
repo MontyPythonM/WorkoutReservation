@@ -16,7 +16,8 @@ import {BaseService} from "../../common/base.service";
   providedIn: 'root'
 })
 export class AccountService extends BaseService {
-  public userAccount$: BehaviorSubject<UserAccount>;
+  private userAccountSource = new BehaviorSubject<UserAccount>({} as UserAccount);
+  public userAccount$ = this.userAccountSource.asObservable();
 
   constructor(protected override http: HttpClient,
               private datePipe: DatePipe,
@@ -24,18 +25,13 @@ export class AccountService extends BaseService {
               private notificationService: NotificationService,
               private localStorageService: LocalStorageService) {
     super(http);
-    this.userAccount$ = new BehaviorSubject<UserAccount>({} as UserAccount);
   }
 
   login(loginForm: LoginForm): Observable<void> {
     return super.post<string>(apiUrl.account.login, loginForm, {}, {responseType: 'text'})
       .pipe(map((token: string) => {
         this.localStorageService.set(token);
-        const decodedToken = new JwtHelperService().decodeToken(token);
-        this.setCurrentUser(new UserAccount(
-          decodedToken.sub,
-          decodedToken.name,
-          decodedToken.permissions));
+        this.setUserAccountOrDefault();
         this.router.navigateByUrl('/home');
       })
     );
@@ -64,5 +60,19 @@ export class AccountService extends BaseService {
     return token;
   }
 
-  private setCurrentUser = (account: UserAccount) => this.userAccount$.next(account);
+  setUserAccountOrDefault() {
+    const token = this.localStorageService.get();
+    if (token) {
+      const decodedToken = new JwtHelperService().decodeToken(token);
+      this.setCurrentUser(new UserAccount(
+        decodedToken.sub,
+        decodedToken.name,
+        decodedToken.permissions));
+    }
+    else {
+      this.setCurrentUser({} as UserAccount);
+    }
+  }
+
+  private setCurrentUser = (account: UserAccount) => this.userAccountSource.next(account);
 }
