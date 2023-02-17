@@ -6,7 +6,6 @@ import {AccountService} from "../../../services/identity/account.service";
   selector: 'app-nav-bar',
   template: `
     <nav class="nav">
-
       <div class="nav-left">
         <a class="item" routerLink="home">Home</a>
         <a class="item" routerLink="workouts">Workouts</a>
@@ -15,14 +14,12 @@ import {AccountService} from "../../../services/identity/account.service";
         <a *ngIf="accountService.isLogged$ | async" class="item" routerLink="reservations">My reservations</a>
         <a *ngIf="accountService.isLogged$ | async" class="item" routerLink="administration">Administration</a>
       </div>
-
       <div class="nav-right">
         <a *ngIf="!(accountService.isLogged$ | async)" class="item" routerLink="register">Register</a>
         <a *ngIf="!(accountService.isLogged$ | async)" class="item" routerLink="login">Login</a>
         <a *ngIf="accountService.isLogged$ | async" class="logged" routerLink="account-settings">Logged as: Mateusz Szewczyk</a>
         <a *ngIf="accountService.isLogged$ | async" class="logout" (click)="onLogout()">Logout</a>
       </div>
-
     </nav>
   `,
   styleUrls: ['./nav-bar.component.css']
