@@ -10,6 +10,7 @@ import {ReservationsComponent} from './pages/reservations/reservations.component
 import {WorkoutTypesComponent} from './pages/workout-types/workout-types.component';
 import {WorkoutDetailsComponent} from './pages/workouts/workout-details/workout-details.component';
 import {WorkoutsComponent} from './pages/workouts/workouts.component';
+import {AuthGuardService} from "./services/identity/auth-guard.service";
 
 const routes: Routes = [
     { path: 'home', component: HomeComponent },
@@ -19,14 +20,14 @@ const routes: Routes = [
     { path: 'instructors/:id', component: InstructorDetailsComponent },
     { path: 'workout-types', component: WorkoutTypesComponent },
     { path: 'register', component: RegisterComponent },
-    { path: 'reservations', component: ReservationsComponent },
+    { path: 'reservations', component: ReservationsComponent, canActivate: [AuthGuardService] },
     { path: 'login', component: LoginComponent },
     {
       path: 'administration',
       loadChildren: () => import('./pages/administration/administration.module')
         .then((m) => m.AdministrationModule)
     },
-    { path: 'account-settings', component: AccountSettingsComponent },
+    { path: 'account-settings', component: AccountSettingsComponent, canActivate: [AuthGuardService] },
     { path: '', redirectTo: '/home', pathMatch: 'prefix' }
   ];
 

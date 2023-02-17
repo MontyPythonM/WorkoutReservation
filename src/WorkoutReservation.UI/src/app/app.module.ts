@@ -41,7 +41,7 @@ import {AdministrationModule} from "./pages/administration/administration.module
 import {ConfirmationPopupModule} from "./components/confirmation-popup/confirmation-popup.module";
 import {PagerModule} from "./components/pager/pager.module";
 import {TokenAuthorizationInterceptor} from "./interceptors/token-authorization.interceptor";
-import { LogoComponent } from './components/header/logo/logo.component';
+import {LogoComponent} from './components/header/logo/logo.component';
 
 @NgModule({
   declarations: [

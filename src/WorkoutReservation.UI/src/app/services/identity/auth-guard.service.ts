@@ -18,7 +18,11 @@ export class AuthGuardService implements CanActivate {
       return this.router.createUrlTree(['home'])
     }
 
-    return this.permissionService.hasPermission(route.data['permission'])
+    if (route.data['permission'] == undefined) {
+      return true;
+    }
+
+    return this.permissionService.hasPermissions(route.data['permission'])
       .pipe(map((result: boolean) => {
         return result ? true : this.router.createUrlTree(['home'])
       }
