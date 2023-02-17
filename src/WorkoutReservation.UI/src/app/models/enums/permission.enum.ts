@@ -36,5 +36,6 @@ export enum Permission {
   DeleteUserAccount = "DeleteUserAccount",
   DeleteOwnAccount = "DeleteOwnAccount",
 
-  OpenAdministrationPage = "OpenAdministrationPage"
+  OpenAdministrationPage = "OpenAdministrationPage",
+  CanSeeAdministrativeContent = "CanSeeAdministrativeContent"
 }

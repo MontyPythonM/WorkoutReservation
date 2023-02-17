@@ -21,7 +21,8 @@ export class RegisterComponent extends BaseComponent {
   private dxForm!: dxForm;
   private readonly emailTakenErrorMessage = 'Validation failed: \r\n -- Email: Email address is already taken. Severity: Error'
 
-  constructor(private accountService: AccountService, private router: Router, private notificationService: NotificationService) {
+  constructor(private accountService: AccountService,
+              private router: Router) {
     super();
     this.registerFormData = new RegisterForm();
     this.namePattern = /^[^0-9]+$/;

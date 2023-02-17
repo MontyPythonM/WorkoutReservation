@@ -1,5 +1,6 @@
 <div class="container">
   <dx-button
+    [disabled]="!(hasPermission(permissions.CreateWorkoutTypeTag) | async)!"
     class="add-button"
     icon="plus"
     text="Add workout type tag"
@@ -22,10 +23,12 @@
     <dxi-column dataField="createdBy" alignment="center" dataType="string" [width]="300"></dxi-column>
     <dxi-column dataField="createdDate" alignment="center" dataType="date" [format]="dateFormat" [width]="150"></dxi-column>
     <dxi-column type="buttons" caption="Edit tag">
-      <dxi-button icon="edit" [onClick]="openEditPopup"></dxi-button>
+      <dxi-button icon="edit" [onClick]="openEditPopup"
+        [disabled]="!(hasPermission(permissions.CreateWorkoutType) | async)!"></dxi-button>
     </dxi-column>
     <dxi-column type="buttons" caption="Delete tag">
-      <dxi-button cssClass="delete-button" icon="trash" [onClick]="openDeletePopup"></dxi-button>
+      <dxi-button cssClass="delete-button" icon="trash" [onClick]="openDeletePopup"
+        [disabled]="!(hasPermission(permissions.CreateWorkoutType) | async)!"></dxi-button>
     </dxi-column>
     <dxo-paging
       [pageIndex]="0"

@@ -8,6 +8,7 @@ import {InstructorService} from 'src/app/services/instructor.service';
 import {NotificationService} from 'src/app/services/notification.service';
 import {EnumObject, enumToObjects} from 'src/app/models/enums/enum-converter';
 import {Gender} from 'src/app/models/enums/gender.enum';
+import {Permission} from "../../../models/enums/permission.enum";
 
 @Component({
   selector: 'app-instructor-details',
@@ -22,11 +23,11 @@ export class InstructorDetailsComponent extends BaseComponent implements OnInit 
   isSaving: boolean;
   instructorId: number;
   gender: EnumObject[];
+  permissions = Permission;
   private form!: Form | undefined;
 
   constructor(private instructorService: InstructorService,
     private route: ActivatedRoute,
-    private notificationService: NotificationService,
     private router: Router) {
     super();
     this.isEditPopupOpened = false;

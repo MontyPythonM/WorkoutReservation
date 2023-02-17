@@ -24,6 +24,8 @@
   </div>
   <div class="buttons">
     <dx-button
+      *ngIf="(hasPermission(permissions.CanSeeAdministrativeContent) | async)!"
+      [disabled]="!(hasPermission(permissions.UpdateInstructor) | async)!"
       class="button"
       text="Edit"
       icon="rename"
@@ -31,6 +33,8 @@
       (onClick)="openEditPopup()">
     </dx-button>
     <dx-button
+      *ngIf="(hasPermission(permissions.CanSeeAdministrativeContent) | async)!"
+      [disabled]="!(hasPermission(permissions.DeleteInstructor) | async)!"
       class="button"
       text="Delete"
       icon="trash"

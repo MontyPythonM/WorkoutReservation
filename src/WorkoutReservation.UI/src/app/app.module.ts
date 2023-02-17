@@ -1,4 +1,4 @@
-import {NgModule} from '@angular/core';
+import {Injector, NgModule} from '@angular/core';
 import {BrowserModule} from '@angular/platform-browser';
 import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
 
@@ -41,7 +41,9 @@ import {AdministrationModule} from "./pages/administration/administration.module
 import {ConfirmationPopupModule} from "./components/confirmation-popup/confirmation-popup.module";
 import {PagerModule} from "./components/pager/pager.module";
 import {TokenAuthorizationInterceptor} from "./interceptors/token-authorization.interceptor";
-import { LogoComponent } from './components/header/logo/logo.component';
+import {LogoComponent} from './components/header/logo/logo.component';
+
+export let AppInjector: Injector;
 
 @NgModule({
   declarations: [
@@ -96,4 +98,8 @@ import { LogoComponent } from './components/header/logo/logo.component';
     ],
   bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule {
+  constructor(private injector: Injector) {
+    AppInjector = this.injector;
+  }
+}

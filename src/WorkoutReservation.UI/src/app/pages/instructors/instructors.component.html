@@ -1,5 +1,7 @@
 <div class="container" *ngIf="instructors">
 	<dx-button
+    *ngIf="(hasPermission(permissions.CanSeeAdministrativeContent) | async)!"
+    [disabled]="!(hasPermission(permissions.CreateInstructor) | async)!"
 		class="add-button success-button"
 		icon="plus"
 		text="Add instructor"
