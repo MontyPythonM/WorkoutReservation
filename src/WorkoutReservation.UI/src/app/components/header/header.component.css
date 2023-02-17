@@ -1,37 +1,14 @@
 .nav-menu {
   background-color: rgb(49, 47, 47);
-  padding: 20px 40px 20px 40px;
-  border-bottom: 1px black solid;
   display: flex;
-}
-
-.workout {
-  float: left;
-  font-size: 18px;
-  font-weight: 900;
-  color: rgb(24, 108, 24);
-  margin-left: 15px;
-}
-
-.reservation {
-  float:left;
-  margin-left: 3px;
-  font-size: 18px;
-  font-weight: 400;
-  color: rgba(245, 245, 245, 0.9);
-}
-
-.logo {
-  margin-top: 5px;
-  flex-grow: 1;
+  flex-wrap: wrap
 }
 
 .page-logo {
-  min-width: 90px;
-  min-height: 31,2px;
-  z-index: 2;
   cursor: pointer;
   user-select: none;
+  padding: 15px 18px;
+  margin-right: 1%;
 }
 
 .buttons {

@@ -17,5 +17,5 @@ export class PermissionService {
     ));
   }
 
-  isAuthenticated = () => this.accountService.getValidToken() != null;
+  isAuthenticated = (): boolean => this.accountService.getValidToken() != null;
 }
