@@ -7,6 +7,7 @@ import { InstructorDetailsCommand } from 'src/app/models/instructor-details-comm
 import { Instructor } from 'src/app/models/instructor.model';
 import { InstructorService } from 'src/app/services/instructor.service';
 import { NotificationService } from 'src/app/services/notification.service';
+import {Permission} from "../../models/enums/permission.enum";
 
 @Component({
   selector: 'app-instructors',
@@ -19,6 +20,7 @@ export class InstructorsComponent extends BaseComponent implements OnInit {
   isSaving: boolean;
   instructorCommand!: InstructorDetailsCommand;
   gender: EnumObject[];
+  permissions = Permission;
   private form!: Form | undefined;
 
   constructor(private instructorService: InstructorService) {

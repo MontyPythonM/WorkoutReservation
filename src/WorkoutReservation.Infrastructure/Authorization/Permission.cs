@@ -39,5 +39,6 @@ public enum Permission
     DeleteUserAccount,
     DeleteOwnAccount,
     
-    OpenAdministrationPage
+    OpenAdministrationPage,
+    CanSeeAdministrativeContent
 }

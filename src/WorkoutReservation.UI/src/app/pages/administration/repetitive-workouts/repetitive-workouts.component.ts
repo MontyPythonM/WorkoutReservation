@@ -4,6 +4,7 @@ import {RepetitiveWorkoutService} from "../../../services/repetitive-workout.ser
 import {NotificationService} from "../../../services/notification.service";
 import {pageUrls} from "../../../../environments/page-urls";
 import {environment} from "../../../../environments/environment";
+import {Permission} from "../../../models/enums/permission.enum";
 
 @Component({
   selector: 'app-repetitive-workouts',
@@ -15,6 +16,7 @@ export class RepetitiveWorkoutsComponent extends BaseComponent {
   isDeletePopupVisible: boolean;
   popupTitle: string;
   popupContent: string;
+  permissions = Permission;
 
   constructor(private repetitiveWorkoutService: RepetitiveWorkoutService) {
     super();

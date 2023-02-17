@@ -13,6 +13,7 @@ import {InstructorService} from "../../services/instructor.service";
 import {Instructor} from "../../models/instructor.model";
 import {WorkoutTypeCommand} from "../../models/workout-types-command.model";
 import {WorkoutTypeTagActive} from "../../models/workout-type-tag-active.model";
+import {Permission} from "../../models/enums/permission.enum";
 
 @Component({
   selector: 'app-workout-types',
@@ -33,6 +34,7 @@ export class WorkoutTypesComponent extends BaseComponent implements OnInit {
   activeAndExistingWorkoutTypeTags: WorkoutTypeTagActive[];
   instructors: Instructor[];
   workoutTypeIdToDelete!: number;
+  permissions = Permission;
   private createPopupForm?: dxForm;
   private updatePopupForm?: dxForm;
 

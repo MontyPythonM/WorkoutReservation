@@ -1,5 +1,7 @@
 <div class="container" *ngIf="workoutTypes">
   <dx-button
+    *ngIf="(hasPermission(permissions.CanSeeAdministrativeContent) | async)!"
+    [disabled]="!(hasPermission(permissions.CreateWorkoutType) | async)!"
     class="add-button"
     icon="plus"
     text="Add workout type"
@@ -40,6 +42,8 @@
       </div>
       <div class="buttons clear-both">
         <dx-button
+          *ngIf="(hasPermission(permissions.CanSeeAdministrativeContent) | async)!"
+          [disabled]="!(hasPermission(permissions.UpdateWorkoutType) | async)!"
           class="accordion-button success-button"
           text="Edit"
           icon="rename"
@@ -47,6 +51,8 @@
           (onClick)="openUpdatePopup(workoutType)">
         </dx-button>
         <dx-button
+          *ngIf="(hasPermission(permissions.CanSeeAdministrativeContent) | async)!"
+          [disabled]="!(hasPermission(permissions.DeleteWorkoutType) | async)!"
           class="accordion-button"
           text="Delete"
           icon="trash"

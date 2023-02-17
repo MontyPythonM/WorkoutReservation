@@ -7,6 +7,7 @@ import {NotificationService} from "../../../services/notification.service";
 import {DATETIME_FORMAT} from "../../../constants/constants";
 import {WorkoutTypeTagCommand} from "../../../models/workout-type-tag-command.model";
 import {Row} from "devextreme/ui/data_grid";
+import {Permission} from "../../../models/enums/permission.enum";
 
 @Component({
   selector: 'app-workout-type-tags',
@@ -23,6 +24,7 @@ export class WorkoutTypeTagsComponent extends BaseComponent implements OnInit {
   isSaving: boolean;
   dateFormat = DATETIME_FORMAT;
   isActiveTypes: { name: string, value: boolean }[];
+  permissions = Permission;
   private addPopupform!: Form | undefined;
   private updatePopupForm!: Form | undefined;
   private workoutTypeTagIdToDelete?: number;
