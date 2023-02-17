@@ -4,7 +4,12 @@ import { BaseComponent } from 'src/app/common/base.component';
 
 @Component({
   selector: 'app-header',
-  templateUrl: './header.component.html',
+  template: `
+    <nav class="nav-menu">
+      <app-logo class="page-logo" routerLink='/'></app-logo>
+      <app-nav-bar class="buttons"></app-nav-bar>
+    </nav>
+  `,
   styleUrls: ['./header.component.css']
 })
 export class HeaderComponent extends BaseComponent {

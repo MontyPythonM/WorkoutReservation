@@ -17,7 +17,9 @@ import {BaseService} from "../../common/base.service";
 })
 export class AccountService extends BaseService {
   private userAccountSource = new BehaviorSubject<UserAccount>({} as UserAccount);
+  private isLoggedSource = new BehaviorSubject<boolean>(false);
   public userAccount$ = this.userAccountSource.asObservable();
+  public isLogged$ = this.isLoggedSource.asObservable();
 
   constructor(protected override http: HttpClient,
               private datePipe: DatePipe,
@@ -40,7 +42,7 @@ export class AccountService extends BaseService {
   logout(): void {
     if (this.localStorageService.get() !== null) {
       this.localStorageService.remove();
-      this.setCurrentUser({} as UserAccount);
+      this.setUserAccountOrDefault();
       this.router.navigateByUrl('/login');
       this.notificationService.show('Successfully logged out', 'success')
     }
@@ -68,11 +70,14 @@ export class AccountService extends BaseService {
         decodedToken.sub,
         decodedToken.name,
         decodedToken.permissions));
+      this.setLoggedIn(true);
     }
     else {
       this.setCurrentUser({} as UserAccount);
+      this.setLoggedIn(false);
     }
   }
 
   private setCurrentUser = (account: UserAccount) => this.userAccountSource.next(account);
+  private setLoggedIn = (loggedIn: boolean) => this.isLoggedSource.next(loggedIn);
 }

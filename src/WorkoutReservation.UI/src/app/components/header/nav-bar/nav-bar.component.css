@@ -1,81 +1,36 @@
-.topnav {
+.nav {
+  display: inline;
+}
+
+.nav-left {
+  /*margin-left: 30h;*/
+}
+
+.nav-right {
   float: right;
 }
 
-.topnav a {
+.nav a {
   float: left;
   color: whitesmoke;
   text-align: center;
-  padding: 7px 15px;
-  margin: 0px 2px;
+  padding: 15px 18px;
+  margin: 2px 2px;
   text-decoration: none;
   font-size: 14px;
   border-radius: 2px;
 }
 
-.topnav a:hover {
+.nav a:hover {
   background-color: rgb(174, 170, 170);
   color: black;
-}
-
-.dropdown {
-  margin-left: 10px;
-  float: left;
-  overflow: hidden;
-  background-color: rgba(75, 72, 72);
-  border-radius: 2px;
-}
-
-.dropdown .dropbtn {
-  font-size: 14px;
-  border: none;
-  outline: none;
-  color:  whitesmoke;
-  padding: 7px 3px 7px 12px;
-  margin: 0;
-  position: relative;
-}
-
-.dropdown-content {
-  display: none;
-  position: absolute;
-  background-color: whitesmoke;
-  min-width: 100px;
-  box-shadow: 0px 8px 10px 0px rgba(0,0,0,0.4);
-  z-index: 3;
-  right: 40px;
-}
-
-.dropdown-content a {
-  float: none;
-  color: black;
-  padding: 12px 16px;
-  text-decoration: none;
-  display: block;
-  text-align: left;
-  min-width: 90px;
-}
-
-.dropdown-content a:hover {
-  background-color: rgb(174, 170, 170);
-}
-
-.dropdown:hover .dropdown-content {
-  display: block;
-}
-
-.account-button {
-  display: inline-flex;
-  cursor: pointer;
-}
-
-.arrow-dropdown-icon {
-  height: 29px;
-  width: 29px;
-  margin-top: 2px;
-  content: url('/assets/icons/icon_arrow_dropdown.svg');
 }
 
 .logout {
   cursor: pointer;
 }
+
+.logged {
+  font-size: 10px;
+}
+
