@@ -26,7 +26,6 @@ export class InstructorDetailsComponent extends BaseComponent implements OnInit 
 
   constructor(private instructorService: InstructorService,
     private route: ActivatedRoute,
-    private notificationService: NotificationService,
     private router: Router) {
     super();
     this.isEditPopupOpened = false;

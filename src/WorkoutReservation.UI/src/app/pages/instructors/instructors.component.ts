@@ -21,8 +21,7 @@ export class InstructorsComponent extends BaseComponent implements OnInit {
   gender: EnumObject[];
   private form!: Form | undefined;
 
-  constructor(private instructorService: InstructorService,
-              private notificationService: NotificationService) {
+  constructor(private instructorService: InstructorService) {
     super();
     this.instructors = new Array<Instructor>();
     this.isPopupOpened = false;

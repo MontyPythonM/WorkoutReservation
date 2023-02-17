@@ -17,7 +17,6 @@ export class LoginComponent extends BaseComponent{
   loginData: LoginForm;
 
   constructor(private accountService: AccountService,
-              private notificationService: NotificationService,
               private router: Router) {
     super();
     this.loggedIn = false;

@@ -11,7 +11,7 @@ export class TokenAuthorizationInterceptor implements HttpInterceptor {
               private permissionService: PermissionService) {}
 
   intercept = (request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> =>
-    this.permissionService.isAuthenticated() ?
+    this.permissionService.hasValidToken() ?
       next.handle(request.clone({setHeaders: {'Authorization': 'Bearer ' + this.accountService.getValidToken()}})) :
       next.handle(request);
 }

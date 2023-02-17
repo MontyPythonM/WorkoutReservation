@@ -37,7 +37,6 @@ export class WorkoutTypesComponent extends BaseComponent implements OnInit {
   private updatePopupForm?: dxForm;
 
   constructor(private workoutTypeService: WorkoutTypeService,
-              private notificationService: NotificationService,
               private workoutTypeTagService: WorkoutTypeTagService,
               private instructorService: InstructorService) {
     super();

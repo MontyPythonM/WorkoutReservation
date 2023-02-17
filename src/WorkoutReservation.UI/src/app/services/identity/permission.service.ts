@@ -26,5 +26,5 @@ export class PermissionService extends BaseService {
     ));
   }
 
-  isAuthenticated = (): boolean => this.accountService.getValidToken() != null;
+  hasValidToken = (): boolean => this.accountService.getValidToken() != null;
 }

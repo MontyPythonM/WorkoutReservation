@@ -16,8 +16,7 @@ export class RepetitiveWorkoutsComponent extends BaseComponent {
   popupTitle: string;
   popupContent: string;
 
-  constructor(private repetitiveWorkoutService: RepetitiveWorkoutService,
-              private notificationService: NotificationService) {
+  constructor(private repetitiveWorkoutService: RepetitiveWorkoutService) {
     super();
     this.isGeneratePopupVisible = false;
     this.isDeletePopupVisible = false;

@@ -27,8 +27,7 @@ export class WorkoutTypeTagsComponent extends BaseComponent implements OnInit {
   private updatePopupForm!: Form | undefined;
   private workoutTypeTagIdToDelete?: number;
 
-  constructor(private workoutTypeTagService: WorkoutTypeTagService,
-              private notificationService: NotificationService) {
+  constructor(private workoutTypeTagService: WorkoutTypeTagService) {
     super();
     this.workoutTypeTags = [];
     this.isAddPopupVisible = false;
