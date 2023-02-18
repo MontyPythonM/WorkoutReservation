@@ -7,7 +7,7 @@ internal sealed class UpdateWorkoutTypeTagCommandValidator : AbstractValidator<U
     public UpdateWorkoutTypeTagCommandValidator()
     {
         RuleFor(x => x.Tag)
-            .MaximumLength(50)
+            .MaximumLength(30)
             .NotEmpty();
     }
 }

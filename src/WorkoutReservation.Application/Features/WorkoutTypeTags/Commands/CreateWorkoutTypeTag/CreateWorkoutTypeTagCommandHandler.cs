@@ -1,4 +1,5 @@
-﻿using MediatR;
+﻿using FluentValidation;
+using MediatR;
 using WorkoutReservation.Application.Contracts;
 using WorkoutReservation.Domain.Entities;
 
@@ -21,6 +22,9 @@ internal sealed class CreateWorkoutTypeTagCommandHandler : IRequestHandler<Creat
     public async Task<int> Handle(CreateWorkoutTypeTagCommand request, CancellationToken token)
     {
         var workoutTypeTag = new WorkoutTypeTag(request.Tag, _currentUserAccessor.GetUserId());
+        
+        var validator = new CreateWorkoutTypeTagCommandValidator();
+        await validator.ValidateAndThrowAsync(request, token);
         
         workoutTypeTag = await _workoutTypeTagRepository.AddAsync(workoutTypeTag, token);
         return workoutTypeTag.Id;

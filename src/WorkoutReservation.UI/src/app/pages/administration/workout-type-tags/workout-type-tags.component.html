@@ -24,11 +24,11 @@
     <dxi-column dataField="createdDate" alignment="center" dataType="date" [format]="dateFormat" [width]="150"></dxi-column>
     <dxi-column type="buttons" caption="Edit tag">
       <dxi-button icon="edit" [onClick]="openEditPopup"
-        [disabled]="!(hasPermission(permissions.CreateWorkoutType) | async)!"></dxi-button>
+        [disabled]="!(hasPermission(permissions.UpdateWorkoutTypeTag) | async)!"></dxi-button>
     </dxi-column>
     <dxi-column type="buttons" caption="Delete tag">
       <dxi-button cssClass="delete-button" icon="trash" [onClick]="openDeletePopup"
-        [disabled]="!(hasPermission(permissions.CreateWorkoutType) | async)!"></dxi-button>
+        [disabled]="!(hasPermission(permissions.DeleteWorkoutTypeTag) | async)!"></dxi-button>
     </dxi-column>
     <dxo-paging
       [pageIndex]="0"
@@ -48,8 +48,8 @@
   <div *dxTemplate="let data of 'content'">
     <dx-form id="form" [(formData)]="workoutTypeTagCommand" (onInitialized)="createPopupFromInitialize($event)">
       <dxi-item dataField="tag" editorType="dxTextBox">
-        <dxi-validation-rule type="required" message="First name is required"></dxi-validation-rule>
-        <dxi-validation-rule type="stringLength" [max]="50" message="Tag must have a maximum of 50 characters"></dxi-validation-rule>
+        <dxi-validation-rule type="required" message="Tag name is required"></dxi-validation-rule>
+        <dxi-validation-rule type="stringLength" [max]="30" message="Tag must have a maximum of 30 characters"></dxi-validation-rule>
       </dxi-item>
     </dx-form>
     <dx-load-panel
@@ -81,8 +81,8 @@
   <div *dxTemplate="let data of 'content'">
     <dx-form [(formData)]="workoutTypeTagCommand" (onInitialized)="updatePopupFormInitialize($event)">
       <dxi-item dataField="tag" editorType="dxTextBox">
-        <dxi-validation-rule type="required" message="First name is required"></dxi-validation-rule>
-        <dxi-validation-rule type="stringLength" [max]="50" message="Tag must have a maximum of 50 characters"></dxi-validation-rule>
+        <dxi-validation-rule type="required" message="Tag name is required"></dxi-validation-rule>
+        <dxi-validation-rule type="stringLength" [max]="30" message="Tag must have a maximum of 30 characters"></dxi-validation-rule>
       </dxi-item>
       <dxi-item dataField="isActive" editorType="dxSelectBox" [editorOptions]="{ dataSource: isActiveTypes, valueExpr: 'value', displayExpr: 'name' }"></dxi-item>
     </dx-form>
