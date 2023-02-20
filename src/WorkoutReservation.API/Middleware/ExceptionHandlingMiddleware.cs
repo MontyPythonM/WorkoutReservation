@@ -30,9 +30,9 @@ public class ExceptionHandlingMiddleware : IMiddleware
             context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
             await context.Response.WriteAsync(ex.Message);
         }
-        catch (UnauthorizedException ex)
+        catch (ConversionException ex)
         {
-            context.Response.StatusCode = (int)HttpStatusCode.Unauthorized;
+            context.Response.StatusCode = (int)HttpStatusCode.BadRequest;
             await context.Response.WriteAsync(ex.Message);
         }
         catch (InvalidCredentialsException ex)

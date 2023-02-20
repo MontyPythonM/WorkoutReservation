@@ -23,7 +23,7 @@ import {Permission} from "../../models/enums/permission.enum";
 export class WorkoutTypesComponent extends BaseComponent implements OnInit {
   workoutTypes?: PagedResult<WorkoutType>;
   workoutTypeCommand?: WorkoutTypeCommand;
-  query: PagedQuery;
+  queryParams: PagedQuery;
   isCreatePopupOpened: boolean;
   isUpdatePopupOpened: boolean;
   isDeletePopupVisible: boolean;
@@ -43,7 +43,7 @@ export class WorkoutTypesComponent extends BaseComponent implements OnInit {
               private instructorService: InstructorService) {
     super();
     this.workoutTypes = new PagedResult<WorkoutType>();
-    this.query = new PagedQuery({
+    this.queryParams = new PagedQuery({
       pageNumber: 1,
       pageSize: 10,
       sortByDescending: false,
@@ -64,7 +64,7 @@ export class WorkoutTypesComponent extends BaseComponent implements OnInit {
   ngOnInit(): void {
     this.loadInstructors();
     this.loadWorkoutTypeTags();
-    this.loadWorkoutTypes(this.query);
+    this.loadWorkoutTypes(this.queryParams);
   }
 
   protected loadWorkoutTypes(queryParams: PagedQuery): void {
@@ -178,13 +178,13 @@ export class WorkoutTypesComponent extends BaseComponent implements OnInit {
   }
 
   pageSizeChanged(e: any) {
-    this.query.pageSize = e;
-    this.loadWorkoutTypes(this.query);
+    this.queryParams.pageSize = e;
+    this.loadWorkoutTypes(this.queryParams);
   }
 
   pageNumberChanged(e: any) {
-    this.query.pageNumber = e;
-    this.loadWorkoutTypes(this.query);
+    this.queryParams.pageNumber = e;
+    this.loadWorkoutTypes(this.queryParams);
   }
 
   private getActiveAndExistingTags = (workoutType: WorkoutType): WorkoutTypeTagActive[] => {

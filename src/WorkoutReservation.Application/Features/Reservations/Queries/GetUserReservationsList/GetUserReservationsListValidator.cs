@@ -5,7 +5,7 @@ namespace WorkoutReservation.Application.Features.Reservations.Queries.GetUserRe
 
 internal sealed class GetUserReservationsListValidator : AbstractValidator<GetUserReservationsListQuery>
 {
-    private readonly int[] _allowedPageSizes = new[] { 10, 25, 50, 100 };
+    private readonly int[] _allowedPageSizes = new[] { 20, 50, 100 };
     private readonly string[] _allowedSortByColumnNames = { nameof(Reservation.ReservationStatus), "WorkoutDate" };
 
     public GetUserReservationsListValidator()

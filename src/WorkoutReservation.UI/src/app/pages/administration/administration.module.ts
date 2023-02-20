@@ -17,13 +17,15 @@ import {ConfirmationPopupModule} from "../../components/confirmation-popup/confi
 import {PagerModule} from "../../components/pager/pager.module";
 import {Permission} from "../../models/enums/permission.enum";
 import {AuthGuardService} from "../../services/identity/auth-guard.service";
+import {UserReservationsComponent} from './user-reservations/user-reservations.component';
 
 @NgModule({
   declarations: [
     AdministrationComponent,
     UsersComponent,
     WorkoutTypeTagsComponent,
-    RepetitiveWorkoutsComponent
+    RepetitiveWorkoutsComponent,
+    UserReservationsComponent
   ],
   imports: [
     CommonModule,
@@ -61,6 +63,10 @@ import {AuthGuardService} from "../../services/identity/auth-guard.service";
           {
             path: 'workout-type-tags',
             component: WorkoutTypeTagsComponent,
+          },
+          {
+            path: 'user-reservations',
+            component: UserReservationsComponent
           }
         ]
       }

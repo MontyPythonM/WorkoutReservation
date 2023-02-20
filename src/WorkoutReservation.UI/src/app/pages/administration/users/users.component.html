@@ -5,14 +5,15 @@
     [dataSource]="users.items"
     [columnAutoWidth]="true"
     [showBorders]="true"
-    [showRowLines]="true">
-
+    [showRowLines]="true"
+    [columnHidingEnabled]="true"
+  >
     <dxi-column dataField="id" alignment="center" dataType="string"></dxi-column>
     <dxi-column dataField="firstName" alignment="center" dataType="string"></dxi-column>
     <dxi-column dataField="lastName" alignment="center" dataType="string"></dxi-column>
     <dxi-column dataField="email" alignment="center" dataType="string"></dxi-column>
-    <dxi-column dataField="gender" alignment="center" dataType="string"></dxi-column>
     <dxi-column dataField="userRoles" alignment="center" dataType="string"></dxi-column>
+    <dxi-column dataField="gender" alignment="center" dataType="string"></dxi-column>
     <dxi-column dataField="accountCreationDate" alignment="center" dataType="date" [format]="dateFormat"></dxi-column>
 
     <dxo-paging [enabled]="false"> </dxo-paging>

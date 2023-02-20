@@ -39,6 +39,7 @@ export class AdministrationComponent extends BaseComponent {
     super();
     this.tabs = [
       { title: "Users registry", url: pageUrls.administration.users, icon: "dx-icon-group" },
+      { title: "User reservations", url: pageUrls.administration.userReservations, icon: "dx-icon-event" },
       { title: "Repetitive workouts", url: pageUrls.administration.repetitiveWorkouts, icon: "dx-icon-tableproperties" },
       { title: "Workout type tags", url: pageUrls.administration.workoutTypeTags, icon: "dx-icon-tags" },
     ];

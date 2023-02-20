@@ -10,6 +10,7 @@ namespace WorkoutReservation.Application.Features.Reservations.Queries.GetUserRe
 
 public record GetUserReservationsListQuery : IRequest<PagedResultDto<UserReservationsListDto>>, IPagedQuery
 {
+    public Guid UserId { get; set; }
     public string SearchPhrase { get; set; }
     public string SortBy { get; set; }
     public bool SortByDescending { get; set; }
@@ -21,15 +22,12 @@ internal sealed class GetUserReservationsListHandler : IRequestHandler<GetUserRe
     PagedResultDto<UserReservationsListDto>>
 {
     private readonly IReservationRepository _reservationRepository;
-    private readonly ICurrentUserAccessor _currentUserAccessor;
     private readonly IMapper _mapper;
 
     public GetUserReservationsListHandler(IReservationRepository reservationRepository, 
-        ICurrentUserAccessor currentUserAccessor,
         IMapper mapper)
     {
         _reservationRepository = reservationRepository;
-        _currentUserAccessor = currentUserAccessor;
         _mapper = mapper;
     }
 
@@ -40,7 +38,7 @@ internal sealed class GetUserReservationsListHandler : IRequestHandler<GetUserRe
         await validator.ValidateAndThrowAsync(request, token);
         
         var reservationsQuery = _reservationRepository
-            .GetUserReservationsByGuidQuery(_currentUserAccessor.GetUserId());
+            .GetUserReservationsByGuidQuery(request.UserId);
 
         var query = reservationsQuery
             .Where(x => request.SearchPhrase == null ||

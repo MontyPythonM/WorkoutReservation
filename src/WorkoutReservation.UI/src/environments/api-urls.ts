@@ -9,7 +9,13 @@ export const apiUrl = {
     generateUpcomingWeek: "repetitive-workout/generate-upcoming-week",
     deleteAll: "repetitive-workout/delete-all"
   },
-  reservation: 'reservation/',
+  reservation: {
+    getOwn: "reservation/own",
+    getSomeone: "reservation/selected-user",
+    create: "reservation",
+    updateReservationStatus: "reservation/edit-reservation-status",
+    cancel: "reservation/cancel-reservation"
+  },
   user: {
     users: 'user/users/',
     setUserRole: 'user/set-user-role/',

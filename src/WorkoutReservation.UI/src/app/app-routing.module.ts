@@ -11,6 +11,7 @@ import {WorkoutTypesComponent} from './pages/workout-types/workout-types.compone
 import {WorkoutDetailsComponent} from './pages/workouts/workout-details/workout-details.component';
 import {WorkoutsComponent} from './pages/workouts/workouts.component';
 import {AuthGuardService} from "./services/identity/auth-guard.service";
+import {ReservationDetailsComponent} from "./pages/reservations/reservation-details/reservation-details.component";
 
 const routes: Routes = [
     { path: 'home', component: HomeComponent },
@@ -21,6 +22,7 @@ const routes: Routes = [
     { path: 'workout-types', component: WorkoutTypesComponent },
     { path: 'register', component: RegisterComponent },
     { path: 'reservations', component: ReservationsComponent, canActivate: [AuthGuardService] },
+    { path: 'reservations/:id', component: ReservationDetailsComponent, canActivate: [AuthGuardService] },
     { path: 'login', component: LoginComponent },
     {
       path: 'administration',

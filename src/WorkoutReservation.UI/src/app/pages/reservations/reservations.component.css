@@ -1,0 +1,14 @@
+.container {
+  padding: 0 20% 0 20%;
+  justify-content: center;
+  display: grid;
+}
+
+.record-container {
+  display: flex;
+}
+
+.record {
+  display: inline-block;
+  margin: 0 auto;
+}
