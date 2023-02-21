@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using MediatR;
-using WorkoutReservation.Application.Common.Exceptions;
 using WorkoutReservation.Application.Contracts;
 
 namespace WorkoutReservation.Application.Features.RepetitiveWorkouts.Queries.GetRepetitiveWorkoutList;
@@ -24,10 +23,6 @@ internal sealed class GetRepetitiveWorkoutListQueryHandler : IRequestHandler<Get
         CancellationToken token)
     {
         var repetitiveWorkouts = await _repetitiveWorkoutRepository.GetAllAsync(token);
-
-        if (!repetitiveWorkouts.Any())
-            throw new NotFoundException("Repetitive workouts not found.");
-
         return _mapper.Map<List<RepetitiveWorkoutListDto>>(repetitiveWorkouts);
     }
 }

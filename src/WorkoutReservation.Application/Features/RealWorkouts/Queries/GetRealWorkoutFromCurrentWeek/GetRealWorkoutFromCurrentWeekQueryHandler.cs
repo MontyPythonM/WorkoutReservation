@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using MediatR;
-using WorkoutReservation.Application.Common.Exceptions;
 using WorkoutReservation.Application.Contracts;
 using WorkoutReservation.Domain.Extensions;
 
@@ -29,11 +28,7 @@ internal sealed class GetRealWorkoutFromCurrentWeekQueryHandler : IRequestHandle
         var realWorkouts = await _realWorkoutRepository
             .GetAllFromDateRangeAsync(firstDayOfCurrentWeek, lastDayOfCurrentWeek, true, token,
                 incl => incl.WorkoutType, incl => incl.Instructor);
-
-        if (!realWorkouts.Any())
-            throw new NotFoundException($"Real workouts from current week not found. " +
-                                        $"[Date from: {firstDayOfCurrentWeek} to {lastDayOfCurrentWeek}]");
-
+        
         return _mapper.Map<List<RealWorkoutFromCurrentWeekDto>>(realWorkouts);
     }
 }

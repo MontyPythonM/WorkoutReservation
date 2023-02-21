@@ -18,11 +18,11 @@
 }
 
 .appointment-background {
-  background-image: linear-gradient(to right, rgb(70,70,70), rgb(100,100,100));
+  background-image: linear-gradient(to right, rgba(35, 110, 35), rgb(20, 90, 20));
 }
 
 .appointment-background:hover {
-  background-image: linear-gradient(to right, rgba(25, 100, 25), rgb(20, 90, 20));
+  background-image: linear-gradient(to right, rgba(140, 60, 40, 0.4), rgb(140, 60, 40));
 }
 
 .appointment-title {

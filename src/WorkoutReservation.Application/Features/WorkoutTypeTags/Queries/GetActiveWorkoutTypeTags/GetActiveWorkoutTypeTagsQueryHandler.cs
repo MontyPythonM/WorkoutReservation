@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using MediatR;
-using WorkoutReservation.Application.Common.Exceptions;
 using WorkoutReservation.Application.Contracts;
 
 namespace WorkoutReservation.Application.Features.WorkoutTypeTags.Queries.GetActiveWorkoutTypeTags;
@@ -23,9 +22,6 @@ internal sealed class GetActiveWorkoutTypeTagsQueryHandler : IRequestHandler<Get
         var activeWorkoutTypeTags = await _workoutTypeTagRepository
             .GetAllAsync(tag => tag.IsActive || tag.WorkoutTypes.Count > 0, true, token);
         
-        if (!activeWorkoutTypeTags.Any())
-            throw new NotFoundException("Workout type tags not found.");
-
         return _mapper.Map<List<ActiveWorkoutTypeTagsDto>>(activeWorkoutTypeTags);
     }
 }

@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using MediatR;
-using WorkoutReservation.Application.Common.Exceptions;
 using WorkoutReservation.Application.Contracts;
 
 namespace WorkoutReservation.Application.Features.Instructors.Queries.GetInstructorList;
@@ -24,11 +23,6 @@ internal sealed class GetInstructorListQueryHandler : IRequestHandler<GetInstruc
         CancellationToken token)
     {
         var instructors = await _instructorRepository.GetAllAsync(true, token);
-
-        if(!instructors.Any())
-            throw new NotFoundException($"Instructors not found.");
-
         return _mapper.Map<List<InstructorListQueryDto>>(instructors);
     }
-
 }

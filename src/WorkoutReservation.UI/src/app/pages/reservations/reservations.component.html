@@ -1,1 +1,76 @@
-<p>reservations works!</p>
+<div class="container" *ngIf="isReservationsExist">
+  <dx-data-grid
+    keyExpr="id"
+    [dataSource]="reservations.items"
+    [columnAutoWidth]="true"
+    [showBorders]="true"
+    [showRowLines]="false"
+    [showColumnLines]="false"
+    [hoverStateEnabled]="true"
+    (onInitialized)="onDataGridInit($event)"
+    (onRowClick)="navigateToReservationDetails($event)"
+  >
+    <dxi-column dataField="date" caption="Workout date" [hidingPriority]="2" alignment="center" dataType="date" [format]="dateFormat"></dxi-column>
+    <dxi-column dataField="workoutTypeName" caption="Workout" [hidingPriority]="3" alignment="center" dataType="string"></dxi-column>
+    <dxi-column dataField="instructorFullName" caption="Instructor" [hidingPriority]="1" alignment="center" dataType="string"></dxi-column>
+    <dxi-column dataField="reservationStatus" caption="Status" [hidingPriority]="1" alignment="center" dataType="string"></dxi-column>
+
+    <dxo-paging [enabled]="false"> </dxo-paging>
+    <dxo-search-panel [visible]="true" [width]="300" placeholder="Search..."></dxo-search-panel>
+
+    <dxo-toolbar>
+      <dxi-item name="addRowButton"></dxi-item>
+      <dxi-item
+        name="searchPanel"
+        locateInMenu="auto"
+        location="before">
+      </dxi-item>
+      <dxi-item name="addRowButton"></dxi-item>
+      <dxi-item location="before">
+        <div *dxTemplate>
+          <dx-button icon="info" text="Tooltips" (onClick)="openInfoPopup()"></dx-button>
+        </div>
+      </dxi-item>
+    </dxo-toolbar>
+  </dx-data-grid>
+
+  <app-pager
+    [allowedPageSize]="[20, 50, 100]"
+    [totalPages]="reservations.totalPages"
+    (pageSizeChanged)="pageSizeChanged($event)"
+    (pageNumberChanged)="pageNumberChanged($event)">
+  </app-pager>
+</div>
+
+<div class="container" *ngIf="!isReservationsExist">
+  <h2>You don't have any reservations :)</h2>
+</div>
+
+<dx-popup
+  [(visible)]="isInfoPopupOpen"
+  [showTitle]="true"
+  title="Information about reservations page"
+  [dragEnabled]="false"
+  [showCloseButton]="false"
+  [width]="650"
+  [height]="250">
+  <div *dxTemplate="let data of 'content'">
+    <p>
+      <b>Tooltip</b>: Click on the selected row to go to the details page
+    </p>
+    <p>
+      <b>Tooltip</b>: Click on column header to filter data by selected property (ascending or descending)
+    </p>
+    <p>
+      <b>Tooltip</b>: If you want clear apply filter, right mouse click on column header
+    </p>
+  </div>
+  <dxi-toolbar-item location="center" toolbar="bottom">
+    <dx-button
+      class="popup-button"
+      text="Back"
+      type="normal"
+      (onClick)="closeInfoPopup()">
+    </dx-button>
+  </dxi-toolbar-item>
+</dx-popup>

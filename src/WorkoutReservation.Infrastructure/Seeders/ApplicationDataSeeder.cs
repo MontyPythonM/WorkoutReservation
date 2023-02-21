@@ -44,12 +44,10 @@ public class ApplicationDataSeeder
             _dbContext.AddRangeAsync(WorkoutTypesData.Create(), token));
         await _dbContext.SaveChangesAsync(token);
 
-        var seededInstructors = await _instructorRepository.GetAllAsync(true, token);
-        var seededWorkoutTypes = await _workoutTypeRepository.GetAllAsync(true, token);
-
-        await Task.WhenAll(
-            _dbContext.AddRangeAsync(RealWorkoutsData.Create(), token),
-            _dbContext.AddRangeAsync(RepetitiveWorkoutsData.Create(seededInstructors, seededWorkoutTypes), token));
+        var seededInstructors = await _instructorRepository.GetAllAsync(false, token);
+        var seededWorkoutTypes = await _workoutTypeRepository.GetAllAsync(false, token);
+        await _dbContext.AddRangeAsync(RealWorkoutsData.Create(), token);
+        await _dbContext.AddRangeAsync(RepetitiveWorkoutsData.Create(seededInstructors, seededWorkoutTypes), token);
         await _dbContext.SaveChangesAsync(token);
         
         await _dbContext.WorkoutTypeInstructors.AddRangeAsync

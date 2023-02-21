@@ -33,7 +33,7 @@ internal sealed class AddReservationCommandHandler : IRequestHandler<AddReservat
             throw new NotFoundException($"Real workout with Id: {request.RealWorkoutId} not found.");
         
         var isUserAlreadyReservedWorkout = await _reservationRepository
-            .CheckIsUserReservedAsync(realWorkout, user, token);
+            .CheckIsReservedAsync(realWorkout, user, token);
         var validator = new AddReservationCommandValidator(realWorkout, user.Id, isUserAlreadyReservedWorkout);
         await validator.ValidateAndThrowAsync(request, token);
 

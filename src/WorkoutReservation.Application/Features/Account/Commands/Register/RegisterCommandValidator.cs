@@ -25,6 +25,7 @@ internal sealed class RegisterCommandValidator : AbstractValidator<RegisterComma
 
         RuleFor(x => x.ConfirmPassword)
             .Equal(e => e.Password)
+            .MaximumLength(500)
             .WithMessage("'ConfirmPassword' must be equal 'Password'.");
 
         RuleFor(x => x.FirstName).MaximumLength(50); 

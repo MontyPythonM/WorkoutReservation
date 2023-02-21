@@ -11,6 +11,11 @@
           [pattern]="namePattern"
           message="Do not use digits in the first name">
         </dxi-validation-rule>
+        <dxi-validation-rule
+          type="stringLength"
+          [max]="50"
+          message="The first name can be up to 50 characters long">
+        </dxi-validation-rule>
       </dxi-item>
 
       <dxi-item dataField="lastName">
@@ -22,6 +27,11 @@
           type="pattern"
           [pattern]="namePattern"
           message="Do not use digits in the last name">
+        </dxi-validation-rule>
+        <dxi-validation-rule
+          type="stringLength"
+          [max]="50"
+          message="The last name can be up to 50 characters long">
         </dxi-validation-rule>
       </dxi-item>
 
