@@ -5,13 +5,11 @@ namespace WorkoutReservation.Application.Contracts;
 
 public interface IReservationRepository
 {
-    public Task<List<Reservation>> GetUserReservationsByGuidAsync(Guid userId, CancellationToken token);
     public Task<Reservation> AddReservationAsync(Reservation reservation, CancellationToken token);
-    public Task<bool> CheckIsUserReservedAsync(RealWorkout realWorkout, ApplicationUser currentUser, CancellationToken token);
-    public Task<Reservation> GetReservationByIdAsync(int reservationId, CancellationToken token);
-    public Task<Reservation> GetByIdAsync(int reservationId, bool asNoTracking, CancellationToken token);
+    public Task<bool> CheckIsReservedAsync(RealWorkout realWorkout, ApplicationUser user, CancellationToken token);
     public Task<Reservation> GetByIdAsync(int reservationId, bool asNoTracking, CancellationToken token,
         params Expression<Func<Reservation, object>>[] includes);
     public Task UpdateAsync(Reservation reservation, CancellationToken token);
-    public IQueryable<Reservation> GetUserReservationsByGuidQuery(Guid userId);
+    public IQueryable<Reservation> GetUserReservationsQuery(Guid userId);
+    public Task<Reservation> GetDetailsByIdAsync(int reservationId, Guid userId, bool asNoTracking, CancellationToken token);
 }

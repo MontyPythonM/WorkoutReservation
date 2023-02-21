@@ -19,7 +19,7 @@ public class UserController : ApiControllerBase
         return Ok(await Mediator.Send(query, token));
     }
 
-    [HttpPut("set-user-role")]
+    [HttpPatch("set-user-role")]
     [HasPermission(Permission.SetUserRole)]
     [SwaggerOperation(Summary = "Assigns a application role to a selected person")]
     public async Task<IActionResult> SetUserRole([FromBody] SetUserRoleCommand command, CancellationToken token)

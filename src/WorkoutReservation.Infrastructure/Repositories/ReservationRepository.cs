@@ -17,18 +17,7 @@ public class ReservationRepository : IReservationRepository
         _dbContext = dbContext;
         _repository = repository;
     }
-
-    public async Task<List<Reservation>> GetUserReservationsByGuidAsync(Guid userId, CancellationToken token)
-    {
-        return await _dbContext.Reservations
-            .AsNoTracking()
-            .Include(x => x.RealWorkout)
-            .Where(x => x.UserId == userId)
-            .OrderBy(x => x.RealWorkout.Date)
-                .ThenBy(x => x.RealWorkout.StartTime)
-            .ToListAsync(token);
-    }
-
+    
     public async Task<Reservation> AddReservationAsync(Reservation reservation, CancellationToken token)
     {
         await _dbContext.AddAsync(reservation, token);
@@ -37,25 +26,17 @@ public class ReservationRepository : IReservationRepository
         return reservation;
     }
 
-    public async Task<bool> CheckIsUserReservedAsync(RealWorkout realWorkout, ApplicationUser currentUser, CancellationToken token)
+    public async Task<bool> CheckIsReservedAsync(RealWorkout realWorkout, ApplicationUser user, CancellationToken token)
     {
         var isUserAlreadyReserved = await _dbContext.Reservations
             .Include(x => x.User)
             .Include(x => x.RealWorkout)
             .Where(x => x.RealWorkoutId == realWorkout.Id)
-            .FirstOrDefaultAsync(x => x.UserId == currentUser.Id, token);
+            .FirstOrDefaultAsync(x => x.UserId == user.Id, token);
       
         return isUserAlreadyReserved is not null;
     }
 
-    public async Task<Reservation> GetByIdAsync(int reservationId, bool asNoTracking, CancellationToken token)
-    {
-        var query = _dbContext.Reservations.AsQueryable();
-        query = _repository.ApplyAsNoTracking(asNoTracking, query);
-            
-        return await query.FirstOrDefaultAsync(x => x.Id == reservationId, token);
-    }
-    
     public async Task<Reservation> GetByIdAsync(int reservationId, bool asNoTracking, CancellationToken token, params Expression<Func<Reservation, object>>[] includes)
     {
         var query = _dbContext.Reservations.AsQueryable();
@@ -64,15 +45,6 @@ public class ReservationRepository : IReservationRepository
         
         return await query.FirstOrDefaultAsync(x => x.Id == reservationId, token);
     }
-    
-    public async Task<Reservation> GetReservationByIdAsync(int reservationId, CancellationToken token)
-    {
-        return await _dbContext.Reservations
-            .AsNoTracking()
-            .Include(x => x.RealWorkout)
-            .Include(x => x.User)
-            .FirstOrDefaultAsync(x => x.Id == reservationId, token);
-    }
 
     public async Task UpdateAsync(Reservation reservation, CancellationToken token)
     {
@@ -80,17 +52,26 @@ public class ReservationRepository : IReservationRepository
         await _dbContext.SaveChangesAsync(token);
     }
 
-    public IQueryable<Reservation> GetUserReservationsByGuidQuery(Guid userId)
+    public IQueryable<Reservation> GetUserReservationsQuery(Guid userId)
     { 
         return _dbContext.Reservations
             .AsNoTracking()
-            .Include(x => x.RealWorkout)
-                .ThenInclude(x => x.Instructor)
-            .Include(x => x.RealWorkout)
-                .ThenInclude(x => x.WorkoutType)
+            .Include(x => x.RealWorkout).ThenInclude(x => x.Instructor)
+            .Include(x => x.RealWorkout).ThenInclude(x => x.WorkoutType)
             .Where(x => x.UserId == userId)
-            .OrderBy(x => x.RealWorkout.Date)
-                .ThenBy(x => x.RealWorkout.StartTime)
+            .OrderBy(x => x.RealWorkout.Date).ThenBy(x => x.RealWorkout.StartTime)
             .AsQueryable();          
+    }
+    
+    public async Task<Reservation> GetDetailsByIdAsync(int reservationId, Guid userId, bool asNoTracking, CancellationToken token)
+    {
+        var query = _dbContext.Reservations
+            .Include(r => r.RealWorkout).ThenInclude(w => w.Instructor)
+            .Include(r => r.RealWorkout).ThenInclude(w => w.WorkoutType)
+            .AsQueryable();
+        
+        query = _repository.ApplyAsNoTracking(asNoTracking, query);
+        
+        return await query.FirstOrDefaultAsync(r => r.Id == reservationId && r.UserId == userId, token);
     }
 }

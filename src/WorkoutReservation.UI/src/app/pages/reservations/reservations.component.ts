@@ -21,6 +21,7 @@ export class ReservationsComponent extends BaseComponent implements OnInit {
   reservationStatus: EnumObject[];
   dateFormat = DATE_FORMAT;
   isInfoPopupOpen: boolean;
+  isReservationsExist: boolean;
   private dxDataGrid?: dxDataGrid;
 
   constructor(private reservationService: ReservationService, private router: Router) {
@@ -35,6 +36,7 @@ export class ReservationsComponent extends BaseComponent implements OnInit {
     });
     this.reservationStatus = enumToObjects(ReservationStatus);
     this.isInfoPopupOpen = false;
+    this.isReservationsExist = true;
    }
 
   ngOnInit(): void {
@@ -43,7 +45,12 @@ export class ReservationsComponent extends BaseComponent implements OnInit {
 
   protected loadReservations(queryParams: PagedQuery): void {
     this.subscribe(this.reservationService.getOwnReservations(queryParams), {
-      next: (response: PagedResult<Reservation>) => this.reservations = response
+      next: (response: PagedResult<Reservation>) => {
+        this.reservations = response;
+        if (response.totalItemsCount === 0) {
+          this.isReservationsExist = false;
+        }
+      }
     });
   }
 

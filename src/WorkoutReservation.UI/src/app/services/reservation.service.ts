@@ -5,6 +5,7 @@ import {map, Observable} from "rxjs";
 import {PagedResult} from "../models/paged-result.model";
 import {apiUrl} from "../../environments/api-urls";
 import {Reservation} from "../models/reservation.model";
+import {ReservationStatus} from "../models/enums/reservation-status.enum";
 
 @Injectable({
   providedIn: 'root'
@@ -33,5 +34,25 @@ export class ReservationService extends BaseService {
         return response;
       })
     );
+  }
+
+  getOwnReservationDetails(reservationId: number): Observable<Reservation> {
+    return super.get<Reservation>(apiUrl.reservation.getOwnDetails, { reservationId });
+  }
+
+  getSomeoneReservationDetails(reservationId: number, userId: string): Observable<Reservation> {
+    return super.get<Reservation>(apiUrl.reservation.getSomeoneDetails, { reservationId, userId });
+  }
+
+  addReservation(reservationId: number): Observable<void> {
+    return super.post<void>(apiUrl.reservation.create, { reservationId });
+  }
+
+  cancelReservation(reservationId: number) {
+    return super.patch(apiUrl.reservation.cancel, { reservationId });
+  }
+
+  editReservationStatus(reservationId: number, status: ReservationStatus) {
+    return super.patch(apiUrl.reservation.updateReservationStatus, { reservationId, status });
   }
 }

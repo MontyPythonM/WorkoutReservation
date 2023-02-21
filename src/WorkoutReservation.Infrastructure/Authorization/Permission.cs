@@ -40,5 +40,8 @@ public enum Permission
     DeleteOwnAccount,
     
     OpenAdministrationPage,
-    CanSeeAdministrativeContent
+    CanSeeAdministrativeContent,
+    
+    GetOwnReservationDetails,
+    GetSomeoneReservationDetails,
 }
