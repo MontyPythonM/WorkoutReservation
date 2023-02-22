@@ -20,8 +20,7 @@ public class RealWorkoutController : ApiControllerBase
     [SwaggerOperation(Summary = "Returns a list of workouts for current week")]
     public async Task<IActionResult> GetRealWorkoutsFromCurrentWeek(CancellationToken token)
     {
-        var realWorkouts = await Mediator.Send(new GetRealWorkoutFromCurrentWeekQuery(), token);
-        return Ok(realWorkouts);
+        return await SendAsync(new GetRealWorkoutFromCurrentWeekQuery(), token);
     }
 
     [HttpGet("upcoming-week")]
@@ -29,8 +28,7 @@ public class RealWorkoutController : ApiControllerBase
     [SwaggerOperation(Summary = "Returns a list of workouts for upcoming week")]
     public async Task<IActionResult> GetRealWorkoutsFromUpcomingWeek(CancellationToken token)
     {
-        var realWorkouts = await Mediator.Send(new GetRealWorkoutFromUpcomingWeekQuery(), token);
-        return Ok(realWorkouts);
+        return await SendAsync(new GetRealWorkoutFromUpcomingWeekQuery(), token);
     }
     
     [HttpGet("{realWorkoutId}")]
@@ -38,8 +36,7 @@ public class RealWorkoutController : ApiControllerBase
     [SwaggerOperation(Summary = "Returns selected workout")]
     public async Task<IActionResult> GetRealWorkoutDetails([FromRoute] int realWorkoutId, CancellationToken token)
     {
-        var realWorkout = await Mediator.Send(new GetRealWorkoutDetailQuery(realWorkoutId), token);
-        return Ok(realWorkout);
+        return await SendAsync(new GetRealWorkoutDetailQuery(realWorkoutId), token);
     }
 
     [HttpPost]   
@@ -47,8 +44,7 @@ public class RealWorkoutController : ApiControllerBase
     [SwaggerOperation(Summary = "Create new workout")]
     public async Task<IActionResult> CreateRealWorkout([FromBody] CreateRealWorkoutCommand command, CancellationToken token)
     {
-        var realWorkoutId = await Mediator.Send(command, token);
-        return Created($"/api/real-workout/{realWorkoutId}", null);
+        return await SendAsync(command, token);
     }
 
     [HttpDelete("{realWorkoutId}")]
@@ -56,8 +52,7 @@ public class RealWorkoutController : ApiControllerBase
     [SwaggerOperation(Summary = "Delete selected workout")]
     public async Task<IActionResult> DeleteRealWorkout([FromRoute] int realWorkoutId, CancellationToken token)
     {
-        await Mediator.Send(new DeleteRealWorkoutCommand(realWorkoutId), token);
-        return NoContent();
+        return await SendAsync(new DeleteRealWorkoutCommand(realWorkoutId), token);
     }
 
     [HttpPut]
@@ -65,7 +60,6 @@ public class RealWorkoutController : ApiControllerBase
     [SwaggerOperation(Summary = "Update selected workout")]
     public async Task<IActionResult> UpdateRealWorkout([FromBody] UpdateRealWorkoutCommand command, CancellationToken token)
     {
-        await Mediator.Send(command, token);
-        return Ok();
+        return await SendAsync(command, token);
     }
 }

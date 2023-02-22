@@ -18,7 +18,7 @@ public class WorkoutTypeController : ApiControllerBase
     [SwaggerOperation(Summary = "Returns paged list of workout types")]
     public async Task<IActionResult> GetAllWorkoutTypes([FromQuery] GetWorkoutTypesListQuery query, CancellationToken token)
     {
-        return Ok(await Mediator.Send(query, token));
+        return await SendAsync(query, token);
     }
     
     [HttpPost]
@@ -26,8 +26,7 @@ public class WorkoutTypeController : ApiControllerBase
     [SwaggerOperation(Summary = "Create new workout type")]
     public async Task<IActionResult> CreateWorkoutType([FromBody] CreateWorkoutTypeCommand command, CancellationToken token)
     {
-        var workoutTypeId = await Mediator.Send(command, token);
-        return Created($"/api/workout-type/{workoutTypeId}", null);
+        return await SendAsync(command, token);
     }
 
     [HttpDelete("{workoutTypeId}")]
@@ -35,8 +34,7 @@ public class WorkoutTypeController : ApiControllerBase
     [SwaggerOperation(Summary = "Delete selected workout type")]
     public async Task<IActionResult> DeleteWorkoutType([FromRoute] int workoutTypeId, CancellationToken token)
     {
-        await Mediator.Send(new DeleteWorkoutTypeCommand(workoutTypeId), token);
-        return NoContent();
+        return await SendAsync(new DeleteWorkoutTypeCommand(workoutTypeId), token);
     }
 
     [HttpPut]
@@ -44,7 +42,6 @@ public class WorkoutTypeController : ApiControllerBase
     [SwaggerOperation(Summary = "Update selected workout type")]
     public async Task<IActionResult> UpdateWorkoutType([FromBody] UpdateWorkoutTypeCommand command, CancellationToken token)
     {
-        await Mediator.Send(command, token);
-        return Ok();
+        return await SendAsync(command, token);
     }
 }

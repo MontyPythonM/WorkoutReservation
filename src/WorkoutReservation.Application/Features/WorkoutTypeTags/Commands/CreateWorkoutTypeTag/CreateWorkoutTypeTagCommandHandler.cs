@@ -5,9 +5,9 @@ using WorkoutReservation.Domain.Entities;
 
 namespace WorkoutReservation.Application.Features.WorkoutTypeTags.Commands.CreateWorkoutTypeTag;
 
-public record CreateWorkoutTypeTagCommand(string Tag) : IRequest<int>;
+public record CreateWorkoutTypeTagCommand(string Tag) : IRequest;
 
-internal sealed class CreateWorkoutTypeTagCommandHandler : IRequestHandler<CreateWorkoutTypeTagCommand, int>
+internal sealed class CreateWorkoutTypeTagCommandHandler : IRequestHandler<CreateWorkoutTypeTagCommand>
 {
     private readonly IWorkoutTypeTagRepository _workoutTypeTagRepository;
     private readonly ICurrentUserAccessor _currentUserAccessor;
@@ -19,14 +19,14 @@ internal sealed class CreateWorkoutTypeTagCommandHandler : IRequestHandler<Creat
         _currentUserAccessor = currentUserAccessor;
     }
 
-    public async Task<int> Handle(CreateWorkoutTypeTagCommand request, CancellationToken token)
+    public async Task<Unit> Handle(CreateWorkoutTypeTagCommand request, CancellationToken token)
     {
         var workoutTypeTag = new WorkoutTypeTag(request.Tag, _currentUserAccessor.GetUserId());
         
         var validator = new CreateWorkoutTypeTagCommandValidator();
         await validator.ValidateAndThrowAsync(request, token);
         
-        workoutTypeTag = await _workoutTypeTagRepository.AddAsync(workoutTypeTag, token);
-        return workoutTypeTag.Id;
+        await _workoutTypeTagRepository.AddAsync(workoutTypeTag, token);
+        return Unit.Value;
     }
 }

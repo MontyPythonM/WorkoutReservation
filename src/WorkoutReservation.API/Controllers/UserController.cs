@@ -16,7 +16,7 @@ public class UserController : ApiControllerBase
     [SwaggerOperation(Summary = "Returns paged list of application users")]
     public async Task<IActionResult> GetAllUsers([FromQuery] GetUsersListQuery query, CancellationToken token)
     {
-        return Ok(await Mediator.Send(query, token));
+        return await SendAsync(query, token);
     }
 
     [HttpPatch("set-user-role")]
@@ -24,7 +24,7 @@ public class UserController : ApiControllerBase
     [SwaggerOperation(Summary = "Assigns a application role to a selected person")]
     public async Task<IActionResult> SetUserRole([FromBody] SetUserRoleCommand command, CancellationToken token)
     {
-        return Ok(await Mediator.Send(command, token));
+        return await SendAsync(command, token);
     }
 
     [HttpDelete("delete-user/{userGuid}")]
@@ -32,7 +32,6 @@ public class UserController : ApiControllerBase
     [SwaggerOperation(Summary = "Delete the selected application user account")]
     public async Task<IActionResult> DeleteUserAccount([FromRoute] Guid userGuid, CancellationToken token)
     {
-        await Mediator.Send(new DeleteUserCommand(userGuid), token);
-        return NoContent();
+        return await SendAsync(new DeleteUserCommand(userGuid), token);
     }
 }

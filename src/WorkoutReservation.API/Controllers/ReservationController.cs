@@ -27,7 +27,7 @@ public class ReservationController : ApiControllerBase
     public async Task<IActionResult> GetOwnReservationDetails([FromQuery] GetReservationDetailsQuery query, CancellationToken token)
     {
         query.UserId = _currentUserAccessor.GetUserId();
-        return Ok(await Mediator.Send(query, token));
+        return await SendAsync(query, token);
     }
     
     [HttpGet("selected-user-details")]
@@ -35,7 +35,7 @@ public class ReservationController : ApiControllerBase
     [SwaggerOperation(Summary = "Returns selected user reservation details")]
     public async Task<IActionResult> GetSomeoneReservationDetails([FromQuery] GetReservationDetailsQuery query, CancellationToken token)
     {
-        return Ok(await Mediator.Send(query, token));
+         return await SendAsync(query, token);
     }
     
     [HttpGet("own")]
@@ -44,7 +44,7 @@ public class ReservationController : ApiControllerBase
     public async Task<IActionResult> GetOwnReservation([FromQuery] GetUserReservationsListQuery query, CancellationToken token)
     {
         query.UserId = _currentUserAccessor.GetUserId();
-        return Ok(await Mediator.Send(query, token));
+        return await SendAsync(query, token);
     }
 
     [HttpGet("selected-user")]
@@ -52,7 +52,7 @@ public class ReservationController : ApiControllerBase
     [SwaggerOperation(Summary = "Returns paged list of selected user reservations")]
     public async Task<IActionResult> GetSomeoneReservations([FromQuery] GetUserReservationsListQuery query, CancellationToken token)
     {
-        return Ok(await Mediator.Send(query, token));
+        return await SendAsync(query, token);
     }
     
     [HttpPost]
@@ -60,8 +60,7 @@ public class ReservationController : ApiControllerBase
     [SwaggerOperation(Summary = "Creates a user reservation for the selected workout")]
     public async Task<IActionResult> AddReservation([FromBody] AddReservationCommand command, CancellationToken token)
     {
-        var reservationId = await Mediator.Send(command, token);
-        return Created($"/api/reservation/{reservationId}", null);
+        return await SendAsync(command, token);
     }
 
     [HttpPatch("edit-reservation-status")]
@@ -69,7 +68,7 @@ public class ReservationController : ApiControllerBase
     [SwaggerOperation(Summary = "Change the status of a selected reservation")]
     public async Task<IActionResult> EditUserReservationStatus([FromBody] EditReservationStatusCommand command, CancellationToken token)
     {
-        return Ok(await Mediator.Send(command, token));
+        return await SendAsync(command, token);
     }
 
     [HttpPatch("cancel-reservation")]
@@ -77,7 +76,7 @@ public class ReservationController : ApiControllerBase
     [SwaggerOperation(Summary = "Cancel a selected reservation")]
     public async Task<IActionResult> CancelReservation([FromBody] CancelReservationCommand command, CancellationToken token)
     {
-        return Ok(await Mediator.Send(command, token));
+        return await SendAsync(command, token);
     }
 }
 
