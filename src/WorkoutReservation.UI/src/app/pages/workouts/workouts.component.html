@@ -6,6 +6,7 @@
   appointmentTooltipTemplate="workout-details-template"
   [showAllDayPanel]="false"
   (onAppointmentFormOpening)="onAppointmentFormOpening($event)"
+  (onInitialized)="schedulerInitialize($event)"
   >
   <dxi-view
     type="week"
@@ -23,7 +24,6 @@
     [allowResourceDeleting]="false"
   ></dxo-editing>
 
-
   <dxi-resource fieldExpr="id" [dataSource]="workouts"></dxi-resource>
 
   <div class="appointment-background" *dxTemplate="let workout of 'workout-template'">
@@ -36,7 +36,7 @@
         {{ workout.targetedAppointmentData.instructorNameShort }}
       </div>
       <div class="appointment">Participants:
-        {{ workout.targetedAppointmentData.currentParticipantNumber }}/{{ workout.targetedAppointmentData.maxParticipantNumber }}
+        {{ workout.targetedAppointmentData.currentParticipantNumber }} / {{ workout.targetedAppointmentData.maxParticipantNumber }}
       </div>
     </div>
   </div>
@@ -45,7 +45,12 @@
     <div class="tooltip-container">
       <div>
         <p class="tooltip-title">{{ workout.targetedAppointmentData.workoutTypeName }}</p>
-        <dx-button class="tooltip-button" text="Get reservation " type="success" (onClick)="routeToReservationPage(workout.targetedAppointmentData.id)"></dx-button>
+        <dx-button
+          class="tooltip-button"
+          text="Get reservation"
+          type="success"
+          (onClick)="bookWorkout(workout.targetedAppointmentData.id)">
+        </dx-button>
         <div [style.clear]="'both'"></div>
       </div>
       <div class="tooltip">Instructor:
@@ -58,7 +63,7 @@
         <b>{{ workout.targetedAppointmentData.startDate | date: timeFormat }} - {{ workout.targetedAppointmentData.endDate | date: timeFormat }}</b>
       </div>
       <div class="tooltip">Participants:
-        <b>{{ workout.targetedAppointmentData.currentParticipantNumber }}/{{ workout.targetedAppointmentData.maxParticipantNumber }}</b>
+        <b>{{ workout.targetedAppointmentData.currentParticipantNumber }} / {{ workout.targetedAppointmentData.maxParticipantNumber }}</b>
       </div>
       <div class="tooltip">Workout intensity:
         <b>{{ workout.targetedAppointmentData.intensity }}</b>

@@ -11,19 +11,15 @@ public class RepetitiveWorkoutProfile : Profile
 {
     public RepetitiveWorkoutProfile()
     {
-        // RepetitiveWorkoutListDto
         CreateMap<RepetitiveWorkout, RepetitiveWorkoutListDto>();
         CreateMap<WorkoutType, WorkoutTypeForRepetitiveWorkoutListDto>();
         CreateMap<Instructor, InstructorForRepetitiveWorkoutListDto>();
 
-        // CreateInstructorCommandHandler
         CreateMap<CreateRepetitiveWorkoutCommand, RepetitiveWorkout>();
 
-        // UpdateInstructorCommandHandler
         CreateMap<UpdateRepetitiveWorkoutCommand, RepetitiveWorkout>()
-            .ForMember(x => x.Id, y => y.MapFrom(z => z.RepetitiveWorkoutId));
+            .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.RepetitiveWorkoutId));
 
-        // GenerateUpcomingWorkoutTimetable
         CreateMap<RepetitiveWorkout, RepetitiveWorkoutToRealWorkoutDto>();
     }
 }

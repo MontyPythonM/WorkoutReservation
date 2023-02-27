@@ -53,12 +53,10 @@ public class WorkoutTypeTagRepository : IWorkoutTypeTagRepository
         return await query.FirstOrDefaultAsync(x => x.Id == workoutTypeTagId, token);
     }
 
-    public async Task<WorkoutTypeTag> AddAsync(WorkoutTypeTag workoutTypeTag, CancellationToken token)
+    public async Task AddAsync(WorkoutTypeTag workoutTypeTag, CancellationToken token)
     {
         await _dbContext.AddAsync(workoutTypeTag, token);
         await _dbContext.SaveChangesAsync(token);
-
-        return workoutTypeTag;
     }
 
     public async Task DeleteAsync(WorkoutTypeTag workoutTypeTag, CancellationToken token)

@@ -11,17 +11,13 @@ public class InstructorProfile : Profile
 {
     public InstructorProfile()
     {
-        // InstructorListQueryDto
         CreateMap<Instructor, InstructorListQueryDto>();
 
-        // InstructorDetailQueryDto
         CreateMap<Instructor, InstructorDetailQueryDto>();
         CreateMap<WorkoutType, WorkoutTypeForInstructorDetailQueryDto>();
 
-        // CreateInstructorCommandHandler
         CreateMap<CreateInstructorCommand, Instructor>();
 
-        // UpdateInstructorCommandHandler
         CreateMap<UpdateInstructorCommand, Instructor>();
     }
 }

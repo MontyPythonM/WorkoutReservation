@@ -34,7 +34,7 @@ internal sealed class AddReservationCommandHandler : IRequestHandler<AddReservat
         
         var isUserAlreadyReservedWorkout = await _reservationRepository
             .CheckIsReservedAsync(realWorkout, user, token);
-        var validator = new AddReservationCommandValidator(realWorkout, user.Id, isUserAlreadyReservedWorkout);
+        var validator = new AddReservationCommandValidator(realWorkout, isUserAlreadyReservedWorkout);
         await validator.ValidateAndThrowAsync(request, token);
 
         realWorkout.IncrementCurrentParticipantNumber();

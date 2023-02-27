@@ -44,8 +44,8 @@ export class ReservationService extends BaseService {
     return super.get<Reservation>(apiUrl.reservation.getSomeoneDetails, { reservationId, userId });
   }
 
-  addReservation(reservationId: number): Observable<void> {
-    return super.post<void>(apiUrl.reservation.create, { reservationId });
+  addReservation(realWorkoutId: number): Observable<void> {
+    return super.post<void>(apiUrl.reservation.create, { realWorkoutId });
   }
 
   cancelReservation(reservationId: number) {

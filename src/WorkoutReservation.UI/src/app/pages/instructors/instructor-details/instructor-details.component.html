@@ -23,23 +23,24 @@
     </div>
   </div>
   <div class="buttons">
-    <dx-button
-      *ngIf="(hasPermission(permissions.CanSeeAdministrativeContent) | async)!"
-      [disabled]="!(hasPermission(permissions.UpdateInstructor) | async)!"
-      class="button"
-      text="Edit"
-      icon="rename"
-      type="success"
-      (onClick)="openEditPopup()">
-    </dx-button>
+    <dx-button text="Back to instructors" class="button-left" icon="arrowleft" (onClick)="backToInstructors()"></dx-button>
     <dx-button
       *ngIf="(hasPermission(permissions.CanSeeAdministrativeContent) | async)!"
       [disabled]="!(hasPermission(permissions.DeleteInstructor) | async)!"
-      class="button"
+      class="button-right"
       text="Delete"
       icon="trash"
       type="danger"
       (onClick)="openDeletePopup()">
+    </dx-button>
+    <dx-button
+      *ngIf="(hasPermission(permissions.CanSeeAdministrativeContent) | async)!"
+      [disabled]="!(hasPermission(permissions.UpdateInstructor) | async)!"
+      class="button-right"
+      text="Edit"
+      icon="rename"
+      type="success"
+      (onClick)="openEditPopup()">
     </dx-button>
   </div>
 </div>

@@ -34,7 +34,7 @@ internal sealed class CreateRealWorkoutCommandHandler : IRequestHandler<CreateRe
         if (instructor is null)
             throw new NotFoundException($"Instructor with Id: {request.InstructorId} not found.");
 
-        var workoutType = await _workoutTypeRepository.GetByIdAsync(request.WorkoutTypeId, true, token);
+        var workoutType = await _workoutTypeRepository.GetByIdAsync(request.WorkoutTypeId, false, token);
         if (workoutType is null)
             throw new NotFoundException($"Workout type with Id: {request.WorkoutTypeId} not found.");
 

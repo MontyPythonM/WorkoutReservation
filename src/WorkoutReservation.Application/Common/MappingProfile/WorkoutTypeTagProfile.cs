@@ -11,7 +11,7 @@ public class WorkoutTypeTagProfile : Profile
     public WorkoutTypeTagProfile()
     {
         CreateMap<WorkoutTypeTag, WorkoutTypeTagsDto>()
-            .ForMember(desc => desc.NumberOfUses, src => src.MapFrom(tag => tag.WorkoutTypes.Count));
+            .ForMember(desc => desc.NumberOfUses, opt => opt.MapFrom(src => src.WorkoutTypes.Count));
         
         CreateMap<WorkoutTypeTag, ActiveWorkoutTypeTagsDto>();
 

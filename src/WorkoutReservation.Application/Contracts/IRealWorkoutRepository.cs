@@ -16,7 +16,7 @@ public interface IRealWorkoutRepository
     public Task<RealWorkout> GetByIdAsync(int realWorkoutId, bool asNoTracking, CancellationToken token);
     public Task<RealWorkout> GetByIdAsync(int realWorkoutId, bool asNoTracking, CancellationToken token, 
         params Expression<Func<RealWorkout, object>>[] includes);
-    public Task<RealWorkout> AddAsync(RealWorkout realWorkout, CancellationToken token);
+    public Task AddAsync(RealWorkout realWorkout, CancellationToken token);
     public Task AddAsync(List<RealWorkout> realWorkouts, CancellationToken token);
     public Task DeleteAsync(RealWorkout realWorkout, CancellationToken token);
     public Task UpdateAsync(RealWorkout realWorkout, CancellationToken token);

@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using WorkoutReservation.Application.Contracts;
 using WorkoutReservation.Domain.Entities;
+using WorkoutReservation.Domain.Enums;
 using WorkoutReservation.Infrastructure.Interfaces;
 using WorkoutReservation.Infrastructure.Persistence;
 
@@ -18,12 +19,10 @@ public class ReservationRepository : IReservationRepository
         _repository = repository;
     }
     
-    public async Task<Reservation> AddReservationAsync(Reservation reservation, CancellationToken token)
+    public async Task AddReservationAsync(Reservation reservation, CancellationToken token)
     {
         await _dbContext.AddAsync(reservation, token);
         await _dbContext.SaveChangesAsync(token);
-
-        return reservation;
     }
 
     public async Task<bool> CheckIsReservedAsync(RealWorkout realWorkout, ApplicationUser user, CancellationToken token)
@@ -31,9 +30,9 @@ public class ReservationRepository : IReservationRepository
         var isUserAlreadyReserved = await _dbContext.Reservations
             .Include(x => x.User)
             .Include(x => x.RealWorkout)
-            .Where(x => x.RealWorkoutId == realWorkout.Id)
+            .Where(x => x.RealWorkoutId == realWorkout.Id && x.ReservationStatus != ReservationStatus.Cancelled)
             .FirstOrDefaultAsync(x => x.UserId == user.Id, token);
-      
+
         return isUserAlreadyReserved is not null;
     }
 

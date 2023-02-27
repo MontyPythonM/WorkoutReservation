@@ -22,9 +22,15 @@
 
 .buttons {
   clear:both;
-  margin-top: 50px;
+  margin-top: 80px;
 }
 
-.button {
+.button-right {
   margin-right: 10px;
+  float: right;
+}
+
+.button-left {
+  margin-right: 10px;
+  float: left;
 }

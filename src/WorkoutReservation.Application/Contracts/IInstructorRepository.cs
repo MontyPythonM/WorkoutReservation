@@ -11,7 +11,7 @@ public interface IInstructorRepository
     public Task<Instructor> GetByIdAsync(int instructorId, bool asNoTracking, CancellationToken token);
     public Task<Instructor> GetByIdAsync(int instructorId, bool asNoTracking, CancellationToken token, 
         params Expression<Func<Instructor, object>>[] includes);
-    public Task<Instructor> AddAsync(Instructor instructor, CancellationToken token);
+    public Task AddAsync(Instructor instructor, CancellationToken token);
     public Task DeleteAsync(Instructor instructor, CancellationToken token);
     public Task UpdateAsync(Instructor instructor, CancellationToken token);
 }
