@@ -1,6 +1,4 @@
 ﻿using AutoMapper;
-using WorkoutReservation.Application.Features.RealWorkouts.Commands.CreateRealWorkout;
-using WorkoutReservation.Application.Features.RealWorkouts.Commands.UpdateRealWorkout;
 using WorkoutReservation.Application.Features.RealWorkouts.Queries.GetRealWorkoutDetail;
 using WorkoutReservation.Application.Features.RealWorkouts.Queries.GetRealWorkoutFromCurrentWeek;
 using WorkoutReservation.Application.Features.RealWorkouts.Queries.GetRealWorkoutFromUpcomingWeek;
@@ -23,10 +21,5 @@ public class RealWorkoutProfile : Profile
         CreateMap<RealWorkout, RealWorkoutDetailDto>();
         CreateMap<WorkoutType, WorkoutTypeForRealWorkoutDetailDto>();
         CreateMap<Instructor, InstructorForRealWorkoutDetailDto>();
-
-        CreateMap<CreateRealWorkoutCommand, RealWorkout>();
-
-        CreateMap<UpdateRealWorkoutCommand, RealWorkout>()
-            .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.RealWorkoutId)); ;
     }
 }

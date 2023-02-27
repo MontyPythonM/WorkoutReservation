@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using WorkoutReservation.Application.Features.WorkoutTypeTags.Commands.CreateWorkoutTypeTag;
 using WorkoutReservation.Application.Features.WorkoutTypeTags.Queries.GetActiveWorkoutTypeTags;
 using WorkoutReservation.Application.Features.WorkoutTypeTags.Queries.GetWorkoutTypeTags;
 using WorkoutReservation.Domain.Entities;
@@ -14,7 +13,5 @@ public class WorkoutTypeTagProfile : Profile
             .ForMember(desc => desc.NumberOfUses, opt => opt.MapFrom(src => src.WorkoutTypes.Count));
         
         CreateMap<WorkoutTypeTag, ActiveWorkoutTypeTagsDto>();
-
-        CreateMap<CreateWorkoutTypeTagCommand, WorkoutTypeTag>();
     }
 }

@@ -32,7 +32,7 @@ public enum Permission
     GetSomeoneReservations,
     CreateReservation,
     CancelReservation,
-    UpdateReservationStatus,
+    UpdateReservation,
 
     GetAllUsers,
     SetUserRole,

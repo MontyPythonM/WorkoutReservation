@@ -29,7 +29,7 @@ export enum Permission {
   GetSomeoneReservations = "GetSomeoneReservations",
   CreateReservation = "CreateReservation",
   CancelReservation = "CancelReservation",
-  UpdateReservationStatus = "UpdateReservationStatus",
+  UpdateReservation = "UpdateReservation",
 
   GetAllUsers = "GetAllUsers",
   SetUserRole = "SetUserRole",

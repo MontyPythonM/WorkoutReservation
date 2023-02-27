@@ -63,10 +63,10 @@ public class ReservationController : ApiControllerBase
         return await SendAsync(command, token);
     }
 
-    [HttpPatch("edit-reservation-status")]
-    [HasPermission(Permission.UpdateReservationStatus)]
-    [SwaggerOperation(Summary = "Change the status of a selected reservation")]
-    public async Task<IActionResult> EditUserReservationStatus([FromBody] EditReservationStatusCommand command, CancellationToken token)
+    [HttpPatch("edit-reservation")]
+    [HasPermission(Permission.UpdateReservation)]
+    [SwaggerOperation(Summary = "Change selected reservation")]
+    public async Task<IActionResult> EditUserReservationStatus([FromBody] EditReservationCommand command, CancellationToken token)
     {
         return await SendAsync(command, token);
     }

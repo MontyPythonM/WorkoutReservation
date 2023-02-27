@@ -6,6 +6,7 @@ import {PagedResult} from "../models/paged-result.model";
 import {apiUrl} from "../../environments/api-urls";
 import {Reservation} from "../models/reservation.model";
 import {ReservationStatus} from "../models/enums/reservation-status.enum";
+import {EditReservation} from "../models/edit-reservation.model";
 
 @Injectable({
   providedIn: 'root'
@@ -52,7 +53,7 @@ export class ReservationService extends BaseService {
     return super.patch(apiUrl.reservation.cancel, { reservationId });
   }
 
-  editReservationStatus(reservationId: number, status: ReservationStatus) {
-    return super.patch(apiUrl.reservation.updateReservationStatus, { reservationId, status });
+  editReservation(reservation: EditReservation) {
+    return super.patch(apiUrl.reservation.updateReservation, { ...reservation });
   }
 }

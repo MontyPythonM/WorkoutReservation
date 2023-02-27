@@ -15,7 +15,7 @@ export const apiUrl = {
     getOwnDetails: "reservation/own-details",
     getSomeoneDetails: "reservation/selected-user-details",
     create: "reservation",
-    updateReservationStatus: "reservation/edit-reservation-status",
+    updateReservation: "reservation/edit-reservation",
     cancel: "reservation/cancel-reservation"
   },
   user: {

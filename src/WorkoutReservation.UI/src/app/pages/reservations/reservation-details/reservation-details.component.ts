@@ -9,6 +9,8 @@ import {WorkoutIntensity} from "../../../models/enums/workout-intensity.enum";
 import {ReservationStatus} from "../../../models/enums/reservation-status.enum";
 import {DATE_FORMAT} from "../../../common/constants";
 import { Permission } from 'src/app/models/enums/permission.enum';
+import {EditReservation} from "../../../models/edit-reservation.model";
+import dxForm from "devextreme/ui/form";
 
 @Component({
   selector: 'app-reservation-details',
@@ -23,6 +25,9 @@ export class ReservationDetailsComponent extends BaseComponent implements OnInit
   dateFormat = DATE_FORMAT;
   isNotReserved: boolean;
   permissions = Permission;
+  editPopupVisible: boolean;
+  reservationCommand?: EditReservation;
+  private editPopupForm?: dxForm;
 
   constructor(private reservationService: ReservationService,
               private route: ActivatedRoute,
@@ -32,6 +37,7 @@ export class ReservationDetailsComponent extends BaseComponent implements OnInit
     this.status = enumToObjects(ReservationStatus);
     this.routeId = this.route.snapshot.params['id'];
     this.isNotReserved = false;
+    this.editPopupVisible = false;
   }
 
   ngOnInit(): void {
@@ -57,6 +63,24 @@ export class ReservationDetailsComponent extends BaseComponent implements OnInit
     })
   }
 
+  updateReservation() {
+    if (!this.editPopupForm?.validate().isValid) return;
+    this.subscribe(this.reservationService.editReservation(this.reservationCommand!), {
+      next: () => {
+        this.closeEditPopup();
+        this.ngOnInit();
+        this.notificationService.show("Reservation update successfully", "success");
+      }
+    });
+  }
+
+  openEditPopup = () => {
+    this.reservationCommand = new EditReservation(this.reservation?.id!, this.reservation?.reservationStatus!, this.reservation?.note!);
+    this.editPopupVisible = true;
+  }
+
+  closeEditPopup = () => this.editPopupVisible = false;
+
   backToReservations = () => this.router.navigateByUrl(pageUrls.reservations);
 
   navigateToInstructor = (id: number) => this.router.navigateByUrl(pageUrls.instructors + '/' + id)
@@ -69,4 +93,6 @@ export class ReservationDetailsComponent extends BaseComponent implements OnInit
     const splitTime = time.toString().split(":");
     return `${ splitTime[0] }:${ splitTime[1] }`;
   }
+
+  editPopupFormInit = (e: { component: dxForm }) => this.editPopupForm = e.component;
 }

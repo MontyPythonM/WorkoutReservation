@@ -8,6 +8,7 @@ public class Reservation
     public DateTime CreationDate { get; set; }
     public DateTime? LastModificationDate { get; set; }
     public ReservationStatus ReservationStatus { get; set; }
+    public string Note { get; set; }
     public RealWorkout RealWorkout { get; set; }
     public int RealWorkoutId { get; set; }
     public ApplicationUser User { get; set; }
@@ -24,15 +25,21 @@ public class Reservation
         CreationDate = DateTime.Now;
         LastModificationDate = null;
         ReservationStatus = ReservationStatus.Reserved;
+        Note = string.Empty;
     }
     
     public void UpdateLastModificationDate()
     {
-        LastModificationDate = DateTime.Now;;
+        LastModificationDate = DateTime.Now;
     }
 
     public void SetReservationStatus(ReservationStatus status)
     {
         ReservationStatus = status;
+    }
+    
+    public void SetNote(string note)
+    {
+        Note = note;
     }
 }

@@ -18,11 +18,12 @@ export class Reservation {
   instructorId: number;
   instructorFullName: string;
   isWorkoutExpired: boolean;
+  note: string;
 
   constructor(data: { id: number, creationDate: Date, lastModificationDate: Date, reservationStatus: ReservationStatus,
     realWorkoutId: number, maxParticipantNumber: number, currentParticipantNumber: number, startTime: Date,
     endTime: Date, date: Date, workoutTypeId: number, workoutTypeName: string, intensity: WorkoutIntensity,
-    instructorId: number, instructorFullName: string, isWorkoutExpired: boolean }) {
+    instructorId: number, instructorFullName: string, isWorkoutExpired: boolean, note: string }) {
     this.id = data.id;
     this.creationDate = data.creationDate;
     this.lastModificationDate = data.lastModificationDate;
@@ -39,5 +40,6 @@ export class Reservation {
     this.instructorId = data.instructorId;
     this.instructorFullName = data.instructorFullName;
     this.isWorkoutExpired = data.isWorkoutExpired;
+    this.note = data.note;
   }
 }
