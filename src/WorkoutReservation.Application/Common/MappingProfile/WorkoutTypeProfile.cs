@@ -10,21 +10,18 @@ public class WorkoutTypeProfile : Profile
 {
     public WorkoutTypeProfile()
     {
-        // Get list
         CreateMap<WorkoutType, WorkoutTypesListQueryDto>()
-            .ForMember(dest => dest.WorkoutTypeTags, act =>
-                act.MapFrom(src => src.WorkoutTypeTags.Select(x => x.Id)))
-            .ForMember(dest => dest.Instructors, act =>
-                act.MapFrom(src => src.Instructors.Select(x => x.Id)));
+            .ForMember(dest => dest.WorkoutTypeTags, opt =>
+                opt.MapFrom(src => src.WorkoutTypeTags.Select(x => x.Id)))
+            .ForMember(dest => dest.Instructors, opt =>
+                opt.MapFrom(src => src.Instructors.Select(x => x.Id)));
 
-        // Create
         CreateMap<CreateWorkoutTypeCommand, WorkoutType>()
-            .ForMember(dest => dest.WorkoutTypeTags, act => act.Ignore())
-            .ForMember(dest => dest.Instructors, act => act.Ignore());
+            .ForMember(dest => dest.WorkoutTypeTags, opt => opt.Ignore())
+            .ForMember(dest => dest.Instructors, opt => opt.Ignore());
 
-        // Update
         CreateMap<UpdateWorkoutTypeCommand, WorkoutType>()
-            .ForMember(dest => dest.WorkoutTypeTags, act => act.Ignore())
-            .ForMember(dest => dest.Instructors, act => act.Ignore());
+            .ForMember(dest => dest.WorkoutTypeTags, opt => opt.Ignore())
+            .ForMember(dest => dest.Instructors, opt => opt.Ignore());
     }
 }

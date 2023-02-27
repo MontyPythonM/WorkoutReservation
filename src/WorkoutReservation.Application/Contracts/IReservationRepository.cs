@@ -5,7 +5,7 @@ namespace WorkoutReservation.Application.Contracts;
 
 public interface IReservationRepository
 {
-    public Task<Reservation> AddReservationAsync(Reservation reservation, CancellationToken token);
+    public Task AddReservationAsync(Reservation reservation, CancellationToken token);
     public Task<bool> CheckIsReservedAsync(RealWorkout realWorkout, ApplicationUser user, CancellationToken token);
     public Task<Reservation> GetByIdAsync(int reservationId, bool asNoTracking, CancellationToken token,
         params Expression<Func<Reservation, object>>[] includes);

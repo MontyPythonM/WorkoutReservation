@@ -1,3 +1,71 @@
 <div class="container" *ngIf="reservation">
-
+  <h2>Reservation details:</h2>
+  <div>
+    <p class="field">
+      <img src="assets/icons/fingerprint.svg" alt="Reservation Id">
+      <span>ID:</span>
+      <span class="field-value">{{ reservation.id }}</span>
+    </p>
+    <p class="field">
+      <img src="assets/icons/data_check.svg" alt="Reservation status">
+      <span>Status:</span>
+      <span class="field-value">{{ displayStatus() }}</span>
+    </p>
+    <p class="field">
+      <img src="assets/icons/today.svg" alt="Workout create date">
+      <span>Create date:</span>
+      <span class="field-value">{{ reservation.creationDate | date: dateFormat }}</span>
+    </p>
+    <p *ngIf="reservation.lastModificationDate" class="field">
+      <img src="assets/icons/event_upcoming.svg" alt="Last modification date">
+      <span>Last modification date:</span>
+      <span class="field-value">{{ reservation.lastModificationDate | date: dateFormat }}</span>
+    </p>
+    <dx-button
+      [disabled]="reservation.isWorkoutExpired || isNotReserved || !(hasPermission(permissions.CancelReservation) | async)!"
+      class="button"
+      text="Cancel reservation"
+      icon="close"
+      type="danger"
+      (onClick)="cancelReservation()">
+    </dx-button>
+  </div>
+  <br>
+  <h2>Workout details:</h2>
+  <p class="field">
+    <img src="assets/icons/exercise.svg" alt="Workout type name">
+    <span>Workout type:</span>
+    <span class="field-value link" (click)="navigateToWorkoutType()">{{ reservation.workoutTypeName }}</span>
+  </p>
+  <p class="field">
+    <img src="assets/icons/self_improvement.svg" alt="Workout instructor name">
+    <span>Instructor:</span>
+    <span class="field-value link" (click)="navigateToInstructor(reservation.instructorId)">{{ reservation.instructorFullName }}</span>
+  </p>
+  <p class="field">
+    <img src="assets/icons/event.svg" alt="Workout date">
+    <span>Date:</span>
+    <span class="field-value">{{ reservation.date | date: dateFormat }}</span>
+  </p>
+  <p class="field">
+    <img src="assets/icons/schedule.svg" alt="Workout time">
+    <span>Time:</span>
+    <span class="field-value">{{ displayTime(reservation.startTime) }} - {{ displayTime(reservation.endTime) }}</span>
+  </p>
+  <p class="field">
+    <img src="assets/icons/ecg_heart.svg" alt="Workout intensity">
+    <span>Workout intensity:</span>
+    <span class="field-value">{{ displayIntensity() }}</span>
+  </p>
+  <p class="field">
+    <img src="assets/icons/group.svg" alt="Workout participants">
+    <span>Participants:</span>
+    <span class="field-value">{{ reservation.currentParticipantNumber }} / {{ reservation.maxParticipantNumber }}</span>
+  </p>
+  <dx-button
+    class="back-button"
+    text="Back to my reservations"
+    icon="arrowleft"
+    (onClick)="backToReservations()">
+  </dx-button>
 </div>

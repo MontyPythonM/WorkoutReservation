@@ -19,8 +19,7 @@ public class WorkoutTypeTagController : ApiControllerBase
     [SwaggerOperation(Summary = "Returns list of active workout type tags")]
     public async Task<IActionResult> GetActiveWorkoutTypeTags(CancellationToken token)
     {
-        var result = await Mediator.Send(new GetActiveWorkoutTypeTagsQuery(), token);
-        return Ok(result);
+        return await SendAsync(new GetActiveWorkoutTypeTagsQuery(), token);
     }
     
     [HttpGet]
@@ -28,8 +27,7 @@ public class WorkoutTypeTagController : ApiControllerBase
     [SwaggerOperation(Summary = "Returns list of workout type tags")]
     public async Task<IActionResult> GetWorkoutTypeTags(CancellationToken token)
     {
-        var result = await Mediator.Send(new GetWorkoutTypeTagsQuery(), token);
-        return Ok(result);
+        return await SendAsync(new GetWorkoutTypeTagsQuery(), token);
     }
 
     [HttpPost]
@@ -37,8 +35,7 @@ public class WorkoutTypeTagController : ApiControllerBase
     [SwaggerOperation(Summary = "Create new workout type tag")]
     public async Task<IActionResult> CreateWorkoutTypeTag([FromBody] CreateWorkoutTypeTagCommand command, CancellationToken token)
     {        
-        var workoutTypeTagId = await Mediator.Send(command, token);
-        return Created($"Workout type tag with Id: {workoutTypeTagId} was created", null);
+        return await SendAsync(command, token);
     }
     
     [HttpPut]
@@ -46,8 +43,7 @@ public class WorkoutTypeTagController : ApiControllerBase
     [SwaggerOperation(Summary = "Edit selected workout type tag")]
     public async Task<IActionResult> UpdateWorkoutTypeTag([FromBody] UpdateWorkoutTypeTagCommand command, CancellationToken token)
     {
-        await Mediator.Send(command, token);
-        return Ok();
+        return await SendAsync(command, token);
     }
     
     [HttpDelete("{workoutTypeTagId}")]
@@ -55,7 +51,6 @@ public class WorkoutTypeTagController : ApiControllerBase
     [SwaggerOperation(Summary = "Delete selected workout type tag")]
     public async Task<IActionResult> DeleteWorkoutTypeTag([FromRoute] int workoutTypeTagId, CancellationToken token)
     {
-        await Mediator.Send(new DeleteWorkoutTypeTagCommand(workoutTypeTagId), token);
-        return NoContent();
+        return await SendAsync(new DeleteWorkoutTypeTagCommand(workoutTypeTagId), token);
     }
 }

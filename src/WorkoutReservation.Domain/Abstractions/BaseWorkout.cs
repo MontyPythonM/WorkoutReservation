@@ -1,4 +1,5 @@
 ﻿using WorkoutReservation.Domain.Entities;
+using WorkoutReservation.Domain.Exceptions;
 
 namespace WorkoutReservation.Domain.Abstractions;
 
@@ -19,6 +20,7 @@ public abstract class BaseWorkout
 
     protected BaseWorkout()
     {
+        // for EF
     }
     
     protected BaseWorkout(int maxParticipantNumber, TimeOnly startTime, TimeOnly endTime)
@@ -26,6 +28,7 @@ public abstract class BaseWorkout
         MaxParticipantNumber = maxParticipantNumber;
         StartTime = startTime;
         EndTime = endTime;
+        Valid();
     }
     
     protected BaseWorkout(int maxParticipantNumber, TimeOnly startTime, TimeOnly endTime, WorkoutType workoutType, Instructor instructor)
@@ -35,10 +38,34 @@ public abstract class BaseWorkout
         EndTime = endTime;
         WorkoutType = workoutType;
         Instructor = instructor;
+        Valid();
     }
     
     public void UpdateLastModifiedDate() => LastModifiedDate = DateTime.Now;
     public void UpdateLastModifiedBy(ApplicationUser user) => LastModifiedBy = user.Id.ToString();
     public void SetCreatedDate() => CreatedDate = DateTime.Now;
     public void SetCreatedBy(ApplicationUser user) => CreatedBy = user.Id.ToString();
+
+    private void Valid()
+    {
+        if (MaxParticipantNumber <= 0)
+        {
+            throw new DomainException("MaxParticipantNumber must be greater than 0");
+        }
+
+        if (StartTime > EndTime)
+        {
+            throw new DomainException("EndTime must be greater than or equal StartTime");
+        }
+
+        if (WorkoutType is null)
+        {
+            throw new DomainException("WorkoutType cannot be null");
+        }
+        
+        if (Instructor is null)
+        {
+            throw new DomainException("Instructor cannot be null");
+        }
+    }
 }

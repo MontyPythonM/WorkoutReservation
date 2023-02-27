@@ -12,7 +12,7 @@ public interface IWorkoutTypeTagRepository
     public Task<WorkoutTypeTag> GetByIdAsync(int workoutTypeTagId, bool asNoTracking, CancellationToken token);
     public Task<WorkoutTypeTag> GetByIdAsync(int workoutTypeTagId, bool asNoTracking, CancellationToken token, 
         params Expression<Func<WorkoutTypeTag, object>>[] includes);
-    public Task<WorkoutTypeTag> AddAsync(WorkoutTypeTag workoutTypeTag, CancellationToken token);
+    public Task AddAsync(WorkoutTypeTag workoutTypeTag, CancellationToken token);
     public Task DeleteAsync(WorkoutTypeTag workoutTypeTag, CancellationToken token);
     public Task UpdateAsync(WorkoutTypeTag workoutTypeTag, CancellationToken token);
 }

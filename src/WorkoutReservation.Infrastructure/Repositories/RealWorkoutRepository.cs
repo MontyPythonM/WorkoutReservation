@@ -94,11 +94,10 @@ public class RealWorkoutRepository : IRealWorkoutRepository
          return await query.FirstOrDefaultAsync(x => x.Id == realWorkoutId, token);             
     }
     
-    public async Task<RealWorkout> AddAsync(RealWorkout realWorkout, CancellationToken token)
+    public async Task AddAsync(RealWorkout realWorkout, CancellationToken token)
     {
         await _dbContext.AddAsync(realWorkout, token);
         await _dbContext.SaveChangesAsync(token);
-        return realWorkout;
     }
     
     public async Task AddAsync(List<RealWorkout> realWorkouts, CancellationToken token)

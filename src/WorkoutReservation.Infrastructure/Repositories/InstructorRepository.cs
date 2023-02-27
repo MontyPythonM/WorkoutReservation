@@ -18,12 +18,10 @@ public class InstructorRepository : IInstructorRepository
         _repository = repository;
     }
 
-    public async Task<Instructor> AddAsync(Instructor instructor, CancellationToken token)
+    public async Task AddAsync(Instructor instructor, CancellationToken token)
     {
         await _dbContext.AddAsync(instructor, token);
         await _dbContext.SaveChangesAsync(token);
-
-        return instructor;
     }
 
     public async Task DeleteAsync(Instructor instructor, CancellationToken token)

@@ -12,39 +12,36 @@ public class ReservationProfile : Profile
 {
     public ReservationProfile()
     {
-        // GetUserReservationsList
         CreateMap<Reservation, UserReservationsListDto>()
-            .ForMember(src => src.StartTime, dest => dest.MapFrom(r => r.RealWorkout.StartTime))
-            .ForMember(src => src.EndTime, dest => dest.MapFrom(r => r.RealWorkout.EndTime))
-            .ForMember(src => src.Date, dest => dest.MapFrom(r => r.RealWorkout.Date))
-            .ForMember(src => src.WorkoutTypeName, dest => dest.MapFrom(r => r.RealWorkout.WorkoutType.Name))
-            .ForMember(src => src.InstructorFullName,
-                dest => dest.MapFrom(r => string.Join(" ", r.RealWorkout.Instructor.FirstName, r.RealWorkout.Instructor.LastName)));
+            .ForMember(dest => dest.StartTime, opt => opt.MapFrom(src => src.RealWorkout.StartTime))
+            .ForMember(dest => dest.EndTime, opt => opt.MapFrom(src => src.RealWorkout.EndTime))
+            .ForMember(dest => dest.Date, opt => opt.MapFrom(src => src.RealWorkout.Date))
+            .ForMember(dest => dest.WorkoutTypeName, opt => opt.MapFrom(src => src.RealWorkout.WorkoutType.Name))
+            .ForMember(dest => dest.InstructorFullName, opt => opt.MapFrom(src => 
+                string.Join(" ", src.RealWorkout.Instructor.FirstName, src.RealWorkout.Instructor.LastName)));
         
-        // GetReservationDetails
         CreateMap<Reservation, ReservationDetailsDto>()
-            .ForMember(src => src.RealWorkoutId, dest => dest.MapFrom(r => r.RealWorkout.Id))
-            .ForMember(src => src.MaxParticipantNumber, dest => dest.MapFrom(r => r.RealWorkout.MaxParticipantNumber))
-            .ForMember(src => src.CurrentParticipantNumber, dest => dest.MapFrom(r => r.RealWorkout.CurrentParticipantNumber))
-            .ForMember(src => src.StartTime, dest => dest.MapFrom(r => r.RealWorkout.StartTime))
-            .ForMember(src => src.EndTime, dest => dest.MapFrom(r => r.RealWorkout.EndTime))
-            .ForMember(src => src.Date, dest => dest.MapFrom(r => r.RealWorkout.Date))
-            .ForMember(src => src.WorkoutTypeId, dest => dest.MapFrom(r => r.RealWorkout.WorkoutTypeId))
-            .ForMember(src => src.WorkoutTypeName, dest => dest.MapFrom(r => r.RealWorkout.WorkoutType.Name))
-            .ForMember(src => src.Intensity, dest => dest.MapFrom(r => r.RealWorkout.WorkoutType.Intensity))
-            .ForMember(src => src.InstructorId, dest => dest.MapFrom(r => r.RealWorkout.InstructorId))
-            .ForMember(src => src.InstructorFullName,
-                dest => dest.MapFrom(r => string.Join(" ", r.RealWorkout.Instructor.FirstName, r.RealWorkout.Instructor.LastName)));
+            .ForMember(dest => dest.RealWorkoutId, opt => opt.MapFrom(src => src.RealWorkout.Id))
+            .ForMember(dest => dest.MaxParticipantNumber, opt => opt.MapFrom(src => src.RealWorkout.MaxParticipantNumber))
+            .ForMember(dest => dest.CurrentParticipantNumber, opt => opt.MapFrom(src => src.RealWorkout.CurrentParticipantNumber))
+            .ForMember(dest => dest.StartTime, opt => opt.MapFrom(src => src.RealWorkout.StartTime))
+            .ForMember(dest => dest.EndTime, opt => opt.MapFrom(src => src.RealWorkout.EndTime))
+            .ForMember(dest => dest.Date, opt => opt.MapFrom(src => src.RealWorkout.Date))
+            .ForMember(dest => dest.WorkoutTypeId, opt => opt.MapFrom(src => src.RealWorkout.WorkoutTypeId))
+            .ForMember(dest => dest.WorkoutTypeName, opt => opt.MapFrom(src => src.RealWorkout.WorkoutType.Name))
+            .ForMember(dest => dest.Intensity, opt => opt.MapFrom(src => src.RealWorkout.WorkoutType.Intensity))
+            .ForMember(dest => dest.InstructorId, opt => opt.MapFrom(src => src.RealWorkout.InstructorId))
+            .ForMember(dest => dest.InstructorFullName, opt => opt.MapFrom(r =>
+                string.Join(" ", r.RealWorkout.Instructor.FirstName, r.RealWorkout.Instructor.LastName)))
+            .ForMember(dest => dest.IsWorkoutExpired, opt => opt.MapFrom((src, dest) => 
+                src.RealWorkout.Date <= DateOnly.FromDateTime(DateTime.Now.Date) && src.RealWorkout.EndTime < TimeOnly.FromDateTime(DateTime.Now)));
 
-        // AddReservationCommand
         CreateMap<AddReservationCommand, Reservation>();
 
-        // CancelReservationCommand
         CreateMap<CancelReservationCommand, Reservation>()
             .ForMember(x => x.Id, y => y.MapFrom(z => z.ReservationId));
 
-        // EditReservationStatusCommand
         CreateMap<EditReservationStatusCommand, Reservation>()
-            .ForMember(x => x.Id, y => y.MapFrom(z => z.ReservationId));
+            .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.ReservationId));
     }
 }

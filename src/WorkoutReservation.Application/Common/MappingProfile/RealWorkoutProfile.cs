@@ -12,26 +12,21 @@ public class RealWorkoutProfile : Profile
 {
     public RealWorkoutProfile()
     {
-        // GetRealWorkoutFromCurrentWeekQuery
         CreateMap<RealWorkout, RealWorkoutFromCurrentWeekDto>();
         CreateMap<WorkoutType, WorkoutTypeForRealWorkoutFromCurrentWeekDto>();
         CreateMap<Instructor, InstructorForRealWorkoutFromCurrentWeekDto>();
 
-        // GetRealWorkoutFromUpcomingWeekQuery
         CreateMap<RealWorkout, RealWorkoutFromUpcomingWeekDto>();
         CreateMap<WorkoutType, WorkoutTypeForRealWorkoutFromUpcomingWeekDto>();
         CreateMap<Instructor, InstructorForRealWorkoutFromUpcomingWeekDto>();
 
-        // GetRealWorkoutDetailQuery
         CreateMap<RealWorkout, RealWorkoutDetailDto>();
         CreateMap<WorkoutType, WorkoutTypeForRealWorkoutDetailDto>();
         CreateMap<Instructor, InstructorForRealWorkoutDetailDto>();
 
-        // CreateRealWorkoutCommand
         CreateMap<CreateRealWorkoutCommand, RealWorkout>();
 
-        // UpdateRealWorkoutCommand
         CreateMap<UpdateRealWorkoutCommand, RealWorkout>()
-            .ForMember(x => x.Id, y => y.MapFrom(z => z.RealWorkoutId)); ;
+            .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.RealWorkoutId)); ;
     }
 }

@@ -7,9 +7,9 @@ using WorkoutReservation.Domain.Entities;
 namespace WorkoutReservation.Application.Features.RealWorkouts.Commands.CreateRealWorkout;
 
 public record CreateRealWorkoutCommand(int MaxParticipantNumber, DateOnly Date, TimeOnly StartTime, 
-    TimeOnly EndTime, int WorkoutTypeId, int InstructorId) : IRequest<int>;
+    TimeOnly EndTime, int WorkoutTypeId, int InstructorId) : IRequest;
 
-internal sealed class CreateRealWorkoutCommandHandler : IRequestHandler<CreateRealWorkoutCommand, int>
+internal sealed class CreateRealWorkoutCommandHandler : IRequestHandler<CreateRealWorkoutCommand>
 {
     private readonly IRealWorkoutRepository _realWorkoutRepository;
     private readonly IInstructorRepository _instructorRepository;
@@ -26,7 +26,7 @@ internal sealed class CreateRealWorkoutCommandHandler : IRequestHandler<CreateRe
         _currentUserAccessor = currentUserAccessor;
     }
 
-    public async Task<int> Handle(CreateRealWorkoutCommand request, CancellationToken token)
+    public async Task<Unit> Handle(CreateRealWorkoutCommand request, CancellationToken token)
     {
         var user = await _currentUserAccessor.GetUserAsync(token);
 
@@ -34,7 +34,7 @@ internal sealed class CreateRealWorkoutCommandHandler : IRequestHandler<CreateRe
         if (instructor is null)
             throw new NotFoundException($"Instructor with Id: {request.InstructorId} not found.");
 
-        var workoutType = await _workoutTypeRepository.GetByIdAsync(request.WorkoutTypeId, true, token);
+        var workoutType = await _workoutTypeRepository.GetByIdAsync(request.WorkoutTypeId, false, token);
         if (workoutType is null)
             throw new NotFoundException($"Workout type with Id: {request.WorkoutTypeId} not found.");
 
@@ -45,7 +45,7 @@ internal sealed class CreateRealWorkoutCommandHandler : IRequestHandler<CreateRe
         var realWorkout = new RealWorkout(request.MaxParticipantNumber, request.StartTime, 
             request.EndTime, workoutType, instructor, request.Date, user);
         
-        realWorkout = await _realWorkoutRepository.AddAsync(realWorkout, token);
-        return realWorkout.Id;
+        await _realWorkoutRepository.AddAsync(realWorkout, token);
+        return Unit.Value;
     }
 }

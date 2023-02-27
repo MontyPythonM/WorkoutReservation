@@ -8,9 +8,9 @@ using WorkoutReservation.Domain.Enums;
 namespace WorkoutReservation.Application.Features.WorkoutTypes.Commands.CreateWorkoutType;
 
 public record CreateWorkoutTypeCommand(string Name, string Description, WorkoutIntensity Intensity, 
-    List<int> WorkoutTypeTags, List<int> Instructors) : IRequest<int>;
+    List<int> WorkoutTypeTags, List<int> Instructors) : IRequest;
 
-internal sealed class CreateWorkoutTypeCommandHandler : IRequestHandler<CreateWorkoutTypeCommand, int>
+internal sealed class CreateWorkoutTypeCommandHandler : IRequestHandler<CreateWorkoutTypeCommand>
 {    
     private readonly IMapper _mapper;
     private readonly IWorkoutTypeRepository _workoutRepository;
@@ -28,7 +28,7 @@ internal sealed class CreateWorkoutTypeCommandHandler : IRequestHandler<CreateWo
         _instructorRepository = instructorRepository;        
     }
 
-    public async Task<int> Handle(CreateWorkoutTypeCommand request, CancellationToken token)
+    public async Task<Unit> Handle(CreateWorkoutTypeCommand request, CancellationToken token)
     {
         var validator = new CreateWorkoutTypeCommandValidator();
         await validator.ValidateAndThrowAsync(request, token);
@@ -43,8 +43,8 @@ internal sealed class CreateWorkoutTypeCommandHandler : IRequestHandler<CreateWo
         
         workoutType.WorkoutTypeTags = tags;
         workoutType.Instructors = instructors;
-        workoutType = await _workoutRepository.AddAsync(workoutType, token);
         
-        return workoutType.Id;
+        await _workoutRepository.AddAsync(workoutType, token);
+        return Unit.Value;
     }
 }

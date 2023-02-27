@@ -52,12 +52,10 @@ public class WorkoutTypeRepository : IWorkoutTypeRepository
         return await query.FirstOrDefaultAsync(x => x.Id == workoutTypeId, token);
     }
     
-    public async Task<WorkoutType> AddAsync(WorkoutType workoutType, CancellationToken token)
+    public async Task AddAsync(WorkoutType workoutType, CancellationToken token)
     {
         await _dbContext.AddAsync(workoutType, token);
         await _dbContext.SaveChangesAsync(token);
-
-        return workoutType;
     }
 
     public async Task DeleteAsync(WorkoutType workoutType, CancellationToken token)

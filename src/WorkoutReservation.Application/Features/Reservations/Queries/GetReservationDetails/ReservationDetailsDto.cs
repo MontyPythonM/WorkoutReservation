@@ -8,6 +8,7 @@ public class ReservationDetailsDto
     public DateTime CreationDate { get; set; }
     public DateTime? LastModificationDate { get; set; }
     public ReservationStatus ReservationStatus { get; set; }
+    public bool IsWorkoutExpired { get; set; }
     
     public int RealWorkoutId { get; set; }
     public int MaxParticipantNumber { get; set; }

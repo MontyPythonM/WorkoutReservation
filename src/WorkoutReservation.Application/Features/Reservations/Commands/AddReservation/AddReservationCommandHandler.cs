@@ -6,9 +6,9 @@ using WorkoutReservation.Domain.Entities;
 
 namespace WorkoutReservation.Application.Features.Reservations.Commands.AddReservation;
 
-public record AddReservationCommand(int RealWorkoutId) : IRequest<int>;
+public record AddReservationCommand(int RealWorkoutId) : IRequest;
 
-internal sealed class AddReservationCommandHandler : IRequestHandler<AddReservationCommand, int>
+internal sealed class AddReservationCommandHandler : IRequestHandler<AddReservationCommand>
 {
     private readonly IReservationRepository _reservationRepository;
     private readonly IRealWorkoutRepository _realWorkoutRepository;
@@ -23,7 +23,7 @@ internal sealed class AddReservationCommandHandler : IRequestHandler<AddReservat
         _currentUserAccessor = currentUserAccessor;
     }
 
-    public async Task<int> Handle(AddReservationCommand request, CancellationToken token)
+    public async Task<Unit> Handle(AddReservationCommand request, CancellationToken token)
     {
         var user = await _currentUserAccessor.GetUserAsync(token);
 
@@ -34,14 +34,14 @@ internal sealed class AddReservationCommandHandler : IRequestHandler<AddReservat
         
         var isUserAlreadyReservedWorkout = await _reservationRepository
             .CheckIsReservedAsync(realWorkout, user, token);
-        var validator = new AddReservationCommandValidator(realWorkout, user.Id, isUserAlreadyReservedWorkout);
+        var validator = new AddReservationCommandValidator(realWorkout, isUserAlreadyReservedWorkout);
         await validator.ValidateAndThrowAsync(request, token);
 
         realWorkout.IncrementCurrentParticipantNumber();
         await _realWorkoutRepository.UpdateAsync(realWorkout, token);
         
         var reservation = new Reservation(realWorkout, user);
-        reservation = await _reservationRepository.AddReservationAsync(reservation, token);
-        return reservation.Id;
+        await _reservationRepository.AddReservationAsync(reservation, token);
+        return Unit.Value;
     }
 }

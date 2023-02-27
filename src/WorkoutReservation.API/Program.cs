@@ -51,6 +51,8 @@ try
     var systemAdministratorSettings = new SystemAdministratorSettings();
     builder.Configuration.GetSection("FirstAdmin").Bind(systemAdministratorSettings);
 
+    GlobalJobFilters.Filters.Add(new AutomaticRetryAttribute { Attempts = 0 , LogEvents = true });
+    
     //--- Add services to the container
     builder.Services.AddSingleton(authenticationSettings);
     builder.Services.AddSingleton(systemAdministratorSettings);

@@ -1,4 +1,5 @@
 ﻿using WorkoutReservation.Domain.Abstractions;
+using WorkoutReservation.Domain.Exceptions;
 
 namespace WorkoutReservation.Domain.Entities;
 
@@ -26,6 +27,11 @@ public class RealWorkout : BaseWorkout
 
     public void IncrementCurrentParticipantNumber()
     {
+        if (CurrentParticipantNumber > MaxParticipantNumber)
+        {
+            throw new DomainException("CurrentParticipantNumber cannot be greater than MaxParticipantNumber");
+        }
+        
         CurrentParticipantNumber++;
     }
     

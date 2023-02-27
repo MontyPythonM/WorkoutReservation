@@ -5,10 +5,10 @@ import {BaseComponent} from 'src/app/common/base.component';
 import {InstructorDetailsCommand} from 'src/app/models/instructor-details-command.model';
 import {InstructorDetails} from 'src/app/models/instructor-details.model';
 import {InstructorService} from 'src/app/services/instructor.service';
-import {NotificationService} from 'src/app/services/notification.service';
 import {EnumObject, enumToObjects} from 'src/app/models/enums/enum-converter';
 import {Gender} from 'src/app/models/enums/gender.enum';
 import {Permission} from "../../../models/enums/permission.enum";
+import {pageUrls} from "../../../../environments/page-urls";
 
 @Component({
   selector: 'app-instructor-details',
@@ -92,7 +92,10 @@ export class InstructorDetailsComponent extends BaseComponent implements OnInit 
     this.isEditPopupOpened = true;
   }
 
+  backToInstructors = () => this.router.navigateByUrl(pageUrls.instructors);
+
   closeEditPopup = () => this.isEditPopupOpened = false;
   openDeletePopup = () => this.isDeletePopupVisible = true;
+
   onFormInitialized = (e: any) => this.form = e.component;
 }

@@ -5,7 +5,7 @@ namespace WorkoutReservation.Application.Features.Reservations.Commands.AddReser
 
 internal sealed class AddReservationCommandValidator : AbstractValidator<AddReservationCommand>
 {
-    public AddReservationCommandValidator(RealWorkout realWorkout, Guid currentUserGuid, bool isUserAlreadyReservedWorkout)
+    public AddReservationCommandValidator(RealWorkout realWorkout, bool isUserAlreadyReservedWorkout)
     {
         RuleFor(x => x.RealWorkoutId).NotEmpty();
 
@@ -20,7 +20,7 @@ internal sealed class AddReservationCommandValidator : AbstractValidator<AddRese
 
         RuleFor(x => x).Custom((value, context) =>
         {
-            if (realWorkout.Date < DateOnly.FromDateTime(DateTime.Now.Date))
+            if (realWorkout.Date <= DateOnly.FromDateTime(DateTime.Now.Date) && realWorkout.EndTime < TimeOnly.FromDateTime(DateTime.Now))
             {
                 context.AddFailure($"Training Id: {realWorkout.Id} has already taken place.");
             }
@@ -30,7 +30,7 @@ internal sealed class AddReservationCommandValidator : AbstractValidator<AddRese
         {
             if(isUserAlreadyReservedWorkout)
             {
-                context.AddFailure($"User with Id: {currentUserGuid} cannot reserve more than once for the same training.");
+                context.AddFailure($"User cannot reserve more than once for the same training.");
             }
         });
     }

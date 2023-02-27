@@ -9,8 +9,8 @@ public class AccountProfile : Profile
     public AccountProfile()
     {
         CreateMap<ApplicationUser, CurrentUserDto>()
-            .ForMember(desc => desc.Roles, src => src.MapFrom(user => user.ApplicationRoles.Select(role => role.Name)))
-            .ForMember(desc => desc.Permissions, src => src.MapFrom(user => user.ApplicationRoles
+            .ForMember(desc => desc.Roles, opt => opt.MapFrom(src => src.ApplicationRoles.Select(role => role.Name)))
+            .ForMember(desc => desc.Permissions, opt => opt.MapFrom(src => src.ApplicationRoles
                 .SelectMany(role => role.ApplicationPermissions.Select(permission => permission.Name))));
     }
 }

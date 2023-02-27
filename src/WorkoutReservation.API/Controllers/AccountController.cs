@@ -18,7 +18,7 @@ public class AccountController : ApiControllerBase
     [SwaggerOperation(Summary = "Register new user account")]
     public async Task<IActionResult> RegisterAccount([FromBody] RegisterCommand command, CancellationToken token)
     {
-        return Ok(await Mediator.Send(command, token));
+        return await SendAsync(command, token);
     }
     
     [HttpPost("login")]
@@ -26,7 +26,7 @@ public class AccountController : ApiControllerBase
     [SwaggerOperation(Summary = "Login user. If credentials is valid returns JWT Bearer token")]
     public async Task<IActionResult> Login([FromBody] LoginQuery query, CancellationToken token)
     {
-        return Ok(await Mediator.Send(query, token));
+        return await SendAsync(query, token);
     }
     
     [HttpDelete("delete-account")]
@@ -34,8 +34,7 @@ public class AccountController : ApiControllerBase
     [SwaggerOperation(Summary = "Delete the currently logged-in user account")]
     public async Task<IActionResult> DeleteOwnAccount([FromBody] SelfDeleteUserCommand command, CancellationToken token)
     {
-        await Mediator.Send(command, token);
-        return NoContent();
+        return await SendAsync(command, token);
     }
     
     [HttpGet("current-user")]
@@ -43,6 +42,6 @@ public class AccountController : ApiControllerBase
     [SwaggerOperation(Summary = "Get information about current user")]
     public async Task<IActionResult> GetCurrentUser(CancellationToken token)
     {
-        return Ok(await Mediator.Send(new GetCurrentUserQuery(), token));
+        return await SendAsync(new GetCurrentUserQuery(), token);
     }
 }

@@ -14,12 +14,10 @@ public class RepetitiveWorkoutRepository : IRepetitiveWorkoutRepository
         _dbContext = dbContext;
     }
 
-    public async Task<RepetitiveWorkout> AddAsync(RepetitiveWorkout repetitiveWorkout, CancellationToken token)
+    public async Task AddAsync(RepetitiveWorkout repetitiveWorkout, CancellationToken token)
     {
         await _dbContext.AddAsync(repetitiveWorkout, token);
         await _dbContext.SaveChangesAsync(token);
-
-        return repetitiveWorkout;
     }
 
     public async Task DeleteAsync(RepetitiveWorkout repetitiveWorkout, CancellationToken token)

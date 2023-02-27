@@ -4,7 +4,7 @@ namespace WorkoutReservation.Application.Contracts;
 
 public interface IRepetitiveWorkoutRepository
 {
-    public Task<RepetitiveWorkout> AddAsync(RepetitiveWorkout repetitiveWorkout, CancellationToken token);
+    public Task AddAsync(RepetitiveWorkout repetitiveWorkout, CancellationToken token);
     public Task DeleteAsync(RepetitiveWorkout repetitiveWorkout, CancellationToken token);
     public Task UpdateAsync(RepetitiveWorkout repetitiveWorkout, CancellationToken token);
     public Task<List<RepetitiveWorkout>> GetAllAsync(CancellationToken token);

@@ -8,9 +8,9 @@ using WorkoutReservation.Domain.Entities;
 namespace WorkoutReservation.Application.Features.RepetitiveWorkouts.Commands.CreateRepetitiveWorkout;
 
 public record CreateRepetitiveWorkoutCommand(int MaxParticipantNumber, TimeOnly StartTime, TimeOnly EndTime, 
-    int WorkoutTypeId, int InstructorId, DayOfWeek DayOfWeek) : IRequest<int>;
+    int WorkoutTypeId, int InstructorId, DayOfWeek DayOfWeek) : IRequest;
 
-internal sealed class CreateRepetitiveWorkoutCommandHandler : IRequestHandler<CreateRepetitiveWorkoutCommand, int>
+internal sealed class CreateRepetitiveWorkoutCommandHandler : IRequestHandler<CreateRepetitiveWorkoutCommand>
 {
     private readonly IRepetitiveWorkoutRepository _repetitiveWorkoutRepository;
     private readonly IInstructorRepository _instructorRepository;
@@ -28,7 +28,7 @@ internal sealed class CreateRepetitiveWorkoutCommandHandler : IRequestHandler<Cr
         _mapper = mapper;
     }
 
-    public async Task<int> Handle(CreateRepetitiveWorkoutCommand request, CancellationToken token)
+    public async Task<Unit> Handle(CreateRepetitiveWorkoutCommand request, CancellationToken token)
     {
         var instructor = await _instructorRepository.GetByIdAsync(request.InstructorId, false, token);
         if (instructor is null)
@@ -46,8 +46,8 @@ internal sealed class CreateRepetitiveWorkoutCommandHandler : IRequestHandler<Cr
 
         var repetitiveWorkout = _mapper.Map<RepetitiveWorkout>(request);
         repetitiveWorkout.CreatedDate = DateTime.Now;
-        repetitiveWorkout = await _repetitiveWorkoutRepository.AddAsync(repetitiveWorkout, token);
         
-        return repetitiveWorkout.Id;
+        await _repetitiveWorkoutRepository.AddAsync(repetitiveWorkout, token);
+        return Unit.Value;
     }
 }
