@@ -27,6 +27,7 @@ export class ReservationDetailsComponent extends BaseComponent implements OnInit
   permissions = Permission;
   editPopupVisible: boolean;
   reservationCommand?: EditReservation;
+  isCancelPopupVisible: boolean;
   private editPopupForm?: dxForm;
 
   constructor(private reservationService: ReservationService,
@@ -38,6 +39,7 @@ export class ReservationDetailsComponent extends BaseComponent implements OnInit
     this.routeId = this.route.snapshot.params['id'];
     this.isNotReserved = false;
     this.editPopupVisible = false;
+    this.isCancelPopupVisible = false;
   }
 
   ngOnInit(): void {
@@ -80,6 +82,8 @@ export class ReservationDetailsComponent extends BaseComponent implements OnInit
   }
 
   closeEditPopup = () => this.editPopupVisible = false;
+
+  openCancelPopup = () => this.isCancelPopupVisible = true;
 
   backToReservations = () => this.router.navigateByUrl(pageUrls.reservations);
 

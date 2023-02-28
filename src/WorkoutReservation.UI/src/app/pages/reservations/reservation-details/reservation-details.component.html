@@ -32,7 +32,7 @@
       text="Cancel reservation"
       icon="close"
       type="danger"
-      (onClick)="cancelReservation()">
+      (onClick)="openCancelPopup()">
     </dx-button>
 
     <dx-button
@@ -106,7 +106,7 @@
   </div>
   <dxi-toolbar-item location="after" toolbar="bottom">
     <dx-button
-      class="button"
+      class="popup-button"
       text="Cancel"
       type="normal"
       (onClick)="closeEditPopup()"></dx-button>
@@ -116,3 +116,10 @@
       (onClick)="updateReservation()"></dx-button>
   </dxi-toolbar-item>
 </dx-popup>
+
+<app-confirmation-popup
+  [(visible)]="isCancelPopupVisible"
+  title="Cancel reservation"
+  content="Are you sure you want to cancel this reservation?"
+  (confirm)="cancelReservation()">
+</app-confirmation-popup>

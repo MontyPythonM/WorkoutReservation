@@ -32,3 +32,7 @@ img {
 .link:hover {
   cursor: pointer;
 }
+
+.popup-button {
+  margin-right: 10px;
+}
