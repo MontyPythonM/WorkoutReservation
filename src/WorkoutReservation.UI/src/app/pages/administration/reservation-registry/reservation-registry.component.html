@@ -26,22 +26,12 @@
         <span>{{ cell.data.currentParticipantNumber }} / {{ cell.data.maxParticipantNumber }}</span>
       </div>
     </dxi-column>
-
     <dxi-column dataField="ownerId" caption="owner Id" alignment="center" dataType="string"></dxi-column>
     <dxi-column dataField="ownerFullName" caption="owner" alignment="center" dataType="string"></dxi-column>
-
     <dxi-column dataField="reservationStatus" caption="Status" alignment="center" dataType="string">
       <dxo-lookup [dataSource]="reservationStatuses" valueExpr="index" displayExpr="value"></dxo-lookup>
     </dxi-column>
-
-
-
     <dxi-column dataField="note" alignment="center" dataType="string"></dxi-column>
-
-
-
-
-
     <dxi-column type="buttons" caption="Edit reservation">
       <dxi-button
         [disabled]="!(hasPermission(permissions.UpdateReservation) | async)!"
