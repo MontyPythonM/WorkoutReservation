@@ -39,7 +39,7 @@
       class="button-right"
       text="Edit"
       icon="rename"
-      type="success"
+      type="default"
       (onClick)="openEditPopup()">
     </dx-button>
   </div>
@@ -65,7 +65,7 @@
 				<dxi-validation-rule type="stringLength" [max]="50" message="Last name must be a maximum of 50 characters"></dxi-validation-rule>
 			</dxi-item>
       <dxi-item dataField="gender" editorType="dxSelectBox"
-				[editorOptions]="{ dataSource: gender, valueExpr: 'index', displayExpr: 'value' }">
+				[editorOptions]="{ dataSource: genders, valueExpr: 'index', displayExpr: 'value' }">
 				<dxi-validation-rule type="required" message="Gender is required"></dxi-validation-rule>
 			</dxi-item>
       <dxi-item dataField="biography" editorType="dxTextArea" [editorOptions]="{ height: 120 }">

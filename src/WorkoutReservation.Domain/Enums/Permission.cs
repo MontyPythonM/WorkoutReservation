@@ -1,4 +1,4 @@
-﻿namespace WorkoutReservation.Infrastructure.Authorization;
+﻿namespace WorkoutReservation.Domain.Enums;
 
 public enum Permission
 {
@@ -29,10 +29,10 @@ public enum Permission
     OpenHangfireDashboard,
     
     GetOwnReservations,
-    GetSomeoneReservations,
+    GetAllReservations,
     CreateReservation,
     CancelReservation,
-    UpdateReservationStatus,
+    UpdateReservation,
 
     GetAllUsers,
     SetUserRole,

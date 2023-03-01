@@ -2,10 +2,8 @@ import {Component} from '@angular/core';
 import {Router} from '@angular/router';
 import dxForm from 'devextreme/ui/form';
 import {BaseComponent} from 'src/app/common/base.component';
-import {EnumObject, enumToObjects} from 'src/app/models/enums/enum-converter';
-import {Gender} from 'src/app/models/enums/gender.enum';
+import {genders} from 'src/app/models/enums/gender.enum';
 import {RegisterForm} from 'src/app/models/register-form.model';
-import {NotificationService} from 'src/app/services/notification.service';
 import {AccountService} from "../../services/identity/account.service";
 
 @Component({
@@ -15,7 +13,7 @@ import {AccountService} from "../../services/identity/account.service";
 })
 export class RegisterComponent extends BaseComponent {
   registerFormData: RegisterForm;
-  gender: EnumObject[];
+  genders = genders;
   namePattern: any;
   dateOptions: any;
   private dxForm!: dxForm;
@@ -33,7 +31,6 @@ export class RegisterComponent extends BaseComponent {
       min: new Date(1900, 0, 1),
       max: new Date(Date.now())
     };
-    this.gender = enumToObjects(Gender);
   }
 
   signUp() {

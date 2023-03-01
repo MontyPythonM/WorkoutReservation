@@ -7,6 +7,7 @@ using WorkoutReservation.Application.Features.Instructors.Commands.DeleteInstruc
 using WorkoutReservation.Application.Features.Instructors.Commands.UpdateInstructor;
 using WorkoutReservation.Application.Features.Instructors.Queries.GetInstructorDetail;
 using WorkoutReservation.Application.Features.Instructors.Queries.GetInstructorList;
+using WorkoutReservation.Domain.Enums;
 using WorkoutReservation.Infrastructure.Authorization;
 
 namespace WorkoutReservation.API.Controllers;

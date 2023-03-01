@@ -5,8 +5,7 @@ import {BaseComponent} from 'src/app/common/base.component';
 import {InstructorDetailsCommand} from 'src/app/models/instructor-details-command.model';
 import {InstructorDetails} from 'src/app/models/instructor-details.model';
 import {InstructorService} from 'src/app/services/instructor.service';
-import {EnumObject, enumToObjects} from 'src/app/models/enums/enum-converter';
-import {Gender} from 'src/app/models/enums/gender.enum';
+import {genders} from 'src/app/models/enums/gender.enum';
 import {Permission} from "../../../models/enums/permission.enum";
 import {pageUrls} from "../../../../environments/page-urls";
 
@@ -22,7 +21,7 @@ export class InstructorDetailsComponent extends BaseComponent implements OnInit 
   isDeletePopupVisible: boolean;
   isSaving: boolean;
   instructorId: number;
-  gender: EnumObject[];
+  genders = genders;
   permissions = Permission;
   private form!: Form | undefined;
 
@@ -34,7 +33,6 @@ export class InstructorDetailsComponent extends BaseComponent implements OnInit 
     this.isDeletePopupVisible = false;
     this.isSaving = false;
     this.instructorId = this.route.snapshot.params['id'];
-    this.gender = enumToObjects(Gender);
   }
 
   ngOnInit(): void {
@@ -85,7 +83,7 @@ export class InstructorDetailsComponent extends BaseComponent implements OnInit 
       this.instructor?.id,
       this.instructor?.firstName,
       this.instructor?.lastName,
-      this.gender.find(x => x.value === this.instructor?.gender)?.index!,
+      this.genders.find(x => x.value === this.instructor?.gender)?.index!,
       this.instructor?.biography,
       this.instructor?.email
     );

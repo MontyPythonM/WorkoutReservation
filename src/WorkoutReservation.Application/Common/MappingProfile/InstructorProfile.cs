@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using WorkoutReservation.Application.Features.Instructors.Commands.CreateInstructor;
-using WorkoutReservation.Application.Features.Instructors.Commands.UpdateInstructor;
 using WorkoutReservation.Application.Features.Instructors.Queries.GetInstructorDetail;
 using WorkoutReservation.Application.Features.Instructors.Queries.GetInstructorList;
 using WorkoutReservation.Domain.Entities;
@@ -17,7 +16,5 @@ public class InstructorProfile : Profile
         CreateMap<WorkoutType, WorkoutTypeForInstructorDetailQueryDto>();
 
         CreateMap<CreateInstructorCommand, Instructor>();
-
-        CreateMap<UpdateInstructorCommand, Instructor>();
     }
 }

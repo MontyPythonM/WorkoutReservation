@@ -4,6 +4,7 @@ using WorkoutReservation.API.Controllers.Base;
 using WorkoutReservation.Application.Features.Users.Commands.DeleteUser;
 using WorkoutReservation.Application.Features.Users.Commands.SetUserRole;
 using WorkoutReservation.Application.Features.Users.Queries.GetUsersList;
+using WorkoutReservation.Domain.Enums;
 using WorkoutReservation.Infrastructure.Authorization;
 
 namespace WorkoutReservation.API.Controllers;

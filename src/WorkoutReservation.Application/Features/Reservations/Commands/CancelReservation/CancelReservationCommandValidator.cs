@@ -16,7 +16,7 @@ internal sealed class CancelReservationCommandValidator : AbstractValidator<Canc
         {
             if (reservation.User.Id != userGuid)
             {
-                context.AddFailure("Incorrect reservation Id. Access forbidden.");
+                context.AddFailure("Access forbidden.");
             }
             
             if (reservation.RealWorkout.Date < DateOnly.FromDateTime(DateTime.Now.Date))

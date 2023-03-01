@@ -2,9 +2,9 @@
 
 namespace WorkoutReservation.Application.Features.Reservations.Commands.EditReservationStatus;
 
-internal sealed class EditReservationStatusCommandValidator : AbstractValidator<EditReservationStatusCommand>
+internal sealed class EditReservationCommandValidator : AbstractValidator<EditReservationCommand>
 {
-    public EditReservationStatusCommandValidator()
+    public EditReservationCommandValidator()
     {
         RuleFor(x => x.ReservationId)
             .NotEmpty()
@@ -13,5 +13,8 @@ internal sealed class EditReservationStatusCommandValidator : AbstractValidator<
         RuleFor(x => x.ReservationStatus)
             .IsInEnum()
             .NotEmpty();
+
+        RuleFor(x => x.Note)
+            .MaximumLength(3000);
     }
 }

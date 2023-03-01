@@ -6,21 +6,18 @@ using WorkoutReservation.Domain.Enums;
 
 namespace WorkoutReservation.Application.Features.Reservations.Commands.EditReservationStatus;
 
-public record EditReservationStatusCommand(int ReservationId, ReservationStatus ReservationStatus) : IRequest;
+public record EditReservationCommand(int ReservationId, ReservationStatus ReservationStatus, string Note) : IRequest;
 
-internal sealed class EditReservationStatusCommandHandler : IRequestHandler<EditReservationStatusCommand>
+internal sealed class EditReservationCommandHandler : IRequestHandler<EditReservationCommand>
 {
     private readonly IReservationRepository _reservationRepository;
-    private readonly IRealWorkoutRepository _realWorkoutRepository;
 
-    public EditReservationStatusCommandHandler(IReservationRepository reservationRepository,
-        IRealWorkoutRepository realWorkoutRepository)
+    public EditReservationCommandHandler(IReservationRepository reservationRepository)
     {
         _reservationRepository = reservationRepository;
-        _realWorkoutRepository = realWorkoutRepository;
     }
 
-    public async Task<Unit> Handle(EditReservationStatusCommand request, CancellationToken token)
+    public async Task<Unit> Handle(EditReservationCommand request, CancellationToken token)
     {
         var reservation = await _reservationRepository
             .GetByIdAsync(request.ReservationId, false, token,
@@ -29,7 +26,7 @@ internal sealed class EditReservationStatusCommandHandler : IRequestHandler<Edit
         if (reservation is null)
             throw new NotFoundException($"Reservation with Id: {request.ReservationId} not found.");
 
-        var validator = new EditReservationStatusCommandValidator();
+        var validator = new EditReservationCommandValidator();
         await validator.ValidateAndThrowAsync(request, token);
         
         if (reservation.ReservationStatus == ReservationStatus.Reserved && 
@@ -46,6 +43,7 @@ internal sealed class EditReservationStatusCommandHandler : IRequestHandler<Edit
 
         reservation.UpdateLastModificationDate();
         reservation.SetReservationStatus(request.ReservationStatus);
+        reservation.SetNote(request.Note);
         
         await _reservationRepository.UpdateAsync(reservation, token);
         return Unit.Value;

@@ -20,16 +20,6 @@ public class ExceptionHandlingMiddleware : IMiddleware
         {
             await next.Invoke(context);
         }
-        catch (DomainException ex)
-        {
-            context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
-            await context.Response.WriteAsync(ex.Message);
-        }
-        catch (InfrastructureException ex)
-        {
-            context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
-            await context.Response.WriteAsync(ex.Message);
-        }
         catch (ConversionException ex)
         {
             context.Response.StatusCode = (int)HttpStatusCode.BadRequest;
@@ -55,23 +45,33 @@ public class ExceptionHandlingMiddleware : IMiddleware
             context.Response.StatusCode = (int)HttpStatusCode.NotFound;
             await context.Response.WriteAsync(ex.Message);
         }
-        catch (ForbidException ex)
+        catch (UnauthorizedException ex)
         {
-            context.Response.StatusCode = (int)HttpStatusCode.Forbidden;
+            context.Response.StatusCode = (int)HttpStatusCode.Unauthorized;
             await context.Response.WriteAsync(ex.Message);
         }
-        catch (InternalServerError ex)
+        catch (DomainException ex)
+        {
+            context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+            await context.Response.WriteAsync(ex.Message);
+        }
+        catch (InfrastructureException ex)
+        {
+            context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+            await context.Response.WriteAsync(ex.Message);
+        }
+        catch (DatabaseConnectionException ex)
         {
             _logger.LogError("Cannot connect with database.", ex);
 
-            context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;;
+            context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
             await context.Response.WriteAsync(ex.Message);
         }
         catch (Exception ex)
         {
             _logger.LogError("Internal server error.", ex);
 
-            context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;;
+            context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
             await context.Response.WriteAsync(ex.Message);
         }
     }

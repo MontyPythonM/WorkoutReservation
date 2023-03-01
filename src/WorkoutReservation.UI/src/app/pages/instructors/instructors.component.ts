@@ -1,12 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import Form from 'devextreme/ui/form';
-import { BaseComponent } from 'src/app/common/base.component';
-import { EnumObject, enumToObjects } from 'src/app/models/enums/enum-converter';
-import { Gender } from 'src/app/models/enums/gender.enum';
-import { InstructorDetailsCommand } from 'src/app/models/instructor-details-command.model';
-import { Instructor } from 'src/app/models/instructor.model';
-import { InstructorService } from 'src/app/services/instructor.service';
-import { NotificationService } from 'src/app/services/notification.service';
+import {BaseComponent} from 'src/app/common/base.component';
+import {genders} from 'src/app/models/enums/gender.enum';
+import {InstructorDetailsCommand} from 'src/app/models/instructor-details-command.model';
+import {Instructor} from 'src/app/models/instructor.model';
+import {InstructorService} from 'src/app/services/instructor.service';
 import {Permission} from "../../models/enums/permission.enum";
 
 @Component({
@@ -19,7 +17,7 @@ export class InstructorsComponent extends BaseComponent implements OnInit {
   isPopupOpened: boolean;
   isSaving: boolean;
   instructorCommand!: InstructorDetailsCommand;
-  gender: EnumObject[];
+  genders = genders;
   permissions = Permission;
   private form!: Form | undefined;
 
@@ -28,7 +26,6 @@ export class InstructorsComponent extends BaseComponent implements OnInit {
     this.instructors = new Array<Instructor>();
     this.isPopupOpened = false;
     this.isSaving = false;
-    this.gender = enumToObjects(Gender);
   }
 
   ngOnInit(): void {

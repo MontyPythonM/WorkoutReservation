@@ -62,7 +62,18 @@ public class ReservationRepository : IReservationRepository
             .AsQueryable();          
     }
     
-    public async Task<Reservation> GetDetailsByIdAsync(int reservationId, Guid userId, bool asNoTracking, CancellationToken token)
+    public IQueryable<Reservation> GetReservationsQuery()
+    { 
+        return _dbContext.Reservations
+            .AsNoTracking()
+            .Include(x => x.User)
+            .Include(x => x.RealWorkout).ThenInclude(x => x.Instructor)
+            .Include(x => x.RealWorkout).ThenInclude(x => x.WorkoutType)
+            .OrderByDescending(x => x.RealWorkout.Date).ThenBy(x => x.RealWorkout.StartTime)
+            .AsQueryable();          
+    }
+    
+    public async Task<Reservation> GetDetailsByIdAsync(int reservationId, bool asNoTracking, CancellationToken token)
     {
         var query = _dbContext.Reservations
             .Include(r => r.RealWorkout).ThenInclude(w => w.Instructor)
@@ -71,6 +82,6 @@ public class ReservationRepository : IReservationRepository
         
         query = _repository.ApplyAsNoTracking(asNoTracking, query);
         
-        return await query.FirstOrDefaultAsync(r => r.Id == reservationId && r.UserId == userId, token);
+        return await query.FirstOrDefaultAsync(r => r.Id == reservationId, token);
     }
 }

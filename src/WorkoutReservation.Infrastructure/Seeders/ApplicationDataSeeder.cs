@@ -29,7 +29,7 @@ public class ApplicationDataSeeder
     public async Task SeedAsync(CancellationToken token)
     {
         if (await _dbContext.Database.CanConnectAsync(token) is false)
-            throw new InternalServerError("Cannot connect with database.");
+            throw new DatabaseConnectionException();
         
         if (await _dbContext.Instructors.AnyAsync(token) ||
             await _dbContext.WorkoutTypes.AnyAsync(token) ||

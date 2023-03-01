@@ -27,12 +27,12 @@ internal sealed class LoginQueryHandler : IRequestHandler<LoginQuery, string>
         var user = await _userRepository.GetByEmailAsync(request.Email, true, token);
 
         if (user is null)
-            throw new InvalidCredentialsException("Invalid email address or password.");
+            throw new InvalidCredentialsException();
 
         var result = _passwordHasher.VerifyHashedPassword(user, user.PasswordHash, request.Password);
 
         if (result == PasswordVerificationResult.Failed)
-            throw new InvalidCredentialsException("Invalid email address or password.");
+            throw new InvalidCredentialsException();
 
         return await _jwtProvider.GenerateAsync(user, token);
     }

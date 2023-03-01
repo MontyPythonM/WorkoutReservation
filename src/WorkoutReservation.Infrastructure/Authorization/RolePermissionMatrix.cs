@@ -1,4 +1,5 @@
 ﻿using WorkoutReservation.Domain.Entities;
+using WorkoutReservation.Domain.Enums;
 
 namespace WorkoutReservation.Infrastructure.Authorization;
 
@@ -30,12 +31,12 @@ internal static class RolePermissionMatrix
             Create(ApplicationRole.SystemAdministrator, Permission.GenerateNewUpcomingWeek),
             Create(ApplicationRole.SystemAdministrator, Permission.OpenHangfireDashboard),
             Create(ApplicationRole.SystemAdministrator, Permission.GetOwnReservations),
-            Create(ApplicationRole.SystemAdministrator, Permission.GetSomeoneReservations),
+            Create(ApplicationRole.SystemAdministrator, Permission.GetAllReservations),
             Create(ApplicationRole.SystemAdministrator, Permission.GetOwnReservationDetails),
             Create(ApplicationRole.SystemAdministrator, Permission.GetSomeoneReservationDetails),
             Create(ApplicationRole.SystemAdministrator, Permission.CreateReservation),
             Create(ApplicationRole.SystemAdministrator, Permission.CancelReservation),
-            Create(ApplicationRole.SystemAdministrator, Permission.UpdateReservationStatus),
+            Create(ApplicationRole.SystemAdministrator, Permission.UpdateReservation),
             Create(ApplicationRole.SystemAdministrator, Permission.GetAllUsers),
             Create(ApplicationRole.SystemAdministrator, Permission.SetUserRole),
             Create(ApplicationRole.SystemAdministrator, Permission.DeleteUserAccount),
@@ -62,9 +63,9 @@ internal static class RolePermissionMatrix
             Create(ApplicationRole.BusinessAdministrator, Permission.DeleteRepetitiveWorkout),
             Create(ApplicationRole.BusinessAdministrator, Permission.DeleteAllRepetitiveWorkouts),
             Create(ApplicationRole.BusinessAdministrator, Permission.OpenHangfireDashboard),
-            Create(ApplicationRole.BusinessAdministrator, Permission.GetSomeoneReservations),
+            Create(ApplicationRole.BusinessAdministrator, Permission.GetAllReservations),
             Create(ApplicationRole.BusinessAdministrator, Permission.GetSomeoneReservationDetails),
-            Create(ApplicationRole.BusinessAdministrator, Permission.UpdateReservationStatus),
+            Create(ApplicationRole.BusinessAdministrator, Permission.UpdateReservation),
             Create(ApplicationRole.BusinessAdministrator, Permission.GetAllUsers),
             Create(ApplicationRole.BusinessAdministrator, Permission.SetUserRole),
             Create(ApplicationRole.BusinessAdministrator, Permission.DeleteOwnAccount),
@@ -78,12 +79,12 @@ internal static class RolePermissionMatrix
             Create(ApplicationRole.Manager, Permission.DeleteRealWorkout),
             Create(ApplicationRole.Manager, Permission.GetRepetitiveWorkouts),
             Create(ApplicationRole.Manager, Permission.GetOwnReservations),
-            Create(ApplicationRole.Manager, Permission.GetSomeoneReservations),
+            Create(ApplicationRole.Manager, Permission.GetAllReservations),
             Create(ApplicationRole.Manager, Permission.GetOwnReservationDetails),
             Create(ApplicationRole.Manager, Permission.GetSomeoneReservationDetails),
             Create(ApplicationRole.Manager, Permission.CreateReservation),
             Create(ApplicationRole.Manager, Permission.CancelReservation),
-            Create(ApplicationRole.Manager, Permission.UpdateReservationStatus),
+            Create(ApplicationRole.Manager, Permission.UpdateReservation),
             Create(ApplicationRole.Manager, Permission.GetAllUsers),
             Create(ApplicationRole.Manager, Permission.DeleteOwnAccount),
             Create(ApplicationRole.Manager, Permission.OpenAdministrationPage),
