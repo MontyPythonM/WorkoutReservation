@@ -92,7 +92,7 @@
         <dxi-validation-rule type="stringLength" [max]="600" message="Workout type name must be a maximum of 50 characters"></dxi-validation-rule>
       </dxi-item>
       <dxi-item dataField="intensity" editorType="dxSelectBox"
-        [editorOptions]="{ dataSource: intensity, valueExpr: 'index', displayExpr: 'value' }">
+        [editorOptions]="{ dataSource: intensities, valueExpr: 'index', displayExpr: 'value' }">
         <dxi-validation-rule type="required" message="Intensity is required"></dxi-validation-rule>
       </dxi-item>
       <dxi-item dataField="workoutTypeTags" editorType="dxTagBox"
@@ -141,7 +141,7 @@
         <dxi-validation-rule type="stringLength" [max]="600" message="Workout type name must be a maximum of 50 characters"></dxi-validation-rule>
       </dxi-item>
       <dxi-item dataField="intensity" editorType="dxSelectBox"
-                [editorOptions]="{ dataSource: intensity, valueExpr: 'index', displayExpr: 'value' }">
+                [editorOptions]="{ dataSource: intensities, valueExpr: 'index', displayExpr: 'value' }">
         <dxi-validation-rule type="required" message="Intensity is required"></dxi-validation-rule>
       </dxi-item>
       <dxi-item dataField="workoutTypeTags" editorType="dxTagBox"

@@ -5,9 +5,7 @@ import {PagedQuery} from 'src/app/models/paged-query.model';
 import {PagedResult} from 'src/app/models/paged-result.model';
 import {WorkoutType} from 'src/app/models/workout-types.model';
 import {WorkoutTypeService} from 'src/app/services/workout-type.service';
-import {NotificationService} from "../../services/notification.service";
-import {EnumObject, enumToObjects} from "../../models/enums/enum-converter";
-import {WorkoutIntensity} from "../../models/enums/workout-intensity.enum";
+import {workoutIntensities} from "../../models/enums/workout-intensity.enum";
 import {WorkoutTypeTagService} from "../../services/workout-type-tag.service";
 import {InstructorService} from "../../services/instructor.service";
 import {Instructor} from "../../models/instructor.model";
@@ -28,7 +26,7 @@ export class WorkoutTypesComponent extends BaseComponent implements OnInit {
   isUpdatePopupOpened: boolean;
   isDeletePopupVisible: boolean;
   isSaving: boolean;
-  intensity: EnumObject[];
+  intensities = workoutIntensities;
   workoutTypeTags: WorkoutTypeTagActive[];
   activeWorkoutTypeTags: WorkoutTypeTagActive[];
   activeAndExistingWorkoutTypeTags: WorkoutTypeTagActive[];
@@ -54,7 +52,6 @@ export class WorkoutTypesComponent extends BaseComponent implements OnInit {
     this.isUpdatePopupOpened = false;
     this.isDeletePopupVisible = false;
     this.isSaving = false;
-    this.intensity = enumToObjects(WorkoutIntensity);
     this.workoutTypeTags = [];
     this.activeWorkoutTypeTags = [];
     this.activeAndExistingWorkoutTypeTags = [];
@@ -149,7 +146,7 @@ export class WorkoutTypesComponent extends BaseComponent implements OnInit {
       workoutType.id,
       workoutType.name,
       workoutType.description,
-      this.intensity.find(x => x.value === workoutType.intensity)!.index,
+      this.intensities.find(x => x.value === workoutType.intensity)!.index,
       workoutType.workoutTypeTags,
       workoutType.instructors
     );

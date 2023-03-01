@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 using WorkoutReservation.API.Controllers.Base;
 using WorkoutReservation.Application.Contracts;
@@ -6,7 +7,9 @@ using WorkoutReservation.Application.Features.Reservations.Commands.AddReservati
 using WorkoutReservation.Application.Features.Reservations.Commands.CancelReservation;
 using WorkoutReservation.Application.Features.Reservations.Commands.EditReservationStatus;
 using WorkoutReservation.Application.Features.Reservations.Queries.GetReservationDetails;
+using WorkoutReservation.Application.Features.Reservations.Queries.GetReservations;
 using WorkoutReservation.Application.Features.Reservations.Queries.GetUserReservationsList;
+using WorkoutReservation.Domain.Enums;
 using WorkoutReservation.Infrastructure.Authorization;
 
 namespace WorkoutReservation.API.Controllers;
@@ -21,18 +24,9 @@ public class ReservationController : ApiControllerBase
         _currentUserAccessor = currentUserAccessor;
     }
     
-    [HttpGet("own-details")] 
-    [HasPermission(Permission.GetOwnReservationDetails)]
-    [SwaggerOperation(Summary = "Returns current user reservation details")]
-    public async Task<IActionResult> GetOwnReservationDetails([FromQuery] GetReservationDetailsQuery query, CancellationToken token)
-    {
-        query.UserId = _currentUserAccessor.GetUserId();
-        return await SendAsync(query, token);
-    }
-    
-    [HttpGet("selected-user-details")]
-    [HasPermission(Permission.GetSomeoneReservationDetails)]
-    [SwaggerOperation(Summary = "Returns selected user reservation details")]
+    [HttpGet("details")]
+    [Authorize]
+    [SwaggerOperation(Summary = "Returns selected reservation details")]
     public async Task<IActionResult> GetSomeoneReservationDetails([FromQuery] GetReservationDetailsQuery query, CancellationToken token)
     {
          return await SendAsync(query, token);
@@ -47,10 +41,10 @@ public class ReservationController : ApiControllerBase
         return await SendAsync(query, token);
     }
 
-    [HttpGet("selected-user")]
-    [HasPermission(Permission.GetSomeoneReservations)]
-    [SwaggerOperation(Summary = "Returns paged list of selected user reservations")]
-    public async Task<IActionResult> GetSomeoneReservations([FromQuery] GetUserReservationsListQuery query, CancellationToken token)
+    [HttpGet("all")]
+    [HasPermission(Permission.GetAllReservations)]
+    [SwaggerOperation(Summary = "Returns paged list of reservations")]
+    public async Task<IActionResult> GetAllReservations([FromQuery] GetReservationsQuery query, CancellationToken token)
     {
         return await SendAsync(query, token);
     }

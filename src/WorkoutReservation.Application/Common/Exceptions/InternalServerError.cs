@@ -1,8 +1,12 @@
 ﻿namespace WorkoutReservation.Application.Common.Exceptions;
 
-public class InternalServerError : Exception
+public class DatabaseConnectionException : Exception
 {
-    public InternalServerError(string message) : base(message)
+    public DatabaseConnectionException() : base("Cannot connect with database")
+    {
+    }
+    
+    public DatabaseConnectionException(string message) : base(message)
     {
     }
 }

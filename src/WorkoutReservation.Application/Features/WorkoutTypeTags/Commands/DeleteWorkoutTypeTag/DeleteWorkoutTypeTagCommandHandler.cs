@@ -1,6 +1,7 @@
 ﻿using MediatR;
 using WorkoutReservation.Application.Common.Exceptions;
 using WorkoutReservation.Application.Contracts;
+using WorkoutReservation.Domain.Entities;
 
 namespace WorkoutReservation.Application.Features.WorkoutTypeTags.Commands.DeleteWorkoutTypeTag;
 
@@ -20,7 +21,7 @@ internal sealed class DeleteWorkoutTypeTagCommandHandler : IRequestHandler<Delet
         var workoutTypeTag = await _workoutTypeTagRepository.GetByIdAsync(request.Id, false, token);
 
         if (workoutTypeTag is null)
-            throw new NotFoundException($"Workout type with Id: {request.Id} not found.");
+            throw new NotFoundException(nameof(WorkoutTypeTag), request.Id.ToString());
 
         await _workoutTypeTagRepository.DeleteAsync(workoutTypeTag, token);
         return Unit.Value;

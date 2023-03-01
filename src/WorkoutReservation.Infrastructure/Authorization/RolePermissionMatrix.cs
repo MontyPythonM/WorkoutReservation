@@ -1,4 +1,5 @@
 ﻿using WorkoutReservation.Domain.Entities;
+using WorkoutReservation.Domain.Enums;
 
 namespace WorkoutReservation.Infrastructure.Authorization;
 
@@ -30,7 +31,7 @@ internal static class RolePermissionMatrix
             Create(ApplicationRole.SystemAdministrator, Permission.GenerateNewUpcomingWeek),
             Create(ApplicationRole.SystemAdministrator, Permission.OpenHangfireDashboard),
             Create(ApplicationRole.SystemAdministrator, Permission.GetOwnReservations),
-            Create(ApplicationRole.SystemAdministrator, Permission.GetSomeoneReservations),
+            Create(ApplicationRole.SystemAdministrator, Permission.GetAllReservations),
             Create(ApplicationRole.SystemAdministrator, Permission.GetOwnReservationDetails),
             Create(ApplicationRole.SystemAdministrator, Permission.GetSomeoneReservationDetails),
             Create(ApplicationRole.SystemAdministrator, Permission.CreateReservation),
@@ -62,7 +63,7 @@ internal static class RolePermissionMatrix
             Create(ApplicationRole.BusinessAdministrator, Permission.DeleteRepetitiveWorkout),
             Create(ApplicationRole.BusinessAdministrator, Permission.DeleteAllRepetitiveWorkouts),
             Create(ApplicationRole.BusinessAdministrator, Permission.OpenHangfireDashboard),
-            Create(ApplicationRole.BusinessAdministrator, Permission.GetSomeoneReservations),
+            Create(ApplicationRole.BusinessAdministrator, Permission.GetAllReservations),
             Create(ApplicationRole.BusinessAdministrator, Permission.GetSomeoneReservationDetails),
             Create(ApplicationRole.BusinessAdministrator, Permission.UpdateReservation),
             Create(ApplicationRole.BusinessAdministrator, Permission.GetAllUsers),
@@ -78,7 +79,7 @@ internal static class RolePermissionMatrix
             Create(ApplicationRole.Manager, Permission.DeleteRealWorkout),
             Create(ApplicationRole.Manager, Permission.GetRepetitiveWorkouts),
             Create(ApplicationRole.Manager, Permission.GetOwnReservations),
-            Create(ApplicationRole.Manager, Permission.GetSomeoneReservations),
+            Create(ApplicationRole.Manager, Permission.GetAllReservations),
             Create(ApplicationRole.Manager, Permission.GetOwnReservationDetails),
             Create(ApplicationRole.Manager, Permission.GetSomeoneReservationDetails),
             Create(ApplicationRole.Manager, Permission.CreateReservation),

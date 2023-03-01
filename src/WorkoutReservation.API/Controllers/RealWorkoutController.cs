@@ -8,6 +8,7 @@ using WorkoutReservation.Application.Features.RealWorkouts.Commands.UpdateRealWo
 using WorkoutReservation.Application.Features.RealWorkouts.Queries.GetRealWorkoutDetail;
 using WorkoutReservation.Application.Features.RealWorkouts.Queries.GetRealWorkoutFromCurrentWeek;
 using WorkoutReservation.Application.Features.RealWorkouts.Queries.GetRealWorkoutFromUpcomingWeek;
+using WorkoutReservation.Domain.Enums;
 using WorkoutReservation.Infrastructure.Authorization;
 
 namespace WorkoutReservation.API.Controllers;

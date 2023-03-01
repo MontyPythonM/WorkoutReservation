@@ -1,0 +1,17 @@
+.container {
+  margin: 1% 1% 1% 1%;
+}
+
+.popup-button {
+  margin-right: 10px;
+}
+
+.link {
+  font-weight: bold;
+  color: rgb(24, 108, 24);
+}
+
+.link:hover {
+  font-weight: bold;
+  cursor: pointer;
+}

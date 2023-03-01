@@ -3,8 +3,6 @@ import {BaseComponent} from 'src/app/common/base.component';
 import {PagedQuery} from "../../models/paged-query.model";
 import {PagedResult} from "../../models/paged-result.model";
 import {Reservation} from "../../models/reservation.model";
-import {EnumObject, enumToObjects} from "../../models/enums/enum-converter";
-import {ReservationStatus} from "../../models/enums/reservation-status.enum";
 import {ReservationService} from "../../services/reservation.service";
 import {Router} from "@angular/router";
 import {DATE_FORMAT} from "../../constants/constants";
@@ -19,9 +17,7 @@ import {pageUrls} from "../../../environments/page-urls";
 export class ReservationsComponent extends BaseComponent implements OnInit {
   reservations: PagedResult<Reservation>;
   queryParams: PagedQuery;
-  reservationStatus: EnumObject[];
   dateFormat = DATE_FORMAT;
-  isInfoPopupOpen: boolean;
   isReservationsExist: boolean;
   private dxDataGrid?: dxDataGrid;
 
@@ -35,8 +31,6 @@ export class ReservationsComponent extends BaseComponent implements OnInit {
       sortBy: 'WorkoutDate',
       searchPhrase: ''
     });
-    this.reservationStatus = enumToObjects(ReservationStatus);
-    this.isInfoPopupOpen = false;
     this.isReservationsExist = true;
    }
 
@@ -68,9 +62,6 @@ export class ReservationsComponent extends BaseComponent implements OnInit {
   navigateToReservationDetails(e: any){
     this.router.navigateByUrl(pageUrls.reservations + '/' + e.data.id);
   }
-
-  openInfoPopup = () => this.isInfoPopupOpen = true;
-  closeInfoPopup = () => this.isInfoPopupOpen = false;
 
   onDataGridInit = (e: { component: dxDataGrid }) => this.dxDataGrid = e.component;
 }

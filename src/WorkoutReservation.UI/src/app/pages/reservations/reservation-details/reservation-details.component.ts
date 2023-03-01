@@ -4,11 +4,10 @@ import {Reservation} from "../../../models/reservation.model";
 import {ReservationService} from "../../../services/reservation.service";
 import {ActivatedRoute, Router} from "@angular/router";
 import {pageUrls} from "../../../../environments/page-urls";
-import {EnumObject, enumToObjects} from "../../../models/enums/enum-converter";
-import {WorkoutIntensity} from "../../../models/enums/workout-intensity.enum";
-import {ReservationStatus} from "../../../models/enums/reservation-status.enum";
+import {workoutIntensities} from "../../../models/enums/workout-intensity.enum";
+import {ReservationStatus, reservationStatuses} from "../../../models/enums/reservation-status.enum";
 import {DATE_FORMAT} from "../../../common/constants";
-import { Permission } from 'src/app/models/enums/permission.enum';
+import {Permission} from 'src/app/models/enums/permission.enum';
 import {EditReservation} from "../../../models/edit-reservation.model";
 import dxForm from "devextreme/ui/form";
 
@@ -19,8 +18,8 @@ import dxForm from "devextreme/ui/form";
 })
 export class ReservationDetailsComponent extends BaseComponent implements OnInit {
   reservation?: Reservation;
-  intensity: EnumObject[];
-  status: EnumObject[];
+  intensities = workoutIntensities;
+  statuses = reservationStatuses;
   routeId: number;
   dateFormat = DATE_FORMAT;
   isNotReserved: boolean;
@@ -34,8 +33,6 @@ export class ReservationDetailsComponent extends BaseComponent implements OnInit
               private route: ActivatedRoute,
               private router: Router) {
     super();
-    this.intensity = enumToObjects(WorkoutIntensity);
-    this.status = enumToObjects(ReservationStatus);
     this.routeId = this.route.snapshot.params['id'];
     this.isNotReserved = false;
     this.editPopupVisible = false;
@@ -47,7 +44,7 @@ export class ReservationDetailsComponent extends BaseComponent implements OnInit
   }
 
   protected loadReservation() {
-    this.subscribe(this.reservationService.getOwnReservationDetails(this.routeId), {
+    this.subscribe(this.reservationService.getDetails(this.routeId), {
       next: (result: Reservation) => {
         this.reservation = result;
         this.isNotReserved = result.reservationStatus != ReservationStatus.Reserved;
@@ -90,8 +87,8 @@ export class ReservationDetailsComponent extends BaseComponent implements OnInit
   navigateToInstructor = (id: number) => this.router.navigateByUrl(pageUrls.instructors + '/' + id)
   navigateToWorkoutType = () => this.router.navigateByUrl(pageUrls.workoutTypes);
 
-  displayStatus = () => this.status.find(x => x.index === this.reservation?.reservationStatus)!.value;
-  displayIntensity = () => this.intensity.find(x => x.index === this.reservation?.intensity)!.value;
+  displayStatus = () => this.statuses.find(x => x.index === this.reservation?.reservationStatus)!.value;
+  displayIntensity = () => this.intensities.find(x => x.index === this.reservation?.intensity)!.value;
 
   displayTime = (time: Date): string => {
     const splitTime = time.toString().split(":");

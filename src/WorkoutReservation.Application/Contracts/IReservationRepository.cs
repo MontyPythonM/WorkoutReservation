@@ -11,5 +11,6 @@ public interface IReservationRepository
         params Expression<Func<Reservation, object>>[] includes);
     public Task UpdateAsync(Reservation reservation, CancellationToken token);
     public IQueryable<Reservation> GetUserReservationsQuery(Guid userId);
-    public Task<Reservation> GetDetailsByIdAsync(int reservationId, Guid userId, bool asNoTracking, CancellationToken token);
+    public IQueryable<Reservation> GetReservationsQuery();
+    public Task<Reservation> GetDetailsByIdAsync(int reservationId, bool asNoTracking, CancellationToken token);
 }

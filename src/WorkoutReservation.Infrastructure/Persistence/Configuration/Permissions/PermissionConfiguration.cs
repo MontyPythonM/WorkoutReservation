@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using WorkoutReservation.Domain.Entities;
-using WorkoutReservation.Infrastructure.Authorization;
+using WorkoutReservation.Domain.Enums;
 
 namespace WorkoutReservation.Infrastructure.Persistence.Configuration.Permissions;
 

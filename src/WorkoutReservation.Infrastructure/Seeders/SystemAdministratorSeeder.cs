@@ -32,7 +32,7 @@ public class SystemAdministratorSeeder
     public async Task SeedAsync(CancellationToken token)
     {
         if (await _dbContext.Database.CanConnectAsync(token) is false)
-            throw new InternalServerError("Cannot connect with database.");
+            throw new DatabaseConnectionException();
 
         var anyAdmin = await _dbContext.ApplicationUsers
             .AnyAsync(x => x.ApplicationRoles.Contains(ApplicationRole.SystemAdministrator), token);

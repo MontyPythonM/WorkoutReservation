@@ -2,6 +2,7 @@
 using MediatR;
 using WorkoutReservation.Application.Common.Exceptions;
 using WorkoutReservation.Application.Contracts;
+using WorkoutReservation.Domain.Entities;
 
 namespace WorkoutReservation.Application.Features.Instructors.Queries.GetInstructorDetail;
 
@@ -27,7 +28,7 @@ internal sealed class GetInstructorDetailQueryHandler : IRequestHandler<GetInstr
             .GetByIdAsync(request.InstructorId, true, token);
 
         if (instructor is null)
-            throw new NotFoundException($"Instructor with Id: {request.InstructorId} not found.");
+            throw new NotFoundException(nameof(Instructor), request.InstructorId.ToString());
 
         return _mapper.Map<InstructorDetailQueryDto>(instructor);
     }

@@ -26,7 +26,7 @@ export enum Permission {
   OpenHangfireDashboard = "OpenHangfireDashboard",
 
   GetOwnReservations = "GetOwnReservations",
-  GetSomeoneReservations = "GetSomeoneReservations",
+  GetAllReservations = "GetAllReservations",
   CreateReservation = "CreateReservation",
   CancelReservation = "CancelReservation",
   UpdateReservation = "UpdateReservation",

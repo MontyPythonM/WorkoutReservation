@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using WorkoutReservation.Domain.Enums;
 
 namespace WorkoutReservation.Infrastructure.Authorization;
 

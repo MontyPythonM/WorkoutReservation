@@ -33,7 +33,7 @@ public sealed class CurrentUserAccessor : ICurrentUserAccessor
     public Guid GetUserId() => Guid.TryParse(_httpContextAccessor.HttpContext?.User
         .FindFirstValue(ClaimTypes.NameIdentifier), out var parsedUserId) ? 
             parsedUserId : 
-            throw new ConversionException("Invalid current user name identifier.");
+            throw new ConversionException("Invalid current user name identifier");
 
     public IEnumerable<Claim> GetUserClaims() => _httpContextAccessor.HttpContext!.User.Claims.ToList();
 

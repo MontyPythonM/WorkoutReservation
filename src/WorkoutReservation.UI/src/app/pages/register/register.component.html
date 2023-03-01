@@ -36,7 +36,7 @@
       </dxi-item>
 
       <dxi-item dataField="gender" editorType="dxSelectBox"
-        [editorOptions]="{ dataSource: gender, valueExpr: 'index', displayExpr: 'value' }">
+        [editorOptions]="{ dataSource: genders, valueExpr: 'index', displayExpr: 'value' }">
         <dxi-validation-rule
           type="required"
           message="Gender is required">

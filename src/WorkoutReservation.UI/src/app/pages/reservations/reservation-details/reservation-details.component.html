@@ -88,7 +88,7 @@
 <dx-popup
   [(visible)]="editPopupVisible"
   [showTitle]="true"
-  title="Edit reservation status"
+  title="Edit reservation"
   [dragEnabled]="false"
   [showCloseButton]="false"
   [width]="500"
@@ -96,7 +96,7 @@
   <div *dxTemplate="let data of 'content'">
     <dx-form id="form" [(formData)]="reservationCommand" (onInitialized)="editPopupFormInit($event)">
       <dxi-item dataField="reservationStatus" editorType="dxSelectBox"
-                [editorOptions]="{ dataSource: status, valueExpr: 'index', displayExpr: 'value' }">
+                [editorOptions]="{ dataSource: statuses, valueExpr: 'index', displayExpr: 'value' }">
         <dxi-validation-rule type="required" message="Reservation status is required"></dxi-validation-rule>
       </dxi-item>
       <dxi-item dataField="note" editorType="dxTextArea" [editorOptions]="{ height: 120 }">

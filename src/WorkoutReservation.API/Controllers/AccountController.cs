@@ -6,6 +6,7 @@ using WorkoutReservation.Application.Features.Account.Commands.Register;
 using WorkoutReservation.Application.Features.Account.Commands.SelfUserDelete;
 using WorkoutReservation.Application.Features.Account.Queries.GetCurrentUser;
 using WorkoutReservation.Application.Features.Account.Queries.Login;
+using WorkoutReservation.Domain.Enums;
 using WorkoutReservation.Infrastructure.Authorization;
 
 namespace WorkoutReservation.API.Controllers;

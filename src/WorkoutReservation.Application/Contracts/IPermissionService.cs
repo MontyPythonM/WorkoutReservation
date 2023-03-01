@@ -1,6 +1,4 @@
-﻿using WorkoutReservation.Domain.Entities;
-
-namespace WorkoutReservation.Infrastructure.Interfaces;
+﻿namespace WorkoutReservation.Application.Contracts;
 
 public interface IPermissionService
 {
