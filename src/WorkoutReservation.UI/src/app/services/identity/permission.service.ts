@@ -18,10 +18,10 @@ export class PermissionService extends BaseService {
   hasPermissions(permissions: string | Array<string>): Observable<boolean> {
     return this.accountService.userAccount$.pipe(
       map((user: UserAccount) => {
-        if (permissions instanceof Array) {
-          return permissions.some(p => user.permissions.includes(p))
-        }
-        return user.permissions.includes(permissions)
+        if (!this.hasValidToken()) return false;
+        return permissions instanceof Array ?
+          permissions.some(p => user.permissions.includes(p)) :
+          user.permissions.includes(permissions);
       }
     ));
   }

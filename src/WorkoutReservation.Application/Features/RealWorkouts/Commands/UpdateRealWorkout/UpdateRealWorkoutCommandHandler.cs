@@ -5,7 +5,7 @@ using WorkoutReservation.Application.Contracts;
 
 namespace WorkoutReservation.Application.Features.RealWorkouts.Commands.UpdateRealWorkout;
 
-public record UpdateRealWorkoutCommand(int RealWorkoutId, int MaxParticipantNumber, DateOnly Date, 
+public record UpdateRealWorkoutCommand(int Id, int MaxParticipantNumber, DateOnly Date, 
     TimeOnly StartTime, TimeOnly EndTime, int InstructorId) : IRequest;
 
 internal sealed class UpdateRealWorkoutCommandHandler : IRequestHandler<UpdateRealWorkoutCommand>
@@ -22,9 +22,9 @@ internal sealed class UpdateRealWorkoutCommandHandler : IRequestHandler<UpdateRe
 
     public async Task<Unit> Handle(UpdateRealWorkoutCommand request, CancellationToken token)
     {
-        var realWorkout = await _realWorkoutRepository.GetByIdAsync(request.RealWorkoutId, false, token);
+        var realWorkout = await _realWorkoutRepository.GetByIdAsync(request.Id, false, token);
         if (realWorkout is null)
-            throw new NotFoundException($"Real workout with Id: {request.RealWorkoutId} not found.");
+            throw new NotFoundException($"Real workout with Id: {request.Id} not found.");
 
         var instructor = await _instructorRepository.GetByIdAsync(request.InstructorId, false, token);
         if (instructor is null)

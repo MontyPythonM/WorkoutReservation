@@ -3,6 +3,7 @@ using WorkoutReservation.Application.Features.Reservations.Queries.GetReservatio
 using WorkoutReservation.Application.Features.Reservations.Queries.GetReservations;
 using WorkoutReservation.Application.Features.Reservations.Queries.GetUserReservationsList;
 using WorkoutReservation.Domain.Entities;
+using WorkoutReservation.Domain.Extensions;
 
 namespace WorkoutReservation.Application.Common.MappingProfile;
 
@@ -31,8 +32,7 @@ public class ReservationProfile : Profile
             .ForMember(dest => dest.InstructorId, opt => opt.MapFrom(src => src.RealWorkout.InstructorId))
             .ForMember(dest => dest.InstructorFullName, opt => opt.MapFrom(r =>
                 string.Join(" ", r.RealWorkout.Instructor.FirstName, r.RealWorkout.Instructor.LastName)))
-            .ForMember(dest => dest.IsWorkoutExpired, opt => opt.MapFrom((src, dest) => 
-                src.RealWorkout.Date <= DateOnly.FromDateTime(DateTime.Now.Date) && src.RealWorkout.EndTime < TimeOnly.FromDateTime(DateTime.Now)));
+            .ForMember(dest => dest.IsWorkoutExpired, opt => opt.MapFrom(src => DateTime.Now.IsExpired(src.RealWorkout.Date, src.RealWorkout.EndTime)));
         
         CreateMap<Reservation, ReservationListDto>()
             .ForMember(dest => dest.OwnerId, opt => opt.MapFrom(src => src.UserId))
@@ -48,7 +48,6 @@ public class ReservationProfile : Profile
             .ForMember(dest => dest.InstructorId, opt => opt.MapFrom(src => src.RealWorkout.InstructorId))
             .ForMember(dest => dest.InstructorFullName, opt => opt.MapFrom(r =>
                 string.Join(" ", r.RealWorkout.Instructor.FirstName, r.RealWorkout.Instructor.LastName)))
-            .ForMember(dest => dest.IsWorkoutExpired, opt => opt.MapFrom((src, dest) => 
-                src.RealWorkout.Date <= DateOnly.FromDateTime(DateTime.Now.Date) && src.RealWorkout.EndTime < TimeOnly.FromDateTime(DateTime.Now)));
+            .ForMember(dest => dest.IsWorkoutExpired, opt => opt.MapFrom(src => DateTime.Now.IsExpired(src.RealWorkout.Date, src.RealWorkout.EndTime)));
     }
 }

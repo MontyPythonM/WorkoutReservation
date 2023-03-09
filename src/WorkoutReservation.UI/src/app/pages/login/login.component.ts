@@ -13,13 +13,11 @@ import {AccountService} from "../../services/identity/account.service";
 export class LoginComponent extends BaseComponent{
   emailTextBox: any;
   passwordTextBox: any;
-  loggedIn: boolean;
   loginData: LoginForm;
 
   constructor(private accountService: AccountService,
               private router: Router) {
     super();
-    this.loggedIn = false;
     this.loginData = { email: '', password: ''};
     this.emailTextBox = {
       icon: "email",

@@ -25,9 +25,9 @@ export class RegisterComponent extends BaseComponent {
     this.registerFormData = new RegisterForm();
     this.namePattern = /^[^0-9]+$/;
     this.dateOptions = {
-      invalidDateMessage:'The date must have the following format: dd-MM-yyyy',
+      invalidDateMessage:'The date must have the following format: dd.MM.yyyy',
       type: 'date',
-      displayFormat:'dd-MM-yyyy',
+      displayFormat:'dd.MM.yyyy',
       min: new Date(1900, 0, 1),
       max: new Date(Date.now())
     };

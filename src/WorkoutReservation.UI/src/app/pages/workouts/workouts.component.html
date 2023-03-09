@@ -1,10 +1,20 @@
+<dx-button
+  *ngIf="(hasPermission(permissions.CanSeeAdministrativeContent) | async)!"
+  [disabled]="!(hasPermission(permissions.CreateRealWorkout) | async)!"
+  class="add-button"
+  text="Add real workout"
+  icon="add"
+  type="success"
+  (onClick)="openAddPopup()">
+</dx-button>
+
 <dx-scheduler
   [dataSource]="workouts"
   currentView="week"
   textExpr="workoutTypeName"
   appointmentTemplate="workout-template"
-  appointmentTooltipTemplate="workout-details-template"
   [showAllDayPanel]="false"
+  (onAppointmentClick)="openEditPopup($event)"
   (onAppointmentFormOpening)="onAppointmentFormOpening($event)"
   (onInitialized)="schedulerInitialize($event)"
   >
@@ -33,7 +43,7 @@
         {{ workout.targetedAppointmentData.startDate | date: timeFormat }} - {{ workout.targetedAppointmentData.endDate | date: timeFormat }}
       </div>
       <div class="appointment">Instructor:
-        {{ workout.targetedAppointmentData.instructorNameShort }}
+        {{ workout.targetedAppointmentData.instructorShortName }}
       </div>
       <div class="appointment">Participants:
         {{ workout.targetedAppointmentData.currentParticipantNumber }} / {{ workout.targetedAppointmentData.maxParticipantNumber }}
@@ -46,15 +56,24 @@
       <div>
         <p class="tooltip-title">{{ workout.targetedAppointmentData.workoutTypeName }}</p>
         <dx-button
+          *ngIf="!workout.targetedAppointmentData.isAlreadyReserved && isAuthenticated()"
+          [disabled]="workout.targetedAppointmentData.isExpired"
           class="tooltip-button"
           text="Get reservation"
           type="success"
           (onClick)="bookWorkout(workout.targetedAppointmentData.id)">
         </dx-button>
+        <dx-button
+          *ngIf="workout.targetedAppointmentData.isAlreadyReserved && isAuthenticated()"
+          class="tooltip-button"
+          text="Go to reservation"
+          type="default"
+          (onClick)="navigateToReservation(workout.targetedAppointmentData.reservationId)">
+        </dx-button>
         <div [style.clear]="'both'"></div>
       </div>
       <div class="tooltip">Instructor:
-        <b>{{ workout.targetedAppointmentData.instructorName }}</b>
+        <b>{{ workout.targetedAppointmentData.instructorFullName }}</b>
       </div>
       <div class="tooltip">Date:
         <b>{{ workout.targetedAppointmentData.startDate | date: dateFormat }}</b>
@@ -66,8 +85,138 @@
         <b>{{ workout.targetedAppointmentData.currentParticipantNumber }} / {{ workout.targetedAppointmentData.maxParticipantNumber }}</b>
       </div>
       <div class="tooltip">Workout intensity:
-        <b>{{ workout.targetedAppointmentData.intensity }}</b>
+        <b>{{ workout.targetedAppointmentData.workoutIntensity }}</b>
       </div>
     </div>
   </div>
 </dx-scheduler>
+
+<dx-popup
+  [(visible)]="editPopupVisible"
+  [showTitle]="true"
+  title="Workout details"
+  [dragEnabled]="false"
+  [showCloseButton]="false"
+  [width]="600"
+  [height]="popupHeight"
+  contentTemplate="popupContent"
+>
+
+  <div *dxTemplate="let data of 'popupContent'">
+    <dx-form *ngIf="isEditMode" [(formData)]="realWorkoutCommand" (onInitialized)="editPopupFormInitialize($event)">
+      <dxi-item [disabled]="true" dataField="id" editorType="dxTextBox"></dxi-item>
+      <dxi-item [disabled]="!isEditMode" dataField="maxParticipantNumber" editorType="dxTextBox">
+        <dxi-validation-rule type="numeric" message="Max participant number is required"></dxi-validation-rule>
+      </dxi-item>
+
+      <dxi-item [disabled]="!isEditMode" dataField="date" editorType="dxDateBox"
+                [editorOptions]="{ displayFormat:'dd.MM.yyyy', type: 'date', invalidDateMessage: 'The date must have the following format: dd.MM.yyyy' }">
+        <dxi-validation-rule type="required" message="Date is required"></dxi-validation-rule>
+      </dxi-item>
+
+      <dxi-item [disabled]="!isEditMode" dataField="startTime" editorType="dxDateBox"
+                [editorOptions]="{ type: 'time' }">
+        <dxi-validation-rule type="required" message="Start time is required"></dxi-validation-rule>
+      </dxi-item>
+
+      <dxi-item [disabled]="!isEditMode" dataField="endTime" editorType="dxDateBox"
+                [editorOptions]="{ type: 'time' }">
+        <dxi-validation-rule type="required" message="End time is required"></dxi-validation-rule>
+      </dxi-item>
+
+      <dxi-item [disabled]="!isEditMode" dataField="instructorId" caption="Instructor" editorType="dxSelectBox"
+                [editorOptions]="{ items: instructors, valueExpr: 'id', displayExpr: displayInstructorName }">
+        <dxi-validation-rule type="required" message="Instructor id is required"></dxi-validation-rule>
+      </dxi-item>
+    </dx-form>
+
+    <div *ngIf="!isEditMode">
+      <p class="field">
+        <img src="assets/icons/exercise.svg" alt="Workout type">
+        <span>Workout type:</span>
+        <span class="field-value">{{ workoutDetails!.workoutTypeName }}</span>
+      </p>
+      <p class="field">
+        <img src="assets/icons/self_improvement.svg" alt="Instructor">
+        <span>Instructor:</span>
+        <span class="field-value">{{ workoutDetails!.instructorFullName }}</span>
+      </p>
+      <p class="field">
+        <img src="assets/icons/today.svg" alt="Workout date">
+        <span>Date:</span>
+        <span class="field-value">{{ workoutDetails!.startDate | date: dateFormat }}</span>
+      </p>
+      <p class="field">
+        <img src="assets/icons/schedule.svg" alt="Workout time">
+        <span>Time:</span>
+        <span class="field-value">{{ workoutDetails!.startDate | date: timeFormat }} - {{ workoutDetails!.endDate | date: timeFormat }}</span>
+      </p>
+      <p class="field">
+        <img src="assets/icons/group.svg" alt="Participants">
+        <span>Participants:</span>
+        <span class="field-value">{{ workoutDetails!.currentParticipantNumber }} / {{ workoutDetails!.maxParticipantNumber }}</span>
+      </p>
+    </div>
+
+    <div class="buttons-section">
+      <dx-button
+        *ngIf="!workoutDetails!.isAlreadyReserved && isAuthenticated() && !isEditMode"
+        [disabled]="workoutDetails!.isExpired || !(hasPermission(permissions.CreateReservation) | async)!"
+        class="popup-button"
+        text="Create reservation"
+        icon="add"
+        type="success"
+        (onClick)="bookWorkout(workoutDetails!.id)">
+      </dx-button>
+      <dx-button
+        *ngIf="workoutDetails!.isAlreadyReserved && isAuthenticated() && !isEditMode"
+        [disabled]="!(hasPermission(permissions.GetOwnReservationDetails) | async)!"
+        class="popup-button"
+        text="Go to reservation"
+        icon="movetofolder"
+        type="default"
+        (onClick)="navigateToReservation(workoutDetails!.reservationId)">
+      </dx-button>
+      <dx-button
+        *ngIf="(hasPermission(permissions.CanSeeAdministrativeContent) | async)! && isEditMode"
+        [disabled]="!(hasPermission(permissions.UpdateRealWorkout) | async)!"
+        class="popup-button"
+        text="Save"
+        icon="save"
+        type="success"
+        (onClick)="editRealWorkout()">
+      </dx-button>
+      <dx-button
+        *ngIf="(hasPermission(permissions.CanSeeAdministrativeContent) | async)! && !isEditMode"
+        [disabled]="!(hasPermission(permissions.UpdateRealWorkout) | async)! || workoutDetails!.isExpired"
+        class="popup-button"
+        text="Edit"
+        icon="edit"
+        type="default"
+        (onClick)="toggleEditMode()">
+      </dx-button>
+      <dx-button
+        *ngIf="(hasPermission(permissions.CanSeeAdministrativeContent) | async)! && !isEditMode"
+        [disabled]="!(hasPermission(permissions.DeleteRealWorkout) | async)!"
+        class="popup-button"
+        text="Delete"
+        icon="trash"
+        type="danger"
+        (onClick)="openDeletePopup()">
+      </dx-button>
+      <dx-button
+        class="popup-button"
+        [text]="closeEditPopupText()"
+        type="normal"
+        (onClick)="closeEditPopup()">
+      </dx-button>
+    </div>
+  </div>
+</dx-popup>
+
+<app-confirmation-popup
+  [(visible)]="isDeletePopupVisible"
+  title="Delete instructor"
+  content="Are you sure you want to permanently delete this real workout?"
+  (confirm)="deleteRealWorkout()">
+</app-confirmation-popup>

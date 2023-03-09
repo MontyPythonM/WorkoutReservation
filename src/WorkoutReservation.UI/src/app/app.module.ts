@@ -13,7 +13,6 @@ import {WorkoutsComponent} from './pages/workouts/workouts.component';
 import {LoginComponent} from './pages/login/login.component';
 import {RegisterComponent} from './pages/register/register.component';
 import {InstructorDetailsComponent} from './pages/instructors/instructor-details/instructor-details.component';
-import {WorkoutDetailsComponent} from './pages/workouts/workout-details/workout-details.component';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 
 import {
@@ -59,7 +58,6 @@ export let AppInjector: Injector;
     LoginComponent,
     RegisterComponent,
     InstructorDetailsComponent,
-    WorkoutDetailsComponent,
     ReservationsComponent,
     AccountSettingsComponent,
     NavBarComponent,

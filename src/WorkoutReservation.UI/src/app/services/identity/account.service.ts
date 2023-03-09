@@ -11,6 +11,7 @@ import {LoginForm} from "../../models/interfaces/login-form.model";
 import {UserAccount} from "../../models/user-account.model";
 import {RegisterForm} from "../../models/register-form.model";
 import {BaseService} from "../../common/base.service";
+import {DATEONLY_FORMAT} from "../../constants/constants";
 
 @Injectable({
   providedIn: 'root'
@@ -49,7 +50,7 @@ export class AccountService extends BaseService {
   }
 
   register(registerForm: RegisterForm): Observable<string> {
-    registerForm.dateOfBirth = this.datePipe.transform(registerForm.dateOfBirth, 'dd-MM-yyyy')!;
+    registerForm.dateOfBirth = this.datePipe.transform(registerForm.dateOfBirth, DATEONLY_FORMAT)!;
     return super.post<any>(apiUrl.account.register, registerForm);
   }
 

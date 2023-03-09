@@ -5,7 +5,7 @@ using WorkoutReservation.Application.Contracts;
 
 namespace WorkoutReservation.Application.Features.RealWorkouts.Commands.DeleteRealWorkout;
 
-public record DeleteRealWorkoutCommand(int RealWorkoutId) : IRequest;
+public record DeleteRealWorkoutCommand(int Id) : IRequest;
 
 internal sealed class DeleteRealWorkoutCommandHandler : IRequestHandler<DeleteRealWorkoutCommand>
 {
@@ -22,14 +22,14 @@ internal sealed class DeleteRealWorkoutCommandHandler : IRequestHandler<DeleteRe
     public async Task<Unit> Handle(DeleteRealWorkoutCommand request, CancellationToken token)
     {
         var realWorkout = await _realWorkoutRepository
-            .GetByIdAsync(request.RealWorkoutId, false, token);
+            .GetByIdAsync(request.Id, false, token);
         
         if (realWorkout is null)
-            throw new NotFoundException($"Real workout with Id: {request.RealWorkoutId} not found.");
+            throw new NotFoundException($"Real workout with Id: {request.Id} not found.");
 
         await _realWorkoutRepository.DeleteAsync(realWorkout, token);
         
-        _logger.LogInformation($"Real workout with Id: {request.RealWorkoutId} was deleted.");
+        _logger.LogInformation($"Real workout with Id: {request.Id} was deleted.");
         return Unit.Value;
     }
 }

@@ -13,13 +13,13 @@ internal sealed class UpdateRealWorkoutCommandValidator : AbstractValidator<Upda
             {
                 if (value < DateOnly.FromDateTime(DateTime.Now))
                 {
-                    context.AddFailure("You cannot create a workout with a past date.");
+                    context.AddFailure("You cannot update a workout with a past date");
                 }
             });
 
         RuleFor(x => x.StartTime)
             .LessThan(x => x.EndTime)
-            .WithMessage("'StartTime' must be earlier than the 'EndTime'.");
+            .WithMessage("'StartTime' must be earlier than the 'EndTime'");
 
         RuleFor(x => new { x.StartTime, x.EndTime })
             .NotEmpty()
@@ -38,7 +38,7 @@ internal sealed class UpdateRealWorkoutCommandValidator : AbstractValidator<Upda
 
                     if (isConflict)
                     {
-                        context.AddFailure("StartTime - EndTime", "The sent workout time conflicts with existing workouts.");
+                        context.AddFailure("StartTime - EndTime", "The sent workout time conflicts with existing workouts");
                         break;
                     }
                 }

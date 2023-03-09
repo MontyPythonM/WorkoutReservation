@@ -41,4 +41,7 @@ public sealed class CurrentUserAccessor : ICurrentUserAccessor
         .Where(claim => claim.Type == CustomClaims.Permissions)
         .Select(claim => claim.Value)
         .ToHashSet();
+
+    public bool IsUserContextExist() =>
+        _httpContextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier) is not null;
 }

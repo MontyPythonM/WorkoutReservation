@@ -1,10 +1,7 @@
 export const apiUrl = {
   instructor: 'instructor/',
   workoutType: 'workout-type/',
-  realWorkout: {
-    current: 'real-workout/current-week',
-    upcoming: 'real-workout/upcoming-week'
-  },
+  realWorkout:  'real-workout/',
   repetitiveWorkout: {
     generateUpcomingWeek: "repetitive-workout/generate-upcoming-week",
     deleteAll: "repetitive-workout/delete-all"
