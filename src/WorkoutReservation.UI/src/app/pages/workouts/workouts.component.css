@@ -1,22 +1,3 @@
-.tooltip-container {
-  text-align: left;
-  margin: 5px 5px 5px 15px;
-}
-
-.tooltip-title {
-  font-size: 20px;
-  margin: 5px 0px 10px 0px;
-  float: left;
-}
-
-.tooltip {
-  margin: 2px 0px 2px 0px;
-}
-
-.tooltip-button {
-  float: right;
-}
-
 .appointment-background {
   background-image: linear-gradient(to right, rgba(35, 110, 35), rgb(20, 90, 20));
 }
@@ -37,6 +18,47 @@
 }
 
 .appointment {
-  margin: 1px 0px 1px 0px;
+  margin: 1px 0 1px 0;
   font-size: 12px;
+}
+
+.popup-button {
+  float: right;
+  margin-left: 10px;
+}
+
+.popup-field {
+  margin: 2px 0px 2px 0px;
+}
+
+
+.field {
+  display: flex;
+}
+
+.field-value {
+  margin-left: 5px;
+  font-weight: bold;
+}
+
+img {
+  width: 20px;
+  height: 20px;
+  margin-right: 8px;
+}
+
+.title {
+  font-size: 20px;
+  margin: 10px 0 10px 0;
+  font-family: "Helvetica Neue","Segoe UI",helvetica,verdana,sans-serif;
+  line-height: 1.35715;
+  color: #333333;
+}
+
+.buttons-section {
+  margin-top: 50px
+}
+
+.add-button {
+  margin-bottom: 20px;
 }

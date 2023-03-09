@@ -8,7 +8,6 @@ import {LoginComponent} from './pages/login/login.component';
 import {RegisterComponent} from './pages/register/register.component';
 import {ReservationsComponent} from './pages/reservations/reservations.component';
 import {WorkoutTypesComponent} from './pages/workout-types/workout-types.component';
-import {WorkoutDetailsComponent} from './pages/workouts/workout-details/workout-details.component';
 import {WorkoutsComponent} from './pages/workouts/workouts.component';
 import {AuthGuardService} from "./services/identity/auth-guard.service";
 import {ReservationDetailsComponent} from "./pages/reservations/reservation-details/reservation-details.component";
@@ -16,7 +15,6 @@ import {ReservationDetailsComponent} from "./pages/reservations/reservation-deta
 const routes: Routes = [
     { path: 'home', component: HomeComponent },
     { path: 'workouts', component: WorkoutsComponent },
-    { path: 'workouts/:id', component: WorkoutDetailsComponent },
     { path: 'instructors', component: InstructorsComponent },
     { path: 'instructors/:id', component: InstructorDetailsComponent },
     { path: 'workout-types', component: WorkoutTypesComponent },

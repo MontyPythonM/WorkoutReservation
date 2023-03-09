@@ -9,4 +9,5 @@ public interface ICurrentUserAccessor
     public Guid GetUserId();
     public IEnumerable<Claim> GetUserClaims();
     public HashSet<string> GetUserPermissions();
+    public bool IsUserContextExist();
 }
