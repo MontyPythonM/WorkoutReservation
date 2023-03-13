@@ -5,6 +5,7 @@ import {BaseComponent} from 'src/app/common/base.component';
 import {genders} from 'src/app/models/enums/gender.enum';
 import {RegisterForm} from 'src/app/models/register-form.model';
 import {AccountService} from "../../services/identity/account.service";
+import {pageUrls} from "../../../environments/page-urls";
 
 @Component({
   selector: 'app-register',
@@ -40,7 +41,7 @@ export class RegisterComponent extends BaseComponent {
         next: () => {
           this.dxForm.resetValues();
           this.notificationService.show('Account has been created', 'success');
-          this.router.navigateByUrl('/login')
+          this.router.navigate([pageUrls.login]);
         },
         error: (error) => {
           this.registerFormData.email = '';

@@ -40,7 +40,7 @@
     <div class="appointment-container">
       <div class="appointment-title">{{ workout.targetedAppointmentData.workoutTypeName }}</div>
       <div class="appointment">Time:
-        {{ workout.targetedAppointmentData.startDate | date: timeFormat }} - {{ workout.targetedAppointmentData.endDate | date: timeFormat }}
+        {{ workout.targetedAppointmentData.startDate | date: timeDisplayFormat }} - {{ workout.targetedAppointmentData.endDate | date: timeDisplayFormat }}
       </div>
       <div class="appointment">Instructor:
         {{ workout.targetedAppointmentData.instructorShortName }}
@@ -76,10 +76,10 @@
         <b>{{ workout.targetedAppointmentData.instructorFullName }}</b>
       </div>
       <div class="tooltip">Date:
-        <b>{{ workout.targetedAppointmentData.startDate | date: dateFormat }}</b>
+        <b>{{ workout.targetedAppointmentData.startDate | date: dateDisplayFormat }}</b>
       </div>
       <div class="tooltip">Time:
-        <b>{{ workout.targetedAppointmentData.startDate | date: timeFormat }} - {{ workout.targetedAppointmentData.endDate | date: timeFormat }}</b>
+        <b>{{ workout.targetedAppointmentData.startDate | date: timeDisplayFormat }} - {{ workout.targetedAppointmentData.endDate | date: timeDisplayFormat }}</b>
       </div>
       <div class="tooltip">Participants:
         <b>{{ workout.targetedAppointmentData.currentParticipantNumber }} / {{ workout.targetedAppointmentData.maxParticipantNumber }}</b>
@@ -98,38 +98,37 @@
   [dragEnabled]="false"
   [showCloseButton]="false"
   [width]="600"
-  [height]="popupHeight"
+  [height]="editPopupHeight"
   contentTemplate="popupContent"
 >
-
   <div *dxTemplate="let data of 'popupContent'">
     <dx-form *ngIf="isEditMode" [(formData)]="realWorkoutCommand" (onInitialized)="editPopupFormInitialize($event)">
       <dxi-item [disabled]="true" dataField="id" editorType="dxTextBox"></dxi-item>
       <dxi-item [disabled]="!isEditMode" dataField="maxParticipantNumber" editorType="dxTextBox">
-        <dxi-validation-rule type="numeric" message="Max participant number is required"></dxi-validation-rule>
+        <dxi-validation-rule type="numeric" message="Max participant number must be the number"></dxi-validation-rule>
+        <dxi-validation-rule type="required" message="Max participant number is required"></dxi-validation-rule>
+        <dxi-validation-rule type="range" [min]="maxParticipants()" message="Max participant number must be greater than zero or current participant number"></dxi-validation-rule>
       </dxi-item>
-
+      <dxi-item [disabled]="!isEditMode" dataField="instructorId" caption="Instructor" editorType="dxSelectBox"
+                [editorOptions]="{ items: instructors, valueExpr: 'id', displayExpr: 'name' }">
+        <dxi-validation-rule type="required" message="Instructor is required"></dxi-validation-rule>
+      </dxi-item>
       <dxi-item [disabled]="!isEditMode" dataField="date" editorType="dxDateBox"
-                [editorOptions]="{ displayFormat:'dd.MM.yyyy', type: 'date', invalidDateMessage: 'The date must have the following format: dd.MM.yyyy' }">
+                [editorOptions]="{ type: 'date', displayFormat: dateDisplayFormat, dateSerializationFormat: dateOnlyFormat,
+                invalidDateMessage: 'The date must have the following format: dd.MM.yyyy'}">
         <dxi-validation-rule type="required" message="Date is required"></dxi-validation-rule>
       </dxi-item>
-
       <dxi-item [disabled]="!isEditMode" dataField="startTime" editorType="dxDateBox"
-                [editorOptions]="{ type: 'time' }">
+                [editorOptions]="{ type: 'time', displayFormat: timeDisplayFormat, dateSerializationFormat: timeDisplayFormat,
+                invalidDateMessage: 'The time must have the following format: HH:mm'}">
         <dxi-validation-rule type="required" message="Start time is required"></dxi-validation-rule>
       </dxi-item>
-
       <dxi-item [disabled]="!isEditMode" dataField="endTime" editorType="dxDateBox"
-                [editorOptions]="{ type: 'time' }">
+                [editorOptions]="{ type: 'time', displayFormat: timeDisplayFormat, dateSerializationFormat: timeDisplayFormat,
+                invalidDateMessage: 'The time must have the following format: HH:mm'}">
         <dxi-validation-rule type="required" message="End time is required"></dxi-validation-rule>
       </dxi-item>
-
-      <dxi-item [disabled]="!isEditMode" dataField="instructorId" caption="Instructor" editorType="dxSelectBox"
-                [editorOptions]="{ items: instructors, valueExpr: 'id', displayExpr: displayInstructorName }">
-        <dxi-validation-rule type="required" message="Instructor id is required"></dxi-validation-rule>
-      </dxi-item>
     </dx-form>
-
     <div *ngIf="!isEditMode">
       <p class="field">
         <img src="assets/icons/exercise.svg" alt="Workout type">
@@ -144,12 +143,12 @@
       <p class="field">
         <img src="assets/icons/today.svg" alt="Workout date">
         <span>Date:</span>
-        <span class="field-value">{{ workoutDetails!.startDate | date: dateFormat }}</span>
+        <span class="field-value">{{ workoutDetails!.startDate | date: dateDisplayFormat }}</span>
       </p>
       <p class="field">
         <img src="assets/icons/schedule.svg" alt="Workout time">
         <span>Time:</span>
-        <span class="field-value">{{ workoutDetails!.startDate | date: timeFormat }} - {{ workoutDetails!.endDate | date: timeFormat }}</span>
+        <span class="field-value">{{ workoutDetails!.startDate | date: timeDisplayFormat }} - {{ workoutDetails!.endDate | date: timeDisplayFormat }}</span>
       </p>
       <p class="field">
         <img src="assets/icons/group.svg" alt="Participants">
@@ -157,7 +156,6 @@
         <span class="field-value">{{ workoutDetails!.currentParticipantNumber }} / {{ workoutDetails!.maxParticipantNumber }}</span>
       </p>
     </div>
-
     <div class="buttons-section">
       <dx-button
         *ngIf="!workoutDetails!.isAlreadyReserved && isAuthenticated() && !isEditMode"
@@ -214,8 +212,69 @@
   </div>
 </dx-popup>
 
+<dx-popup
+  [(visible)]="addPopupVisible"
+  [showTitle]="true"
+  title="Add real workout"
+  [dragEnabled]="false"
+  [showCloseButton]="false"
+  [width]="600"
+  [height]="440"
+  contentTemplate="popupContent"
+>
+  <div *dxTemplate="let data of 'popupContent'">
+    <dx-form [(formData)]="realWorkoutCommand" (onInitialized)="addPopupFormInitialize($event)">
+      <dxi-item dataField="workoutTypeId" caption="Workout type" editorType="dxSelectBox"
+                [editorOptions]="{ items: workoutTypes, valueExpr: 'id', displayExpr: 'name' }">
+        <dxi-validation-rule type="required" message="Workout type is required"></dxi-validation-rule>
+      </dxi-item>
+      <dxi-item dataField="instructorId" caption="Instructor" editorType="dxSelectBox"
+                [editorOptions]="{ items: instructors, valueExpr: 'id', displayExpr: 'name' }">
+        <dxi-validation-rule type="required" message="Instructor is required"></dxi-validation-rule>
+      </dxi-item>
+      <dxi-item dataField="maxParticipantNumber" editorType="dxTextBox">
+        <dxi-validation-rule type="numeric" message="Max participant number must be the number"></dxi-validation-rule>
+        <dxi-validation-rule type="required" message="Max participant number is required"></dxi-validation-rule>
+        <dxi-validation-rule type="range" [min]="1" message="Max participant number must be greater than or equal 1"></dxi-validation-rule>
+      </dxi-item>
+      <dxi-item dataField="date" editorType="dxDateBox"
+                [editorOptions]="{ displayFormat: dateDisplayFormat, type: 'date', dateSerializationFormat: dateOnlyFormat,
+                invalidDateMessage: 'The date must have the following format: dd.MM.yyyy' }">
+        <dxi-validation-rule type="required" message="Date is required"></dxi-validation-rule>
+      </dxi-item>
+      <dxi-item dataField="startTime" editorType="dxDateBox"
+                [editorOptions]="{ type: 'time', displayFormat: timeDisplayFormat, dateSerializationFormat: timeDisplayFormat,
+                invalidDateMessage: 'The time must have the following format: HH:mm'}">
+        <dxi-validation-rule type="required" message="Start time is required"></dxi-validation-rule>
+      </dxi-item>
+      <dxi-item dataField="endTime" editorType="dxDateBox"
+                [editorOptions]="{ type: 'time', displayFormat: timeDisplayFormat, dateSerializationFormat: timeDisplayFormat,
+                invalidDateMessage: 'The time must have the following format: HH:mm'}">
+        <dxi-validation-rule type="required" message="End time is required"></dxi-validation-rule>
+      </dxi-item>
+    </dx-form>
+    <div class="buttons-section">
+      <dx-button
+        *ngIf="(hasPermission(permissions.CanSeeAdministrativeContent) | async)!"
+        [disabled]="!(hasPermission(permissions.CreateRealWorkout) | async)!"
+        class="popup-button"
+        text="Save"
+        icon="save"
+        type="success"
+        (onClick)="addRealWorkout()">
+      </dx-button>
+      <dx-button
+        class="popup-button"
+        text="Cancel"
+        type="normal"
+        (onClick)="closeAddPopup()">
+      </dx-button>
+    </div>
+  </div>
+</dx-popup>
+
 <app-confirmation-popup
-  [(visible)]="isDeletePopupVisible"
+  [(visible)]="deletePopupVisible"
   title="Delete instructor"
   content="Are you sure you want to permanently delete this real workout?"
   (confirm)="deleteRealWorkout()">

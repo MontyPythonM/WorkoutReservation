@@ -1,6 +1,9 @@
 export const apiUrl = {
   instructor: 'instructor/',
-  workoutType: 'workout-type/',
+  workoutType: {
+    baseUrl: 'workout-type/',
+    all: 'workout-type/all'
+  },
   realWorkout:  'real-workout/',
   repetitiveWorkout: {
     generateUpcomingWeek: "repetitive-workout/generate-upcoming-week",
@@ -27,10 +30,6 @@ export const apiUrl = {
   },
   workoutTypeTag: {
     onlyActive: 'workout-type-tag/only-active',
-    all: 'workout-type-tag/',
-    create: "workout-type-tag/",
-    deactivate: "workout-type-tag/",
-    delete: "workout-type-tag/",
-    update: "workout-type-tag/"
+    baseUrl: 'workout-type-tag/'
   }
 }

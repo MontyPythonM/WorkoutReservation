@@ -82,10 +82,10 @@ export class ReservationDetailsComponent extends BaseComponent implements OnInit
 
   openCancelPopup = () => this.isCancelPopupVisible = true;
 
-  backToReservations = () => this.router.navigateByUrl(pageUrls.reservations);
+  backToReservations = () => this.router.navigate([pageUrls.reservations]);
 
-  navigateToInstructor = (id: number) => this.router.navigateByUrl(pageUrls.instructors + '/' + id)
-  navigateToWorkoutType = () => this.router.navigateByUrl(pageUrls.workoutTypes);
+  navigateToInstructor = (id: number) => this.router.navigateByUrl(pageUrls.instructors + id)
+  navigateToWorkoutType = () => this.router.navigate([pageUrls.workoutTypes]);
 
   displayStatus = () => this.statuses.find(x => x.index === this.reservation?.reservationStatus)!.value;
   displayIntensity = () => this.intensities.find(x => x.index === this.reservation?.intensity)!.value;

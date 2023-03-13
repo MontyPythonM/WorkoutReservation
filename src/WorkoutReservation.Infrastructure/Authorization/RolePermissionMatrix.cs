@@ -42,6 +42,7 @@ internal static class RolePermissionMatrix
             Create(ApplicationRole.SystemAdministrator, Permission.DeleteUserAccount),
             Create(ApplicationRole.SystemAdministrator, Permission.OpenAdministrationPage),
             Create(ApplicationRole.SystemAdministrator, Permission.CanSeeAdministrativeContent),
+            Create(ApplicationRole.SystemAdministrator, Permission.GetWorkoutTypes),
 
             Create(ApplicationRole.BusinessAdministrator, Permission.CreateInstructor),
             Create(ApplicationRole.BusinessAdministrator, Permission.UpdateInstructor),
@@ -71,12 +72,11 @@ internal static class RolePermissionMatrix
             Create(ApplicationRole.BusinessAdministrator, Permission.DeleteOwnAccount),
             Create(ApplicationRole.BusinessAdministrator, Permission.OpenAdministrationPage),
             Create(ApplicationRole.BusinessAdministrator, Permission.CanSeeAdministrativeContent),
-
+            Create(ApplicationRole.BusinessAdministrator, Permission.GetWorkoutTypes),
+            
             Create(ApplicationRole.Manager, Permission.GetAllWorkoutTypeTags),
             Create(ApplicationRole.Manager, Permission.GetRealWorkoutDetails),
-            Create(ApplicationRole.Manager, Permission.CreateRealWorkout),
             Create(ApplicationRole.Manager, Permission.UpdateRealWorkout),
-            Create(ApplicationRole.Manager, Permission.DeleteRealWorkout),
             Create(ApplicationRole.Manager, Permission.GetRepetitiveWorkouts),
             Create(ApplicationRole.Manager, Permission.GetOwnReservations),
             Create(ApplicationRole.Manager, Permission.GetAllReservations),
@@ -89,6 +89,7 @@ internal static class RolePermissionMatrix
             Create(ApplicationRole.Manager, Permission.DeleteOwnAccount),
             Create(ApplicationRole.Manager, Permission.OpenAdministrationPage),
             Create(ApplicationRole.Manager, Permission.CanSeeAdministrativeContent),
+            Create(ApplicationRole.Manager, Permission.GetWorkoutTypes),
 
             Create(ApplicationRole.Member, Permission.GetRealWorkoutDetails),
             Create(ApplicationRole.Member, Permission.GetOwnReservations),

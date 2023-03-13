@@ -2,9 +2,9 @@ import {Component, OnInit} from '@angular/core';
 import {BaseComponent} from "../../../common/base.component";
 import {PagedResult} from "../../../models/paged-result.model";
 import {PagedQuery} from "../../../models/paged-query.model";
-import {DATETIME_FORMAT} from "../../../constants/constants";
 import {ApplicationUser} from "../../../models/application-user.model";
 import {UserService} from "../../../services/application-user.service";
+import {DATETIME_FORMAT} from "../../../common/constants";
 
 @Component({
   selector: 'app-users',

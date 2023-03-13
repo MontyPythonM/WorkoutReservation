@@ -47,7 +47,7 @@ internal sealed class CreateRealWorkoutCommandValidator : AbstractValidator<Crea
             });
 
         RuleFor(x => x.MaxParticipantNumber)
-            .GreaterThan(0)
+            .GreaterThanOrEqualTo(1)
             .NotNull();
     }
 }

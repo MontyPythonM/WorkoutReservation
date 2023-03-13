@@ -41,4 +41,5 @@ export enum Permission {
 
   GetOwnReservationDetails = "GetOwnReservationDetails",
   GetSomeoneReservationDetails = "GetSomeoneReservationDetails",
+  GetWorkoutTypes = "GetWorkoutTypes"
 }

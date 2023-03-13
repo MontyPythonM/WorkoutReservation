@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using WorkoutReservation.Application.Features.WorkoutTypes.Commands.CreateWorkoutType;
+using WorkoutReservation.Application.Features.WorkoutTypes.Queries.GetAllWorkoutTypes;
 using WorkoutReservation.Application.Features.WorkoutTypes.Queries.GetWorkoutTypesList;
 using WorkoutReservation.Domain.Entities;
 
@@ -15,6 +16,8 @@ public class WorkoutTypeProfile : Profile
             .ForMember(dest => dest.Instructors, opt =>
                 opt.MapFrom(src => src.Instructors.Select(x => x.Id)));
 
+        CreateMap<WorkoutType, WorkoutTypesDto>();
+        
         CreateMap<CreateWorkoutTypeCommand, WorkoutType>()
             .ForMember(dest => dest.WorkoutTypeTags, opt => opt.Ignore())
             .ForMember(dest => dest.Instructors, opt => opt.Ignore());

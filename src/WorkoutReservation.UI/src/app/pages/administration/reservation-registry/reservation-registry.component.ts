@@ -2,7 +2,6 @@ import {Component, OnInit} from '@angular/core';
 import {PagedResult} from "../../../models/paged-result.model";
 import {Reservation} from "../../../models/reservation.model";
 import {PagedQuery} from "../../../models/paged-query.model";
-import {DATE_FORMAT} from "../../../constants/constants";
 import {BaseComponent} from "../../../common/base.component";
 import {ReservationService} from "../../../services/reservation.service";
 import dxDataGrid, {Row} from "devextreme/ui/data_grid";
@@ -10,6 +9,7 @@ import {Permission} from "../../../models/enums/permission.enum";
 import {EditReservation} from "../../../models/edit-reservation.model";
 import dxForm from "devextreme/ui/form";
 import {reservationStatuses} from "../../../models/enums/reservation-status.enum";
+import {DATE_FORMAT} from "../../../common/constants";
 
 @Component({
   selector: 'app-reservation-registry',

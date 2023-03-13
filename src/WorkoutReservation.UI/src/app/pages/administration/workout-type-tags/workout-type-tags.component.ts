@@ -3,11 +3,10 @@ import {BaseComponent} from "../../../common/base.component";
 import {WorkoutTypeTag} from "../../../models/workout-type-tag.model";
 import {WorkoutTypeTagService} from "../../../services/workout-type-tag.service";
 import Form from "devextreme/ui/form";
-import {NotificationService} from "../../../services/notification.service";
-import {DATETIME_FORMAT} from "../../../constants/constants";
 import {WorkoutTypeTagCommand} from "../../../models/workout-type-tag-command.model";
 import {Row} from "devextreme/ui/data_grid";
 import {Permission} from "../../../models/enums/permission.enum";
+import {DATETIME_FORMAT} from "../../../common/constants";
 
 @Component({
   selector: 'app-workout-type-tags',

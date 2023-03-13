@@ -13,11 +13,11 @@
 		[dataSource]="instructors"
 		[searchEnabled]="true"
 		searchMode="contains"
-		[searchExpr]="['firstName', 'lastName']"
+		[searchExpr]="['name']"
 		itemTemplate="instructorsList"
 		[width]="800">
 		<div *dxTemplate="let instructor of 'instructorsList'">
-			<div [routerLink]="[instructor.id]">{{ instructor.firstName + ' ' + instructor.lastName}}</div>
+			<div [routerLink]="[instructor.id]">{{ instructor.name }}</div>
 		</div>
 	</dx-list>
 </div>

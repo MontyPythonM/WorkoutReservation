@@ -5,9 +5,9 @@ import {PagedResult} from "../../models/paged-result.model";
 import {Reservation} from "../../models/reservation.model";
 import {ReservationService} from "../../services/reservation.service";
 import {Router} from "@angular/router";
-import {DATE_FORMAT} from "../../constants/constants";
 import dxDataGrid from "devextreme/ui/data_grid";
 import {pageUrls} from "../../../environments/page-urls";
+import {DATE_FORMAT} from "../../common/constants";
 
 @Component({
   selector: 'app-reservations',
@@ -60,7 +60,7 @@ export class ReservationsComponent extends BaseComponent implements OnInit {
   }
 
   navigateToReservationDetails(e: any){
-    this.router.navigateByUrl(pageUrls.reservations + '/' + e.data.id);
+    this.router.navigateByUrl(pageUrls.reservations + e.data.id);
   }
 
   onDataGridInit = (e: { component: dxDataGrid }) => this.dxDataGrid = e.component;

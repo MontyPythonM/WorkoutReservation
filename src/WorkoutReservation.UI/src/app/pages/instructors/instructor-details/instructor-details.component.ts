@@ -51,7 +51,7 @@ export class InstructorDetailsComponent extends BaseComponent implements OnInit 
     this.subscribe(this.instructorService.remove(this.instructor!.id), {
       next: () => {
         this.notificationService.show('Instructor delete successfully', 'success')
-        this.router.navigate(['instructors']);
+        this.backToInstructors();
       },
       error: () => {
         this.notificationService.show('Failed to delete instructor', 'error')
@@ -90,7 +90,7 @@ export class InstructorDetailsComponent extends BaseComponent implements OnInit 
     this.isEditPopupOpened = true;
   }
 
-  backToInstructors = () => this.router.navigateByUrl(pageUrls.instructors);
+  backToInstructors = () => this.router.navigate([pageUrls.instructors]);
 
   closeEditPopup = () => this.isEditPopupOpened = false;
   openDeletePopup = () => this.isDeletePopupVisible = true;

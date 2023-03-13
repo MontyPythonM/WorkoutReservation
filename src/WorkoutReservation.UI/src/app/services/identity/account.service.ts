@@ -11,7 +11,8 @@ import {LoginForm} from "../../models/interfaces/login-form.model";
 import {UserAccount} from "../../models/user-account.model";
 import {RegisterForm} from "../../models/register-form.model";
 import {BaseService} from "../../common/base.service";
-import {DATEONLY_FORMAT} from "../../constants/constants";
+import {pageUrls} from "../../../environments/page-urls";
+import {DATEONLY_FORMAT} from "../../common/constants";
 
 @Injectable({
   providedIn: 'root'
@@ -35,7 +36,7 @@ export class AccountService extends BaseService {
       .pipe(map((token: string) => {
         this.localStorageService.set(token);
         this.setUserAccountOrDefault();
-        this.router.navigateByUrl('/home');
+        this.router.navigate([pageUrls.workouts]);
       })
     );
   }
@@ -44,7 +45,7 @@ export class AccountService extends BaseService {
     if (this.localStorageService.get() !== null) {
       this.localStorageService.remove();
       this.setUserAccountOrDefault();
-      this.router.navigateByUrl('/login');
+      this.router.navigate([pageUrls.login]);
       this.notificationService.show('Successfully logged out', 'success')
     }
   }
