@@ -44,4 +44,5 @@ public enum Permission
     
     GetOwnReservationDetails,
     GetSomeoneReservationDetails,
+    GetWorkoutTypes
 }

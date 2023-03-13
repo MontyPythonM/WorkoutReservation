@@ -16,8 +16,8 @@ export class WorkoutTypeService extends BaseService {
     super(http);
   }
 
-  getAll(queryParams: any): Observable<PagedResult<WorkoutType>> {
-    return super.get<PagedResult<WorkoutType>>(apiUrl.workoutType,
+  getAllWithPagination(queryParams: any): Observable<PagedResult<WorkoutType>> {
+    return super.get<PagedResult<WorkoutType>>(apiUrl.workoutType.baseUrl,
     { ...queryParams }).pipe(
       map((response) => {
         response.items = response.items.map((workoutType) => new WorkoutType(workoutType));
@@ -26,15 +26,19 @@ export class WorkoutTypeService extends BaseService {
     );
   }
 
+  getAll(): Observable<WorkoutType[]> {
+    return super.get(apiUrl.workoutType.all);
+  }
+
   remove(id: number): Observable<void> {
-    return super.delete<void>(apiUrl.workoutType + id);
+    return super.delete(apiUrl.workoutType.baseUrl + id);
   }
 
   create(workoutType: WorkoutTypeCommand): Observable<void> {
-    return super.post(apiUrl.workoutType, { ...workoutType });
+    return super.post(apiUrl.workoutType.baseUrl, { ...workoutType });
   }
 
   update(workoutType: WorkoutTypeCommand): Observable<void> {
-    return super.put(apiUrl.workoutType, { ...workoutType });
+    return super.put(apiUrl.workoutType.baseUrl, { ...workoutType });
   }
 }

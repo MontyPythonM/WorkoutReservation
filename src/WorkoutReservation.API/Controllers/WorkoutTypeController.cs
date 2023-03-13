@@ -5,6 +5,7 @@ using WorkoutReservation.API.Controllers.Base;
 using WorkoutReservation.Application.Features.WorkoutTypes.Commands.CreateWorkoutType;
 using WorkoutReservation.Application.Features.WorkoutTypes.Commands.DeleteWorkoutType;
 using WorkoutReservation.Application.Features.WorkoutTypes.Commands.UpdateWorkoutType;
+using WorkoutReservation.Application.Features.WorkoutTypes.Queries.GetAllWorkoutTypes;
 using WorkoutReservation.Application.Features.WorkoutTypes.Queries.GetWorkoutTypesList;
 using WorkoutReservation.Domain.Enums;
 using WorkoutReservation.Infrastructure.Authorization;
@@ -17,9 +18,17 @@ public class WorkoutTypeController : ApiControllerBase
     [HttpGet]
     [AllowAnonymous]
     [SwaggerOperation(Summary = "Returns paged list of workout types")]
-    public async Task<IActionResult> GetAllWorkoutTypes([FromQuery] GetWorkoutTypesListQuery query, CancellationToken token)
+    public async Task<IActionResult> GetPagedWorkoutTypes([FromQuery] GetWorkoutTypesListQuery query, CancellationToken token)
     {
         return await SendAsync(query, token);
+    }
+    
+    [HttpGet("all")]
+    [HasPermission(Permission.GetWorkoutTypes)]
+    [SwaggerOperation(Summary = "Returns list of workout types")]
+    public async Task<IActionResult> GetAllWorkoutTypes(CancellationToken token)
+    {
+        return await SendAsync(new GetAllWorkoutTypesQuery(), token);
     }
     
     [HttpPost]

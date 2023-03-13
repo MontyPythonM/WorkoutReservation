@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {Router} from '@angular/router';
 import {BaseComponent} from 'src/app/common/base.component';
-import {DATE_FORMAT, TIME_FORMAT} from 'src/app/common/constants';
+import {DATE_FORMAT, DATEONLY_FORMAT, TIME_FORMAT} from 'src/app/common/constants';
 import {RealWorkout} from 'src/app/models/real-workout.model';
 import {RealWorkoutService} from 'src/app/services/real-workout.service';
 import {ReservationService} from "../../services/reservation.service";
@@ -12,6 +12,9 @@ import {Instructor} from "../../models/instructor.model";
 import {InstructorService} from "../../services/instructor.service";
 import dxForm from "devextreme/ui/form";
 import {RealWorkoutCommand} from "../../models/real-workout-command.model";
+import {WorkoutType} from "../../models/workout-types.model";
+import {WorkoutTypeService} from "../../services/workout-type.service";
+import {DatePipe} from "@angular/common";
 
 @Component({
   selector: 'app-workouts',
@@ -20,33 +23,39 @@ import {RealWorkoutCommand} from "../../models/real-workout-command.model";
 })
 export class WorkoutsComponent extends BaseComponent implements OnInit {
   workouts: RealWorkout[];
-  dateFormat: string;
-  timeFormat: string;
-  schedulerInit?: dxScheduler;
-  editFormInit?: dxForm;
-  editPopupVisible: boolean;
   workoutDetails?: RealWorkout;
+  instructors?: Instructor[];
+  workoutTypes?: WorkoutType[];
   realWorkoutCommand?: RealWorkoutCommand;
+  dateDisplayFormat: string;
+  dateOnlyFormat: string;
+  timeDisplayFormat: string;
   permissions = Permission;
   isEditMode: boolean;
   addPopupVisible: boolean;
-  instructors?: Instructor[];
-  popupHeight: number;
-  isDeletePopupVisible: boolean;
+  editPopupVisible: boolean;
+  deletePopupVisible: boolean;
+  editPopupHeight: number;
+  schedulerInit?: dxScheduler;
+  editFormInit?: dxForm;
+  addFormInit?: dxForm;
 
   constructor(private realWorkoutService: RealWorkoutService,
               private router: Router,
               private reservationService: ReservationService,
-              private instructorService: InstructorService) {
+              private instructorService: InstructorService,
+              private workoutTypeService: WorkoutTypeService,
+              private datePipe: DatePipe) {
     super();
     this.workouts = [];
-    this.dateFormat = DATE_FORMAT;
-    this.timeFormat = TIME_FORMAT;
+    this.dateDisplayFormat = DATE_FORMAT;
+    this.dateOnlyFormat = DATEONLY_FORMAT;
+    this.timeDisplayFormat = TIME_FORMAT;
     this.editPopupVisible = false;
     this.isEditMode = false;
     this.addPopupVisible = false;
-    this.popupHeight = 345;
-    this.isDeletePopupVisible = false;
+    this.editPopupHeight = 345;
+    this.deletePopupVisible = false;
   }
 
   ngOnInit(): void {
@@ -65,6 +74,12 @@ export class WorkoutsComponent extends BaseComponent implements OnInit {
     });
   }
 
+  loadWorkoutTypes() {
+    this.subscribe(this.workoutTypeService.getAll(), {
+      next: (result: WorkoutType[]) => this.workoutTypes = result
+    });
+  }
+
   bookWorkout(workoutId: number) {
     this.subscribe(this.reservationService.addReservation(workoutId), {
       next: () => {
@@ -77,12 +92,19 @@ export class WorkoutsComponent extends BaseComponent implements OnInit {
   }
 
   addRealWorkout() {
-    // TODO
+    if (this.addFormInit!.validate().isValid) {
+      this.subscribe(this.realWorkoutService.create(this.realWorkoutCommand!), {
+        next: () => {
+          this.ngOnInit();
+          this.notificationService.show("Workout successfully created", "success");
+          this.closeAddPopup();
+        }
+      });
+    }
   }
 
   editRealWorkout() {
-    const isValid = this.editFormInit!.validate().isValid;
-    if (isValid) {
+    if (this.editFormInit!.validate().isValid) {
       this.subscribe(this.realWorkoutService.update(this.realWorkoutCommand!), {
         next: () => {
           this.ngOnInit();
@@ -104,14 +126,20 @@ export class WorkoutsComponent extends BaseComponent implements OnInit {
   }
 
   toggleEditMode = () => {
-    this.popupHeight = 440;
+    this.editPopupHeight = 440;
     this.isEditMode = !this.isEditMode;
     if (this.isEditMode) {
       this.loadInstructors()
     }
   }
 
-  openAddPopup = () => this.addPopupVisible = true;
+  openAddPopup = () => {
+    this.loadInstructors();
+    this.loadWorkoutTypes();
+    this.realWorkoutCommand = new RealWorkoutCommand();
+    this.addPopupVisible = true;
+  }
+
   closeAddPopup = () => this.addPopupVisible = false;
 
   openEditPopup = (e: any) => {
@@ -119,23 +147,27 @@ export class WorkoutsComponent extends BaseComponent implements OnInit {
     this.workoutDetails = new RealWorkout(e.appointmentData);
     const data = e.appointmentData;
     this.realWorkoutCommand = new RealWorkoutCommand(data.id, data.maxParticipantNumber,
-      new Date(data.startDate), data.startDate, data.endDate, data.instructorId);
-    this.popupHeight = 345;
+      this.toDateOnly(data.startDate), data.startDate, data.endDate, data.instructorId);
+    this.editPopupHeight = 345;
     this.isEditMode = false;
     this.editPopupVisible = true;
   }
 
   closeEditPopup = () => this.editPopupVisible = false;
-  openDeletePopup = () => this.isDeletePopupVisible = true;
-
-  navigateToReservation = (reservationId: number | undefined) => this.router.navigate([pageUrls.reservations + '/', reservationId]);
-
-  displayInstructorName = (instructor: Instructor) => `${instructor.firstName} ${instructor.lastName}`;
 
   closeEditPopupText = () => this.isEditMode ? "Cancel" : "Back";
 
+  openDeletePopup = () => this.deletePopupVisible = true;
+
+  navigateToReservation = (reservationId: number | undefined) => this.router.navigate([pageUrls.reservations + '/', reservationId]);
+
   onAppointmentFormOpening = (e: any) => e.cancel = true;
+
+  maxParticipants = (): number => this.workoutDetails?.currentParticipantNumber! > 1 ? this.workoutDetails?.currentParticipantNumber! : 1;
 
   schedulerInitialize = (e: { component: dxScheduler }) => this.schedulerInit = e.component;
   editPopupFormInitialize = (e: { component: dxForm }) => this.editFormInit = e.component;
+  addPopupFormInitialize = (e: { component: dxForm }) => this.addFormInit = e.component;
+
+  private toDateOnly = (dateTime: Date | string): string => this.datePipe.transform(dateTime, DATEONLY_FORMAT)!;
 }

@@ -45,8 +45,8 @@ internal sealed class UpdateRealWorkoutCommandValidator : AbstractValidator<Upda
             });
 
         RuleFor(x => x.MaxParticipantNumber)
-            .GreaterThan(0)
-            .GreaterThan(editedRealWorkout.CurrentParticipantNumber)
+            .GreaterThanOrEqualTo(1)
+            .GreaterThanOrEqualTo(editedRealWorkout.CurrentParticipantNumber)
             .NotNull();
     }
 }

@@ -65,7 +65,7 @@ export class WorkoutTypesComponent extends BaseComponent implements OnInit {
   }
 
   protected loadWorkoutTypes(queryParams: PagedQuery): void {
-    this.subscribe(this.workoutTypeService.getAll(queryParams), {
+    this.subscribe(this.workoutTypeService.getAllWithPagination(queryParams), {
       next: (response: PagedResult<WorkoutType>) => this.workoutTypes = response
     });
   }
@@ -169,10 +169,7 @@ export class WorkoutTypesComponent extends BaseComponent implements OnInit {
 
   getWorkoutTag = (workoutTagId: number): string => this.workoutTypeTags.find(x => x.id === workoutTagId)!.tag;
 
-  getInstructor = (instructorId: any): string => {
-    const instructor = this.instructors.find(x => x.id === instructorId)!;
-    return `${instructor.firstName} ${instructor.lastName}`;
-  }
+  getInstructor = (instructorId: any): string => this.instructors.find(x => x.id === instructorId)?.name!;
 
   pageSizeChanged(e: any) {
     this.queryParams.pageSize = e;

@@ -1,7 +1,6 @@
 import {Component} from '@angular/core';
 import {BaseComponent} from "../../../common/base.component";
 import {RepetitiveWorkoutService} from "../../../services/repetitive-workout.service";
-import {NotificationService} from "../../../services/notification.service";
 import {pageUrls} from "../../../../environments/page-urls";
 import {environment} from "../../../../environments/environment";
 import {Permission} from "../../../models/enums/permission.enum";

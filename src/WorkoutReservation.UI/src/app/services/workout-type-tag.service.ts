@@ -21,18 +21,18 @@ export class WorkoutTypeTagService extends BaseService  {
   }
 
   getAll(): Observable<WorkoutTypeTag[]> {
-    return super.get<WorkoutTypeTag[]>(apiUrl.workoutTypeTag.all);
+    return super.get<WorkoutTypeTag[]>(apiUrl.workoutTypeTag.baseUrl);
   }
 
   remove(id: number): Observable<void> {
-    return super.delete<void>(apiUrl.workoutTypeTag.delete + id);
+    return super.delete<void>(apiUrl.workoutTypeTag.baseUrl + id);
   }
 
   create(tag: string): Observable<void> {
-    return super.post<void>(apiUrl.workoutTypeTag.create, { tag });
+    return super.post<void>(apiUrl.workoutTypeTag.baseUrl, { tag });
   }
 
   update(workoutTypeTagCommand: WorkoutTypeTagCommand): Observable<void> {
-    return super.put<void>(apiUrl.workoutTypeTag.update, { ...workoutTypeTagCommand });
+    return super.put<void>(apiUrl.workoutTypeTag.baseUrl, { ...workoutTypeTagCommand });
   }
 }

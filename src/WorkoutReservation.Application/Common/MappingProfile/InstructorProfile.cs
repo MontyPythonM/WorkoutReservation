@@ -10,7 +10,8 @@ public class InstructorProfile : Profile
 {
     public InstructorProfile()
     {
-        CreateMap<Instructor, InstructorListQueryDto>();
+        CreateMap<Instructor, InstructorListQueryDto>()
+            .ForMember(dest => dest.Name, opt => opt.MapFrom(src => string.Join(" ", src.FirstName, src.LastName)));
 
         CreateMap<Instructor, InstructorDetailQueryDto>();
         CreateMap<WorkoutType, WorkoutTypeForInstructorDetailQueryDto>();
