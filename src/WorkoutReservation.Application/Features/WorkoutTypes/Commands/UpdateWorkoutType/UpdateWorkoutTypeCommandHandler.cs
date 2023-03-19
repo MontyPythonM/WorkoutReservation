@@ -2,6 +2,7 @@
 using MediatR;
 using WorkoutReservation.Application.Common.Exceptions;
 using WorkoutReservation.Application.Contracts;
+using WorkoutReservation.Domain.Entities;
 using WorkoutReservation.Domain.Enums;
 
 namespace WorkoutReservation.Application.Features.WorkoutTypes.Commands.UpdateWorkoutType;
@@ -27,10 +28,12 @@ internal sealed class UpdateWorkoutTypeCommandHandler : IRequestHandler<UpdateWo
     public async Task<Unit> Handle(UpdateWorkoutTypeCommand request, CancellationToken token)
     {
         var workoutType = await _workoutTypeRepository
-            .GetByIdAsync(request.Id, false, token, incl => incl.WorkoutTypeTags, incl => incl.Instructors);
+            .GetByIdAsync(request.Id, false, token, 
+                incl => incl.WorkoutTypeTags, incl => incl.Instructors);
+        
         if (workoutType is null)
-            throw new NotFoundException($"Workout type with Id: {request.Id} not found.");
-
+            throw new NotFoundException(nameof(WorkoutType), request.Id.ToString());
+        
         var validator = new UpdateWorkoutTypeCommandValidatior();
         await validator.ValidateAndThrowAsync(request, token);
         
@@ -40,15 +43,7 @@ internal sealed class UpdateWorkoutTypeCommandHandler : IRequestHandler<UpdateWo
         var instructors = await _instructorRepository
             .GetAllAsync(instructor => request.Instructors.Contains(instructor.Id), false, token);
 
-        workoutType.Name = request.Name;
-        workoutType.Description = request.Description;
-        workoutType.Intensity = request.Intensity;
-        
-        workoutType.WorkoutTypeTags.Clear();
-        tags.ToList().ForEach(tag => workoutType.WorkoutTypeTags.Add(tag));
-        
-        workoutType.Instructors.Clear();
-        instructors.ToList().ForEach(instructor => workoutType.Instructors.Add(instructor));
+        workoutType.Update(request.Name, request.Description, request.Intensity, instructors, tags);
         
         await _workoutTypeRepository.UpdateAsync(workoutType, token);
         return Unit.Value;

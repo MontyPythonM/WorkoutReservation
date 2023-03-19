@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Logging;
 using WorkoutReservation.Application.Common.Exceptions;
 using WorkoutReservation.Application.Contracts;
+using WorkoutReservation.Domain.Entities;
 
 namespace WorkoutReservation.Application.Features.WorkoutTypes.Commands.DeleteWorkoutType;
 
@@ -25,7 +26,7 @@ internal sealed class DeleteWorkoutTypeCommandHandler : IRequestHandler<DeleteWo
             .GetByIdAsync(request.WorkoutTypeId, false, token, incl => incl.BaseWorkouts);
 
         if (workoutType is null)
-            throw new NotFoundException($"Workout type with Id: {request.WorkoutTypeId} not found.");
+            throw new NotFoundException(nameof(WorkoutType), request.WorkoutTypeId.ToString());
         
         if (workoutType.BaseWorkouts.Any())
             throw new BadRequestException($"WorkoutType with Id: {request.WorkoutTypeId} is assigned to existing workouts (repetitiveWorkout or realWorkout). " +

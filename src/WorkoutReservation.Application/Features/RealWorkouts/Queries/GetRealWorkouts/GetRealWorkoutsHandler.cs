@@ -59,7 +59,7 @@ internal sealed class GetRealWorkoutsQueryHandler : IRequestHandler<GetRealWorko
                 .FirstOrDefault(r => r.UserId == _currentUserAccessor.GetUserId() && 
                                      r.ReservationStatus != ReservationStatus.Cancelled) is not null;
         }
-
+        
         return false;
     }
 
@@ -67,7 +67,6 @@ internal sealed class GetRealWorkoutsQueryHandler : IRequestHandler<GetRealWorko
     {
         return _currentUserAccessor.IsUserContextExist() ? 
             workout.Reservations.FirstOrDefault(r => r.UserId == _currentUserAccessor.GetUserId() && 
-                                                     r.ReservationStatus != ReservationStatus.Cancelled)?.Id :
-            null;
+                                                     r.ReservationStatus != ReservationStatus.Cancelled)?.Id : null;
     }
 }

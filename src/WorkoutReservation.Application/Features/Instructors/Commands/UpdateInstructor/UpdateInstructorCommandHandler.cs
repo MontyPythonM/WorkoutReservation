@@ -2,6 +2,7 @@
 using MediatR;
 using WorkoutReservation.Application.Common.Exceptions;
 using WorkoutReservation.Application.Contracts;
+using WorkoutReservation.Domain.Entities;
 using WorkoutReservation.Domain.Enums;
 
 namespace WorkoutReservation.Application.Features.Instructors.Commands.UpdateInstructor;
@@ -23,16 +24,13 @@ internal sealed class UpdateInstructorCommandHandler : IRequestHandler<UpdateIns
         var instructor = await _instructorRepository.GetByIdAsync(request.Id, false, token);
 
         if (instructor is null)
-            throw new NotFoundException($"Instructor with Id: {request.Id} not found.");
+            throw new NotFoundException(nameof(Instructor), request.Id.ToString());
 
         var validator = new UpdateInstructorCommandValidator();
         await validator.ValidateAndThrowAsync(request, token);
 
-        instructor.FirstName = request.FirstName;
-        instructor.LastName = request.LastName;
-        instructor.Biography = request.Biography;
-        instructor.Email = request.Email;
-        instructor.Gender = request.Gender;
+        instructor.Update(request.FirstName, request.LastName, request.Gender,
+            request.Biography, request.Email);
         
         await _instructorRepository.UpdateAsync(instructor, token);
         return Unit.Value;

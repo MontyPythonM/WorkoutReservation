@@ -1,8 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using WorkoutReservation.Domain.Entities;
-using WorkoutReservation.Domain.Enums;
-using WorkoutReservation.Infrastructure.Authorization;
 
 namespace WorkoutReservation.Infrastructure.Persistence.Configuration.Permissions;
 
@@ -19,6 +17,6 @@ internal class RoleConfiguration : IEntityTypeConfiguration<ApplicationRole>
             .WithMany(r => r.ApplicationRoles)
             .UsingEntity<ApplicationUserRole>();
 
-        builder.HasData(ApplicationRole.Create());
+        builder.HasData(ApplicationRole.GetEnumerations());
     }
 }

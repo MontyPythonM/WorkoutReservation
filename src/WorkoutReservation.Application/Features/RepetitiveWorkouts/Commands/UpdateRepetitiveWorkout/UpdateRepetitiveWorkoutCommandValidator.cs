@@ -8,13 +8,11 @@ internal sealed class UpdateRepetitiveWorkoutCommandValidator : AbstractValidato
     public UpdateRepetitiveWorkoutCommandValidator(RepetitiveWorkout newRepetitiveWorkout,
         IEnumerable<RepetitiveWorkout> dailyWorkouts)
     {
-        RuleFor(x => x.DayOfWeek)
-            .IsInEnum();
-
-        RuleFor(x => x.StartTime)
-            .LessThan(x => x.EndTime)
-            .WithMessage("'StartTime' must be earlier than the 'EndTime'.");
-
+        RuleFor(x => x.DayOfWeek).IsInEnum();
+        RuleFor(x => x.MaxParticipantNumber).NotEmpty();
+        RuleFor(x => x.WorkoutTypeId).NotEmpty();
+        RuleFor(x => x.InstructorId).NotEmpty();
+        
         RuleFor(x => new { x.StartTime, x.EndTime })
             .NotEmpty()
             .Custom((newWorkout, context) =>
@@ -37,9 +35,5 @@ internal sealed class UpdateRepetitiveWorkoutCommandValidator : AbstractValidato
                     }
                 }
             });
-
-        RuleFor(x => x.MaxParticipantNumber)
-            .GreaterThan(0)
-            .NotNull();
     }
 }

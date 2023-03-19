@@ -2,9 +2,7 @@
 
 export enum ReservationStatus {
   Reserved = 1,
-  Cancelled,
-  Absence,
-  Presence
+  Cancelled
 }
 
 export const reservationStatuses = enumToObjects(ReservationStatus);

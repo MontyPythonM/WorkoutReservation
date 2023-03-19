@@ -2,15 +2,15 @@
 
 namespace WorkoutReservation.Domain.Entities;
 
-public class ApplicationPermission : Enumeration<ApplicationRole>
+public sealed class ApplicationPermission : Enumeration<ApplicationRole>
 {
     public ICollection<ApplicationRole> ApplicationRoles { get; } = new List<ApplicationRole>();
-    
-    protected ApplicationPermission()
+
+    private ApplicationPermission()
     {
-        // for EF core
+        // required by EF core
     }
-    
+
     public ApplicationPermission(int id, string name) 
         : base(id, name)
     {

@@ -22,9 +22,7 @@ public abstract class Enumeration<TEnum> : IEquatable<Enumeration<TEnum>>
     }
     
     public static TEnum? FromValue(int value) => 
-        Enumerations.TryGetValue(value, out TEnum? enumeration) ? 
-            enumeration :
-            default;
+        Enumerations.TryGetValue(value, out TEnum? enumeration) ? enumeration : default;
     
     public static TEnum? FromName(string name) => 
         Enumerations.Values.SingleOrDefault(e => e.Name == name);
@@ -44,7 +42,7 @@ public abstract class Enumeration<TEnum> : IEquatable<Enumeration<TEnum>>
 
     public override int GetHashCode() => base.GetHashCode();
 
-    public static IReadOnlyCollection<TEnum> Create() => Enumerations.Values.ToList();
+    public static IReadOnlyCollection<TEnum> GetEnumerations() => Enumerations.Values.ToList();
 
     private static Dictionary<int, TEnum> CreateEnumerations()
     {

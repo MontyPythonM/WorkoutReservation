@@ -3,34 +3,22 @@ using WorkoutReservation.Domain.Exceptions;
 
 namespace WorkoutReservation.Domain.Abstractions;
 
-public abstract class BaseWorkout
+public abstract class BaseWorkout : Entity
 {
-    public int Id { get; set; }
-    public int MaxParticipantNumber { get; set; }
-    public TimeOnly StartTime { get; set; }
-    public TimeOnly EndTime { get; set; }
-    public string CreatedBy { get; set; }
-    public DateTime CreatedDate { get; set; }
-    public string LastModifiedBy { get; set; }
-    public DateTime? LastModifiedDate { get; set; }
-    public WorkoutType WorkoutType { get; set; }
-    public int? WorkoutTypeId { get; set; }
-    public Instructor Instructor { get; set; }
-    public int? InstructorId { get; set; }
+    public int Id { get; private set; }
+    public int MaxParticipantNumber { get; protected set; }
+    public TimeOnly StartTime { get; protected set; }
+    public TimeOnly EndTime { get; protected set; }
+    public WorkoutType WorkoutType { get; protected set; }
+    public int WorkoutTypeId { get; internal set; }
+    public Instructor Instructor { get; protected set; }
+    public int InstructorId { get; internal set; }
 
     protected BaseWorkout()
     {
         // for EF
     }
-    
-    protected BaseWorkout(int maxParticipantNumber, TimeOnly startTime, TimeOnly endTime)
-    {
-        MaxParticipantNumber = maxParticipantNumber;
-        StartTime = startTime;
-        EndTime = endTime;
-        Valid();
-    }
-    
+
     protected BaseWorkout(int maxParticipantNumber, TimeOnly startTime, TimeOnly endTime, WorkoutType workoutType, Instructor instructor)
     {
         MaxParticipantNumber = maxParticipantNumber;
@@ -41,31 +29,36 @@ public abstract class BaseWorkout
         Valid();
     }
     
-    public void UpdateLastModifiedDate() => LastModifiedDate = DateTime.Now;
-    public void UpdateLastModifiedBy(ApplicationUser user) => LastModifiedBy = user.Id.ToString();
-    public void SetCreatedDate() => CreatedDate = DateTime.Now;
-    public void SetCreatedBy(ApplicationUser user) => CreatedBy = user.Id.ToString();
+    protected void AddInstructor(Instructor instructor)
+    {
+        Instructor = instructor;
+        Valid();
+    }
 
-    private void Valid()
+    protected void AddWorkoutType(WorkoutType workoutType)
+    {
+        WorkoutType = workoutType;
+        Valid();
+    }
+    
+    protected override void Valid()
     {
         if (MaxParticipantNumber <= 0)
-        {
-            throw new DomainException("MaxParticipantNumber must be greater than 0");
-        }
+            throw new DomainException(this, MaxParticipantNumber, ExceptionCode.ValueToSmall);
 
         if (StartTime > EndTime)
-        {
-            throw new DomainException("EndTime must be greater than or equal StartTime");
-        }
-
-        if (WorkoutType is null)
-        {
-            throw new DomainException("WorkoutType cannot be null");
-        }
+            throw new DomainException(this, EndTime, ExceptionCode.InvalidValue);
         
+        if (WorkoutType is null)
+            throw new DomainException(this, WorkoutType, ExceptionCode.CannotBeNull);
+        
+        if (WorkoutTypeId > 0)
+            throw new DomainException(this, WorkoutTypeId, ExceptionCode.InvalidValue);
+
         if (Instructor is null)
-        {
-            throw new DomainException("Instructor cannot be null");
-        }
+            throw new DomainException(this, Instructor, ExceptionCode.CannotBeNull);
+        
+        if (InstructorId > 0)
+            throw new DomainException(this, InstructorId, ExceptionCode.InvalidValue);
     }
 }

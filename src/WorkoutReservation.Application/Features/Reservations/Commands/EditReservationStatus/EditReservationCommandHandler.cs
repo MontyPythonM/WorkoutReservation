@@ -1,5 +1,4 @@
-﻿using FluentValidation;
-using MediatR;
+﻿using MediatR;
 using WorkoutReservation.Application.Common.Exceptions;
 using WorkoutReservation.Application.Contracts;
 using WorkoutReservation.Domain.Enums;
@@ -10,42 +9,26 @@ public record EditReservationCommand(int ReservationId, ReservationStatus Reserv
 
 internal sealed class EditReservationCommandHandler : IRequestHandler<EditReservationCommand>
 {
-    private readonly IReservationRepository _reservationRepository;
+    private readonly IRealWorkoutRepository _realWorkoutRepository;
 
-    public EditReservationCommandHandler(IReservationRepository reservationRepository)
+    public EditReservationCommandHandler(IRealWorkoutRepository realWorkoutRepository)
     {
-        _reservationRepository = reservationRepository;
+        _realWorkoutRepository = realWorkoutRepository;
     }
 
     public async Task<Unit> Handle(EditReservationCommand request, CancellationToken token)
     {
-        var reservation = await _reservationRepository
-            .GetByIdAsync(request.ReservationId, false, token,
-                incl => incl.RealWorkout);
-        
-        if (reservation is null)
-            throw new NotFoundException($"Reservation with Id: {request.ReservationId} not found.");
+        var realWorkout = await _realWorkoutRepository
+            .GetByReservationIdAsync(request.ReservationId, false, token);
 
-        var validator = new EditReservationCommandValidator();
-        await validator.ValidateAndThrowAsync(request, token);
+        if (realWorkout is null)
+            throw new NotFoundException($"RealWorkout containing a reservation with Id: {request.ReservationId} not found");
         
-        if (reservation.ReservationStatus == ReservationStatus.Reserved && 
-            request.ReservationStatus != ReservationStatus.Reserved)
-        {
-            reservation.RealWorkout.DecrementCurrentParticipantNumber();
-        }
+        var reservation = realWorkout.Reservations.First(r => r.Id == request.ReservationId);
 
-        if (reservation.ReservationStatus != ReservationStatus.Reserved && 
-            request.ReservationStatus == ReservationStatus.Reserved)
-        {
-            reservation.RealWorkout.IncrementCurrentParticipantNumber();
-        }
-
-        reservation.UpdateLastModificationDate();
-        reservation.SetReservationStatus(request.ReservationStatus);
-        reservation.SetNote(request.Note);
+        realWorkout.UpdateReservation(reservation, request.ReservationStatus, request.Note);
+        await _realWorkoutRepository.UpdateAsync(realWorkout, token);
         
-        await _reservationRepository.UpdateAsync(reservation, token);
         return Unit.Value;
     }
 }

@@ -15,7 +15,7 @@ internal sealed class GetInstructorDetailQueryHandler : IRequestHandler<GetInstr
     private readonly IMapper _mapper;
 
     public GetInstructorDetailQueryHandler(IInstructorRepository instructorRepository,
-                                           IMapper mapper)
+        IMapper mapper)
     {
         _instructorRepository = instructorRepository;
         _mapper = mapper;

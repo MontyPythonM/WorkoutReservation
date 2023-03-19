@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using WorkoutReservation.Infrastructure.Interfaces;
 
-namespace WorkoutReservation.Infrastructure.Repositories.Common;
+namespace WorkoutReservation.Infrastructure.Services;
 
 internal sealed class Repository<TEntity> : IRepository<TEntity> 
     where TEntity : class

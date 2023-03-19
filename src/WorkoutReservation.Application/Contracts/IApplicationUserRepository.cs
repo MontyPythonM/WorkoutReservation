@@ -14,4 +14,5 @@ public interface IApplicationUserRepository
     public Task UpdateAsync(ApplicationUser user, CancellationToken token);
     public Task DeleteAsync(ApplicationUser user, CancellationToken token);
     public IQueryable<ApplicationUser> GetAllUsersQuery();
+    public Task<bool> IsEmailAlreadyTaken(string email, CancellationToken token);
 }

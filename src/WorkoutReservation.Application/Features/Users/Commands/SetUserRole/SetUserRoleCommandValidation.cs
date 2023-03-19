@@ -7,12 +7,6 @@ internal sealed class SetUserRoleCommandValidation : AbstractValidator<SetUserRo
     public SetUserRoleCommandValidation(Guid currentUser)
     {
         RuleFor(x => x.Role)
-            .IsInEnum()
-            .NotEmpty();
-
-        RuleFor(x => x.UserId)
-            .NotEmpty()
-            .Must(x => x != currentUser)
-            .WithMessage("You cannot change your own UserRole.");
+            .IsInEnum();
     }
 }
