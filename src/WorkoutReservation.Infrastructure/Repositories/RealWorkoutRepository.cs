@@ -88,11 +88,14 @@ public class RealWorkoutRepository : IRealWorkoutRepository
     
     public async Task<RealWorkout> GetByIdWithReservationUserAsync(int realWorkoutId, bool asNoTracking, CancellationToken token)
     {
-        var query = _dbContext.RealWorkouts.AsQueryable();
+        var query = _dbContext.RealWorkouts
+            .Include(r => r.WorkoutType)
+            .Include(r => r.Instructor)
+            .Include(r => r.Reservations)
+            .ThenInclude(reservation => reservation.User)
+            .AsQueryable();
+        
         query = _repository.ApplyAsNoTracking(asNoTracking, query);
-
-        query.Include(realWorkout => realWorkout.Reservations)
-            .ThenInclude(reservation => reservation.User);
         
         return await query.FirstOrDefaultAsync(x => x.Id == realWorkoutId, token);             
     }
@@ -100,9 +103,11 @@ public class RealWorkoutRepository : IRealWorkoutRepository
     public async Task<RealWorkout> GetByReservationIdAsync(int reservationId, bool asNoTracking, CancellationToken token)
     {
         var query = _dbContext.RealWorkouts
-            .Include(realWorkout => realWorkout.Reservations)
+            .Include(r => r.WorkoutType)
+            .Include(r => r.Instructor)
+            .Include(r => r.Reservations)
             .ThenInclude(reservation => reservation.User)
-            .Where(x => x.Reservations.Any(r => r.Id == reservationId))
+            .Where(r => r.Reservations.Any(reservation => reservation.Id == reservationId))
             .AsQueryable();
         
         query = _repository.ApplyAsNoTracking(asNoTracking, query);

@@ -23,7 +23,9 @@ internal sealed class UpdateRealWorkoutCommandHandler : IRequestHandler<UpdateRe
 
     public async Task<Unit> Handle(UpdateRealWorkoutCommand request, CancellationToken token)
     {
-        var realWorkout = await _realWorkoutRepository.GetByIdAsync(request.Id, false, token);
+        var realWorkout = await _realWorkoutRepository.GetByIdAsync(request.Id, false, token, 
+            incl => incl.Instructor, incl => incl.WorkoutType);
+        
         if (realWorkout is null)
             throw new NotFoundException(nameof(RealWorkout), request.Id.ToString());
 

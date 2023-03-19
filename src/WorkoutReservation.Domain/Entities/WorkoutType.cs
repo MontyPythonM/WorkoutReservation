@@ -12,7 +12,8 @@ public sealed class WorkoutType : Entity
     public WorkoutIntensity Intensity { get; private set; }
     public ICollection<Instructor> Instructors { get; private set; } = new List<Instructor>();
     public ICollection<WorkoutTypeTag> WorkoutTypeTags { get; private set; } = new List<WorkoutTypeTag>();
-    public ICollection<BaseWorkout> BaseWorkouts { get; private set; } = new List<BaseWorkout>();
+    public ICollection<RealWorkout> RealWorkouts { get; private set; } = new List<RealWorkout>();
+    public ICollection<RepetitiveWorkout> RepetitiveWorkouts { get; private set; } = new List<RepetitiveWorkout>();
 
     private WorkoutType()
     {

@@ -22,7 +22,9 @@ internal sealed class GetRepetitiveWorkoutListQueryHandler : IRequestHandler<Get
     public async Task<List<RepetitiveWorkoutListDto>> Handle(GetRepetitiveWorkoutListQuery request, 
         CancellationToken token)
     {
-        var repetitiveWorkouts = await _repetitiveWorkoutRepository.GetAllAsync(true, token);
+        var repetitiveWorkouts = await _repetitiveWorkoutRepository
+            .GetAllAsync(true, token, incl => incl.Instructor, incl => incl.WorkoutType);
+        
         return _mapper.Map<List<RepetitiveWorkoutListDto>>(repetitiveWorkouts);
     }
 }

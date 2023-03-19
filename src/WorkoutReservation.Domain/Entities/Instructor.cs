@@ -13,7 +13,8 @@ public sealed class Instructor : Entity
     public string Biography { get; private set; }
     public string Email { get; private set; }
     public ICollection<WorkoutType> WorkoutTypes { get; private set; } = new List<WorkoutType>();
-    public ICollection<BaseWorkout> BaseWorkouts { get; private set; } = new List<BaseWorkout>();
+    public ICollection<RealWorkout> RealWorkouts { get; private set; } = new List<RealWorkout>();
+    public ICollection<RepetitiveWorkout> RepetitiveWorkouts { get; private set; } = new List<RepetitiveWorkout>();
 
     private Instructor()
     {

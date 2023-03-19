@@ -54,10 +54,7 @@ public class InstructorRepository : IInstructorRepository
 
     public async Task<Instructor> GetByIdAsync(int instructorId, bool asNoTracking, CancellationToken token)
     {
-        var query = _dbContext.Instructors
-            .Include(x => x.WorkoutTypes)
-            .AsQueryable();
-        
+        var query = _dbContext.Instructors.AsQueryable();
         query = _repository.ApplyAsNoTracking(asNoTracking, query);
         
         return await query.FirstOrDefaultAsync(x => x.Id == instructorId, token);
