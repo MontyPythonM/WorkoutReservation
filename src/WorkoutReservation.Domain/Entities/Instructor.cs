@@ -60,8 +60,5 @@ public sealed class Instructor : Entity
         
         if (string.IsNullOrWhiteSpace(Email))
             throw new DomainException(this, nameof(Email), ExceptionCode.CannotBeNullOrWhiteSpace);
-        
-        if (Email.Length > 50)
-            throw new DomainException(this, nameof(Email), ExceptionCode.ValueToLarge);
     }
 }

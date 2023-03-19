@@ -109,20 +109,13 @@ public sealed class RealWorkout : Entity
         if (CurrentParticipantNumber < 0)
             throw new DomainException(this, nameof(CurrentParticipantNumber), ExceptionCode.ValueToSmall);
 
-        if (Date < DateOnly.FromDateTime(DateTime.Now) && EndTime < TimeOnly.FromDateTime(DateTime.Now) || Date > DateTime.Now.GetFirstDayOfWeekAndAddDays(13))
-            throw new DomainException(this, nameof(Date), ExceptionCode.ValueOutOfRange);
+        if (Date <= DateOnly.FromDateTime(DateTime.Now) && EndTime < TimeOnly.FromDateTime(DateTime.Now))
+            throw new DomainException(this, nameof(Date), ExceptionCode.ValueToSmall);
         
         if (Date > DateTime.Now.GetFirstDayOfWeekAndAddDays(13))
-            throw new DomainException(this, nameof(Date), ExceptionCode.ValueOutOfRange);
-
-        var reservedReservations = Reservations
-            .Count(r => r.ReservationStatus == ReservationStatus.Reserved);
+            throw new DomainException(this, nameof(Date), ExceptionCode.ValueToLarge);
         
-        var x = Reservations.Where(r => r.ReservationStatus == ReservationStatus.Reserved)
-            .DistinctBy(r => r.UserId)
-            .Count();
-        
-        if (reservedReservations != x)
+        if (Reservations.Where(r => r.ReservationStatus == ReservationStatus.Reserved).DistinctBy(r => r.UserId).Count() > 1)
             throw new DomainException(this, nameof(Reservations), ExceptionCode.AlreadyExists);
         
         if (Reservations.Count < 0)
@@ -134,7 +127,7 @@ public sealed class RealWorkout : Entity
     {
         if (Date <= DateOnly.FromDateTime(DateTime.Now.Date) && EndTime < TimeOnly.FromDateTime(DateTime.Now))
         {
-            throw new DomainException(this, nameof(EndTime), ExceptionCode.ValueToLarge);
+            throw new DomainException(this, nameof(EndTime), ExceptionCode.ValueToSmall);
         }
     }
 
