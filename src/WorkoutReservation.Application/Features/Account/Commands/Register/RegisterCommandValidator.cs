@@ -1,20 +1,19 @@
 ﻿using FluentValidation;
-using WorkoutReservation.Domain.Entities;
 
 namespace WorkoutReservation.Application.Features.Account.Commands.Register;
 
 internal sealed class RegisterCommandValidator : AbstractValidator<RegisterCommand>
 {
-    public RegisterCommandValidator(ApplicationUser user)
+    public RegisterCommandValidator(bool isEmailAlreadyTaken)
     {
         RuleFor(x => x.Email)
             .NotEmpty()
             .EmailAddress()
             .Custom((value, context) => 
             {
-                if (user is not null)
+                if (isEmailAlreadyTaken)
                 {
-                    context.AddFailure("Email address is already taken.");
+                    context.AddFailure("Email address is already taken");
                 }
             });
 
@@ -25,8 +24,7 @@ internal sealed class RegisterCommandValidator : AbstractValidator<RegisterComma
 
         RuleFor(x => x.ConfirmPassword)
             .Equal(e => e.Password)
-            .MaximumLength(500)
-            .WithMessage("'ConfirmPassword' must be equal 'Password'.");
+            .WithMessage("'ConfirmPassword' must be equal 'Password'");
 
         RuleFor(x => x.FirstName).MaximumLength(50); 
 

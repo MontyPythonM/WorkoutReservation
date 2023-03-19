@@ -13,8 +13,9 @@ public sealed class ApplicationRole : Enumeration<ApplicationRole>
     public static readonly ApplicationRole Manager = new((int)Role.Manager, nameof(Manager));
     public static readonly ApplicationRole Member = new((int)Role.Member, nameof(Member));
 
-    public ApplicationRole()
+    private ApplicationRole()
     {
+        // required by EF core
     }
     
     private ApplicationRole(int id, string name)

@@ -11,9 +11,9 @@ using WorkoutReservation.Infrastructure.Identity;
 using WorkoutReservation.Infrastructure.Interfaces;
 using WorkoutReservation.Infrastructure.Persistence;
 using WorkoutReservation.Infrastructure.Repositories;
-using WorkoutReservation.Infrastructure.Repositories.Common;
 using WorkoutReservation.Infrastructure.Seeders;
 using WorkoutReservation.Infrastructure.Seeders.Data;
+using WorkoutReservation.Infrastructure.Services;
 
 namespace WorkoutReservation.Infrastructure;
 
@@ -30,6 +30,8 @@ public static class ConfigureInfrastructureServices
         services.AddHangfireServer();
         services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
         services.AddScoped<ICurrentUserAccessor, CurrentUserAccessor>();
+        services.AddScoped<IAuthorProvider, AuthorProvider>();
+        services.AddScoped<IDateTimeProvider, DateTimeProvider>();
         
         services.AddScoped<IApplicationRoleRepository, ApplicationRoleRepository>();
         services.AddScoped<IApplicationUserRepository, ApplicationUserRepository>();

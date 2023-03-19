@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using FluentValidation;
+﻿using FluentValidation;
 using MediatR;
 using WorkoutReservation.Application.Common.Exceptions;
 using WorkoutReservation.Application.Contracts;
@@ -15,37 +14,34 @@ internal sealed class CreateRepetitiveWorkoutCommandHandler : IRequestHandler<Cr
     private readonly IRepetitiveWorkoutRepository _repetitiveWorkoutRepository;
     private readonly IInstructorRepository _instructorRepository;
     private readonly IWorkoutTypeRepository _workoutTypeRepository;
-    private readonly IMapper _mapper;
 
     public CreateRepetitiveWorkoutCommandHandler(IRepetitiveWorkoutRepository repetitiveWorkoutRepository,
         IInstructorRepository instructorRepository,
-        IWorkoutTypeRepository workoutTypeRepository,
-        IMapper mapper)
+        IWorkoutTypeRepository workoutTypeRepository)
     {
         _repetitiveWorkoutRepository = repetitiveWorkoutRepository;
         _instructorRepository = instructorRepository;
         _workoutTypeRepository = workoutTypeRepository;
-        _mapper = mapper;
     }
 
     public async Task<Unit> Handle(CreateRepetitiveWorkoutCommand request, CancellationToken token)
     {
         var instructor = await _instructorRepository.GetByIdAsync(request.InstructorId, false, token);
         if (instructor is null)
-            throw new NotFoundException($"Instructor with Id: {request.InstructorId} not found.");
+            throw new NotFoundException(nameof(Instructor), request.InstructorId.ToString());
 
-        var workoutType = await _workoutTypeRepository.GetByIdAsync(request.WorkoutTypeId, true, token);
+        var workoutType = await _workoutTypeRepository.GetByIdAsync(request.WorkoutTypeId, false, token);
         if (workoutType is null)
-            throw new NotFoundException($"Workout type with Id: {request.WorkoutTypeId} not found.");
+            throw new NotFoundException(nameof(WorkoutType), request.WorkoutTypeId.ToString());
 
         var dailyWorkoutsList = await _repetitiveWorkoutRepository
-            .GetAllFromSelectedDayAsync(request.DayOfWeek, token);
+            .GetAllFromSelectedDayAsync(request.DayOfWeek, true, token);
         
         var validator = new CreateRepetitiveWorkoutCommandValidator(dailyWorkoutsList);
         await validator.ValidateAndThrowAsync(request, token);
 
-        var repetitiveWorkout = _mapper.Map<RepetitiveWorkout>(request);
-        repetitiveWorkout.CreatedDate = DateTime.Now;
+        var repetitiveWorkout = new RepetitiveWorkout(request.MaxParticipantNumber, request.StartTime, 
+            request.EndTime, request.DayOfWeek, workoutType, instructor);
         
         await _repetitiveWorkoutRepository.AddAsync(repetitiveWorkout, token);
         return Unit.Value;

@@ -7,20 +7,10 @@ internal sealed class UpdateRealWorkoutCommandValidator : AbstractValidator<Upda
 {
     public UpdateRealWorkoutCommandValidator(List<RealWorkout> dailyWorkouts, RealWorkout editedRealWorkout)
     {
-        RuleFor(x => x.Date)
-            .NotEmpty()
-            .Custom((value, context) =>
-            {
-                if (value < DateOnly.FromDateTime(DateTime.Now))
-                {
-                    context.AddFailure("You cannot update a workout with a past date");
-                }
-            });
-
-        RuleFor(x => x.StartTime)
-            .LessThan(x => x.EndTime)
-            .WithMessage("'StartTime' must be earlier than the 'EndTime'");
-
+        RuleFor(x => x.Date).NotEmpty();
+        RuleFor(x => x.MaxParticipantNumber).NotEmpty();
+        RuleFor(x => x.InstructorId).NotEmpty();
+        
         RuleFor(x => new { x.StartTime, x.EndTime })
             .NotEmpty()
             .Custom((newWorkout, context) =>
@@ -43,10 +33,5 @@ internal sealed class UpdateRealWorkoutCommandValidator : AbstractValidator<Upda
                     }
                 }
             });
-
-        RuleFor(x => x.MaxParticipantNumber)
-            .GreaterThanOrEqualTo(1)
-            .GreaterThanOrEqualTo(editedRealWorkout.CurrentParticipantNumber)
-            .NotNull();
     }
 }

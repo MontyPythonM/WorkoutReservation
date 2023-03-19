@@ -14,12 +14,9 @@ public static class DateTimeExtension
         return DateOnly.FromDateTime(firstDayOfWeek).AddDays(days);
     }
 
-    public static bool IsExpired(this DateTime now, DateOnly date, TimeOnly time)
-    {
-        var dateTime = date.ToDateTime(time);
-        return now > dateTime;
-    }
-
+    public static bool IsExpired(this DateTime now, DateOnly date, TimeOnly time) => now > date.ToDateTime(time);
+    public static bool IsExpired(this DateTime now, DateTime dateTime) => now > dateTime;
+    
     private static DateTime CalculateFirstDayOfWeek(DateTime dateTime) => 
         dateTime.AddDays((-7 + (1 - (int)dateTime.DayOfWeek)) % 7);
 }

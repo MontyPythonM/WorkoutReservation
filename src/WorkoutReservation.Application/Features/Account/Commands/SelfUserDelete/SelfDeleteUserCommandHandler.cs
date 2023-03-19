@@ -1,4 +1,4 @@
-﻿using FluentValidation;
+﻿using System.Security.Authentication;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
 using WorkoutReservation.Application.Contracts;
@@ -30,8 +30,8 @@ internal sealed class SelfDeleteUserCommandHandler : IRequestHandler<SelfDeleteU
         var passwordCompareResult = _passwordHasher
             .VerifyHashedPassword(user, user.PasswordHash, request.Password);
 
-        var validator = new SelfDeleteUserCommandValidator(passwordCompareResult);
-        await validator.ValidateAndThrowAsync(request, token);
+        if (passwordCompareResult == PasswordVerificationResult.Failed)
+            throw new InvalidCredentialException("Invalid password");
 
         await _userRepository.DeleteAsync(user, token);
         return Unit.Value;

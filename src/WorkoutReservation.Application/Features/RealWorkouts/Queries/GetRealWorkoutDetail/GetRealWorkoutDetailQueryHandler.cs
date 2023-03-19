@@ -2,6 +2,7 @@
 using MediatR;
 using WorkoutReservation.Application.Common.Exceptions;
 using WorkoutReservation.Application.Contracts;
+using WorkoutReservation.Domain.Entities;
 
 namespace WorkoutReservation.Application.Features.RealWorkouts.Queries.GetRealWorkoutDetail;
 
@@ -27,7 +28,7 @@ internal sealed class GetRealWorkoutDetailQueryHandler : IRequestHandler<GetReal
                 incl => incl.WorkoutType, incl => incl.Instructor);
         
         if (realWorkout is null)
-            throw new NotFoundException($"Workout with Id: {request.RealWorkoutId} not found.");
+            throw new NotFoundException(nameof(RealWorkout), request.RealWorkoutId.ToString());
 
         return _mapper.Map<RealWorkoutDetailDto>(realWorkout);
     }

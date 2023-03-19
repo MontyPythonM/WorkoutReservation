@@ -8,24 +8,11 @@ internal sealed class CreateRealWorkoutCommandValidator : AbstractValidator<Crea
 {
     public CreateRealWorkoutCommandValidator(List<RealWorkout> dailyWorkouts)
     {
-        RuleFor(x => x.Date)
-            .NotEmpty()
-            .Custom((value, context) => 
-            {
-                if (value < DateOnly.FromDateTime(DateTime.Now))
-                {
-                    context.AddFailure("You cannot create a workout with a past date.");
-                }
-
-                if (value > DateTime.Now.GetFirstDayOfWeek().AddDays(13))
-                {
-                    context.AddFailure("You cannot create a workout with a date further than 2 weeks (counting from the beginning of the current week).");
-                }
-            });
-
-        RuleFor(x => x.StartTime)
-            .LessThan(x => x.EndTime)
-            .WithMessage("'StartTime' must be earlier than the 'EndTime'.");
+        RuleFor(x => x.Date).NotEmpty();
+        RuleFor(x => x.StartTime).NotEmpty();
+        RuleFor(x => x.EndTime).NotEmpty();
+        RuleFor(x => x.MaxParticipantNumber).NotEmpty();
+        RuleFor(x => x.InstructorId).NotEmpty();
 
         RuleFor(x => new { x.StartTime, x.EndTime })
             .NotEmpty()
@@ -45,9 +32,5 @@ internal sealed class CreateRealWorkoutCommandValidator : AbstractValidator<Crea
                     }
                 }
             });
-
-        RuleFor(x => x.MaxParticipantNumber)
-            .GreaterThanOrEqualTo(1)
-            .NotNull();
     }
 }

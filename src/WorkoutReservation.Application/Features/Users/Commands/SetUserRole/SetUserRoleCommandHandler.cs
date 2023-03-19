@@ -1,6 +1,8 @@
 ﻿using FluentValidation;
 using MediatR;
+using WorkoutReservation.Application.Common.Exceptions;
 using WorkoutReservation.Application.Contracts;
+using WorkoutReservation.Domain.Entities;
 using WorkoutReservation.Domain.Enums;
 
 namespace WorkoutReservation.Application.Features.Users.Commands.SetUserRole;
@@ -23,11 +25,14 @@ internal sealed class SetUserRoleCommandHandler : IRequestHandler<SetUserRoleCom
 
     public async Task<Unit> Handle(SetUserRoleCommand request, CancellationToken token)
     {
-        var user = await _userRepository.GetByGuidAsync(request.UserId, false, token);
-        
         var validator = new SetUserRoleCommandValidation(_currentUserAccessor.GetUserId());
         await validator.ValidateAndThrowAsync(request, token);
+        
+        var user = await _userRepository.GetByGuidAsync(request.UserId, false, token);
 
+        if (user is null)
+            throw new NotFoundException(nameof(ApplicationUser), request.UserId.ToString());
+        
         var role = await _roleRepository.GetAsync(request.Role, token);
         user.SetRole(role);
         

@@ -1,15 +1,23 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using WorkoutReservation.Application.Contracts;
 using WorkoutReservation.Domain.Abstractions;
 using WorkoutReservation.Domain.Entities;
+using WorkoutReservation.Infrastructure.Interfaces;
 
 namespace WorkoutReservation.Infrastructure.Persistence;
 
 // dotnet ef database update -s ../WorkoutReservation.API
 // dotnet ef migrations add <name> -s../WorkoutReservation.API
-public class AppDbContext : DbContext
+public sealed class AppDbContext : DbContext
 {
-    public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
+    private readonly IAuthorProvider _authorProvider;
+    private readonly IDateTimeProvider _dateTimeProvider;
+    
+    public AppDbContext(DbContextOptions<AppDbContext> options, IAuthorProvider authorProvider, 
+        IDateTimeProvider dateTimeProvider) : base(options)
     {
+        _authorProvider = authorProvider;
+        _dateTimeProvider = dateTimeProvider;
     }
 
     public DbSet<Instructor> Instructors { get; set; }
@@ -27,5 +35,29 @@ public class AppDbContext : DbContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(AppDbContext).Assembly);
+    }
+    
+    public override async Task<int> SaveChangesAsync(CancellationToken token = default)
+    {
+        UpdateAuditableEntities(_dateTimeProvider.Now, _authorProvider.GetAuthor());
+        return await base.SaveChangesAsync(token);
+    }
+    
+    private void UpdateAuditableEntities(DateTime now, string author)
+    {
+        foreach (var entityEntry in ChangeTracker.Entries<Entity>())
+        {
+            if (entityEntry.State == EntityState.Added)
+            {
+                entityEntry.Property(nameof(Entity.CreatedDate)).CurrentValue = now;
+                entityEntry.Property(nameof(Entity.CreatedBy)).CurrentValue = author;
+            }
+
+            if (entityEntry.State == EntityState.Modified)
+            {
+                entityEntry.Property(nameof(Entity.LastModifiedDate)).CurrentValue = now;
+                entityEntry.Property(nameof(Entity.LastModifiedBy)).CurrentValue = author;
+            }
+        }
     }
 }

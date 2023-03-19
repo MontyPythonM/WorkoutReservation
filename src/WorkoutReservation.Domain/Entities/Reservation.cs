@@ -1,45 +1,63 @@
-﻿using WorkoutReservation.Domain.Enums;
+﻿using WorkoutReservation.Domain.Abstractions;
+using WorkoutReservation.Domain.Enums;
+using WorkoutReservation.Domain.Exceptions;
 
 namespace WorkoutReservation.Domain.Entities;
 
-public class Reservation
+public sealed class Reservation : Entity
 {
-    public int Id { get; set; }
-    public DateTime CreationDate { get; set; }
-    public DateTime? LastModificationDate { get; set; }
-    public ReservationStatus ReservationStatus { get; set; }
-    public string Note { get; set; }
-    public RealWorkout RealWorkout { get; set; }
-    public int RealWorkoutId { get; set; }
-    public ApplicationUser User { get; set; }
-    public Guid UserId { get; set; }
+    public int Id { get; private set; }
+    public ReservationStatus ReservationStatus { get; private set; }
+    public string Note { get; private set; }
+    public RealWorkout RealWorkout { get; private set; }
+    public int RealWorkoutId { get; private set; }
+    public ApplicationUser User { get; private set; }
+    public Guid UserId { get; private set; }
 
-    protected Reservation()
+    private Reservation()
     {
+        // required for EF Core
     }
     
-    public Reservation(RealWorkout realWorkout, ApplicationUser user)
+    internal Reservation(RealWorkout realWorkout, ApplicationUser user)
     {
         RealWorkout = realWorkout;
         User = user;
-        CreationDate = DateTime.Now;
-        LastModificationDate = null;
         ReservationStatus = ReservationStatus.Reserved;
         Note = string.Empty;
-    }
-    
-    public void UpdateLastModificationDate()
-    {
-        LastModificationDate = DateTime.Now;
+        Valid();
     }
 
-    public void SetReservationStatus(ReservationStatus status)
-    {
-        ReservationStatus = status;
-    }
-    
-    public void SetNote(string note)
+    internal void Update( string note, ReservationStatus status)
     {
         Note = note;
+        ReservationStatus = status;
+        Valid();
+    }
+
+    internal void SetReservationStatus(ReservationStatus status)
+    {
+        ReservationStatus = status;
+        Valid();
+    }
+    
+    internal void SetNote(string note)
+    {
+        Note = note;
+        Valid();
+    }
+
+    protected override void Valid()
+    {
+        // TODO add validation for enum 
+        
+        if (RealWorkout is null)
+            throw new DomainException(this, RealWorkout, ExceptionCode.CannotBeNull);
+        
+        if (User is null)
+            throw new DomainException(this, User, ExceptionCode.CannotBeNull);
+        
+        if (Note.Length > 3000)
+            throw new DomainException(this, Note, ExceptionCode.ValueToLarge);
     }
 }

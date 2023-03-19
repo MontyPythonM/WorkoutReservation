@@ -21,7 +21,7 @@ internal sealed class DeleteAllRepetitiveWorkoutsCommandHandler : IRequestHandle
 
     public async Task<Unit> Handle(DeleteAllRepetitiveWorkoutsCommand request, CancellationToken token)
     {
-        var repetitiveWorkouts = await _repetitiveWorkoutRepository.GetAllAsync(token);
+        var repetitiveWorkouts = await _repetitiveWorkoutRepository.GetAllAsync(false, token);
 
         if(!repetitiveWorkouts.Any())
             throw new NotFoundException("Repetitive workouts not found.");
