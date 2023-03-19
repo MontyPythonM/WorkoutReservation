@@ -49,10 +49,10 @@ public sealed class RealWorkout : BaseWorkout
     public void CancelReservation(Reservation reservation, ApplicationUser user)
     {
         if (reservation is null)
-            throw new DomainException(this, Reservations, ExceptionCode.NotExists);
+            throw new DomainException(this, nameof(Reservations), ExceptionCode.NotExists);
 
         if (reservation.ReservationStatus == ReservationStatus.Cancelled)
-            throw new DomainException(this, Reservations, ExceptionCode.CannotBeOverwritten);
+            throw new DomainException(this, nameof(Reservations), ExceptionCode.CannotBeOverwritten);
         
         ThrowIfRealWorkoutStarted();
         
@@ -82,18 +82,18 @@ public sealed class RealWorkout : BaseWorkout
     protected override void Valid()
     {
         if (CurrentParticipantNumber > MaxParticipantNumber)
-            throw new DomainException(this, CurrentParticipantNumber, ExceptionCode.ValueToLarge);
+            throw new DomainException(this, nameof(CurrentParticipantNumber), ExceptionCode.ValueToLarge);
 
         if (CurrentParticipantNumber < 0)
-            throw new DomainException(this, CurrentParticipantNumber, ExceptionCode.ValueToSmall);
+            throw new DomainException(this, nameof(CurrentParticipantNumber), ExceptionCode.ValueToSmall);
 
         if (Date < DateOnly.FromDateTime(DateTime.Now) && 
             Date > DateTime.Now.GetFirstDayOfWeekAndAddDays(13))
-            throw new DomainException(this, Date, ExceptionCode.ValueOutOfRange);
+            throw new DomainException(this, nameof(Date), ExceptionCode.ValueOutOfRange);
         
         if (Reservations.Count(r => r.ReservationStatus == ReservationStatus.Reserved) != 
             Reservations.Where(r => r.ReservationStatus == ReservationStatus.Reserved).DistinctBy(r => r.UserId).Count())
-            throw new DomainException(this, Reservations, ExceptionCode.AlreadyExists);
+            throw new DomainException(this, nameof(Reservations), ExceptionCode.AlreadyExists);
     }
     
     //TODO check this statement
@@ -101,7 +101,7 @@ public sealed class RealWorkout : BaseWorkout
     {
         if (Date <= DateOnly.FromDateTime(DateTime.Now.Date) && EndTime < TimeOnly.FromDateTime(DateTime.Now))
         {
-            throw new DomainException(this, EndTime, ExceptionCode.ValueToLarge);
+            throw new DomainException(this, nameof(EndTime), ExceptionCode.ValueToLarge);
         }
     }
 

@@ -19,7 +19,7 @@ internal sealed class InstructorsData
         {
             new("Tirumalai", "Krishnamacharya", Gender.Male, KrishnamacharyaBiography, "tirumalai.krishnamacharya@workout.com"),
             new("Ewa", "Chodakowska", Gender.Female, ChodakowskaBiography, "ewa.chodakowska@workout.com"),
-            new("Melanie", "Brown", Gender.Female, string.Empty, "ewa.chodakowska@workout.com"),
+            new("Melanie", "Brown", Gender.Female, string.Empty, "m.brown@workout.com"),
             new("Bully", "Juice", Gender.Male, string.Empty, "bully.juice@workout.com")
         };
         

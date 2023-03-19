@@ -46,29 +46,27 @@ public sealed class WorkoutType : Entity
         // TODO add validation for enum 
         
         if (string.IsNullOrWhiteSpace(Name))
-            throw new DomainException(this, Name, ExceptionCode.CannotBeNullOrWhiteSpace);
+            throw new DomainException(this, nameof(Name), ExceptionCode.CannotBeNullOrWhiteSpace);
         
         if (Name.Length > 50)
-            throw new DomainException(this, Name, ExceptionCode.ValueToLarge);
+            throw new DomainException(this, nameof(Name), ExceptionCode.ValueToLarge);
         
         if (string.IsNullOrWhiteSpace(Description))
-            throw new DomainException(this, Description, ExceptionCode.CannotBeNullOrWhiteSpace);
+            throw new DomainException(this, nameof(Description), ExceptionCode.CannotBeNullOrWhiteSpace);
         
         if (Description.Length > 600)
-            throw new DomainException(this, Description, ExceptionCode.ValueToLarge);
+            throw new DomainException(this, nameof(Description), ExceptionCode.ValueToLarge);
     }
     
     private void AddTags(List<WorkoutTypeTag> tags)
     {
         WorkoutTypeTags.Clear();
         tags.ForEach(tag => WorkoutTypeTags.Add(tag));
-        Valid();
     }
     
     private void AddInstructors(List<Instructor> instructors)
     {
         Instructors.Clear();
         instructors.ForEach(instructor => Instructors.Add(instructor));
-        Valid();
     }
 }

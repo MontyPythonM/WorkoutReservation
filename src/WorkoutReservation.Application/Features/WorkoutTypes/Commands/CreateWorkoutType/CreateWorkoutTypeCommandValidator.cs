@@ -6,13 +6,6 @@ internal sealed class CreateWorkoutTypeCommandValidator : AbstractValidator<Crea
 {
     public CreateWorkoutTypeCommandValidator()
     {
-        RuleFor(x => x.Instructors)
-            .NotEmpty();
-        
-        RuleFor(x => x.WorkoutTypeTags)
-            .NotEmpty();
-
-        RuleFor(x => x.Intensity)
-            .IsInEnum();
+        RuleFor(x => x.Intensity).IsInEnum();
     }
 }

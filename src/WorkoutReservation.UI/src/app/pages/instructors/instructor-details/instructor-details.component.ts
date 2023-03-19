@@ -17,7 +17,7 @@ import {pageUrls} from "../../../../environments/page-urls";
 export class InstructorDetailsComponent extends BaseComponent implements OnInit {
   instructor?: InstructorDetails;
   instructorCommand!: InstructorDetailsCommand;
-  isEditPopupOpened: boolean;
+  isEditPopupVisible: boolean;
   isDeletePopupVisible: boolean;
   isSaving: boolean;
   instructorId: number;
@@ -29,7 +29,7 @@ export class InstructorDetailsComponent extends BaseComponent implements OnInit 
     private route: ActivatedRoute,
     private router: Router) {
     super();
-    this.isEditPopupOpened = false;
+    this.isEditPopupVisible = false;
     this.isDeletePopupVisible = false;
     this.isSaving = false;
     this.instructorId = this.route.snapshot.params['id'];
@@ -87,12 +87,12 @@ export class InstructorDetailsComponent extends BaseComponent implements OnInit 
       this.instructor?.biography,
       this.instructor?.email
     );
-    this.isEditPopupOpened = true;
+    this.isEditPopupVisible = true;
   }
 
   backToInstructors = () => this.router.navigate([pageUrls.instructors]);
 
-  closeEditPopup = () => this.isEditPopupOpened = false;
+  closeEditPopup = () => this.isEditPopupVisible = false;
   openDeletePopup = () => this.isDeletePopupVisible = true;
 
   onFormInitialized = (e: any) => this.form = e.component;

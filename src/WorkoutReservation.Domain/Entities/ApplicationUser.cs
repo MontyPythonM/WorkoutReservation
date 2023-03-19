@@ -1,5 +1,6 @@
 ﻿using WorkoutReservation.Domain.Abstractions;
 using WorkoutReservation.Domain.Enums;
+using WorkoutReservation.Domain.Exceptions;
 
 namespace WorkoutReservation.Domain.Entities;
 
@@ -48,5 +49,19 @@ public sealed class ApplicationUser : Entity
 
     protected override void Valid()
     {
+        if (string.IsNullOrWhiteSpace(FirstName))
+            throw new DomainException(this, nameof(FirstName), ExceptionCode.CannotBeNullOrWhiteSpace);
+
+        if (FirstName.Length > 50)
+            throw new DomainException(this, nameof(FirstName), ExceptionCode.ValueToLarge);
+
+        if (string.IsNullOrWhiteSpace(LastName))
+            throw new DomainException(this, nameof(LastName), ExceptionCode.CannotBeNullOrWhiteSpace);
+
+        if (LastName.Length > 50)
+            throw new DomainException(this, nameof(LastName), ExceptionCode.ValueToLarge);
+        
+        if (DateOfBirth > DateOnly.FromDateTime(DateTime.Now) && DateOfBirth.HasValue)
+            throw new DomainException(this, nameof(DateOfBirth), ExceptionCode.ValueToLarge);
     }
 }

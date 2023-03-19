@@ -44,21 +44,21 @@ public abstract class BaseWorkout : Entity
     protected override void Valid()
     {
         if (MaxParticipantNumber <= 0)
-            throw new DomainException(this, MaxParticipantNumber, ExceptionCode.ValueToSmall);
+            throw new DomainException(this, nameof(MaxParticipantNumber), ExceptionCode.ValueToSmall);
 
         if (StartTime > EndTime)
-            throw new DomainException(this, EndTime, ExceptionCode.InvalidValue);
+            throw new DomainException(this, nameof(EndTime), ExceptionCode.InvalidValue);
         
         if (WorkoutType is null)
-            throw new DomainException(this, WorkoutType, ExceptionCode.CannotBeNull);
+            throw new DomainException(this, nameof(WorkoutType), ExceptionCode.CannotBeNull);
         
         if (WorkoutTypeId > 0)
-            throw new DomainException(this, WorkoutTypeId, ExceptionCode.InvalidValue);
+            throw new DomainException(this, nameof(WorkoutTypeId), ExceptionCode.InvalidValue);
 
         if (Instructor is null)
-            throw new DomainException(this, Instructor, ExceptionCode.CannotBeNull);
+            throw new DomainException(this, nameof(Instructor), ExceptionCode.CannotBeNull);
         
         if (InstructorId > 0)
-            throw new DomainException(this, InstructorId, ExceptionCode.InvalidValue);
+            throw new DomainException(this, nameof(InstructorId), ExceptionCode.InvalidValue);
     }
 }
