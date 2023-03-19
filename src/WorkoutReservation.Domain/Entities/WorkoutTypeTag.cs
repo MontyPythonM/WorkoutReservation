@@ -1,24 +1,40 @@
-﻿namespace WorkoutReservation.Domain.Entities;
+﻿using WorkoutReservation.Domain.Abstractions;
+using WorkoutReservation.Domain.Exceptions;
 
-public class WorkoutTypeTag
+namespace WorkoutReservation.Domain.Entities;
+
+public sealed class WorkoutTypeTag : Entity
 {
-    public int Id { get; set; }
-    public string Tag { get; set; }
-    public bool IsActive { get; set; } = true;
-    public string CreatedBy { get; set; }
-    public DateTime CreatedDate { get; set; }
-    public ICollection<WorkoutType> WorkoutTypes { get; set; } = new List<WorkoutType>();
+    public int Id { get; private set; }
+    public string Tag { get; private set; }
+    public bool IsActive { get; private set; } = true;
+    public ICollection<WorkoutType> WorkoutTypes { get; private set; } = new List<WorkoutType>();
 
-    protected WorkoutTypeTag()
+    private WorkoutTypeTag()
     {
-        // for EF
+        // required for EF Core
     }
-    
-    public WorkoutTypeTag(string tag, Guid userId)
+
+    public WorkoutTypeTag(string tag)
     {
         Tag = tag;
         IsActive = true;
-        CreatedDate = DateTime.Now;
-        CreatedBy = userId.ToString();
+        Valid();
+    }
+
+    public void Update(string tag, bool isActive)
+    {
+        Tag = tag;
+        IsActive = isActive;
+        Valid();
+    }
+
+    protected override void Valid()
+    {
+        if (string.IsNullOrWhiteSpace(Tag))
+            throw new DomainException(this, Tag, ExceptionCode.CannotBeNullOrWhiteSpace);
+        
+        if (Tag.Length > 30)
+            throw new DomainException(this, Tag, ExceptionCode.ValueToLarge);
     }
 }

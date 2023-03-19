@@ -76,14 +76,6 @@ public class RealWorkoutRepository : IRealWorkoutRepository
         return await query.ToListAsync(token);
     }
     
-    public async Task<RealWorkout> GetByIdAsync(int realWorkoutId, bool asNoTracking, CancellationToken token)
-    {
-        var query = _dbContext.RealWorkouts.AsQueryable();
-        query = _repository.ApplyAsNoTracking(asNoTracking, query);
-        
-        return await query.FirstOrDefaultAsync(x => x.Id == realWorkoutId, token);             
-    }
-    
     public async Task<RealWorkout> GetByIdAsync(int realWorkoutId, bool asNoTracking, CancellationToken token, 
         params Expression<Func<RealWorkout, object>>[] includes)
     {
@@ -92,6 +84,30 @@ public class RealWorkoutRepository : IRealWorkoutRepository
          query = _repository.ApplyIncludes(includes, query); 
          
          return await query.FirstOrDefaultAsync(x => x.Id == realWorkoutId, token);             
+    }
+    
+    public async Task<RealWorkout> GetByIdWithReservationUserAsync(int realWorkoutId, bool asNoTracking, CancellationToken token)
+    {
+        var query = _dbContext.RealWorkouts.AsQueryable();
+        query = _repository.ApplyAsNoTracking(asNoTracking, query);
+
+        query.Include(realWorkout => realWorkout.Reservations)
+            .ThenInclude(reservation => reservation.User);
+        
+        return await query.FirstOrDefaultAsync(x => x.Id == realWorkoutId, token);             
+    }
+    
+    public async Task<RealWorkout> GetByReservationIdAsync(int reservationId, bool asNoTracking, CancellationToken token)
+    {
+        var query = _dbContext.RealWorkouts
+            .Include(realWorkout => realWorkout.Reservations)
+            .ThenInclude(reservation => reservation.User)
+            .Where(x => x.Reservations.Any(r => r.Id == reservationId))
+            .AsQueryable();
+        
+        query = _repository.ApplyAsNoTracking(asNoTracking, query);
+        
+        return await query.FirstOrDefaultAsync(token);
     }
     
     public async Task AddAsync(RealWorkout realWorkout, CancellationToken token)

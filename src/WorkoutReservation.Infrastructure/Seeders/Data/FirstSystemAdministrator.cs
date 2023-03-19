@@ -19,12 +19,12 @@ internal sealed class FirstSystemAdministrator : IFirstSystemAdministrator
     public async Task<ApplicationUser> Create(SystemAdministratorSettings settings, 
         IPasswordHasher<ApplicationUser> passwordHasher, CancellationToken token)
     {
-        var adminUser = new ApplicationUser(settings.Email, settings.FirstName, settings.LastName, Gender.Unspecified, null, "");
+        var adminUser = new ApplicationUser(settings.Email, settings.FirstName, 
+            settings.LastName, Gender.Unspecified, null);
         var hashPassword = passwordHasher.HashPassword(adminUser, settings.Password);
-        
-        adminUser.SetPasswordHash(hashPassword);
-
         var role = await _roleRepository.GetAsync(Role.SystemAdministrator, token);
+
+        adminUser.SetPasswordHash(hashPassword);
         adminUser.SetRole(role);
         
         return adminUser;

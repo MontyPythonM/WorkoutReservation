@@ -7,12 +7,11 @@ internal sealed class CreateRepetitiveWorkoutCommandValidator : AbstractValidato
 {
     public CreateRepetitiveWorkoutCommandValidator(List<RepetitiveWorkout> dailyExistWorkouts)
     {
-        RuleFor(x => x.DayOfWeek)
-            .IsInEnum();
-
-        RuleFor(x => x.StartTime)
-            .LessThan(x => x.EndTime);
-
+        RuleFor(x => x.DayOfWeek).IsInEnum();
+        RuleFor(x => x.MaxParticipantNumber).NotEmpty();
+        RuleFor(x => x.WorkoutTypeId).NotEmpty();
+        RuleFor(x => x.InstructorId).NotEmpty();
+        
         RuleFor(x => new { x.StartTime, x.EndTime })
             .NotEmpty()
             .Custom((newWorkout, context) => 
@@ -31,9 +30,5 @@ internal sealed class CreateRepetitiveWorkoutCommandValidator : AbstractValidato
                     }
                 }
             });
-
-        RuleFor(x => x.MaxParticipantNumber)
-            .GreaterThan(0)
-            .NotNull();
     }
 }

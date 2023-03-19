@@ -76,4 +76,10 @@ public class ApplicationUserRepository : IApplicationUserRepository
             .Include(x => x.ApplicationRoles)
             .AsQueryable();
     }
+
+    public async Task<bool> IsEmailAlreadyTaken(string email, CancellationToken token)
+    {
+        return await _dbContext.ApplicationUsers
+            .FirstOrDefaultAsync(user => user.Email == email, token) is not null;
+    }
 }

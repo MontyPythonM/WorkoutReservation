@@ -15,7 +15,5 @@ public class InstructorProfile : Profile
 
         CreateMap<Instructor, InstructorDetailQueryDto>();
         CreateMap<WorkoutType, WorkoutTypeForInstructorDetailQueryDto>();
-
-        CreateMap<CreateInstructorCommand, Instructor>();
     }
 }

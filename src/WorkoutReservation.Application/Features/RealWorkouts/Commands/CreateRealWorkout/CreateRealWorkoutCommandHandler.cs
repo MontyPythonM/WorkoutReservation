@@ -14,36 +14,32 @@ internal sealed class CreateRealWorkoutCommandHandler : IRequestHandler<CreateRe
     private readonly IRealWorkoutRepository _realWorkoutRepository;
     private readonly IInstructorRepository _instructorRepository;
     private readonly IWorkoutTypeRepository _workoutTypeRepository;
-    private readonly ICurrentUserAccessor _currentUserAccessor;    
 
     public CreateRealWorkoutCommandHandler(IRealWorkoutRepository realWorkoutRepository,
-        IInstructorRepository instructorRepository, IWorkoutTypeRepository workoutTypeRepository, 
-        ICurrentUserAccessor currentUserAccessor)
+        IInstructorRepository instructorRepository, IWorkoutTypeRepository workoutTypeRepository)
     {
         _realWorkoutRepository = realWorkoutRepository;
         _instructorRepository = instructorRepository;
         _workoutTypeRepository = workoutTypeRepository;
-        _currentUserAccessor = currentUserAccessor;
     }
 
     public async Task<Unit> Handle(CreateRealWorkoutCommand request, CancellationToken token)
     {
-        var user = await _currentUserAccessor.GetUserAsync(token);
-
         var instructor = await _instructorRepository.GetByIdAsync(request.InstructorId, false, token);
         if (instructor is null)
-            throw new NotFoundException($"Instructor with Id: {request.InstructorId} not found.");
+            throw new NotFoundException(nameof(Instructor), request.InstructorId.ToString());
 
         var workoutType = await _workoutTypeRepository.GetByIdAsync(request.WorkoutTypeId, false, token);
         if (workoutType is null)
-            throw new NotFoundException($"Workout type with Id: {request.WorkoutTypeId} not found.");
+            throw new NotFoundException(nameof(WorkoutType), request.InstructorId.ToString());
 
         var dailyWorkoutsList = await _realWorkoutRepository.GetByDayAsync(request.Date, true, token);
+        
         var validator = new CreateRealWorkoutCommandValidator(dailyWorkoutsList);
         await validator.ValidateAndThrowAsync(request, token);
 
-        var realWorkout = new RealWorkout(request.MaxParticipantNumber, request.StartTime, 
-            request.EndTime, workoutType, instructor, request.Date, user);
+        var realWorkout = new RealWorkout(request.MaxParticipantNumber, request.StartTime,
+            request.EndTime, workoutType, instructor, request.Date, false);
         
         await _realWorkoutRepository.AddAsync(realWorkout, token);
         return Unit.Value;

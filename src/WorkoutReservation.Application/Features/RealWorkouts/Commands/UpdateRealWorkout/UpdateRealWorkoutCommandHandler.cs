@@ -2,6 +2,7 @@
 using MediatR;
 using WorkoutReservation.Application.Common.Exceptions;
 using WorkoutReservation.Application.Contracts;
+using WorkoutReservation.Domain.Entities;
 
 namespace WorkoutReservation.Application.Features.RealWorkouts.Commands.UpdateRealWorkout;
 
@@ -24,23 +25,19 @@ internal sealed class UpdateRealWorkoutCommandHandler : IRequestHandler<UpdateRe
     {
         var realWorkout = await _realWorkoutRepository.GetByIdAsync(request.Id, false, token);
         if (realWorkout is null)
-            throw new NotFoundException($"Real workout with Id: {request.Id} not found.");
+            throw new NotFoundException(nameof(RealWorkout), request.Id.ToString());
 
         var instructor = await _instructorRepository.GetByIdAsync(request.InstructorId, false, token);
         if (instructor is null)
-            throw new NotFoundException($"Instructor with Id: {request.InstructorId} not found.");
+            throw new NotFoundException(nameof(Instructor), request.InstructorId.ToString());
         
         var dailyWorkoutsList = await _realWorkoutRepository.GetByDayAsync(request.Date, true, token);
         
         var validator = new UpdateRealWorkoutCommandValidator(dailyWorkoutsList, realWorkout);
         await validator.ValidateAndThrowAsync(request, token);
 
-        realWorkout.UpdateLastModifiedDate();
-        realWorkout.MaxParticipantNumber = request.MaxParticipantNumber;
-        realWorkout.Date = request.Date;
-        realWorkout.StartTime = request.StartTime;
-        realWorkout.EndTime = request.EndTime;
-        realWorkout.Instructor = instructor;
+        realWorkout.Update(request.MaxParticipantNumber, request.Date, 
+            request.StartTime, request.EndTime, instructor);
         
         await _realWorkoutRepository.UpdateAsync(realWorkout, token);
         return Unit.Value;

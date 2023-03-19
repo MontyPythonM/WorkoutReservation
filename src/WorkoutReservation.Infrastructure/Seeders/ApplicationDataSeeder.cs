@@ -31,34 +31,39 @@ public class ApplicationDataSeeder
         if (await _dbContext.Database.CanConnectAsync(token) is false)
             throw new DatabaseConnectionException();
         
-        if (await _dbContext.Instructors.AnyAsync(token) ||
-            await _dbContext.WorkoutTypes.AnyAsync(token) ||
-            await _dbContext.RealWorkouts.AnyAsync(token) ||
-            await _dbContext.RepetitiveWorkouts.AnyAsync(token))
+        if (await _dbContext.Instructors.AnyAsync(token) || await _dbContext.WorkoutTypes.AnyAsync(token) ||
+            await _dbContext.RealWorkouts.AnyAsync(token) || await _dbContext.RepetitiveWorkouts.AnyAsync(token))
         {        
             return;
         }
 
-        await Task.WhenAll(
-            _dbContext.AddRangeAsync(InstructorsData.Create(), token),
-            _dbContext.AddRangeAsync(WorkoutTypesData.Create(), token));
-        await _dbContext.SaveChangesAsync(token);
+        try
+        {
+            await Task.WhenAll(
+                _dbContext.AddRangeAsync(InstructorsData.Create(), token),
+                _dbContext.AddRangeAsync(WorkoutTypesData.Create(), token));
+            await _dbContext.SaveChangesAsync(token);
 
-        var seededInstructors = await _instructorRepository.GetAllAsync(false, token);
-        var seededWorkoutTypes = await _workoutTypeRepository.GetAllAsync(false, token);
-        await _dbContext.AddRangeAsync(RealWorkoutsData.Create(), token);
-        await _dbContext.AddRangeAsync(RepetitiveWorkoutsData.Create(seededInstructors, seededWorkoutTypes), token);
-        await _dbContext.SaveChangesAsync(token);
-        
-        await _dbContext.WorkoutTypeInstructors.AddRangeAsync
-        (
-            new WorkoutTypeInstructor { InstructorId = seededInstructors[0].Id, WorkoutTypeId = seededWorkoutTypes[0].Id },
-            new WorkoutTypeInstructor { InstructorId = seededInstructors[0].Id, WorkoutTypeId = seededWorkoutTypes[1].Id },
-            new WorkoutTypeInstructor { InstructorId = seededInstructors[1].Id, WorkoutTypeId = seededWorkoutTypes[3].Id },
-            new WorkoutTypeInstructor { InstructorId = seededInstructors[2].Id, WorkoutTypeId = seededWorkoutTypes[2].Id },
-            new WorkoutTypeInstructor { InstructorId = seededInstructors[2].Id, WorkoutTypeId = seededWorkoutTypes[3].Id }
-        );
-        await _dbContext.SaveChangesAsync(token);
-        _logger.LogInformation("Dummy data was successfully seeded.");
+            var seededInstructors = await _instructorRepository.GetAllAsync(false, token);
+            var seededWorkoutTypes = await _workoutTypeRepository.GetAllAsync(false, token);
+            await _dbContext.AddRangeAsync(RealWorkoutsData.Create(seededInstructors, seededWorkoutTypes), token);
+            await _dbContext.AddRangeAsync(RepetitiveWorkoutsData.Create(seededInstructors, seededWorkoutTypes), token);
+            await _dbContext.SaveChangesAsync(token);
+
+            await _dbContext.WorkoutTypeInstructors.AddRangeAsync
+            (
+                new WorkoutTypeInstructor(seededInstructors[0].Id, seededWorkoutTypes[0].Id),
+                new WorkoutTypeInstructor(seededInstructors[0].Id, seededWorkoutTypes[1].Id),
+                new WorkoutTypeInstructor(seededInstructors[1].Id, seededWorkoutTypes[3].Id),
+                new WorkoutTypeInstructor(seededInstructors[2].Id, seededWorkoutTypes[2].Id),
+                new WorkoutTypeInstructor(seededInstructors[2].Id, seededWorkoutTypes[3].Id)
+            );
+            await _dbContext.SaveChangesAsync(token);
+            _logger.LogInformation("Initial data was successfully seeded");
+        }
+        catch
+        {
+            _logger.LogWarning("Initial data seeding failed");
+        }
     }
 }

@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using FluentValidation;
+﻿using FluentValidation;
 using MediatR;
 using WorkoutReservation.Application.Contracts;
 using WorkoutReservation.Domain.Entities;
@@ -13,13 +12,10 @@ public record CreateInstructorCommand(string FirstName, string LastName, Gender?
 internal sealed class CreateInstructorCommandHandler : IRequestHandler<CreateInstructorCommand>
 {
     private readonly IInstructorRepository _instructorRepository;
-    private readonly IMapper _mapper;
 
-    public CreateInstructorCommandHandler(IInstructorRepository instructorRepository, 
-        IMapper mapper)
+    public CreateInstructorCommandHandler(IInstructorRepository instructorRepository)
     {
         _instructorRepository = instructorRepository;
-        _mapper = mapper;
     }
     
     public async Task<Unit> Handle(CreateInstructorCommand request, CancellationToken token)
@@ -27,7 +23,8 @@ internal sealed class CreateInstructorCommandHandler : IRequestHandler<CreateIns
         var validator = new CreateInstructorCommandValidator();
         await validator.ValidateAndThrowAsync(request, token);
 
-        var instructor = _mapper.Map<Instructor>(request);
+        var instructor = new Instructor(request.FirstName, request.LastName, 
+            request.Gender, request.Biography, request.Email);
 
         await _instructorRepository.AddAsync(instructor, token);
         return Unit.Value;

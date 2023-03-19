@@ -14,12 +14,7 @@ public class RepetitiveWorkoutProfile : Profile
         CreateMap<RepetitiveWorkout, RepetitiveWorkoutListDto>();
         CreateMap<WorkoutType, WorkoutTypeForRepetitiveWorkoutListDto>();
         CreateMap<Instructor, InstructorForRepetitiveWorkoutListDto>();
-
-        CreateMap<CreateRepetitiveWorkoutCommand, RepetitiveWorkout>();
-
-        CreateMap<UpdateRepetitiveWorkoutCommand, RepetitiveWorkout>()
-            .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.RepetitiveWorkoutId));
-
+        
         CreateMap<RepetitiveWorkout, RepetitiveWorkoutToRealWorkoutDto>();
     }
 }

@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using FluentValidation;
+﻿using FluentValidation;
 using MediatR;
 using WorkoutReservation.Application.Contracts;
 using WorkoutReservation.Domain.Entities;
@@ -12,17 +11,14 @@ public record CreateWorkoutTypeCommand(string Name, string Description, WorkoutI
 
 internal sealed class CreateWorkoutTypeCommandHandler : IRequestHandler<CreateWorkoutTypeCommand>
 {    
-    private readonly IMapper _mapper;
     private readonly IWorkoutTypeRepository _workoutRepository;
     private readonly IWorkoutTypeTagRepository _workoutTypeTagRepository;
     private readonly IInstructorRepository _instructorRepository;
 
-    public CreateWorkoutTypeCommandHandler(IMapper mapper,
-        IWorkoutTypeRepository workoutTypeRepository,
+    public CreateWorkoutTypeCommandHandler(IWorkoutTypeRepository workoutTypeRepository,
         IWorkoutTypeTagRepository workoutTypeTagRepository,
         IInstructorRepository instructorRepository)
     {
-        _mapper = mapper;
         _workoutRepository = workoutTypeRepository;        
         _workoutTypeTagRepository = workoutTypeTagRepository;
         _instructorRepository = instructorRepository;        
@@ -33,16 +29,14 @@ internal sealed class CreateWorkoutTypeCommandHandler : IRequestHandler<CreateWo
         var validator = new CreateWorkoutTypeCommandValidator();
         await validator.ValidateAndThrowAsync(request, token);
         
-        var workoutType = _mapper.Map<WorkoutType>(request);
-        
         var tags = await _workoutTypeTagRepository
             .GetAllAsync(tag => tag.IsActive && request.WorkoutTypeTags.Contains(tag.Id), false, token);
         
         var instructors = await _instructorRepository
             .GetAllAsync(instructor => request.Instructors.Contains(instructor.Id), false, token);
-        
-        workoutType.WorkoutTypeTags = tags;
-        workoutType.Instructors = instructors;
+
+        var workoutType = new WorkoutType(request.Name, request.Description, 
+            request.Intensity, instructors, tags);
         
         await _workoutRepository.AddAsync(workoutType, token);
         return Unit.Value;

@@ -1,8 +1,8 @@
-﻿using FluentValidation;
-using MediatR;
+﻿using MediatR;
 using Microsoft.Extensions.Logging;
 using WorkoutReservation.Application.Common.Exceptions;
 using WorkoutReservation.Application.Contracts;
+using WorkoutReservation.Domain.Entities;
 
 namespace WorkoutReservation.Application.Features.Users.Commands.DeleteUser;
 
@@ -25,19 +25,18 @@ internal sealed class DeleteUserCommandHandler : IRequestHandler<DeleteUserComma
 
     public async Task<Unit> Handle(DeleteUserCommand request, CancellationToken token)
     {
+        var currentUser = await _currentUserAccessor.GetUserAsync(token);
         var userToRemove = await _userRepository.GetByGuidAsync(request.UserGuid, false, token);
 
         if (userToRemove is null)
-            throw new NotFoundException($"User with Guid: {request.UserGuid} not found.");
-
-        var currentUserGuid = _currentUserAccessor.GetUserId();
-
-        var validator = new DeleteUserCommandValidator(currentUserGuid);
-        await validator.ValidateAndThrowAsync(request, token);
-
+            throw new NotFoundException(nameof(ApplicationUser), request.UserGuid.ToString());
+        
+        if (userToRemove.Id == currentUser.Id)
+            throw new BadRequestException("You cannot delete your own account by this endpoint. Use route: ./api/account/delete-account");
+        
         await _userRepository.DeleteAsync(userToRemove, token);
         
-        _logger.LogInformation($"User with Id: {request.UserGuid} was deleted by Administrator Id: {currentUserGuid}.");
+        _logger.LogInformation($"User with Id: {request.UserGuid} was deleted by user Id: {currentUser.Id}.");
         return Unit.Value;
     }
 }

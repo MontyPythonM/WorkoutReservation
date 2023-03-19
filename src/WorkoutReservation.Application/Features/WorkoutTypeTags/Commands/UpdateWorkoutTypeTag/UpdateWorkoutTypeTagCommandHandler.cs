@@ -1,5 +1,4 @@
-﻿using FluentValidation;
-using MediatR;
+﻿using MediatR;
 using WorkoutReservation.Application.Common.Exceptions;
 using WorkoutReservation.Application.Contracts;
 
@@ -23,11 +22,7 @@ internal sealed class UpdateWorkoutTypeTagCommandHandler : IRequestHandler<Updat
         if (workoutTypeTag is null)
             throw new NotFoundException($"Workout type tag with Id: {request.Id} not found.");
         
-        var validator = new UpdateWorkoutTypeTagCommandValidator();
-        await validator.ValidateAndThrowAsync(request, token);
-
-        workoutTypeTag.Tag = request.Tag;
-        workoutTypeTag.IsActive = request.IsActive;
+        workoutTypeTag.Update(request.Tag, request.IsActive);
         
         await _workoutTypeTagRepository.UpdateAsync(workoutTypeTag, token);
         return Unit.Value;

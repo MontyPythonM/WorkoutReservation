@@ -1,7 +1,20 @@
-﻿namespace WorkoutReservation.Domain.Entities;
+﻿using WorkoutReservation.Domain.Enums;
 
-public class ApplicationRolePermission
+namespace WorkoutReservation.Domain.Entities;
+
+public sealed class ApplicationRolePermission
 {
-    public int ApplicationRoleId { get; set; }
-    public int ApplicationPermissionId { get; set; }
+    public int ApplicationRoleId { get; }
+    public int ApplicationPermissionId { get; }
+
+    public ApplicationRolePermission(ApplicationRole role, Permission permission)
+    {
+        ApplicationRoleId = role.Id;
+        ApplicationPermissionId = (int)permission;
+    }
+
+    private ApplicationRolePermission()
+    {
+        // required by EF core
+    }
 }

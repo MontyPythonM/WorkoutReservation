@@ -1,6 +1,8 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System.Linq.Expressions;
+using Microsoft.EntityFrameworkCore;
 using WorkoutReservation.Application.Contracts;
 using WorkoutReservation.Domain.Entities;
+using WorkoutReservation.Infrastructure.Interfaces;
 using WorkoutReservation.Infrastructure.Persistence;
 
 namespace WorkoutReservation.Infrastructure.Repositories;
@@ -8,10 +10,13 @@ namespace WorkoutReservation.Infrastructure.Repositories;
 public class RepetitiveWorkoutRepository : IRepetitiveWorkoutRepository
 {
     private readonly AppDbContext _dbContext;
+    private readonly IRepository<RepetitiveWorkout> _repository;
 
-    public RepetitiveWorkoutRepository(AppDbContext dbContext)
+    public RepetitiveWorkoutRepository(AppDbContext dbContext, 
+        IRepository<RepetitiveWorkout> repository)
     {
         _dbContext = dbContext;
+        _repository = repository;
     }
 
     public async Task AddAsync(RepetitiveWorkout repetitiveWorkout, CancellationToken token)
@@ -38,33 +43,41 @@ public class RepetitiveWorkoutRepository : IRepetitiveWorkoutRepository
         await _dbContext.SaveChangesAsync(token);
     }
 
-    public async Task<List<RepetitiveWorkout>> GetAllAsync(CancellationToken token)
+    public async Task<List<RepetitiveWorkout>> GetAllAsync(bool asNoTracking, 
+        CancellationToken token, params Expression<Func<RepetitiveWorkout, object>>[] includes)
     {
-        return await _dbContext.RepetitiveWorkouts
-            .Include(x => x.Instructor)
-            .Include(x => x.WorkoutType)
-            .OrderBy(x => x.DayOfWeek)
-                .ThenBy(x => x.StartTime)
+        var query = _dbContext.RepetitiveWorkouts.AsQueryable();
+            
+        query = _repository.ApplyAsNoTracking(asNoTracking, query);
+        query = _repository.ApplyIncludes(includes, query); 
+            
+        return await query
+            .OrderBy(x => x.StartTime)
             .ToListAsync(token);
     }
 
-    public async Task<List<RepetitiveWorkout>> GetAllFromSelectedDayAsync(DayOfWeek dayOfWeek, CancellationToken token)
+    public async Task<List<RepetitiveWorkout>> GetAllFromSelectedDayAsync(DayOfWeek dayOfWeek, bool asNoTracking, 
+        CancellationToken token, params Expression<Func<RepetitiveWorkout, object>>[] includes)
     {
-        return await _dbContext.RepetitiveWorkouts
-            .AsNoTracking()
-            .Include(x => x.Instructor)
-            .Include(x => x.WorkoutType)
+        var query = _dbContext.RepetitiveWorkouts.AsQueryable();
+            
+        query = _repository.ApplyAsNoTracking(asNoTracking, query);
+        query = _repository.ApplyIncludes(includes, query); 
+            
+        return await query
             .Where(x => x.DayOfWeek == dayOfWeek)
             .OrderBy(x => x.StartTime)
             .ToListAsync(token);
     }
 
-    public async Task<RepetitiveWorkout> GetByIdAsync(int repetitiveWorkoutId, CancellationToken token)
+    public async Task<RepetitiveWorkout> GetByIdAsync(int repetitiveWorkoutId, bool asNoTracking, 
+        CancellationToken token, params Expression<Func<RepetitiveWorkout, object>>[] includes)
     {
-        return await _dbContext.RepetitiveWorkouts
-            .AsNoTracking()
-            .Include(x => x.Instructor)
-            .Include(x => x.WorkoutType)
-            .FirstOrDefaultAsync(x => x.Id == repetitiveWorkoutId, token);
+        var query = _dbContext.RepetitiveWorkouts.AsQueryable();
+            
+        query = _repository.ApplyAsNoTracking(asNoTracking, query);
+        query = _repository.ApplyIncludes(includes, query); 
+
+        return await query.FirstOrDefaultAsync(x => x.Id == repetitiveWorkoutId, token);
     }
 }

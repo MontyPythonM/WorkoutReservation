@@ -15,7 +15,7 @@ internal sealed class RegisterCommandHandler : IRequestHandler<RegisterCommand>
     private readonly IApplicationUserRepository _userRepository; 
     private readonly IPasswordHasher<ApplicationUser> _passwordHasher;
     private readonly IApplicationRoleRepository _roleRepository;
-
+    
     public RegisterCommandHandler(IApplicationUserRepository userRepository, 
         IPasswordHasher<ApplicationUser> passwordHasher, 
         IApplicationRoleRepository roleRepository)
@@ -27,20 +27,16 @@ internal sealed class RegisterCommandHandler : IRequestHandler<RegisterCommand>
 
     public async Task<Unit> Handle(RegisterCommand request, CancellationToken token)
     {
-        var user = await _userRepository
-            .GetByEmailAsync(request.Email, false, token, incl => incl.ApplicationRoles);
+        var isEmailAlreadyTaken = await _userRepository.IsEmailAlreadyTaken(request.Email, token);
         
-        var validator = new RegisterCommandValidator(user);
+        var validator = new RegisterCommandValidator(isEmailAlreadyTaken);
         await validator.ValidateAndThrowAsync(request, token);
 
         var newUser = new ApplicationUser(request.Email, request.FirstName, 
-            request.LastName, request.Gender, request.DateOfBirth, "");
-        
-        var hashPassword = _passwordHasher.HashPassword(newUser, request.Password);
-        newUser.SetPasswordHash(hashPassword);
+            request.LastName, request.Gender, request.DateOfBirth);
 
-        var role = await _roleRepository.GetAsync(Role.Member, token);
-        newUser.SetRole(role);
+        newUser.SetPasswordHash(_passwordHasher.HashPassword(newUser, request.Password));
+        newUser.SetRole(await _roleRepository.GetAsync(Role.Member, token));
         
         await _userRepository.AddAsync(newUser, token);
         return Unit.Value;

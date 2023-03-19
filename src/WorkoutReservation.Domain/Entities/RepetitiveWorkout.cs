@@ -2,23 +2,35 @@
 
 namespace WorkoutReservation.Domain.Entities;
 
-public class RepetitiveWorkout : BaseWorkout
+public sealed class RepetitiveWorkout : BaseWorkout
 {
-    public DayOfWeek DayOfWeek { get; set; }
-
-    protected RepetitiveWorkout()
-    {
-    }
+    public DayOfWeek DayOfWeek { get; private set; }
     
-    public RepetitiveWorkout(int maxParticipantNumber, TimeOnly startTime, TimeOnly endTime, DayOfWeek dayOfWeek) 
-        : base(maxParticipantNumber, startTime, endTime)
+    private RepetitiveWorkout()
     {
-        DayOfWeek = dayOfWeek;
+        // required by EF core
     }
     
     public RepetitiveWorkout(int maxParticipantNumber, TimeOnly startTime, TimeOnly endTime, DayOfWeek dayOfWeek, WorkoutType workoutType, Instructor instructor) 
         : base(maxParticipantNumber, startTime, endTime, workoutType, instructor)
     {
         DayOfWeek = dayOfWeek;
+        Valid();
+    }
+
+    public void Update(int maxParticipantNumber, TimeOnly startTime, TimeOnly endTime, 
+        DayOfWeek dayOfWeek, WorkoutType workoutType, Instructor instructor)
+    {
+        MaxParticipantNumber = maxParticipantNumber;
+        StartTime = startTime;
+        EndTime = endTime;
+        DayOfWeek = dayOfWeek;
+        AddWorkoutType(workoutType);
+        Valid();
+    }
+    
+    protected override void Valid()
+    {
+        // TODO add validation for enum 
     }
 }

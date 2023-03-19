@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Logging;
 using WorkoutReservation.Application.Common.Exceptions;
 using WorkoutReservation.Application.Contracts;
+using WorkoutReservation.Domain.Entities;
 
 namespace WorkoutReservation.Application.Features.Instructors.Commands.DeleteInstructor;
 
@@ -23,11 +24,11 @@ internal sealed class DeleteInstructorCommandHandler : IRequestHandler<DeleteIns
     {
         var instructor = await _instructorRepository.GetByIdAsync(request.InstructorId, false, token);
         if (instructor is null)
-            throw new NotFoundException($"Instructor with Id: {request.InstructorId} not found.");
+            throw new NotFoundException(nameof(Instructor), request.InstructorId.ToString());
 
         await _instructorRepository.DeleteAsync(instructor, token);
 
-        _logger.LogInformation($"Instructor with Id: {request.InstructorId} was deleted.");
+        _logger.LogInformation($"Instructor with Id: {request.InstructorId} was deleted");
         return Unit.Value;
     }
 }

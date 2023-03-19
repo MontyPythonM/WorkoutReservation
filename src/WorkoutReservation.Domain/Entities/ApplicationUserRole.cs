@@ -2,6 +2,17 @@
 
 public class ApplicationUserRole
 {
-    public Guid ApplicationUserId { get; set; }
-    public int ApplicationRoleId { get; set; }
+    public Guid ApplicationUserId { get; }
+    public int ApplicationRoleId { get; }
+
+    private ApplicationUserRole()
+    {
+        // required by EF core
+    }
+
+    public ApplicationUserRole(Guid applicationUserId, int applicationRoleId)
+    {
+        ApplicationUserId = applicationUserId;
+        ApplicationRoleId = applicationRoleId;
+    }
 }

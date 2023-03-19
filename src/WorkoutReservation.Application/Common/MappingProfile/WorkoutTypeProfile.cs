@@ -17,9 +17,5 @@ public class WorkoutTypeProfile : Profile
                 opt.MapFrom(src => src.Instructors.Select(x => x.Id)));
 
         CreateMap<WorkoutType, WorkoutTypesDto>();
-        
-        CreateMap<CreateWorkoutTypeCommand, WorkoutType>()
-            .ForMember(dest => dest.WorkoutTypeTags, opt => opt.Ignore())
-            .ForMember(dest => dest.Instructors, opt => opt.Ignore());
     }
 }

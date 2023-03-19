@@ -7,16 +7,6 @@ internal sealed class UpdateWorkoutTypeCommandValidatior : AbstractValidator<Upd
 {
     public UpdateWorkoutTypeCommandValidatior()
     {
-        RuleFor(x => x.Name)
-            .MaximumLength(50)
-            .NotEmpty();
-
-        RuleFor(x => x.Intensity)
-            .IsInEnum()
-            .NotEmpty();
-
-        RuleFor(x => x.Description)
-            .MaximumLength(600)
-            .NotEmpty();
+        RuleFor(x => x.Intensity).IsInEnum();
     }      
 }
