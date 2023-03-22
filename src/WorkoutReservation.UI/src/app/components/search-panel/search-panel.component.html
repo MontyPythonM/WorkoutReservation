@@ -1,0 +1,35 @@
+<div class="container">
+  <dx-text-box
+    class="item"
+    placeholder=""
+    label="Search phrase"
+    width="300px"
+    [(value)]="searchPhrase"
+  ></dx-text-box>
+
+  <dx-select-box
+    *ngIf="allowedFilters"
+    class="item"
+    label="Filter by"
+    width="220px"
+    [items]="allowedFilters"
+    [value]="allowedFilters[0]"
+    (onValueChanged)="filterChanged($event)"
+  ></dx-select-box>
+
+  <dx-button
+    *ngIf="allowedFilters"
+    class="item button"
+    stylingMode="outlined"
+    [focusStateEnabled]="false"
+    [icon]="setOrderByIcon()"
+    (onClick)="toggleOrderBy()"
+  ></dx-button>
+
+  <dx-button
+    class="item button"
+    icon="search"
+    type="default"
+    (onClick)="onSearch()"
+  ></dx-button>
+</div>

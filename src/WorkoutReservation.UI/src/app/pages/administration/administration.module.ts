@@ -18,6 +18,7 @@ import {PagerModule} from "../../components/pager/pager.module";
 import {Permission} from "../../models/enums/permission.enum";
 import {AuthGuardService} from "../../services/identity/auth-guard.service";
 import {ReservationRegistryComponent} from './reservation-registry/reservation-registry.component';
+import {SearchPanelModule} from "../../components/search-panel/search-panel.module";
 
 @NgModule({
   declarations: [
@@ -38,6 +39,7 @@ import {ReservationRegistryComponent} from './reservation-registry/reservation-r
     DxLoadPanelModule,
     ConfirmationPopupModule,
     PagerModule,
+    SearchPanelModule,
     RouterModule.forChild([
       {
         path: '',

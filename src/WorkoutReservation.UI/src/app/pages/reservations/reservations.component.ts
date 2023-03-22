@@ -42,25 +42,35 @@ export class ReservationsComponent extends BaseComponent implements OnInit {
     this.subscribe(this.reservationService.getOwnReservations(queryParams), {
       next: (response: PagedResult<Reservation>) => {
         this.reservations = response;
-        if (response.totalItemsCount === 0) {
+        if (response.totalItemsCount === 0 &&
+          this.queryParams.searchPhrase == "") {
           this.isReservationsExist = false;
         }
       }
     });
   }
 
-  pageSizeChanged(e: any) {
+  pageSizeChanged(e: number) {
     this.queryParams.pageSize = e;
     this.loadReservations(this.queryParams);
   }
 
-  pageNumberChanged(e: any) {
+  pageNumberChanged(e: number) {
     this.queryParams.pageNumber = e;
     this.loadReservations(this.queryParams);
   }
 
   navigateToReservationDetails(e: any){
     this.router.navigateByUrl(pageUrls.reservations + e.data.id);
+  }
+
+  searchPhraseChanged = (value: string) => this.queryParams.searchPhrase = value;
+  selectedFilterChanged = (value: string) => this.queryParams.sortBy = value;
+  orderByChanged = (value: boolean) => this.queryParams.sortByDescending = value;
+
+  refresh() {
+    console.log(this.queryParams)
+    this.ngOnInit();
   }
 
   onDataGridInit = (e: { component: dxDataGrid }) => this.dxDataGrid = e.component;
