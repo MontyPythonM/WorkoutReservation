@@ -68,10 +68,5 @@ export class ReservationsComponent extends BaseComponent implements OnInit {
   selectedFilterChanged = (value: string) => this.queryParams.sortBy = value;
   orderByChanged = (value: boolean) => this.queryParams.sortByDescending = value;
 
-  refresh() {
-    console.log(this.queryParams)
-    this.ngOnInit();
-  }
-
   onDataGridInit = (e: { component: dxDataGrid }) => this.dxDataGrid = e.component;
 }

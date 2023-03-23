@@ -7,6 +7,7 @@ import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 })
 export class SearchPanelComponent implements OnInit {
   @Input() allowedFilters?: string[];
+  @Input() initialOrderBy: boolean;
   @Output() searchPhraseChanged = new EventEmitter<string>();
   @Output() filterByChanged = new EventEmitter<string>();
   @Output() orderByDescendingChanged = new EventEmitter<boolean>();
@@ -18,11 +19,13 @@ export class SearchPanelComponent implements OnInit {
   constructor() {
     this.searchPhrase = "";
     this.filterBy = "";
-    this.orderByDescending = false;
+    this.orderByDescending = true;
+    this.initialOrderBy = true;
   }
 
   ngOnInit(): void {
     this.filterBy = this.allowedFilters ? this.allowedFilters[0] : "";
+    this.orderByDescending = this.initialOrderBy;
   }
 
   onSearch = () => {
