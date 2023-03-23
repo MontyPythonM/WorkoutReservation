@@ -25,7 +25,7 @@ internal sealed class GetInstructorDetailQueryHandler : IRequestHandler<GetInstr
         CancellationToken token)
     {
         var instructor = await _instructorRepository
-            .GetByIdAsync(request.InstructorId, true, token);
+            .GetByIdAsync(request.InstructorId, true, token, incl => incl.WorkoutTypes);
 
         if (instructor is null)
             throw new NotFoundException(nameof(Instructor), request.InstructorId.ToString());

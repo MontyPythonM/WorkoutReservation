@@ -26,10 +26,10 @@ public class ReservationProfile : Profile
             .ForMember(dest => dest.StartTime, opt => opt.MapFrom(src => src.RealWorkout.StartTime))
             .ForMember(dest => dest.EndTime, opt => opt.MapFrom(src => src.RealWorkout.EndTime))
             .ForMember(dest => dest.Date, opt => opt.MapFrom(src => src.RealWorkout.Date))
-            .ForMember(dest => dest.WorkoutTypeId, opt => opt.MapFrom(src => src.RealWorkout.WorkoutTypeId))
+            .ForMember(dest => dest.WorkoutTypeId, opt => opt.MapFrom(src => src.RealWorkout.WorkoutType.Id))
             .ForMember(dest => dest.WorkoutTypeName, opt => opt.MapFrom(src => src.RealWorkout.WorkoutType.Name))
             .ForMember(dest => dest.Intensity, opt => opt.MapFrom(src => src.RealWorkout.WorkoutType.Intensity))
-            .ForMember(dest => dest.InstructorId, opt => opt.MapFrom(src => src.RealWorkout.InstructorId))
+            .ForMember(dest => dest.InstructorId, opt => opt.MapFrom(src => src.RealWorkout.Instructor.Id))
             .ForMember(dest => dest.InstructorFullName, opt => opt.MapFrom(r =>
                 string.Join(" ", r.RealWorkout.Instructor.FirstName, r.RealWorkout.Instructor.LastName)))
             .ForMember(dest => dest.IsWorkoutExpired, opt => opt.MapFrom(src => DateTime.Now.IsExpired(src.RealWorkout.Date, src.RealWorkout.EndTime)));
@@ -43,9 +43,9 @@ public class ReservationProfile : Profile
             .ForMember(dest => dest.Date, opt => opt.MapFrom(src => src.RealWorkout.Date))
             .ForMember(dest => dest.MaxParticipantNumber, opt => opt.MapFrom(src => src.RealWorkout.MaxParticipantNumber))
             .ForMember(dest => dest.CurrentParticipantNumber, opt => opt.MapFrom(src => src.RealWorkout.CurrentParticipantNumber))
-            .ForMember(dest => dest.WorkoutTypeId, opt => opt.MapFrom(src => src.RealWorkout.WorkoutTypeId))
+            .ForMember(dest => dest.WorkoutTypeId, opt => opt.MapFrom(src => src.RealWorkout.WorkoutType.Id))
             .ForMember(dest => dest.WorkoutTypeName, opt => opt.MapFrom(src => src.RealWorkout.WorkoutType.Name))
-            .ForMember(dest => dest.InstructorId, opt => opt.MapFrom(src => src.RealWorkout.InstructorId))
+            .ForMember(dest => dest.InstructorId, opt => opt.MapFrom(src => src.RealWorkout.Instructor.Id))
             .ForMember(dest => dest.InstructorFullName, opt => opt.MapFrom(r =>
                 string.Join(" ", r.RealWorkout.Instructor.FirstName, r.RealWorkout.Instructor.LastName)))
             .ForMember(dest => dest.IsWorkoutExpired, opt => opt.MapFrom(src => DateTime.Now.IsExpired(src.RealWorkout.Date, src.RealWorkout.EndTime)));

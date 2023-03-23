@@ -11,9 +11,13 @@ internal sealed class CreateRealWorkoutCommandValidator : AbstractValidator<Crea
         RuleFor(x => x.Date).NotEmpty();
         RuleFor(x => x.StartTime).NotEmpty();
         RuleFor(x => x.EndTime).NotEmpty();
-        RuleFor(x => x.MaxParticipantNumber).NotEmpty();
         RuleFor(x => x.InstructorId).NotEmpty();
+        RuleFor(x => x.WorkoutTypeId).NotEmpty();
 
+        RuleFor(x => x.MaxParticipantNumber)
+            .GreaterThanOrEqualTo(1)
+            .NotEmpty();
+        
         RuleFor(x => new { x.StartTime, x.EndTime })
             .NotEmpty()
             .Custom((newWorkout, context) =>

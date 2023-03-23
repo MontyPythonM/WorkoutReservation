@@ -1,0 +1,19 @@
+.container {
+  margin: 20px 0 20px 0;
+  display: inline-flex
+}
+
+.item {
+  margin-right: 20px;
+}
+
+.button {
+  height: 34px;
+  display: inline-block;
+  align-self: flex-end;
+}
+
+.checkbox {
+  justify-content: center;
+  align-items: center;
+}

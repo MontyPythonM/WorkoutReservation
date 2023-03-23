@@ -1,4 +1,12 @@
 <div class="container" *ngIf="isReservationsExist">
+  <app-search-panel
+    [allowedFilters]="['WorkoutDate', 'ReservationStatus']"
+    [initialOrderBy]="queryParams.sortByDescending"
+    (searchPhraseChanged)="searchPhraseChanged($event)"
+    (filterByChanged)="selectedFilterChanged($event)"
+    (orderByDescendingChanged)="orderByChanged($event)"
+    (refresh)="ngOnInit()"
+  ></app-search-panel>
   <dx-data-grid
     keyExpr="id"
     [dataSource]="reservations.items"
@@ -14,17 +22,7 @@
     <dxi-column dataField="workoutTypeName" caption="Workout" [hidingPriority]="3" alignment="center" dataType="string"></dxi-column>
     <dxi-column dataField="instructorFullName" caption="Instructor" [hidingPriority]="1" alignment="center" dataType="string"></dxi-column>
     <dxi-column dataField="reservationStatus" caption="Status" [hidingPriority]="1" alignment="center" dataType="string"></dxi-column>
-
     <dxo-paging [enabled]="false"> </dxo-paging>
-    <dxo-search-panel [visible]="true" [width]="300" placeholder="Search..."></dxo-search-panel>
-
-    <dxo-toolbar>
-      <dxi-item
-        name="searchPanel"
-        locateInMenu="auto"
-        location="before">
-      </dxi-item>
-    </dxo-toolbar>
   </dx-data-grid>
 
   <app-pager

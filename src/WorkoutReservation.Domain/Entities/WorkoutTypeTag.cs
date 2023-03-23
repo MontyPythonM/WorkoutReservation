@@ -32,9 +32,9 @@ public sealed class WorkoutTypeTag : Entity
     protected override void Valid()
     {
         if (string.IsNullOrWhiteSpace(Tag))
-            throw new DomainException(this, Tag, ExceptionCode.CannotBeNullOrWhiteSpace);
+            throw new DomainException(this, nameof(Tag), ExceptionCode.CannotBeNullOrWhiteSpace);
         
         if (Tag.Length > 30)
-            throw new DomainException(this, Tag, ExceptionCode.ValueToLarge);
+            throw new DomainException(this, nameof(Tag), ExceptionCode.ValueToLarge);
     }
 }

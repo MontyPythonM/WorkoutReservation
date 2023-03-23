@@ -23,12 +23,13 @@ internal sealed class DeleteWorkoutTypeCommandHandler : IRequestHandler<DeleteWo
     public async Task<Unit> Handle(DeleteWorkoutTypeCommand request, CancellationToken token)
     {
         var workoutType = await _workoutTypeRepository
-            .GetByIdAsync(request.WorkoutTypeId, false, token, incl => incl.BaseWorkouts);
+            .GetByIdAsync(request.WorkoutTypeId, false, token, 
+                incl => incl.RealWorkouts, incl => incl.RepetitiveWorkouts);
 
         if (workoutType is null)
             throw new NotFoundException(nameof(WorkoutType), request.WorkoutTypeId.ToString());
         
-        if (workoutType.BaseWorkouts.Any())
+        if (workoutType.RealWorkouts.Any() || workoutType.RepetitiveWorkouts.Any())
             throw new BadRequestException($"WorkoutType with Id: {request.WorkoutTypeId} is assigned to existing workouts (repetitiveWorkout or realWorkout). " +
                                           $"To delete an WorkoutType, you must first delete or edit the assigned workouts.");
         

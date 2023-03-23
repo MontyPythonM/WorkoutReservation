@@ -12,7 +12,8 @@ public sealed class WorkoutType : Entity
     public WorkoutIntensity Intensity { get; private set; }
     public ICollection<Instructor> Instructors { get; private set; } = new List<Instructor>();
     public ICollection<WorkoutTypeTag> WorkoutTypeTags { get; private set; } = new List<WorkoutTypeTag>();
-    public ICollection<BaseWorkout> BaseWorkouts { get; private set; } = new List<BaseWorkout>();
+    public ICollection<RealWorkout> RealWorkouts { get; private set; } = new List<RealWorkout>();
+    public ICollection<RepetitiveWorkout> RepetitiveWorkouts { get; private set; } = new List<RepetitiveWorkout>();
 
     private WorkoutType()
     {
@@ -46,29 +47,27 @@ public sealed class WorkoutType : Entity
         // TODO add validation for enum 
         
         if (string.IsNullOrWhiteSpace(Name))
-            throw new DomainException(this, Name, ExceptionCode.CannotBeNullOrWhiteSpace);
+            throw new DomainException(this, nameof(Name), ExceptionCode.CannotBeNullOrWhiteSpace);
         
         if (Name.Length > 50)
-            throw new DomainException(this, Name, ExceptionCode.ValueToLarge);
+            throw new DomainException(this, nameof(Name), ExceptionCode.ValueToLarge);
         
         if (string.IsNullOrWhiteSpace(Description))
-            throw new DomainException(this, Description, ExceptionCode.CannotBeNullOrWhiteSpace);
+            throw new DomainException(this, nameof(Description), ExceptionCode.CannotBeNullOrWhiteSpace);
         
         if (Description.Length > 600)
-            throw new DomainException(this, Description, ExceptionCode.ValueToLarge);
+            throw new DomainException(this, nameof(Description), ExceptionCode.ValueToLarge);
     }
     
     private void AddTags(List<WorkoutTypeTag> tags)
     {
         WorkoutTypeTags.Clear();
         tags.ForEach(tag => WorkoutTypeTags.Add(tag));
-        Valid();
     }
     
     private void AddInstructors(List<Instructor> instructors)
     {
         Instructors.Clear();
         instructors.ForEach(instructor => Instructors.Add(instructor));
-        Valid();
     }
 }

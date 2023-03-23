@@ -16,7 +16,7 @@ export class InstructorsComponent extends BaseComponent implements OnInit {
   instructors?: Instructor[];
   isPopupOpened: boolean;
   isSaving: boolean;
-  instructorCommand!: InstructorDetailsCommand;
+  instructorCommand?: InstructorDetailsCommand;
   genders = genders;
   permissions = Permission;
   private form!: Form | undefined;
@@ -43,7 +43,7 @@ export class InstructorsComponent extends BaseComponent implements OnInit {
   createInstructor = () => {
     if(!this.form?.validate().isValid) return;
     this.isSaving = true;
-    this.subscribe(this.instructorService.create(this.instructorCommand), {
+    this.subscribe(this.instructorService.create(this.instructorCommand!), {
       next: () => {
         this.isSaving = false;
         this.closePopup();
@@ -59,7 +59,11 @@ export class InstructorsComponent extends BaseComponent implements OnInit {
     });
   }
 
-  openPopup = () => this.isPopupOpened = true;
+  openPopup = () => {
+    this.instructorCommand = new InstructorDetailsCommand();
+    this.isPopupOpened = true;
+  }
+
   closePopup = () => this.isPopupOpened = false;
 
   onFormInitialized = (e: {component: Form}) => this.form = e.component;

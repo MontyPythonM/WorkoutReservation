@@ -52,12 +52,12 @@ public sealed class Reservation : Entity
         // TODO add validation for enum 
         
         if (RealWorkout is null)
-            throw new DomainException(this, RealWorkout, ExceptionCode.CannotBeNull);
+            throw new DomainException(this, nameof(RealWorkout), ExceptionCode.CannotBeNull);
         
         if (User is null)
-            throw new DomainException(this, User, ExceptionCode.CannotBeNull);
+            throw new DomainException(this, nameof(User), ExceptionCode.CannotBeNull);
         
         if (Note.Length > 3000)
-            throw new DomainException(this, Note, ExceptionCode.ValueToLarge);
+            throw new DomainException(this, nameof(Note), ExceptionCode.ValueToLarge);
     }
 }

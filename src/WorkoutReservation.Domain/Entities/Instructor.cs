@@ -13,7 +13,8 @@ public sealed class Instructor : Entity
     public string Biography { get; private set; }
     public string Email { get; private set; }
     public ICollection<WorkoutType> WorkoutTypes { get; private set; } = new List<WorkoutType>();
-    public ICollection<BaseWorkout> BaseWorkouts { get; private set; } = new List<BaseWorkout>();
+    public ICollection<RealWorkout> RealWorkouts { get; private set; } = new List<RealWorkout>();
+    public ICollection<RepetitiveWorkout> RepetitiveWorkouts { get; private set; } = new List<RepetitiveWorkout>();
 
     private Instructor()
     {
@@ -43,24 +44,21 @@ public sealed class Instructor : Entity
     protected override void Valid()
     {
         if (string.IsNullOrWhiteSpace(FirstName))
-            throw new DomainException(this, FirstName, ExceptionCode.CannotBeNullOrWhiteSpace);
+            throw new DomainException(this, nameof(FirstName), ExceptionCode.CannotBeNullOrWhiteSpace);
 
         if (FirstName.Length > 50)
-            throw new DomainException(this, FirstName, ExceptionCode.ValueToLarge);
+            throw new DomainException(this, nameof(FirstName), ExceptionCode.ValueToLarge);
         
         if (string.IsNullOrWhiteSpace(LastName))
-            throw new DomainException(this, LastName, ExceptionCode.CannotBeNullOrWhiteSpace);
+            throw new DomainException(this, nameof(LastName), ExceptionCode.CannotBeNullOrWhiteSpace);
         
         if (LastName.Length > 50)
-            throw new DomainException(this, LastName, ExceptionCode.ValueToLarge);
+            throw new DomainException(this, nameof(LastName), ExceptionCode.ValueToLarge);
 
         if (Biography.Length > 3000)
-            throw new DomainException(this, Biography, ExceptionCode.ValueToLarge);
+            throw new DomainException(this, nameof(Biography), ExceptionCode.ValueToLarge);
         
         if (string.IsNullOrWhiteSpace(Email))
-            throw new DomainException(this, Email, ExceptionCode.CannotBeNullOrWhiteSpace);
-        
-        if (Email.Length > 50)
-            throw new DomainException(this, Email, ExceptionCode.ValueToLarge);
+            throw new DomainException(this, nameof(Email), ExceptionCode.CannotBeNullOrWhiteSpace);
     }
 }

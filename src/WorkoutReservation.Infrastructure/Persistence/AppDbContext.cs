@@ -24,7 +24,6 @@ public sealed class AppDbContext : DbContext
     public DbSet<WorkoutType> WorkoutTypes { get; set; }
     public DbSet<WorkoutTypeInstructor> WorkoutTypeInstructors { get; set; }
     public DbSet<WorkoutTypeTag> WorkoutTypeTags { get; set; }
-    public DbSet<BaseWorkout> BaseWorkouts { get; set; }
     public DbSet<RepetitiveWorkout> RepetitiveWorkouts { get; set; }
     public DbSet<RealWorkout> RealWorkouts { get; set; }
     public DbSet<ApplicationUser> ApplicationUsers { get; set; }

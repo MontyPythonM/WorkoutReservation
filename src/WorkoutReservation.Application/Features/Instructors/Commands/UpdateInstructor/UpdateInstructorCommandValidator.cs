@@ -20,7 +20,7 @@ internal sealed class UpdateInstructorCommandValidator : AbstractValidator<Updat
 
         RuleFor(x => x.Email)
             .EmailAddress()
-            .NotNull();
+            .NotEmpty();
 
         RuleFor(x => x.Gender)
             .IsInEnum();

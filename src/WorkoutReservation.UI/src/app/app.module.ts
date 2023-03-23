@@ -41,8 +41,8 @@ import {ConfirmationPopupModule} from "./components/confirmation-popup/confirmat
 import {PagerModule} from "./components/pager/pager.module";
 import {TokenAuthorizationInterceptor} from "./interceptors/token-authorization.interceptor";
 import {LogoComponent} from './components/header/logo/logo.component';
-import { UserSearchComponent } from './components/user-search/user-search.component';
-import { ReservationDetailsComponent } from './pages/reservations/reservation-details/reservation-details.component';
+import {ReservationDetailsComponent} from './pages/reservations/reservation-details/reservation-details.component';
+import {SearchPanelModule} from "./components/search-panel/search-panel.module";
 
 export let AppInjector: Injector;
 
@@ -62,7 +62,6 @@ export let AppInjector: Injector;
     AccountSettingsComponent,
     NavBarComponent,
     LogoComponent,
-    UserSearchComponent,
     ReservationDetailsComponent
   ],
   imports: [
@@ -88,7 +87,8 @@ export let AppInjector: Injector;
     DxLoadPanelModule,
     DxTagBoxModule,
     ConfirmationPopupModule,
-    PagerModule
+    PagerModule,
+    SearchPanelModule
   ],
   providers: [
     DatePipe,

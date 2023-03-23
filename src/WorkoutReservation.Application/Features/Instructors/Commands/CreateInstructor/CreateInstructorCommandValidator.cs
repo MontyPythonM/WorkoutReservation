@@ -14,12 +14,12 @@ internal sealed class CreateInstructorCommandValidator : AbstractValidator<Creat
             .MaximumLength(50)
             .NotEmpty();
 
+        RuleFor(x => x.Biography)
+            .MaximumLength(3000);
+
         RuleFor(x => x.Email)
             .EmailAddress()
             .NotEmpty();
-
-        RuleFor(x => x.Biography)
-            .MaximumLength(3000);
 
         RuleFor(x => x.Gender)
             .IsInEnum();

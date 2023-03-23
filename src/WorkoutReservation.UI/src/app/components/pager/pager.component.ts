@@ -28,7 +28,7 @@ export class PagerComponent implements OnInit {
   }
 
   onPageNumberChanged = (pageNumber: number) => {
-    if (pageNumber == null) {
+    if (pageNumber == null || pageNumber == 0) {
       pageNumber = 1;
       this.currentPageNumber = 1;
     }
