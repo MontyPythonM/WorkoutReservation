@@ -56,7 +56,7 @@ public sealed class RealWorkout : Entity
         Valid();
     }
 
-    public void CancelReservation(Reservation reservation, ApplicationUser user)
+    public void CancelReservation(Reservation reservation)
     {
         if (reservation is null)
             throw new DomainException(this, nameof(Reservations), ExceptionCode.NotExists);
@@ -115,20 +115,33 @@ public sealed class RealWorkout : Entity
         if (Date > DateTime.Now.GetFirstDayOfWeekAndAddDays(13))
             throw new DomainException(this, nameof(Date), ExceptionCode.ValueToLarge);
         
-        if (Reservations.Where(r => r.ReservationStatus == ReservationStatus.Reserved).DistinctBy(r => r.UserId).Count() > 1)
+        if (IsAnyUserHasMoreThanOneActiveReservation())
             throw new DomainException(this, nameof(Reservations), ExceptionCode.AlreadyExists);
         
         if (Reservations.Count < 0)
             throw new DomainException(this, nameof(Reservations), ExceptionCode.ValueToSmall);
     }
     
-    //TODO check this statement
     private void ThrowIfRealWorkoutAlreadyStarted()
     {
         if (Date <= DateOnly.FromDateTime(DateTime.Now.Date) && EndTime < TimeOnly.FromDateTime(DateTime.Now))
         {
             throw new DomainException(this, nameof(EndTime), ExceptionCode.ValueToSmall);
         }
+    }
+
+    private bool IsAnyUserHasMoreThanOneActiveReservation()
+    {
+        var reservationsDistinctByUser = Reservations
+            .Where(r => r.ReservationStatus == ReservationStatus.Reserved)
+            .DistinctBy(r => r.User.Id)
+            .ToList();
+
+        var reservations = Reservations
+            .Where(r => r.ReservationStatus == ReservationStatus.Reserved)
+            .ToList();
+        
+        return reservationsDistinctByUser.Count != reservations.Count;
     }
 
     private void IncrementCurrentParticipantNumber()

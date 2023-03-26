@@ -8,17 +8,17 @@
   ></dx-text-box>
 
   <dx-select-box
-    *ngIf="allowedFilters"
+    *ngIf="allowedSortBy"
     class="item"
-    label="Filter by"
+    label="Sort by"
     width="220px"
-    [items]="allowedFilters"
-    [value]="allowedFilters[0]"
-    (onValueChanged)="filterChanged($event)"
+    [items]="allowedSortBy"
+    [value]="allowedSortBy[0]"
+    (onValueChanged)="setSortBy($event)"
   ></dx-select-box>
 
   <dx-button
-    *ngIf="allowedFilters"
+    *ngIf="allowedSortBy"
     class="item button"
     stylingMode="outlined"
     [focusStateEnabled]="false"

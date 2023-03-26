@@ -33,7 +33,7 @@ internal sealed class CancelReservationCommandHandler : IRequestHandler<CancelRe
         var reservation = await _reservationRepository
             .GetByIdAsync(request.ReservationId, false, token);
         
-        realWorkout.CancelReservation(reservation, user);
+        realWorkout.CancelReservation(reservation);
         await _realWorkoutRepository.UpdateAsync(realWorkout, token);
         return Unit.Value;
     }

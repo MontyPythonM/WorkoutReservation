@@ -28,13 +28,6 @@ public sealed class Reservation : Entity
         Valid();
     }
 
-    internal void Update( string note, ReservationStatus status)
-    {
-        Note = note;
-        ReservationStatus = status;
-        Valid();
-    }
-
     internal void SetReservationStatus(ReservationStatus status)
     {
         ReservationStatus = status;

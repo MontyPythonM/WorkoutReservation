@@ -1,12 +1,18 @@
 ﻿using FluentValidation;
 using WorkoutReservation.Domain.Entities;
+using WorkoutReservation.Domain.Enums;
+using WorkoutReservation.Domain.Extensions;
 
 namespace WorkoutReservation.Application.Features.Reservations.Queries.GetUserReservationsList;
 
 internal sealed class GetUserReservationsListValidator : AbstractValidator<GetUserReservationsListQuery>
 {
-    private readonly int[] _allowedPageSizes = new[] { 20, 50, 100 };
-    private readonly string[] _allowedSortByColumnNames = { nameof(Reservation.ReservationStatus), "WorkoutDate" };
+    private readonly int[] _allowedPageSizes = { 20, 50, 100 };
+    private readonly string[] _allowedSortByColumnNames =
+    {
+        SortBySelector.ReservationStatus.StringValue(),
+        SortBySelector.WorkoutDate.StringValue()
+    };
 
     public GetUserReservationsListValidator()
     {

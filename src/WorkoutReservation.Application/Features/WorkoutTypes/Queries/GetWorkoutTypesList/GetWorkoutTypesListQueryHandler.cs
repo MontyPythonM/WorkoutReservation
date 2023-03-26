@@ -1,10 +1,8 @@
 ﻿using AutoMapper;
 using FluentValidation;
 using MediatR;
-using System.Linq.Expressions;
 using WorkoutReservation.Application.Common.Dtos;
 using WorkoutReservation.Application.Contracts;
-using WorkoutReservation.Domain.Entities;
 
 namespace WorkoutReservation.Application.Features.WorkoutTypes.Queries.GetWorkoutTypesList;
 
@@ -35,37 +33,10 @@ internal sealed class GetWorkoutTypesListQueryHandler : IRequestHandler<GetWorko
         var validator = new GetWorkoutTypesListQueryValidator();
         await validator.ValidateAndThrowAsync(request, token);
 
-        var workoutTypesQuery = _workoutTypeRepository.GetAllQuery();
-
-        var query = workoutTypesQuery
-            .Where(x => request.SearchPhrase == null ||
-                   x.Name.ToLower().Contains(request.SearchPhrase.ToLower()));
-
-        var totalCount = query.Count();
-
-        if (!string.IsNullOrEmpty(request.SortBy))
-        {
-            var columnsSelector = new Dictionary<string, Expression<Func<WorkoutType, object>>>
-            {
-                { nameof(WorkoutType.Name), u => u.Name},
-                { nameof(WorkoutType.Intensity), u => u.Intensity},
-            };
-
-            var sortByExpression = columnsSelector[request.SortBy];
-
-            query = request.SortByDescending
-                ? query.OrderByDescending(sortByExpression)
-                : query.OrderBy(sortByExpression);
-        }
-
-        var result = query
-            .Skip(request.PageSize * (request.PageNumber - 1))
-            .Take(request.PageSize)
-            .ToList();
-
-        var mappedResult = _mapper.Map<List<WorkoutTypesListQueryDto>>(result);
+        var pagedResult = await _workoutTypeRepository.GetPagedAsync(request, token);
+        var mappedResult = _mapper.Map<List<WorkoutTypesListQueryDto>>(pagedResult.workoutTypes);
 
         return new PagedResultDto<WorkoutTypesListQueryDto>(mappedResult, 
-            totalCount, request.PageSize, request.PageNumber);
+            pagedResult.totalItems, request.PageSize, request.PageNumber);
     }
 }
