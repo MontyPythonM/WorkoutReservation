@@ -5,6 +5,8 @@ using System.Linq.Expressions;
 using WorkoutReservation.Application.Common.Dtos;
 using WorkoutReservation.Application.Contracts;
 using WorkoutReservation.Domain.Entities;
+using WorkoutReservation.Domain.Enums;
+using WorkoutReservation.Domain.Extensions;
 
 namespace WorkoutReservation.Application.Features.WorkoutTypes.Queries.GetWorkoutTypesList;
 
@@ -47,8 +49,8 @@ internal sealed class GetWorkoutTypesListQueryHandler : IRequestHandler<GetWorko
         {
             var columnsSelector = new Dictionary<string, Expression<Func<WorkoutType, object>>>
             {
-                { nameof(WorkoutType.Name), u => u.Name},
-                { nameof(WorkoutType.Intensity), u => u.Intensity},
+                { SortBySelector.WorkoutName.StringValue(), u => u.Name},
+                { SortBySelector.WorkoutIntensity.StringValue(), u => u.Intensity},
             };
 
             var sortByExpression = columnsSelector[request.SortBy];

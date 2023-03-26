@@ -1,9 +1,9 @@
 <div class="container" *ngIf="isReservationsExist">
   <app-search-panel
-    [allowedFilters]="['WorkoutDate', 'ReservationStatus']"
+    [allowedSortBy]="[sortBy.WorkoutDate, sortBy.ReservationStatus]"
     [initialOrderBy]="queryParams.sortByDescending"
     (searchPhraseChanged)="searchPhraseChanged($event)"
-    (filterByChanged)="selectedFilterChanged($event)"
+    (sortByChanged)="sortByChanged($event)"
     (orderByDescendingChanged)="orderByChanged($event)"
     (refresh)="ngOnInit()"
   ></app-search-panel>

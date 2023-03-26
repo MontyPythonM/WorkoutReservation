@@ -12,6 +12,7 @@ import {Instructor} from "../../models/instructor.model";
 import {WorkoutTypeCommand} from "../../models/workout-types-command.model";
 import {WorkoutTypeTagActive} from "../../models/workout-type-tag-active.model";
 import {Permission} from "../../models/enums/permission.enum";
+import {SortBySelector} from "../../models/enums/sort-by-selector.enum";
 
 @Component({
   selector: 'app-workout-types',
@@ -27,6 +28,7 @@ export class WorkoutTypesComponent extends BaseComponent implements OnInit {
   isDeletePopupVisible: boolean;
   isSaving: boolean;
   intensities = workoutIntensities;
+  sortBy = SortBySelector;
   workoutTypeTags: WorkoutTypeTagActive[];
   activeWorkoutTypeTags: WorkoutTypeTagActive[];
   activeAndExistingWorkoutTypeTags: WorkoutTypeTagActive[];
@@ -45,7 +47,7 @@ export class WorkoutTypesComponent extends BaseComponent implements OnInit {
       pageNumber: 1,
       pageSize: 10,
       sortByDescending: false,
-      sortBy: 'Name',
+      sortBy: this.sortBy.WorkoutName,
       searchPhrase: ''
     });
     this.isCreatePopupOpened = false;
@@ -188,4 +190,8 @@ export class WorkoutTypesComponent extends BaseComponent implements OnInit {
 
     return [...activeTags, ...existingTags];
   }
+
+  searchPhraseChanged = (value: string) => this.queryParams.searchPhrase = value;
+  sortByChanged = (value: string) => this.queryParams.sortBy = value;
+  orderByChanged = (value: boolean) => this.queryParams.sortByDescending = value;
 }

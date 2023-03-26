@@ -1,12 +1,18 @@
 ﻿using FluentValidation;
 using WorkoutReservation.Domain.Entities;
+using WorkoutReservation.Domain.Enums;
+using WorkoutReservation.Domain.Extensions;
 
 namespace WorkoutReservation.Application.Features.WorkoutTypes.Queries.GetWorkoutTypesList;
 
 internal sealed class GetWorkoutTypesListQueryValidator : AbstractValidator<GetWorkoutTypesListQuery>
 {
-    private readonly int[] _allowedPageSizes = new[] { 10, 20, 50 };
-    private readonly string[] _allowedSortByColumnNames = { nameof(WorkoutType.Name), nameof(WorkoutType.Intensity)};
+    private readonly int[] _allowedPageSizes = { 10, 20, 50 };
+    private readonly string[] _allowedSortByColumnNames =
+    {
+        SortBySelector.WorkoutName.StringValue(),
+        SortBySelector.WorkoutIntensity.StringValue(),
+    };
 
     public GetWorkoutTypesListQueryValidator()
     {

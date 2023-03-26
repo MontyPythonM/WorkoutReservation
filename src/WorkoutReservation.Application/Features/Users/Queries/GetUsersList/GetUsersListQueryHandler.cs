@@ -5,6 +5,8 @@ using System.Linq.Expressions;
 using WorkoutReservation.Application.Common.Dtos;
 using WorkoutReservation.Application.Contracts;
 using WorkoutReservation.Domain.Entities;
+using WorkoutReservation.Domain.Enums;
+using WorkoutReservation.Domain.Extensions;
 
 namespace WorkoutReservation.Application.Features.Users.Queries.GetUsersList;
 
@@ -39,6 +41,7 @@ internal sealed class GetUsersListQueryHandler : IRequestHandler<GetUsersListQue
 
         var query = usersQuery
             .Where(x => request.SearchPhrase == null ||
+                   x.Id.ToString().ToLower().Contains(request.SearchPhrase.ToLower()) ||
                    x.Email.ToLower().Contains(request.SearchPhrase.ToLower()) ||
                    x.FirstName.ToLower().Contains(request.SearchPhrase.ToLower()) ||
                    x.LastName.ToLower().Contains(request.SearchPhrase.ToLower()));
@@ -49,9 +52,11 @@ internal sealed class GetUsersListQueryHandler : IRequestHandler<GetUsersListQue
         {
             var columnsSelector = new Dictionary<string, Expression<Func<ApplicationUser, object>>>
             {
-                { nameof(ApplicationUser.Email), u => u.Email},
-                { nameof(ApplicationUser.FirstName), u => u.FirstName},
-                { nameof(ApplicationUser.LastName), u => u.LastName},
+                { SortBySelector.UserId.StringValue(), u => u.Id},
+                { SortBySelector.UserEmail.StringValue(), u => u.Email},
+                { SortBySelector.UserFirstName.StringValue(), u => u.FirstName},
+                { SortBySelector.UserLastName.StringValue(), u => u.LastName},
+                { SortBySelector.CreatedDate.StringValue(), u => u.CreatedDate}
             };
 
             var sortByExpression = columnsSelector[request.SortBy];

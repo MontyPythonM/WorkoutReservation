@@ -1,15 +1,19 @@
 ﻿using FluentValidation;
 using WorkoutReservation.Domain.Entities;
+using WorkoutReservation.Domain.Enums;
+using WorkoutReservation.Domain.Extensions;
 
 namespace WorkoutReservation.Application.Features.Users.Queries.GetUsersList;
 
 internal sealed class GetUsersListQueryValidator : AbstractValidator<GetUsersListQuery>
 {
-    private readonly int[] _allowedPageSizes = new[] { 15, 30, 50 };
+    private readonly int[] _allowedPageSizes = { 15, 30, 50 };
     private readonly string[] _allowedSortByColumnNames = { 
-        nameof(ApplicationUser.Email), 
-        nameof(ApplicationUser.FirstName),
-        nameof(ApplicationUser.LastName),
+        SortBySelector.UserId.StringValue(),
+        SortBySelector.UserEmail.StringValue(),
+        SortBySelector.UserFirstName.StringValue(),
+        SortBySelector.UserLastName.StringValue(),
+        SortBySelector.CreatedDate.StringValue()
     };
 
     public GetUsersListQueryValidator()

@@ -5,6 +5,7 @@ import {PagedQuery} from "../../../models/paged-query.model";
 import {ApplicationUser} from "../../../models/application-user.model";
 import {UserService} from "../../../services/application-user.service";
 import {DATETIME_FORMAT} from "../../../common/constants";
+import {SortBySelector} from "../../../models/enums/sort-by-selector.enum";
 
 @Component({
   selector: 'app-users',
@@ -13,13 +14,14 @@ import {DATETIME_FORMAT} from "../../../common/constants";
 })
 export class UsersComponent extends BaseComponent implements OnInit {
   users: PagedResult<ApplicationUser>;
-  query: PagedQuery;
+  queryParams: PagedQuery;
   dateFormat = DATETIME_FORMAT;
+  sortBy = SortBySelector;
 
   constructor(private userService: UserService) {
     super();
     this.users = new PagedResult<ApplicationUser>();
-    this.query = new PagedQuery({
+    this.queryParams = new PagedQuery({
       pageNumber: 1,
       pageSize: 15,
       sortByDescending: false,
@@ -29,7 +31,7 @@ export class UsersComponent extends BaseComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.loadUsers(this.query);
+    this.loadUsers(this.queryParams);
   }
 
   loadUsers(query: PagedQuery) {
@@ -41,12 +43,16 @@ export class UsersComponent extends BaseComponent implements OnInit {
   }
 
   pageSizeChanged(e: any) {
-    this.query.pageSize = e;
-    this.loadUsers(this.query);
+    this.queryParams.pageSize = e;
+    this.loadUsers(this.queryParams);
   }
 
   pageNumberChanged(e: any) {
-    this.query.pageNumber = e;
-    this.loadUsers(this.query);
+    this.queryParams.pageNumber = e;
+    this.loadUsers(this.queryParams);
   }
+
+  searchPhraseChanged = (value: string) => this.queryParams.searchPhrase = value;
+  sortByChanged = (value: string) => this.queryParams.sortBy = value;
+  orderByChanged = (value: boolean) => this.queryParams.sortByDescending = value;
 }

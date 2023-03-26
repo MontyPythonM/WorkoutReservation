@@ -55,10 +55,13 @@ public class ReservationRepository : IReservationRepository
     { 
         return _dbContext.Reservations
             .AsNoTracking()
+            .Include(x => x.User)
             .Include(x => x.RealWorkout).ThenInclude(x => x.Instructor)
             .Include(x => x.RealWorkout).ThenInclude(x => x.WorkoutType)
             .Where(x => x.UserId == userId)
-            .OrderBy(x => x.RealWorkout.Date).ThenBy(x => x.RealWorkout.StartTime)
+            .OrderBy(x => x.RealWorkout.Date)
+                .ThenBy(x => x.RealWorkout.StartTime)
+                .ThenByDescending(x => x.ReservationStatus)
             .AsQueryable();          
     }
     
@@ -69,7 +72,9 @@ public class ReservationRepository : IReservationRepository
             .Include(x => x.User)
             .Include(x => x.RealWorkout).ThenInclude(x => x.Instructor)
             .Include(x => x.RealWorkout).ThenInclude(x => x.WorkoutType)
-            .OrderByDescending(x => x.RealWorkout.Date).ThenBy(x => x.RealWorkout.StartTime)
+            .OrderByDescending(x => x.RealWorkout.Date)
+                .ThenBy(x => x.RealWorkout.StartTime)
+                .ThenByDescending(x => x.ReservationStatus)
             .AsQueryable();          
     }
     

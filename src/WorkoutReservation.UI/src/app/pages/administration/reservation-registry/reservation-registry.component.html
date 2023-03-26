@@ -1,4 +1,13 @@
 <div class="container">
+  <app-search-panel
+    [allowedSortBy]="[sortBy.ReservationId, sortBy.WorkoutDate, sortBy.WorkoutName,
+      sortBy.ReservationStatus, sortBy.CreatedDate, sortBy.LastModifiedDate]"
+    [initialOrderBy]="queryParams.sortByDescending"
+    (searchPhraseChanged)="searchPhraseChanged($event)"
+    (sortByChanged)="sortByChanged($event)"
+    (orderByDescendingChanged)="orderByChanged($event)"
+    (refresh)="ngOnInit()"
+  ></app-search-panel>
   <dx-data-grid
     keyExpr="id"
     [dataSource]="reservations.items"
@@ -41,15 +50,6 @@
     </dxi-column>
 
     <dxo-paging [enabled]="false"> </dxo-paging>
-    <dxo-search-panel [visible]="true" [width]="300" placeholder="Search..."></dxo-search-panel>
-
-    <dxo-toolbar>
-      <dxi-item
-        name="searchPanel"
-        locateInMenu="auto"
-        location="before">
-      </dxi-item>
-    </dxo-toolbar>
   </dx-data-grid>
 
   <app-pager

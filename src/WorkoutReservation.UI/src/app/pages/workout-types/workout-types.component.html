@@ -8,6 +8,16 @@
     type="success"
     (onClick)="openCreatePopup()">
   </dx-button>
+  <div>
+    <app-search-panel
+      [allowedSortBy]="[sortBy.WorkoutName, sortBy.WorkoutIntensity]"
+      [initialOrderBy]="queryParams.sortByDescending"
+      (searchPhraseChanged)="searchPhraseChanged($event)"
+      (sortByChanged)="sortByChanged($event)"
+      (orderByDescendingChanged)="orderByChanged($event)"
+      (refresh)="ngOnInit()"
+    ></app-search-panel>
+  </div>
   <dx-accordion
   [dataSource]="workoutTypes.items"
   [collapsible]="true"

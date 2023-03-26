@@ -10,6 +10,7 @@ import {EditReservation} from "../../../models/edit-reservation.model";
 import dxForm from "devextreme/ui/form";
 import {reservationStatuses} from "../../../models/enums/reservation-status.enum";
 import {DATE_FORMAT} from "../../../common/constants";
+import {SortBySelector} from "../../../models/enums/sort-by-selector.enum";
 
 @Component({
   selector: 'app-reservation-registry',
@@ -21,6 +22,7 @@ export class ReservationRegistryComponent extends BaseComponent implements OnIni
   queryParams: PagedQuery;
   dateFormat = DATE_FORMAT;
   reservationStatuses = reservationStatuses;
+  sortBy = SortBySelector;
   permissions = Permission;
   editPopupVisible: boolean;
   reservationCommand?: EditReservation;
@@ -34,7 +36,7 @@ export class ReservationRegistryComponent extends BaseComponent implements OnIni
       pageNumber: 1,
       pageSize: 20,
       sortByDescending: true,
-      sortBy: 'WorkoutDate',
+      sortBy: this.sortBy.WorkoutDate,
       searchPhrase: ''
     });
     this.editPopupVisible = false;
@@ -83,6 +85,10 @@ export class ReservationRegistryComponent extends BaseComponent implements OnIni
     const splitTime = time.toString().split(":");
     return `${ splitTime[0] }:${ splitTime[1] }`;
   }
+
+  searchPhraseChanged = (value: string) => this.queryParams.searchPhrase = value;
+  sortByChanged = (value: string) => this.queryParams.sortBy = value;
+  orderByChanged = (value: boolean) => this.queryParams.sortByDescending = value;
 
   popupFormInitialized = (e: { component: dxForm }) => this.editPopupForm = e.component;
   dataGridInitialized = (e: { component: dxDataGrid }) => this.dxDataGrid = e.component;

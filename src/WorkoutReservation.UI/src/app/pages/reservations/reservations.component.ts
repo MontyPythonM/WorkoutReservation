@@ -8,6 +8,7 @@ import {Router} from "@angular/router";
 import dxDataGrid from "devextreme/ui/data_grid";
 import {pageUrls} from "../../../environments/page-urls";
 import {DATE_FORMAT} from "../../common/constants";
+import {SortBySelector} from "../../models/enums/sort-by-selector.enum";
 
 @Component({
   selector: 'app-reservations',
@@ -19,6 +20,7 @@ export class ReservationsComponent extends BaseComponent implements OnInit {
   queryParams: PagedQuery;
   dateFormat = DATE_FORMAT;
   isReservationsExist: boolean;
+  sortBy = SortBySelector;
   private dxDataGrid?: dxDataGrid;
 
   constructor(private reservationService: ReservationService, private router: Router) {
@@ -28,7 +30,7 @@ export class ReservationsComponent extends BaseComponent implements OnInit {
       pageNumber: 1,
       pageSize: 20,
       sortByDescending: true,
-      sortBy: 'WorkoutDate',
+      sortBy: this.sortBy.WorkoutDate,
       searchPhrase: ''
     });
     this.isReservationsExist = true;
@@ -65,7 +67,7 @@ export class ReservationsComponent extends BaseComponent implements OnInit {
   }
 
   searchPhraseChanged = (value: string) => this.queryParams.searchPhrase = value;
-  selectedFilterChanged = (value: string) => this.queryParams.sortBy = value;
+  sortByChanged = (value: string) => this.queryParams.sortBy = value;
   orderByChanged = (value: boolean) => this.queryParams.sortByDescending = value;
 
   onDataGridInit = (e: { component: dxDataGrid }) => this.dxDataGrid = e.component;

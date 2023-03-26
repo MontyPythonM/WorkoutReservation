@@ -5,6 +5,8 @@ using System.Linq.Expressions;
 using WorkoutReservation.Application.Common.Dtos;
 using WorkoutReservation.Application.Contracts;
 using WorkoutReservation.Domain.Entities;
+using WorkoutReservation.Domain.Enums;
+using WorkoutReservation.Domain.Extensions;
 
 namespace WorkoutReservation.Application.Features.Reservations.Queries.GetUserReservationsList;
 
@@ -52,8 +54,8 @@ internal sealed class GetUserReservationsListHandler : IRequestHandler<GetUserRe
         {
             var columnsSelector = new Dictionary<string, Expression<Func<Reservation, object>>>
             {
-                { nameof(Reservation.ReservationStatus), u => u.ReservationStatus},
-                { "WorkoutDate", u => u.RealWorkout.Date}
+                { SortBySelector.ReservationStatus.StringValue(), u => u.ReservationStatus},
+                { SortBySelector.WorkoutDate.StringValue(), u => u.RealWorkout.Date}
             };
 
             var sortByExpression = columnsSelector[request.SortBy];

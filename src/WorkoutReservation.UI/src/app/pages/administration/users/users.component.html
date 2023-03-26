@@ -1,4 +1,12 @@
 <div class="container">
+  <app-search-panel
+    [allowedSortBy]="[sortBy.UserId, sortBy.UserEmail, sortBy.UserFirstName, sortBy.UserLastName, sortBy.CreatedDate]"
+    [initialOrderBy]="queryParams.sortByDescending"
+    (searchPhraseChanged)="searchPhraseChanged($event)"
+    (sortByChanged)="sortByChanged($event)"
+    (orderByDescendingChanged)="orderByChanged($event)"
+    (refresh)="ngOnInit()"
+  ></app-search-panel>
   <dx-data-grid
     id="grid"
     keyExpr="id"
