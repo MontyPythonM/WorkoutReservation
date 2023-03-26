@@ -2,6 +2,8 @@
 using Microsoft.EntityFrameworkCore;
 using WorkoutReservation.Application.Contracts;
 using WorkoutReservation.Domain.Entities;
+using WorkoutReservation.Domain.Enums;
+using WorkoutReservation.Domain.Extensions;
 using WorkoutReservation.Infrastructure.Interfaces;
 using WorkoutReservation.Infrastructure.Persistence;
 
@@ -40,17 +42,7 @@ public class ApplicationUserRepository : IApplicationUserRepository
         
         return await query.FirstOrDefaultAsync(x => x.Id == guid, token);
     }
-
-    public async Task<List<ApplicationUser>> GetAllAsync(bool asNoTracking = false, CancellationToken token = default,
-        params Expression<Func<ApplicationUser, object>>[] includes)
-    {
-        var query = _dbContext.ApplicationUsers.AsQueryable();
-        query = _repository.ApplyAsNoTracking(asNoTracking, query);
-        query = _repository.ApplyIncludes(includes, query);     
-                
-        return await query.ToListAsync(token);
-    }
-
+    
     public async Task AddAsync(ApplicationUser user, CancellationToken token)
     { 
         await _dbContext.ApplicationUsers.AddAsync(user, token);
@@ -69,14 +61,46 @@ public class ApplicationUserRepository : IApplicationUserRepository
         await _dbContext.SaveChangesAsync(token);
     }
 
-    public IQueryable<ApplicationUser> GetAllUsersQuery()
+    public async Task<(List<ApplicationUser> users, int totalItems)> GetPagedAsync(IPagedQuery request, CancellationToken token)
     {
-        return _dbContext.ApplicationUsers
+        var usersQuery = _dbContext.ApplicationUsers
             .AsNoTracking()
             .Include(x => x.ApplicationRoles)
             .AsQueryable();
-    }
+        
+        var query = usersQuery
+            .Where(x => request.SearchPhrase == null ||
+                        x.Id.ToString().ToLower().Contains(request.SearchPhrase.ToLower()) ||
+                        x.Email.ToLower().Contains(request.SearchPhrase.ToLower()) ||
+                        x.FirstName.ToLower().Contains(request.SearchPhrase.ToLower()) ||
+                        x.LastName.ToLower().Contains(request.SearchPhrase.ToLower()));
 
+        var totalCount = query.Count();
+
+        if (!string.IsNullOrEmpty(request.SortBy))
+        {
+            var columnsSelector = new Dictionary<string, Expression<Func<ApplicationUser, object>>>
+            {
+                { SortBySelector.UserId.StringValue(), u => u.Id},
+                { SortBySelector.UserEmail.StringValue(), u => u.Email},
+                { SortBySelector.UserFirstName.StringValue(), u => u.FirstName},
+                { SortBySelector.UserLastName.StringValue(), u => u.LastName},
+                { SortBySelector.CreatedDate.StringValue(), u => u.CreatedDate}
+            };
+
+            var sortByExpression = columnsSelector[request.SortBy];
+
+            query = request.SortByDescending
+                ? query.OrderByDescending(sortByExpression)
+                : query.OrderBy(sortByExpression);
+        }
+
+        return (await query
+            .Skip(request.PageSize * (request.PageNumber - 1))
+            .Take(request.PageSize)
+            .ToListAsync(token), totalCount);
+    }
+    
     public async Task<bool> IsEmailAlreadyTaken(string email, CancellationToken token)
     {
         return await _dbContext.ApplicationUsers

@@ -2,6 +2,8 @@
 using Microsoft.EntityFrameworkCore;
 using WorkoutReservation.Application.Contracts;
 using WorkoutReservation.Domain.Entities;
+using WorkoutReservation.Domain.Enums;
+using WorkoutReservation.Domain.Extensions;
 using WorkoutReservation.Infrastructure.Interfaces;
 using WorkoutReservation.Infrastructure.Persistence;
 
@@ -25,14 +27,41 @@ public class WorkoutTypeRepository : IWorkoutTypeRepository
         
         return await query.ToListAsync(token);
     }
-    
-    public IQueryable<WorkoutType> GetAllQuery()
+
+    public async Task<(List<WorkoutType> workoutTypes, int totalItems)> GetPagedAsync(IPagedQuery request,
+        CancellationToken token)
     {
-        return _dbContext.WorkoutTypes
+        var workoutTypesQuery = _dbContext.WorkoutTypes
             .AsNoTracking()
             .Include(x => x.Instructors)
             .Include(x => x.WorkoutTypeTags)
             .AsQueryable();
+        
+        var query = workoutTypesQuery
+            .Where(x => request.SearchPhrase == null ||
+                        x.Name.ToLower().Contains(request.SearchPhrase.ToLower()));
+
+        var totalCount = query.Count();
+
+        if (!string.IsNullOrEmpty(request.SortBy))
+        {
+            var columnsSelector = new Dictionary<string, Expression<Func<WorkoutType, object>>>
+            {
+                { SortBySelector.WorkoutName.StringValue(), u => u.Name},
+                { SortBySelector.WorkoutIntensity.StringValue(), u => u.Intensity},
+            };
+
+            var sortByExpression = columnsSelector[request.SortBy];
+
+            query = request.SortByDescending
+                ? query.OrderByDescending(sortByExpression)
+                : query.OrderBy(sortByExpression);
+        }
+
+        return (await query
+            .Skip(request.PageSize * (request.PageNumber - 1))
+            .Take(request.PageSize)
+            .ToListAsync(token), totalCount);
     }
     
     public async Task<WorkoutType> GetByIdAsync(int workoutTypeId, bool asNoTracking, CancellationToken token)
