@@ -20,19 +20,19 @@ public class UserController : ApiControllerBase
         return await SendAsync(query, token);
     }
 
-    [HttpPatch("set-user-role")]
+    [HttpPatch("set-user-roles")]
     [HasPermission(Permission.SetUserRole)]
-    [SwaggerOperation(Summary = "Assigns a application role to a selected person")]
-    public async Task<IActionResult> SetUserRole([FromBody] SetUserRoleCommand command, CancellationToken token)
+    [SwaggerOperation(Summary = "Assigns a application roles to a selected user")]
+    public async Task<IActionResult> SetUserRoles([FromBody] SetUserRoleCommand command, CancellationToken token)
     {
         return await SendAsync(command, token);
     }
 
-    [HttpDelete("delete-user/{userGuid}")]
+    [HttpDelete("delete-user")]
     [HasPermission(Permission.DeleteUserAccount)]
     [SwaggerOperation(Summary = "Delete the selected application user account")]
-    public async Task<IActionResult> DeleteUserAccount([FromRoute] Guid userGuid, CancellationToken token)
+    public async Task<IActionResult> DeleteUserAccount([FromBody] DeleteUserCommand command, CancellationToken token)
     {
-        return await SendAsync(new DeleteUserCommand(userGuid), token);
+        return await SendAsync(command, token);
     }
 }

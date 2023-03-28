@@ -88,7 +88,7 @@ public class GenerateUpcomingWorkoutTimetableTest : IClassFixture<Program>
         Func<Task<Unit>> result = async () => await handler.Handle(command, CancellationToken.None);
 
         // assert
-        await result.Should().ThrowAsync<ValidationException>();
+        await result.Should().ThrowAsync<DomainException>();
     }
     
     [Fact]

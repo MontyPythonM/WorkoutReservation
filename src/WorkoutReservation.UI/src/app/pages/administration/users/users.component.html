@@ -23,6 +23,15 @@
     <dxi-column dataField="userRoles" alignment="center" dataType="string"></dxi-column>
     <dxi-column dataField="gender" alignment="center" dataType="string"></dxi-column>
     <dxi-column dataField="createdDate" alignment="center" dataType="date" [format]="dateFormat"></dxi-column>
+    <dxi-column dataField="lastModifiedDate" alignment="center" dataType="date" [format]="dateFormat"></dxi-column>
+
+    // TODO: change userRoles column to selectbox
+
+    <dxi-column type="buttons" caption="Delete user">
+      <dxi-button cssClass="delete-button" icon="trash" [onClick]="openDeletePopup"
+                  [disabled]="!(hasPermission(permissions.DeleteUserAccount) | async)! || cannotBeDeleted">
+      </dxi-button>
+    </dxi-column>
 
     <dxo-paging [enabled]="false"> </dxo-paging>
   </dx-data-grid>
@@ -35,3 +44,9 @@
   </app-pager>
 </div>
 
+<app-confirmation-popup
+  [(visible)]="isDeletePopupVisible"
+  title="Delete application user"
+  content="Are you sure you want to permanently delete this user?"
+  (confirm)="deleteApplicationUser()">
+</app-confirmation-popup>

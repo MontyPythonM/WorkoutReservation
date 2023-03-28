@@ -6,6 +6,11 @@ import {ApplicationUser} from "../../../models/application-user.model";
 import {UserService} from "../../../services/application-user.service";
 import {DATETIME_FORMAT} from "../../../common/constants";
 import {SortBySelector} from "../../../models/enums/sort-by-selector.enum";
+import {Permission} from "../../../models/enums/permission.enum";
+import {Row} from 'devextreme/ui/data_grid';
+import {Role} from "../../../models/enums/role.enum";
+import {UserAccount} from "../../../models/user-account.model";
+import {AccountService} from "../../../services/identity/account.service";
 
 @Component({
   selector: 'app-users',
@@ -17,8 +22,12 @@ export class UsersComponent extends BaseComponent implements OnInit {
   queryParams: PagedQuery;
   dateFormat = DATETIME_FORMAT;
   sortBy = SortBySelector;
+  permissions = Permission;
+  isDeletePopupVisible: boolean;
+  userToDelete?: string;
+  currentUserId?: string;
 
-  constructor(private userService: UserService) {
+  constructor(private userService: UserService, private accountService: AccountService) {
     super();
     this.users = new PagedResult<ApplicationUser>();
     this.queryParams = new PagedQuery({
@@ -28,10 +37,12 @@ export class UsersComponent extends BaseComponent implements OnInit {
       sortBy: '',
       searchPhrase: ''
     });
+    this.isDeletePopupVisible = false
   }
 
   ngOnInit(): void {
     this.loadUsers(this.queryParams);
+    this.loadCurrentUser();
   }
 
   loadUsers(query: PagedQuery) {
@@ -39,6 +50,22 @@ export class UsersComponent extends BaseComponent implements OnInit {
       next: (response: PagedResult<ApplicationUser>) => {
         this.users = response;
       }
+    });
+  }
+
+  loadCurrentUser() {
+    this.subscribe(this.accountService.userAccount$, {
+      next: (user: UserAccount) => this.currentUserId = user.id
+    });
+  }
+
+  deleteApplicationUser = () => {
+    this.subscribe(this.userService.deleteUser(this.userToDelete!), {
+      next: () => {
+        this.notificationService.show('Application user has been successfully deleted', 'success');
+        this.ngOnInit();
+      },
+      error: () => this.notificationService.show('Failed to delete application user', 'error')
     });
   }
 
@@ -51,6 +78,13 @@ export class UsersComponent extends BaseComponent implements OnInit {
     this.queryParams.pageNumber = e;
     this.loadUsers(this.queryParams);
   }
+
+  openDeletePopup = (e: {row: Row}) => {
+    this.userToDelete = e.row.data.id;
+    this.isDeletePopupVisible = true;
+  }
+
+  cannotBeDeleted = (e: {row: Row}): boolean => e.row.data.id === this.currentUserId || e.row.data.isDeleted;
 
   searchPhraseChanged = (value: string) => this.queryParams.searchPhrase = value;
   sortByChanged = (value: string) => this.queryParams.sortBy = value;

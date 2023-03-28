@@ -13,5 +13,7 @@ public class UsersListDto
     [JsonConverter(typeof(JsonStringEnumConverter))]
     public Gender Gender { get; set; }
     public DateTime CreatedDate { get; set; }
+    public DateTime? LastModifiedDate  { get; set; }
+    public bool IsDeleted { get; set; }
     public List<string> UserRoles { get; set; }
 }

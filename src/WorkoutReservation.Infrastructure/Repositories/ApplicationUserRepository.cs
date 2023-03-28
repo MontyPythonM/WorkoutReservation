@@ -55,12 +55,6 @@ public class ApplicationUserRepository : IApplicationUserRepository
         await _dbContext.SaveChangesAsync(token);
     }
 
-    public async Task DeleteAsync(ApplicationUser user, CancellationToken token)
-    {
-        _dbContext.Remove(user);
-        await _dbContext.SaveChangesAsync(token);
-    }
-
     public async Task<(List<ApplicationUser> users, int totalItems)> GetPagedAsync(IPagedQuery request, CancellationToken token)
     {
         var usersQuery = _dbContext.ApplicationUsers

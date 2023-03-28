@@ -10,7 +10,6 @@ public interface IApplicationUserRepository
         CancellationToken token = default, params Expression<Func<ApplicationUser, object>>[] includes);
     public Task<ApplicationUser> GetByGuidAsync(Guid guid, bool asNoTracking = false, CancellationToken token = default);
     public Task UpdateAsync(ApplicationUser user, CancellationToken token);
-    public Task DeleteAsync(ApplicationUser user, CancellationToken token);
     public Task<bool> IsEmailAlreadyTaken(string email, CancellationToken token);
     public Task<(List<ApplicationUser> users, int totalItems)> GetPagedAsync(IPagedQuery request,
         CancellationToken token);
