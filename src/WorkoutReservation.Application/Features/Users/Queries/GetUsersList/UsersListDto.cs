@@ -15,5 +15,5 @@ public class UsersListDto
     public DateTime CreatedDate { get; set; }
     public DateTime? LastModifiedDate  { get; set; }
     public bool IsDeleted { get; set; }
-    public List<string> UserRoles { get; set; }
+    public List<Role> Roles { get; set; }
 }

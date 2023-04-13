@@ -12,6 +12,8 @@ export class AccountSettingsComponent extends BaseComponent implements OnInit {
     super();
   }
 
+  // TODO: create account page
+
   ngOnInit(): void {
   }
 

@@ -7,10 +7,10 @@ export class ApplicationUser {
   createdDate: string;
   lastModifiedDate: string;
   isDeleted: boolean;
-  userRoles: string[];
+  roles: number[];
 
   constructor(data: {id: string, email: string, firstName: string, lastName: string, gender: string,
-    createdDate: string, lastModifiedDate: string, isDeleted: boolean, userRoles: string[]}) {
+    createdDate: string, lastModifiedDate: string, isDeleted: boolean, roles: number[]}) {
     this.id = data.id;
     this.email = data.email;
     this.firstName = data.firstName;
@@ -19,6 +19,6 @@ export class ApplicationUser {
     this.createdDate = data.createdDate;
     this.lastModifiedDate = data.lastModifiedDate;
     this.isDeleted = data.isDeleted;
-    this.userRoles = data.userRoles;
+    this.roles = data.roles;
   }
 }

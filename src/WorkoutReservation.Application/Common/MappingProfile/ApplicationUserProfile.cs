@@ -9,6 +9,6 @@ public class ApplicationUserProfile : Profile
     public ApplicationUserProfile()
     {
         CreateMap<ApplicationUser, UsersListDto>()
-            .ForMember(desc => desc.UserRoles, opt => opt.MapFrom(src => src.ApplicationRoles.Select(role => role.Name)));
+            .ForMember(desc => desc.Roles, opt => opt.MapFrom(src => src.ApplicationRoles.Select(role => role.Id)));
     }
 }

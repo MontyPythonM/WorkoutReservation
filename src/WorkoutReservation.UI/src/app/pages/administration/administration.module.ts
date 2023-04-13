@@ -6,7 +6,8 @@ import {
   DxFormModule,
   DxLoadPanelModule,
   DxPopupModule,
-  DxTabPanelModule
+  DxTabPanelModule,
+  DxTagBoxModule
 } from "devextreme-angular";
 import {UsersComponent} from "./users/users.component";
 import {WorkoutTypeTagsComponent} from "./workout-type-tags/workout-type-tags.component";
@@ -37,6 +38,7 @@ import {SearchPanelModule} from "../../components/search-panel/search-panel.modu
     DxPopupModule,
     DxFormModule,
     DxLoadPanelModule,
+    DxTagBoxModule,
     ConfirmationPopupModule,
     PagerModule,
     SearchPanelModule,

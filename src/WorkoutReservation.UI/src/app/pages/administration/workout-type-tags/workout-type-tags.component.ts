@@ -95,8 +95,9 @@ export class WorkoutTypeTagsComponent extends BaseComponent implements OnInit {
   openEditPopup = (e: {row: Row}) => {
     const row = e.row.data;
     this.workoutTypeTagCommand = new WorkoutTypeTagCommand(row.id, row.tag, row.isActive);
-    this.isEditPopupVisible= true;
+    this.isEditPopupVisible = true;
   }
+
   closeEditPopup = () => this.isEditPopupVisible = false;
 
   deleteWorkoutTypeTag = () => {

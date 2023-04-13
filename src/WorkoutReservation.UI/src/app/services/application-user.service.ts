@@ -6,6 +6,7 @@ import {apiUrl} from "../../environments/api-urls";
 import {PagedResult} from "../models/paged-result.model";
 import {ApplicationUser} from "../models/application-user.model";
 import {Role} from "../models/enums/role.enum";
+import {ApplicationUserCommand} from "../models/application-user-command.model";
 
 @Injectable({
   providedIn: 'root'
@@ -25,8 +26,8 @@ export class UserService extends BaseService {
     );
   }
 
-  setUserRoles(userId: string, roles: Role[]): Observable<void> {
-    return super.patch(apiUrl.user.setUserRoles, { userId, roles })
+  setUserRoles(userCommand: ApplicationUserCommand): Observable<void> {
+    return super.patch(apiUrl.user.setUserRoles, { ...userCommand })
   }
 
   deleteUser(id: string): Observable<void> {

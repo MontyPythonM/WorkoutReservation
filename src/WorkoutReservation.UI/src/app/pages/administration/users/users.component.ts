@@ -8,9 +8,12 @@ import {DATETIME_FORMAT} from "../../../common/constants";
 import {SortBySelector} from "../../../models/enums/sort-by-selector.enum";
 import {Permission} from "../../../models/enums/permission.enum";
 import {Row} from 'devextreme/ui/data_grid';
-import {Role} from "../../../models/enums/role.enum";
+import {Role, roles} from "../../../models/enums/role.enum";
 import {UserAccount} from "../../../models/user-account.model";
 import {AccountService} from "../../../services/identity/account.service";
+import {WorkoutTypeTagCommand} from "../../../models/workout-type-tag-command.model";
+import {ApplicationUserCommand} from "../../../models/application-user-command.model";
+import Form from "devextreme/ui/form";
 
 @Component({
   selector: 'app-users',
@@ -19,6 +22,7 @@ import {AccountService} from "../../../services/identity/account.service";
 })
 export class UsersComponent extends BaseComponent implements OnInit {
   users: PagedResult<ApplicationUser>;
+  userCommand?: ApplicationUserCommand;
   queryParams: PagedQuery;
   dateFormat = DATETIME_FORMAT;
   sortBy = SortBySelector;
@@ -26,6 +30,8 @@ export class UsersComponent extends BaseComponent implements OnInit {
   isDeletePopupVisible: boolean;
   userToDelete?: string;
   currentUserId?: string;
+  isEditPopupVisible: boolean;
+  applicationRoles = roles;
 
   constructor(private userService: UserService, private accountService: AccountService) {
     super();
@@ -37,7 +43,8 @@ export class UsersComponent extends BaseComponent implements OnInit {
       sortBy: '',
       searchPhrase: ''
     });
-    this.isDeletePopupVisible = false
+    this.isDeletePopupVisible = false;
+    this.isEditPopupVisible = false;
   }
 
   ngOnInit(): void {
@@ -56,6 +63,17 @@ export class UsersComponent extends BaseComponent implements OnInit {
   loadCurrentUser() {
     this.subscribe(this.accountService.userAccount$, {
       next: (user: UserAccount) => this.currentUserId = user.id
+    });
+  }
+
+  editUser() {
+    this.subscribe(this.userService.setUserRoles(this.userCommand!), {
+      next: () => {
+        this.notificationService.show('Application user updated successfully', 'success');
+        this.closeEditPopup();
+        this.ngOnInit();
+      },
+      error: () => this.notificationService.show('Failed to update application user', 'error')
     });
   }
 
@@ -84,7 +102,23 @@ export class UsersComponent extends BaseComponent implements OnInit {
     this.isDeletePopupVisible = true;
   }
 
+  openEditPopup = (e: {row: Row}) => {
+    const row = e.row.data;
+    this.userCommand = new ApplicationUserCommand(row.id, row.roles);
+    this.isEditPopupVisible = true;
+  }
+
+  closeEditPopup = () => this.isEditPopupVisible = false;
+
+  getRoleDisplayValue = (role: number): string => this.applicationRoles.find(x => x.index === role)!.value;
+
+  displayRoles(roles: number[]): string {
+    const roleStringArray = roles.map(role => this.applicationRoles.find(x => x.index === role)!.value);
+    return roleStringArray.join(", ");
+  }
+
   cannotBeDeleted = (e: {row: Row}): boolean => e.row.data.id === this.currentUserId || e.row.data.isDeleted;
+  cannotBeEdited = (e: {row: Row}): boolean => e.row.data.id === this.currentUserId;
 
   searchPhraseChanged = (value: string) => this.queryParams.searchPhrase = value;
   sortByChanged = (value: string) => this.queryParams.sortBy = value;

@@ -20,16 +20,23 @@
     <dxi-column dataField="firstName" alignment="center" dataType="string"></dxi-column>
     <dxi-column dataField="lastName" alignment="center" dataType="string"></dxi-column>
     <dxi-column dataField="email" alignment="center" dataType="string"></dxi-column>
-    <dxi-column dataField="userRoles" alignment="center" dataType="string"></dxi-column>
+    <dxi-column dataField="roles" alignment="center" dataType="string" cellTemplate="rolesCellTemplate"></dxi-column>
+    <div *dxTemplate="let roles of 'rolesCellTemplate'">
+      {{ displayRoles(roles.value) }}
+    </div>
     <dxi-column dataField="gender" alignment="center" dataType="string"></dxi-column>
     <dxi-column dataField="createdDate" alignment="center" dataType="date" [format]="dateFormat"></dxi-column>
     <dxi-column dataField="lastModifiedDate" alignment="center" dataType="date" [format]="dateFormat"></dxi-column>
-
-    // TODO: change userRoles column to selectbox
-
+    <dxi-column type="buttons" caption="Edit user">
+      <dxi-button
+        icon="edit"
+        [onClick]="openEditPopup"
+        [disabled]="!(hasPermission(permissions.SetUserRole) | async)! || cannotBeEdited">
+      </dxi-button>
+    </dxi-column>
     <dxi-column type="buttons" caption="Delete user">
-      <dxi-button cssClass="delete-button" icon="trash" [onClick]="openDeletePopup"
-                  [disabled]="!(hasPermission(permissions.DeleteUserAccount) | async)! || cannotBeDeleted">
+      <dxi-button icon="trash" [onClick]="openDeletePopup"
+        [disabled]="!(hasPermission(permissions.DeleteUserAccount) | async)! || cannotBeDeleted">
       </dxi-button>
     </dxi-column>
 
@@ -43,6 +50,37 @@
     (pageNumberChanged)="pageNumberChanged($event)">
   </app-pager>
 </div>
+
+<dx-popup
+  [(visible)]="isEditPopupVisible"
+  [showTitle]="true"
+  title="Edit application user"
+  [dragEnabled]="false"
+  [showCloseButton]="false"
+  [width]="500"
+  [height]="220">
+  <div *dxTemplate="let data of 'content'">
+    <dx-form [(formData)]="userCommand">
+      <dxi-item
+        dataField="roles"
+        editorType="dxTagBox"
+        [editorOptions]="{ dataSource: applicationRoles, valueExpr: 'index', displayExpr: 'value' }">
+      </dxi-item>
+    </dx-form>
+  </div>
+  <dxi-toolbar-item location="after" toolbar="bottom">
+    <dx-button
+      class="popup-button"
+      text="Cancel"
+      type="normal"
+      (onClick)="closeEditPopup()"></dx-button>
+    <dx-button
+      text="Save"
+      icon="save"
+      type="success"
+      (onClick)="editUser()"></dx-button>
+  </dxi-toolbar-item>
+</dx-popup>
 
 <app-confirmation-popup
   [(visible)]="isDeletePopupVisible"

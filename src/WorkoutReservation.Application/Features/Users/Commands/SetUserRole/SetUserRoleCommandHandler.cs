@@ -7,7 +7,7 @@ using WorkoutReservation.Domain.Enums;
 
 namespace WorkoutReservation.Application.Features.Users.Commands.SetUserRole;
 
-public record SetUserRoleCommand(Guid UserId, List<Role> Roles) : IRequest;
+public record SetUserRoleCommand(Guid Id, List<Role> Roles) : IRequest;
 
 internal sealed class SetUserRoleCommandHandler : IRequestHandler<SetUserRoleCommand>
 {
@@ -28,10 +28,10 @@ internal sealed class SetUserRoleCommandHandler : IRequestHandler<SetUserRoleCom
         var validator = new SetUserRoleCommandValidation(_currentUserAccessor.GetUserId());
         await validator.ValidateAndThrowAsync(request, token);
         
-        var user = await _userRepository.GetByGuidAsync(request.UserId, false, token);
+        var user = await _userRepository.GetByGuidAsync(request.Id, false, token);
 
         if (user is null)
-            throw new NotFoundException(nameof(ApplicationUser), request.UserId.ToString());
+            throw new NotFoundException(nameof(ApplicationUser), request.Id.ToString());
         
         var roles = await _roleRepository.GetAsync(request.Roles, token);
         user.SetRoles(roles);
