@@ -27,7 +27,7 @@
         [disabled]="!(hasPermission(permissions.UpdateWorkoutTypeTag) | async)!"></dxi-button>
     </dxi-column>
     <dxi-column type="buttons" caption="Delete tag">
-      <dxi-button cssClass="delete-button" icon="trash" [onClick]="openDeletePopup"
+      <dxi-button icon="trash" [onClick]="openDeletePopup"
         [disabled]="!(hasPermission(permissions.DeleteWorkoutTypeTag) | async)!"></dxi-button>
     </dxi-column>
     <dxo-paging

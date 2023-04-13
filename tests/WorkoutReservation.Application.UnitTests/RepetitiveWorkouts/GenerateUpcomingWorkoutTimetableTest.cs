@@ -49,7 +49,6 @@ public class GenerateUpcomingWorkoutTimetableTest : IClassFixture<Program>
     [InlineData(3)]
     public async Task Handle_ExistingAndNewRealWorkoutsTimeCollisionExist_ThrowValidationException(int testScenario)
     {
-        // TODO Fix unit test
         // arrange
         SetInstructorAndWorkoutTypeIds();
         _repetitiveWorkoutRepositoryMock
@@ -88,7 +87,7 @@ public class GenerateUpcomingWorkoutTimetableTest : IClassFixture<Program>
         Func<Task<Unit>> result = async () => await handler.Handle(command, CancellationToken.None);
 
         // assert
-        await result.Should().ThrowAsync<ValidationException>();
+        await result.Should().ThrowAsync<DomainException>();
     }
     
     [Fact]

@@ -6,7 +6,7 @@ using WorkoutReservation.Domain.Entities;
 
 namespace WorkoutReservation.Application.Features.Users.Commands.DeleteUser;
 
-public record DeleteUserCommand(Guid UserGuid) : IRequest;
+public record DeleteUserCommand(Guid Id) : IRequest;
 
 internal sealed class DeleteUserCommandHandler : IRequestHandler<DeleteUserCommand>
 {
@@ -26,17 +26,18 @@ internal sealed class DeleteUserCommandHandler : IRequestHandler<DeleteUserComma
     public async Task<Unit> Handle(DeleteUserCommand request, CancellationToken token)
     {
         var currentUser = await _currentUserAccessor.GetUserAsync(token);
-        var userToRemove = await _userRepository.GetByGuidAsync(request.UserGuid, false, token);
+        var userToRemove = await _userRepository.GetByGuidAsync(request.Id, false, token);
 
         if (userToRemove is null)
-            throw new NotFoundException(nameof(ApplicationUser), request.UserGuid.ToString());
+            throw new NotFoundException(nameof(ApplicationUser), request.Id.ToString());
         
         if (userToRemove.Id == currentUser.Id)
             throw new BadRequestException("You cannot delete your own account by this endpoint. Use route: ./api/account/delete-account");
+
+        userToRemove.SoftDeleteUser();
+        await _userRepository.UpdateAsync(userToRemove, token);
         
-        await _userRepository.DeleteAsync(userToRemove, token);
-        
-        _logger.LogInformation($"User with Id: {request.UserGuid} was deleted by user Id: {currentUser.Id}.");
+        _logger.LogInformation($"User with Id: {request.Id} was soft deleted by user Id: {currentUser.Id}.");
         return Unit.Value;
     }
 }

@@ -18,8 +18,8 @@ export const apiUrl = {
     cancel: "reservation/cancel-reservation"
   },
   user: {
-    users: 'user/users/',
-    setUserRole: 'user/set-user-role/',
+    getUsers: 'user/users/',
+    setUserRoles: 'user/set-user-roles/',
     deleteUser: 'user/delete-user/',
   },
   account: {

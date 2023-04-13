@@ -6,7 +6,11 @@ internal sealed class SetUserRoleCommandValidation : AbstractValidator<SetUserRo
 {
     public SetUserRoleCommandValidation(Guid currentUser)
     {
-        RuleFor(x => x.Role)
-            .IsInEnum();
+        RuleFor(x => x.Roles)
+            .ForEach(role => role.IsInEnum());
+
+        RuleFor(x => x.Id)
+            .NotEmpty()
+            .NotEqual(currentUser);
     }
 }

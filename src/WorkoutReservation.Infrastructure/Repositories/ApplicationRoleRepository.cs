@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using TinyHelpers.Extensions;
 using WorkoutReservation.Application.Contracts;
 using WorkoutReservation.Domain.Entities;
 using WorkoutReservation.Domain.Enums;
@@ -24,5 +25,15 @@ public class ApplicationRoleRepository : IApplicationRoleRepository
             throw new InfrastructureException("Application role not exist");
 
         return applicationRole;
+    }
+
+    public async Task<List<ApplicationRole>> GetAsync(List<Role> roles, CancellationToken token)
+    {
+        var rolesIds = new List<int>();
+        roles.Distinct().ForEach(role => rolesIds.Add((int)role));
+        
+        return await _dbContext.ApplicationRoles
+            .Where(x => rolesIds.Contains(x.Id))
+            .ToListAsync(token);
     }
 }

@@ -5,15 +5,20 @@ export class ApplicationUser {
   lastName: string;
   gender: string;
   createdDate: string;
-  userRoles: string[];
+  lastModifiedDate: string;
+  isDeleted: boolean;
+  roles: number[];
 
-  constructor(data: {id: string, email: string, firstName: string, lastName: string, gender: string, createdDate: string, userRoles: string[]}) {
+  constructor(data: {id: string, email: string, firstName: string, lastName: string, gender: string,
+    createdDate: string, lastModifiedDate: string, isDeleted: boolean, roles: number[]}) {
     this.id = data.id;
     this.email = data.email;
     this.firstName = data.firstName;
     this.lastName = data.lastName;
     this.gender = data.gender;
     this.createdDate = data.createdDate;
-    this.userRoles = data.userRoles;
+    this.lastModifiedDate = data.lastModifiedDate;
+    this.isDeleted = data.isDeleted;
+    this.roles = data.roles;
   }
 }
