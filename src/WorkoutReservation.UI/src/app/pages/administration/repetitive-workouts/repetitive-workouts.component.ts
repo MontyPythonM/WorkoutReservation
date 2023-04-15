@@ -39,8 +39,6 @@ export class RepetitiveWorkoutsComponent extends BaseComponent {
     });
   }
 
-  openHangfireDashboard = () => window.open(environment.serverUrl + pageUrls.hangfire, "Hangfire Dashboard");
-
   openDeletePopup = () => {
     this.popupTitle = "Delete all workouts";
     this.popupContent = "Permanent delete all repetitive workouts?";

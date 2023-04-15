@@ -1,15 +1,5 @@
 <div class="container">
   <div class="button-section">
-    <p>Open Hangfire Dashboard in new browser window:</p>
-    <dx-button
-      [disabled]="!(hasPermission(permissions.OpenHangfireDashboard) | async)!"
-      text="Open Hangfire"
-      type="default"
-      icon="chart"
-      (onClick)="openHangfireDashboard()">
-    </dx-button>
-  </div>
-  <div class="button-section">
     <p>Force generate workouts from upcoming week:</p>
     <dx-button
       [disabled]="!(hasPermission(permissions.GenerateNewUpcomingWeek) | async)!"
