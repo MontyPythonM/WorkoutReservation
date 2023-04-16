@@ -3,7 +3,7 @@
 }
 
 .appointment-background:hover {
-  background-image: linear-gradient(to right, rgba(140, 60, 40, 0.4), rgb(140, 60, 40));
+  background-image: linear-gradient(to right, rgb(55, 55, 55), rgb(55, 55, 55));
 }
 
 .appointment-title {

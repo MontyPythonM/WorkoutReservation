@@ -33,7 +33,7 @@ export class RepetitiveWorkoutService extends BaseService {
   }
 
   update(repetitiveWorkout: RepetitiveWorkoutCommand): Observable<void> {
-    return super.patch(apiUrl.repetitiveWorkout.baseUrl, { ...repetitiveWorkout });
+    return super.put(apiUrl.repetitiveWorkout.baseUrl, { ...repetitiveWorkout });
   }
 
   remove(id: number): Observable<void> {

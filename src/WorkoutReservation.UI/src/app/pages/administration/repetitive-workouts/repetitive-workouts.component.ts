@@ -11,6 +11,7 @@ import dxScheduler from 'devextreme/ui/scheduler';
 import {InstructorService} from "../../../services/instructor.service";
 import {WorkoutTypeService} from "../../../services/workout-type.service";
 import dxForm from 'devextreme/ui/form';
+import {daysOfWeek} from "../../../models/enums/day-of-week.enum";
 
 @Component({
   selector: 'app-repetitive-workouts',
@@ -36,6 +37,7 @@ export class RepetitiveWorkoutsComponent extends BaseComponent implements OnInit
   deletePopupVisible: boolean;
   editFormInit?: dxForm;
   addFormInit?: dxForm;
+  daysOfWeek = daysOfWeek;
 
   constructor(private repetitiveWorkoutService: RepetitiveWorkoutService,
               private instructorService: InstructorService,
@@ -116,7 +118,10 @@ export class RepetitiveWorkoutsComponent extends BaseComponent implements OnInit
 
   deleteAllRepetitiveWorkouts() {
     this.subscribe(this.repetitiveWorkoutService.deleteAll(), {
-      next: () => this.notificationService.show("Successfully removed all repetitive workouts ", "success"),
+      next: () => {
+        this.ngOnInit();
+        this.notificationService.show("Successfully removed all repetitive workouts ", "success")
+      },
       error: () => this.notificationService.show("Failed to remove all repetitive workouts", "error")
     });
   }
@@ -136,6 +141,7 @@ export class RepetitiveWorkoutsComponent extends BaseComponent implements OnInit
   openAddPopup = () => {
     this.loadInstructors();
     this.loadWorkoutTypes();
+    this.addFormInit?.resetValues();
     this.repetitiveWorkoutCommand = new RepetitiveWorkoutCommand();
     this.addPopupVisible = true;
   }
@@ -144,10 +150,16 @@ export class RepetitiveWorkoutsComponent extends BaseComponent implements OnInit
 
   openEditPopup = (e: any) => {
     e.cancel = true;
+    this.loadInstructors();
+    this.loadWorkoutTypes();
     const data = e.appointmentData;
     this.repetitiveWorkoutCommand = new RepetitiveWorkoutCommand(data.id, data.maxParticipantNumber,
       data.startDate, data.endDate, data.dayOfWeek, data.workoutTypeId, data.instructorId);
     this.editPopupVisible = true;
+  }
+
+  isAnyRepetitiveWorkoutHasConflict(): boolean {
+    return this.repetitiveWorkouts.some(rw => rw.isRealWorkoutConflict);
   }
 
   closeEditPopup = () => this.editPopupVisible = false;

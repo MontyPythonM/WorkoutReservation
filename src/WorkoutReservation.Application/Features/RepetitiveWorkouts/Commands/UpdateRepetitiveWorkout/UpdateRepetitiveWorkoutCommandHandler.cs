@@ -6,7 +6,7 @@ using WorkoutReservation.Domain.Entities;
 
 namespace WorkoutReservation.Application.Features.RepetitiveWorkouts.Commands.UpdateRepetitiveWorkout;
 
-public record UpdateRepetitiveWorkoutCommand(int RepetitiveWorkoutId, int MaxParticipantNumber, TimeOnly StartTime, 
+public record UpdateRepetitiveWorkoutCommand(int Id, int MaxParticipantNumber, TimeOnly StartTime, 
     TimeOnly EndTime, int InstructorId, int WorkoutTypeId, DayOfWeek DayOfWeek) : IRequest;
 
 internal sealed class UpdateRepetitiveWorkoutCommandHandler : IRequestHandler<UpdateRepetitiveWorkoutCommand>
@@ -27,11 +27,11 @@ internal sealed class UpdateRepetitiveWorkoutCommandHandler : IRequestHandler<Up
     public async Task<Unit> Handle(UpdateRepetitiveWorkoutCommand request, CancellationToken token)
     {
         var repetitiveWorkout = await _repetitiveWorkoutRepository
-            .GetByIdAsync(request.RepetitiveWorkoutId, false, token, 
+            .GetByIdAsync(request.Id, false, token, 
                 incl => incl.Instructor, incl => incl.WorkoutType);
         
         if (repetitiveWorkout is null)
-            throw new NotFoundException(nameof(RepetitiveWorkout), request.RepetitiveWorkoutId.ToString());
+            throw new NotFoundException(nameof(RepetitiveWorkout), request.Id.ToString());
 
         var instructor = await _instructorRepository.GetByIdAsync(request.InstructorId, false, token);
         if (instructor is null)

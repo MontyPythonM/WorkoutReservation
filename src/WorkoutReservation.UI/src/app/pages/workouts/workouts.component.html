@@ -50,45 +50,6 @@
       </div>
     </div>
   </div>
-
-  <div *dxTemplate="let workout of 'workout-details-template'">
-    <div class="tooltip-container">
-      <div>
-        <p class="tooltip-title">{{ workout.targetedAppointmentData.workoutTypeName }}</p>
-        <dx-button
-          *ngIf="!workout.targetedAppointmentData.isAlreadyReserved && isAuthenticated()"
-          [disabled]="workout.targetedAppointmentData.isExpired"
-          class="tooltip-button"
-          text="Get reservation"
-          type="success"
-          (onClick)="bookWorkout(workout.targetedAppointmentData.id)">
-        </dx-button>
-        <dx-button
-          *ngIf="workout.targetedAppointmentData.isAlreadyReserved && isAuthenticated()"
-          class="tooltip-button"
-          text="Go to reservation"
-          type="default"
-          (onClick)="navigateToReservation(workout.targetedAppointmentData.reservationId)">
-        </dx-button>
-        <div [style.clear]="'both'"></div>
-      </div>
-      <div class="tooltip">Instructor:
-        <b>{{ workout.targetedAppointmentData.instructorFullName }}</b>
-      </div>
-      <div class="tooltip">Date:
-        <b>{{ workout.targetedAppointmentData.startDate | date: dateDisplayFormat }}</b>
-      </div>
-      <div class="tooltip">Time:
-        <b>{{ workout.targetedAppointmentData.startDate | date: timeDisplayFormat }} - {{ workout.targetedAppointmentData.endDate | date: timeDisplayFormat }}</b>
-      </div>
-      <div class="tooltip">Participants:
-        <b>{{ workout.targetedAppointmentData.currentParticipantNumber }} / {{ workout.targetedAppointmentData.maxParticipantNumber }}</b>
-      </div>
-      <div class="tooltip">Workout intensity:
-        <b>{{ workout.targetedAppointmentData.workoutIntensity }}</b>
-      </div>
-    </div>
-  </div>
 </dx-scheduler>
 
 <dx-popup

@@ -15,13 +15,14 @@ export class RepetitiveWorkout {
   workoutTypeName: string;
   workoutIntensity: WorkoutIntensity;
   instructorId: number;
-  instructorFullName: string;
+  instructorShortName: string;
   instructorEmail: string;
+  isRealWorkoutConflict: boolean;
 
   constructor(data: { id: number, maxParticipantNumber: number, startDate: Date, endDate: Date, dayOfWeek: DayOfWeek,
     createdBy: string, createdDate: Date, lastModifiedBy: string, lastModifiedDate: Date, workoutTypeId: number,
-    workoutTypeName: string, workoutIntensity: WorkoutIntensity, instructorId: number, instructorFullName: string,
-    instructorEmail: string}) {
+    workoutTypeName: string, workoutIntensity: WorkoutIntensity, instructorId: number, instructorShortName: string,
+    instructorEmail: string, isRealWorkoutConflict: boolean }) {
     this.id = data.id;
     this.maxParticipantNumber = data.maxParticipantNumber;
     this.startDate = data.startDate;
@@ -35,7 +36,8 @@ export class RepetitiveWorkout {
     this.workoutTypeName = data.workoutTypeName;
     this.workoutIntensity = data.workoutIntensity;
     this.instructorId = data.instructorId;
-    this.instructorFullName = data.instructorFullName;
+    this.instructorShortName = data.instructorShortName;
     this.instructorEmail = data.instructorEmail;
+    this.isRealWorkoutConflict = data.isRealWorkoutConflict;
   }
 }
