@@ -1,0 +1,28 @@
+﻿<div class="button-section">
+  <dx-button
+    [disabled]="!(hasPermission(permissions.OpenHangfireDashboard) | async)!"
+    text="Open Hangfire dashboard"
+    type="default"
+    icon="chart"
+    (onClick)="openHangfireDashboard()">
+  </dx-button>
+</div>
+<dx-tab-panel
+  id="tab-panel"
+  [dataSource]="tabs"
+  [animationEnabled]="true"
+  [selectedIndex]="setCurrentTab()"
+  itemTemplate="tabContents"
+  itemTitleTemplate="tabTitles"
+  (onTitleClick)="selectTab($event)"
+>
+  <div *dxTemplate="let tab of 'tabTitles'">
+    <p>
+      <span class="{{ tab.icon }} dx-icon-custom-style"></span>
+      <span class="tab-title">{{ tab.title }}</span>
+    </p>
+  </div>
+  <div *dxTemplate="let tab of 'tabContents'">
+    <router-outlet></router-outlet>
+  </div>
+</dx-tab-panel>

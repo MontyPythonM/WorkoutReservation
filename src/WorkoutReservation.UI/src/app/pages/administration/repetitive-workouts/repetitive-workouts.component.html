@@ -1,35 +1,208 @@
 <div class="container">
-  <div class="button-section">
-    <p>Open Hangfire Dashboard in new browser window:</p>
+  <div class="buttons clear-both">
     <dx-button
-      [disabled]="!(hasPermission(permissions.OpenHangfireDashboard) | async)!"
-      text="Open Hangfire"
-      type="default"
-      icon="chart"
-      (onClick)="openHangfireDashboard()">
+      *ngIf="(hasPermission(permissions.CanSeeAdministrativeContent) | async)!"
+      [disabled]="!(hasPermission(permissions.CreateRepetitiveWorkout) | async)!"
+      class="inline-button"
+      text="Add repetitive workout"
+      icon="add"
+      type="success"
+      (onClick)="openAddPopup()">
     </dx-button>
-  </div>
-  <div class="button-section">
-    <p>Force generate workouts from upcoming week:</p>
-    <dx-button
-      [disabled]="!(hasPermission(permissions.GenerateNewUpcomingWeek) | async)!"
-      text="Force generate"
-      type="danger"
-      icon="newfolder"
-      (onClick)="openGeneratePopup()">
-    </dx-button>
-  </div>
-  <div class="button-section">
-    <p>Permanently removes all repetitive workouts:</p>
     <dx-button
       [disabled]="!(hasPermission(permissions.DeleteAllRepetitiveWorkouts) | async)!"
+      class="inline-button right"
       text="Delete all"
       type="danger"
       icon="trash"
       (onClick)="openDeletePopup()">
     </dx-button>
+    <dx-button
+      [disabled]="!(hasPermission(permissions.GenerateNewUpcomingWeek) | async)! || isAnyRepetitiveWorkoutHasConflict()"
+      class="inline-button right"
+      text="Force generate real workouts"
+      type="default"
+      icon="newfolder"
+      (onClick)="openGeneratePopup()">
+    </dx-button>
   </div>
+
+  <dx-scheduler
+    [dataSource]="repetitiveWorkouts"
+    currentView="week"
+    textExpr="workoutTypeName"
+    appointmentTemplate="workout-template"
+    [showAllDayPanel]="false"
+    (onAppointmentClick)="openEditPopup($event)"
+    (onAppointmentFormOpening)="onAppointmentFormOpening($event)"
+    (onInitialized)="schedulerInitialize($event)"
+  >
+    <dxi-view
+      type="week"
+      [firstDayOfWeek]="1"
+      [startDayHour]="6"
+      [endDayHour]="22"
+      dateCellTemplate="daysOfWeekTemplate"
+    ></dxi-view>
+    <div *dxTemplate="let data of 'daysOfWeekTemplate'">
+      <div class="name">{{
+        ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"][data.date.getDay()]
+        }}</div>
+    </div>
+    <dxo-editing
+      [allowDragging]="false"
+      [allowAdding]="false"
+      [allowResizing]="false"
+      [allowUpdating]="false"
+      [allowResourceAdding]="false"
+      [allowResourceDeleting]="false"
+    ></dxo-editing>
+    <dxi-resource fieldExpr="id" [dataSource]="repetitiveWorkouts"></dxi-resource>
+    <div class="appointment-background" *dxTemplate="let workout of 'workout-template'">
+      <div class="appointment-container">
+        <div class="appointment-title">{{ workout.targetedAppointmentData.workoutTypeName }}</div>
+        <div class="appointment">Time:
+          {{ workout.targetedAppointmentData.startDate | date: timeDisplayFormat }} - {{ workout.targetedAppointmentData.endDate | date: timeDisplayFormat }}
+        </div>
+        <div class="appointment">Instructor:
+          {{ workout.targetedAppointmentData.instructorShortName }}
+        </div>
+        <div class="appointment">Max participants:
+          {{ workout.targetedAppointmentData.maxParticipantNumber }}
+        </div>
+        <div class="appointment">Has conflict:
+          {{ workout.targetedAppointmentData.isRealWorkoutConflict }}
+        </div>
+      </div>
+    </div>
+  </dx-scheduler>
 </div>
+
+<dx-popup
+  [(visible)]="editPopupVisible"
+  [showTitle]="true"
+  title="Edit repetitive workout"
+  [dragEnabled]="false"
+  [showCloseButton]="false"
+  [width]="600"
+  [height]="490"
+  contentTemplate="popupContent"
+>
+  <div *dxTemplate="let data of 'popupContent'">
+    <dx-form [(formData)]="repetitiveWorkoutCommand" (onInitialized)="editPopupFormInitialize($event)">
+      <dxi-item [disabled]="true" dataField="id" editorType="dxTextBox"></dxi-item>
+      <dxi-item dataField="workoutTypeId" caption="Workout type" editorType="dxSelectBox"
+                [editorOptions]="{ items: workoutTypes, valueExpr: 'id', displayExpr: 'name' }">
+        <dxi-validation-rule type="required" message="Workout type is required"></dxi-validation-rule>
+      </dxi-item>
+      <dxi-item dataField="instructorId" caption="Instructor" editorType="dxSelectBox"
+                [editorOptions]="{ items: instructors, valueExpr: 'id', displayExpr: 'name' }">
+        <dxi-validation-rule type="required" message="Instructor is required"></dxi-validation-rule>
+      </dxi-item>
+      <dxi-item dataField="maxParticipantNumber" editorType="dxTextBox">
+        <dxi-validation-rule type="numeric" message="Max participant number must be the number"></dxi-validation-rule>
+        <dxi-validation-rule type="required" message="Max participant number is required"></dxi-validation-rule>
+      </dxi-item>
+      <dxi-item dataField="dayOfWeek" caption="Day" editorType="dxSelectBox"
+                [editorOptions]="{ items: daysOfWeek, valueExpr: 'index', displayExpr: 'value' }">
+        <dxi-validation-rule type="required" message="Day of week is required"></dxi-validation-rule>
+      </dxi-item>
+      <dxi-item dataField="startTime" editorType="dxDateBox"
+                [editorOptions]="{ type: 'time', displayFormat: timeDisplayFormat, dateSerializationFormat: timeDisplayFormat,
+                invalidDateMessage: 'The time must have the following format: HH:mm'}">
+        <dxi-validation-rule type="required" message="Start time is required"></dxi-validation-rule>
+      </dxi-item>
+      <dxi-item dataField="endTime" editorType="dxDateBox"
+                [editorOptions]="{ type: 'time', displayFormat: timeDisplayFormat, dateSerializationFormat: timeDisplayFormat,
+                invalidDateMessage: 'The time must have the following format: HH:mm'}">
+        <dxi-validation-rule type="required" message="End time is required"></dxi-validation-rule>
+      </dxi-item>
+    </dx-form>
+    <div class="popup-buttons">
+      <dx-button
+        [disabled]="!(hasPermission(permissions.UpdateRepetitiveWorkout) | async)!"
+        class="popup-button"
+        text="Save"
+        icon="save"
+        type="success"
+        (onClick)="editRepetitiveWorkout()">
+      </dx-button>
+      <dx-button
+        [disabled]="!(hasPermission(permissions.DeleteRepetitiveWorkout) | async)!"
+        class="popup-button"
+        text="Delete"
+        icon="trash"
+        type="danger"
+        (onClick)="deleteRepetitiveWorkout()">
+      </dx-button>
+      <dx-button
+        class="popup-button"
+        text="Close"
+        type="normal"
+        (onClick)="closeEditPopup()">
+      </dx-button>
+    </div>
+  </div>
+</dx-popup>
+
+<dx-popup
+  [(visible)]="addPopupVisible"
+  [showTitle]="true"
+  title="Add repetitive workout"
+  [dragEnabled]="false"
+  [showCloseButton]="false"
+  [width]="600"
+  [height]="440"
+  contentTemplate="popupContent"
+>
+  <div *dxTemplate="let data of 'popupContent'">
+    <dx-form [(formData)]="repetitiveWorkoutCommand" (onInitialized)="addPopupFormInitialize($event)">
+      <dxi-item dataField="workoutTypeId" caption="Workout type" editorType="dxSelectBox"
+                [editorOptions]="{ items: workoutTypes, valueExpr: 'id', displayExpr: 'name' }">
+        <dxi-validation-rule type="required" message="Workout type is required"></dxi-validation-rule>
+      </dxi-item>
+      <dxi-item dataField="instructorId" caption="Instructor" editorType="dxSelectBox"
+                [editorOptions]="{ items: instructors, valueExpr: 'id', displayExpr: 'name' }">
+        <dxi-validation-rule type="required" message="Instructor is required"></dxi-validation-rule>
+      </dxi-item>
+      <dxi-item dataField="maxParticipantNumber" editorType="dxTextBox">
+        <dxi-validation-rule type="numeric" message="Max participant number must be the number"></dxi-validation-rule>
+        <dxi-validation-rule type="required" message="Max participant number is required"></dxi-validation-rule>
+        <dxi-validation-rule type="range" [min]="1" message="Max participant number must be greater than or equal 1"></dxi-validation-rule>
+      </dxi-item>
+      <dxi-item dataField="dayOfWeek" caption="Day" editorType="dxSelectBox"
+                [editorOptions]="{ items: daysOfWeek, valueExpr: 'index', displayExpr: 'value' }">
+        <dxi-validation-rule type="required" message="Day of week is required"></dxi-validation-rule>
+      </dxi-item>
+      <dxi-item dataField="startTime" editorType="dxDateBox"
+                [editorOptions]="{ type: 'time', displayFormat: timeDisplayFormat, dateSerializationFormat: timeDisplayFormat,
+                invalidDateMessage: 'The time must have the following format: HH:mm'}">
+        <dxi-validation-rule type="required" message="Start time is required"></dxi-validation-rule>
+      </dxi-item>
+      <dxi-item dataField="endTime" editorType="dxDateBox"
+                [editorOptions]="{ type: 'time', displayFormat: timeDisplayFormat, dateSerializationFormat: timeDisplayFormat,
+                invalidDateMessage: 'The time must have the following format: HH:mm'}">
+        <dxi-validation-rule type="required" message="End time is required"></dxi-validation-rule>
+      </dxi-item>
+    </dx-form>
+    <div class="popup-buttons">
+      <dx-button
+        [disabled]="!(hasPermission(permissions.CreateRealWorkout) | async)!"
+        class="popup-button"
+        text="Save"
+        icon="save"
+        type="success"
+        (onClick)="addRepetitiveWorkout()">
+      </dx-button>
+      <dx-button
+        class="popup-button"
+        text="Cancel"
+        type="normal"
+        (onClick)="closeAddPopup()">
+      </dx-button>
+    </div>
+  </div>
+</dx-popup>
 
 <app-confirmation-popup
   [(visible)]="isGeneratePopupVisible"

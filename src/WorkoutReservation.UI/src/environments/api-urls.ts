@@ -6,6 +6,7 @@ export const apiUrl = {
   },
   realWorkout:  'real-workout/',
   repetitiveWorkout: {
+    baseUrl: "repetitive-workout/",
     generateUpcomingWeek: "repetitive-workout/generate-upcoming-week",
     deleteAll: "repetitive-workout/delete-all"
   },

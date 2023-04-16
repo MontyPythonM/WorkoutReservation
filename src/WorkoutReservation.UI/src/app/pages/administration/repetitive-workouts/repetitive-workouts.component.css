@@ -2,6 +2,54 @@
   margin: 1% 1% 1% 1%;
 }
 
-.button-section {
-  margin-bottom: 40px;
+.buttons {
+  margin-top: 50px;
+  margin-bottom: 20px;
+}
+
+.clear-both {
+  clear: both;
+}
+
+.inline-button {
+  display: inline-block;
+  margin-right: 10px;
+}
+
+.right {
+  float: right;
+}
+
+.popup-button {
+  float: right;
+  margin-left: 10px;
+}
+
+.popup-buttons {
+  margin-top: 50px;
+  float: right
+}
+
+.appointment-background {
+  background-image: linear-gradient(to right, rgba(35, 110, 35), rgb(20, 90, 20));
+}
+
+.appointment-background:hover {
+  background-image: linear-gradient(to right, rgb(55, 55, 55), rgb(55, 55, 55));
+}
+
+.appointment-title {
+  font-size: 15px;
+  font-weight: 500;
+  margin-bottom: 5%;
+  text-align: center;
+}
+
+.appointment-container {
+  margin: 5px 5px 5px 5px;
+}
+
+.appointment {
+  margin: 1px 0 1px 0;
+  font-size: 12px;
 }

@@ -22,8 +22,8 @@ import {DatePipe} from "@angular/common";
   styleUrls: ['./workouts.component.css']
 })
 export class WorkoutsComponent extends BaseComponent implements OnInit {
-  workouts: RealWorkout[];
-  workoutDetails?: RealWorkout;
+  realWorkouts: RealWorkout[];
+  realWorkoutDetails?: RealWorkout;
   instructors?: Instructor[];
   workoutTypes?: WorkoutType[];
   realWorkoutCommand?: RealWorkoutCommand;
@@ -47,7 +47,7 @@ export class WorkoutsComponent extends BaseComponent implements OnInit {
               private workoutTypeService: WorkoutTypeService,
               private datePipe: DatePipe) {
     super();
-    this.workouts = [];
+    this.realWorkouts = [];
     this.dateDisplayFormat = DATE_FORMAT;
     this.dateOnlyFormat = DATEONLY_FORMAT;
     this.timeDisplayFormat = TIME_FORMAT;
@@ -59,12 +59,12 @@ export class WorkoutsComponent extends BaseComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.loadWorkouts();
+    this.loadRealWorkouts();
   }
 
-  loadWorkouts(): void {
+  loadRealWorkouts(): void {
     this.subscribe(this.realWorkoutService.getRealWorkouts(), {
-      next: (result: RealWorkout[]) => this.workouts = result
+      next: (result: RealWorkout[]) => this.realWorkouts = result
     });
   }
 
@@ -144,7 +144,7 @@ export class WorkoutsComponent extends BaseComponent implements OnInit {
 
   openEditPopup = (e: any) => {
     e.cancel = true;
-    this.workoutDetails = new RealWorkout(e.appointmentData);
+    this.realWorkoutDetails = new RealWorkout(e.appointmentData);
     const data = e.appointmentData;
     this.realWorkoutCommand = new RealWorkoutCommand(data.id, data.maxParticipantNumber,
       this.toDateOnly(data.startDate), data.startDate, data.endDate, data.instructorId);
@@ -163,7 +163,7 @@ export class WorkoutsComponent extends BaseComponent implements OnInit {
 
   onAppointmentFormOpening = (e: any) => e.cancel = true;
 
-  maxParticipants = (): number => this.workoutDetails?.currentParticipantNumber! > 1 ? this.workoutDetails?.currentParticipantNumber! : 1;
+  maxParticipants = (): number => this.realWorkoutDetails?.currentParticipantNumber! > 1 ? this.realWorkoutDetails?.currentParticipantNumber! : 1;
 
   schedulerInitialize = (e: { component: dxScheduler }) => this.schedulerInit = e.component;
   editPopupFormInitialize = (e: { component: dxForm }) => this.editFormInit = e.component;
