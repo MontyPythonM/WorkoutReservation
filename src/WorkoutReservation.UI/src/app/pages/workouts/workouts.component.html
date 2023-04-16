@@ -9,7 +9,7 @@
 </dx-button>
 
 <dx-scheduler
-  [dataSource]="workouts"
+  [dataSource]="realWorkouts"
   currentView="week"
   textExpr="workoutTypeName"
   appointmentTemplate="workout-template"
@@ -34,7 +34,7 @@
     [allowResourceDeleting]="false"
   ></dxo-editing>
 
-  <dxi-resource fieldExpr="id" [dataSource]="workouts"></dxi-resource>
+  <dxi-resource fieldExpr="id" [dataSource]="realWorkouts"></dxi-resource>
 
   <div class="appointment-background" *dxTemplate="let workout of 'workout-template'">
     <div class="appointment-container">
@@ -133,47 +133,47 @@
       <p class="field">
         <img src="assets/icons/exercise.svg" alt="Workout type">
         <span>Workout type:</span>
-        <span class="field-value">{{ workoutDetails!.workoutTypeName }}</span>
+        <span class="field-value">{{ realWorkoutDetails!.workoutTypeName }}</span>
       </p>
       <p class="field">
         <img src="assets/icons/self_improvement.svg" alt="Instructor">
         <span>Instructor:</span>
-        <span class="field-value">{{ workoutDetails!.instructorFullName }}</span>
+        <span class="field-value">{{ realWorkoutDetails!.instructorFullName }}</span>
       </p>
       <p class="field">
         <img src="assets/icons/today.svg" alt="Workout date">
         <span>Date:</span>
-        <span class="field-value">{{ workoutDetails!.startDate | date: dateDisplayFormat }}</span>
+        <span class="field-value">{{ realWorkoutDetails!.startDate | date: dateDisplayFormat }}</span>
       </p>
       <p class="field">
         <img src="assets/icons/schedule.svg" alt="Workout time">
         <span>Time:</span>
-        <span class="field-value">{{ workoutDetails!.startDate | date: timeDisplayFormat }} - {{ workoutDetails!.endDate | date: timeDisplayFormat }}</span>
+        <span class="field-value">{{ realWorkoutDetails!.startDate | date: timeDisplayFormat }} - {{ realWorkoutDetails!.endDate | date: timeDisplayFormat }}</span>
       </p>
       <p class="field">
         <img src="assets/icons/group.svg" alt="Participants">
         <span>Participants:</span>
-        <span class="field-value">{{ workoutDetails!.currentParticipantNumber }} / {{ workoutDetails!.maxParticipantNumber }}</span>
+        <span class="field-value">{{ realWorkoutDetails!.currentParticipantNumber }} / {{ realWorkoutDetails!.maxParticipantNumber }}</span>
       </p>
     </div>
     <div class="buttons-section">
       <dx-button
-        *ngIf="!workoutDetails!.isAlreadyReserved && isAuthenticated() && !isEditMode"
-        [disabled]="workoutDetails!.isExpired || !(hasPermission(permissions.CreateReservation) | async)!"
+        *ngIf="!realWorkoutDetails!.isAlreadyReserved && isAuthenticated() && !isEditMode"
+        [disabled]="realWorkoutDetails!.isExpired || !(hasPermission(permissions.CreateReservation) | async)!"
         class="popup-button"
         text="Create reservation"
         icon="add"
         type="success"
-        (onClick)="bookWorkout(workoutDetails!.id)">
+        (onClick)="bookWorkout(realWorkoutDetails!.id)">
       </dx-button>
       <dx-button
-        *ngIf="workoutDetails!.isAlreadyReserved && isAuthenticated() && !isEditMode"
+        *ngIf="realWorkoutDetails!.isAlreadyReserved && isAuthenticated() && !isEditMode"
         [disabled]="!(hasPermission(permissions.GetOwnReservationDetails) | async)!"
         class="popup-button"
         text="Go to reservation"
         icon="movetofolder"
         type="default"
-        (onClick)="navigateToReservation(workoutDetails!.reservationId)">
+        (onClick)="navigateToReservation(realWorkoutDetails!.reservationId)">
       </dx-button>
       <dx-button
         *ngIf="(hasPermission(permissions.CanSeeAdministrativeContent) | async)! && isEditMode"
@@ -186,7 +186,7 @@
       </dx-button>
       <dx-button
         *ngIf="(hasPermission(permissions.CanSeeAdministrativeContent) | async)! && !isEditMode"
-        [disabled]="!(hasPermission(permissions.UpdateRealWorkout) | async)! || workoutDetails!.isExpired"
+        [disabled]="!(hasPermission(permissions.UpdateRealWorkout) | async)! || realWorkoutDetails!.isExpired"
         class="popup-button"
         text="Edit"
         icon="edit"

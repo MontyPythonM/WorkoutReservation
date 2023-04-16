@@ -11,10 +11,10 @@ public class RepetitiveWorkoutProfile : Profile
 {
     public RepetitiveWorkoutProfile()
     {
-        CreateMap<RepetitiveWorkout, RepetitiveWorkoutListDto>();
-        CreateMap<WorkoutType, WorkoutTypeForRepetitiveWorkoutListDto>();
-        CreateMap<Instructor, InstructorForRepetitiveWorkoutListDto>();
-        
+        CreateMap<RepetitiveWorkout, RepetitiveWorkoutListDto>()
+            .ForMember(dest => dest.InstructorFullName, opt => opt.MapFrom(src => 
+                string.Join(" ", src.Instructor.FirstName, src.Instructor.LastName)));
+
         CreateMap<RepetitiveWorkout, RepetitiveWorkoutToRealWorkoutDto>();
     }
 }

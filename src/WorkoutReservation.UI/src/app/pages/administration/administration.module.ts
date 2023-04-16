@@ -6,6 +6,7 @@ import {
   DxFormModule,
   DxLoadPanelModule,
   DxPopupModule,
+  DxSchedulerModule,
   DxTabPanelModule,
   DxTagBoxModule
 } from "devextreme-angular";
@@ -39,6 +40,7 @@ import {SearchPanelModule} from "../../components/search-panel/search-panel.modu
     DxFormModule,
     DxLoadPanelModule,
     DxTagBoxModule,
+    DxSchedulerModule,
     ConfirmationPopupModule,
     PagerModule,
     SearchPanelModule,
