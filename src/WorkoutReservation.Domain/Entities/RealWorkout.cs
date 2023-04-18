@@ -109,7 +109,7 @@ public sealed class RealWorkout : Entity
         if (CurrentParticipantNumber < 0)
             throw new DomainException(this, nameof(CurrentParticipantNumber), ExceptionCode.ValueToSmall);
         
-        if (Date > DateTime.Now.GetFirstDayOfWeekAndAddDays(13))
+        if (Date > DateTime.Now.GetLastDayOfUpcomingWeek())
             throw new DomainException(this, nameof(Date), ExceptionCode.ValueToLarge);
         
         if (IsAnyUserHasMoreThanOneActiveReservation())

@@ -29,8 +29,8 @@ internal sealed class GetRepetitiveWorkoutListQueryHandler : IRequestHandler<Get
             .GetAllAsync(true, token, incl => incl.Instructor, incl => incl.WorkoutType);
         
         var upcomingWeekRealWorkouts = await _realWorkoutRepository
-            .GetAllFromDateRangeAsync(_dateTimeProvider.Now.GetFirstDayOfWeekAndAddDays(7), 
-                _dateTimeProvider.Now.GetFirstDayOfWeekAndAddDays(14), true, token);
+            .GetAllFromDateRangeAsync(_dateTimeProvider.GetFirstDayOfUpcomingWeek(), 
+                _dateTimeProvider.GetLastDayOfUpcomingWeek(), true, token);
         
         return repetitiveWorkouts.Select(rw => new RepetitiveWorkoutListDto()
             {

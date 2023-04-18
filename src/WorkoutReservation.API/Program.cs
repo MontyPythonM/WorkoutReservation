@@ -84,19 +84,20 @@ try
     //--- Build application
     var app = builder.Build();
 
-    //--- Get service instances
-    using var scope = app.Services.CreateScope();
-    var systemAdministratorSeeder = scope.ServiceProvider.GetService<SystemAdministratorSeeder>(); 
-    var applicationDataSeeder = scope.ServiceProvider.GetService<ApplicationDataSeeder>();
-
-    //--- Configure the HTTP request pipeline
-    await systemAdministratorSeeder!.SeedAsync(CancellationToken.None);
-    await applicationDataSeeder!.SeedAsync(CancellationToken.None);
-
     if (app.Environment.IsDevelopment())
     {
         app.UseSwagger();
         app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "WorkoutReservation REST API"));
+        
+        using var scope = app.Services.CreateScope();
+        
+        await scope.ServiceProvider
+            .GetService<SystemAdministratorSeeder>()
+            .SeedAsync(); 
+        
+        await scope.ServiceProvider
+            .GetService<ApplicationDataSeeder>()
+            .SeedAsync();
     }
 
     app.UseCors("WorkoutReservationUIOrigin");

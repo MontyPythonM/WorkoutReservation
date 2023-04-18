@@ -13,19 +13,21 @@ internal sealed class GetRealWorkoutsQueryHandler : IRequestHandler<GetRealWorko
 {
     private readonly IRealWorkoutRepository _realWorkoutRepository;
     private readonly ICurrentUserAccessor _currentUserAccessor;
+    private readonly IDateTimeProvider _dateTimeProvider;
 
     public GetRealWorkoutsQueryHandler(IRealWorkoutRepository realWorkoutRepository, 
-        ICurrentUserAccessor currentUserAccessor)
+        ICurrentUserAccessor currentUserAccessor, IDateTimeProvider dateTimeProvider)
     {
         _realWorkoutRepository = realWorkoutRepository;
         _currentUserAccessor = currentUserAccessor;
+        _dateTimeProvider = dateTimeProvider;
     }
 
     public async Task<List<RealWorkoutDto>> Handle(GetRealWorkoutsQuery request, 
         CancellationToken token)
     {
-        var firstDayOfCurrentWeek = DateTime.Now.GetFirstDayOfWeek();
-        var lastDayOfUpcomingWeek = DateTime.Now.GetFirstDayOfWeekAndAddDays(13);
+        var firstDayOfCurrentWeek = _dateTimeProvider.GetFirstDayOfCurrentWeek();
+        var lastDayOfUpcomingWeek = _dateTimeProvider.GetLastDayOfUpcomingWeek();
         
         var realWorkouts = await _realWorkoutRepository
             .GetAllFromDateRangeAsync(firstDayOfCurrentWeek, lastDayOfUpcomingWeek, true, token,
@@ -38,7 +40,7 @@ internal sealed class GetRealWorkoutsQueryHandler : IRequestHandler<GetRealWorko
                 MaxParticipantNumber = rw.MaxParticipantNumber,
                 StartDate = rw.Date.ToDateTime(rw.StartTime),
                 EndDate = rw.Date.ToDateTime(rw.EndTime),
-                IsExpired = DateTime.Now.IsExpired(rw.Date, rw.EndTime),
+                IsExpired = _dateTimeProvider.CheckIsExpired(rw.Date, rw.EndTime),
                 IsAlreadyReserved = IsAlreadyReserved(rw),
                 ReservationId = GetUserReservationId(rw),
                 WorkoutTypeId = rw.WorkoutType.Id,

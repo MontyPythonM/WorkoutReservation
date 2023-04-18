@@ -11,15 +11,15 @@ public record GetReservationDetailsQuery(int ReservationId) : IRequest<Reservati
 public class GetReservationDetailsHandler : IRequestHandler<GetReservationDetailsQuery, ReservationDetailsDto>
 {
     private readonly IReservationRepository _reservationRepository;
-    private readonly IMapper _mapper;
     private readonly ICurrentUserAccessor _currentUserAccessor;
-    
-    public GetReservationDetailsHandler(IReservationRepository reservationRepository, IMapper mapper, 
-        ICurrentUserAccessor currentUserAccessor)
+    private readonly IDateTimeProvider _dateTimeProvider;
+
+    public GetReservationDetailsHandler(IReservationRepository reservationRepository, 
+        ICurrentUserAccessor currentUserAccessor, IDateTimeProvider dateTimeProvider)
     {
         _reservationRepository = reservationRepository;
-        _mapper = mapper;
         _currentUserAccessor = currentUserAccessor;
+        _dateTimeProvider = dateTimeProvider;
     }
     
     public async Task<ReservationDetailsDto> Handle(GetReservationDetailsQuery request, CancellationToken token)
@@ -33,7 +33,26 @@ public class GetReservationDetailsHandler : IRequestHandler<GetReservationDetail
         if (userPermissions.Contains(Permission.GetSomeoneReservationDetails.ToString()) || 
             userPermissions.Contains(Permission.GetOwnReservationDetails.ToString()) && reservation.UserId == _currentUserAccessor.GetUserId())
         {
-            return _mapper.Map<ReservationDetailsDto>(reservation);
+            return new ReservationDetailsDto
+            {
+                Id = reservation.Id,
+                CreationDate = reservation.CreatedDate,
+                LastModificationDate = reservation.LastModifiedDate,
+                ReservationStatus = reservation.ReservationStatus,
+                IsWorkoutExpired = _dateTimeProvider.CheckIsExpired(reservation.RealWorkout.Date, reservation.RealWorkout.EndTime),
+                Note = reservation.Note,
+                RealWorkoutId = reservation.RealWorkoutId,
+                MaxParticipantNumber = reservation.RealWorkout.MaxParticipantNumber,
+                CurrentParticipantNumber = reservation.RealWorkout.CurrentParticipantNumber,
+                StartTime = reservation.RealWorkout.StartTime,
+                EndTime = reservation.RealWorkout.EndTime,
+                Date = reservation.RealWorkout.Date,
+                WorkoutTypeId = reservation.RealWorkout.WorkoutType.Id,
+                WorkoutTypeName = reservation.RealWorkout.WorkoutType.Name,
+                Intensity = reservation.RealWorkout.WorkoutType.Intensity,
+                InstructorId = reservation.RealWorkout.Instructor.Id,
+                InstructorFullName = string.Join(" ", reservation.RealWorkout.Instructor.FirstName, reservation.RealWorkout.Instructor.LastName),
+            };
         }
         
         throw new UnauthorizedException();

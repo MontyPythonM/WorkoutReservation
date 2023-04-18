@@ -67,7 +67,7 @@ public class GenerateUpcomingWorkoutTimetableTest : IClassFixture<Program>
             .Setup(x => x.GetAllAsync(false, IsAny<CancellationToken>()))
             .ReturnsAsync(new List<WorkoutType>(){ WorkoutType });
         
-        var upcomingMonday = DateTime.Now.GetFirstDayOfWeekAndAddDays(7);
+        var upcomingMonday = DateTime.Now.GetFirstDayOfUpcomingWeek();
         
         var existingRealWorkouts = new List<RealWorkout>
         {
@@ -79,12 +79,9 @@ public class GenerateUpcomingWorkoutTimetableTest : IClassFixture<Program>
 
         var selectedRealWorkout = new List<RealWorkout> { existingRealWorkouts[testScenario] };
         PrepareRealWorkouts(selectedRealWorkout);
-
-        var handler = GetHandler();
-        var command = GetCommand();
-
+        
         // act
-        Func<Task<Unit>> result = async () => await handler.Handle(command, CancellationToken.None);
+        Func<Task<Unit>> result = async () => await GetHandler().Handle(GetCommand(), CancellationToken.None);
 
         // assert
         await result.Should().ThrowAsync<DomainException>();
@@ -102,17 +99,14 @@ public class GenerateUpcomingWorkoutTimetableTest : IClassFixture<Program>
         
         var mondayRealWorkouts = new List<RealWorkout>
         {
-            new(10, new TimeOnly(13,00), new TimeOnly(15,00), WorkoutType, Instructor, DateTime.Now.GetFirstDayOfWeekAndAddDays(7), false), 
-            new(10, new TimeOnly(8,00), new TimeOnly(10,00), WorkoutType, Instructor, DateTime.Now.GetFirstDayOfWeekAndAddDays(7), false)
+            new(10, new TimeOnly(13,00), new TimeOnly(15,00), WorkoutType, Instructor, DateTime.Now.GetLastDayOfCurrentWeek().AddDays(1), false), 
+            new(10, new TimeOnly(8,00), new TimeOnly(10,00), WorkoutType, Instructor, DateTime.Now.GetLastDayOfCurrentWeek().AddDays(1), false)
         };
         
         PrepareRealWorkouts(mondayRealWorkouts);
-        
-        var handler = GetHandler();
-        var command = GetCommand();
 
         // act
-        Func<Task<Unit>> result = async () => await handler.Handle(command, CancellationToken.None);
+        Func<Task<Unit>> result = async () => await GetHandler().Handle(GetCommand(), CancellationToken.None);
 
         // assert
         await result.Should().NotThrowAsync<ValidationException>();
@@ -131,16 +125,13 @@ public class GenerateUpcomingWorkoutTimetableTest : IClassFixture<Program>
 
         var wednesdayRealWorkouts = new List<RealWorkout>
         {
-            new(10, new TimeOnly(10,00), new TimeOnly(12,00), WorkoutType, Instructor, DateTime.Now.GetFirstDayOfWeekAndAddDays(9), false), 
+            new(10, new TimeOnly(10,00), new TimeOnly(12,00), WorkoutType, Instructor, DateTime.Now.GetLastDayOfCurrentWeek().AddDays(3), false), 
         };
         
         PrepareRealWorkouts(wednesdayRealWorkouts);
-        
-        var handler = GetHandler();
-        var command = GetCommand();
 
         // act
-        Func<Task<Unit>> result = async () => await handler.Handle(command, CancellationToken.None);
+        Func<Task<Unit>> result = async () => await GetHandler().Handle(GetCommand(), CancellationToken.None);
 
         // assert
         await result.Should().NotThrowAsync<ValidationException>();
@@ -156,11 +147,8 @@ public class GenerateUpcomingWorkoutTimetableTest : IClassFixture<Program>
                 incl => incl.Instructor, incl => incl.WorkoutType))
             .ReturnsAsync(new List<RepetitiveWorkout>());
 
-        var handler = GetHandler();
-        var command = GetCommand();
-
         // act
-        Func<Task<Unit>> result = async () => await handler.Handle(command, CancellationToken.None);
+        Func<Task<Unit>> result = async () => await GetHandler().Handle(GetCommand(), CancellationToken.None);
 
         // assert
         await result.Should().ThrowAsync<NotFoundException>();
@@ -176,11 +164,8 @@ public class GenerateUpcomingWorkoutTimetableTest : IClassFixture<Program>
                 incl => incl.Instructor, incl => incl.WorkoutType))
             .ReturnsAsync(_repetitiveWorkouts);
 
-        var handler = GetHandler();
-        var command = GetCommand();
-
         // act
-        Func<Task<Unit>> result = async () => await handler.Handle(command, CancellationToken.None);
+        Func<Task<Unit>> result = async () => await GetHandler().Handle(GetCommand(), CancellationToken.None);
 
         // assert
         await result.Should().NotThrowAsync<ValidationException>();
@@ -191,8 +176,8 @@ public class GenerateUpcomingWorkoutTimetableTest : IClassFixture<Program>
     private void PrepareRealWorkouts(List<RealWorkout> returns)
     {
         _realWorkoutRepositoryMock
-            .Setup(x => x.GetAllFromDateRangeAsync(DateTime.Now.GetFirstDayOfWeekAndAddDays(7),
-                DateTime.Now.GetFirstDayOfWeekAndAddDays(14), true, IsAny<CancellationToken>()))
+            .Setup(x => x.GetAllFromDateRangeAsync(DateTime.Now.GetFirstDayOfUpcomingWeek(),
+                DateTime.Now.GetLastDayOfUpcomingWeek(), true, IsAny<CancellationToken>()))
             .ReturnsAsync(returns);
     }
 

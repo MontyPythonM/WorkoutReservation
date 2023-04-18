@@ -1,19 +1,19 @@
 ﻿namespace WorkoutReservation.Domain.Extensions;
 
-public static class DateTimeExtension
+internal static class DateTimeExtension
 {
-    public static DateOnly GetFirstDayOfWeek(this DateTime dateTime)
-    {
-        var firstDayOfWeek = CalculateFirstDayOfWeek(dateTime);
-        return DateOnly.FromDateTime(firstDayOfWeek);
-    }
+    public static DateOnly GetFirstDayOfCurrentWeek(this DateTime dateTime) =>
+        DateOnly.FromDateTime(CalculateFirstDayOfWeek(dateTime));
     
-    public static DateOnly GetFirstDayOfWeekAndAddDays(this DateTime dateTime, int days)
-    {
-        var firstDayOfWeek = CalculateFirstDayOfWeek(dateTime);
-        return DateOnly.FromDateTime(firstDayOfWeek).AddDays(days);
-    }
+    public static DateOnly GetLastDayOfCurrentWeek(this DateTime dateTime) =>
+        DateOnly.FromDateTime(CalculateFirstDayOfWeek(dateTime)).AddDays(6);
 
+    public static DateOnly GetFirstDayOfUpcomingWeek(this DateTime dateTime) =>
+        DateOnly.FromDateTime(CalculateFirstDayOfWeek(dateTime)).AddDays(7);
+
+    public static DateOnly GetLastDayOfUpcomingWeek(this DateTime dateTime) => 
+        DateOnly.FromDateTime(CalculateFirstDayOfWeek(dateTime)).AddDays(13);
+    
     public static bool IsExpired(this DateTime now, DateOnly date, TimeOnly time) => now > date.ToDateTime(time);
     public static bool IsExpired(this DateTime now, DateTime dateTime) => now > dateTime;
     
