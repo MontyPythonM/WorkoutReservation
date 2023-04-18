@@ -9,8 +9,8 @@ internal sealed class RealWorkoutsData
     {
         if (!instructors.Any() || !workoutTypes.Any())
             return new List<RealWorkout>();
-        
-        var currentDate = DateTime.Now.GetFirstDayOfWeek();
+
+        var currentDate = DateOnly.FromDateTime(DateTime.Now);
         var realWorkouts = new List<RealWorkout>
         {
             new(1, new TimeOnly(8, 00), new TimeOnly(11, 00), GetRandom(workoutTypes), GetRandom(instructors), currentDate, true),

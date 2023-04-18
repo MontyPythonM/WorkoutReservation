@@ -26,7 +26,7 @@ public class ApplicationDataSeeder
         _workoutTypeRepository = workoutTypeRepository;
     }
 
-    public async Task SeedAsync(CancellationToken token)
+    public async Task SeedAsync(CancellationToken token = default)
     {
         if (await _dbContext.Database.CanConnectAsync(token) is false)
             throw new DatabaseConnectionException();

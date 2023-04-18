@@ -45,9 +45,9 @@ internal sealed class GenerateUpcomingWorkoutTimetableCommandHandler : IRequestH
             throw new NotFoundException("Repetitive workouts not found.");
         }
         var convertedWorkouts = _mapper.Map<List<RepetitiveWorkoutToRealWorkoutDto>>(repetitiveWorkouts);
-        var firstDayOfUpcomingWeek = _dateTimeProvider.Now.GetFirstDayOfWeekAndAddDays(7);
         
-        convertedWorkouts.ForEach(workout => SetDayOfWeek(workout, firstDayOfUpcomingWeek));
+        convertedWorkouts.ForEach(workout => 
+            workout.Date = _dateTimeProvider.CalculateDateInUpcomingWeek(workout.DayOfWeek));
 
         var workoutTypes = await _workoutTypeRepository.GetAllAsync(false, token);
         var instructors = await _instructorRepository.GetAllAsync(false, token);
@@ -59,7 +59,8 @@ internal sealed class GenerateUpcomingWorkoutTimetableCommandHandler : IRequestH
             .ToList();
         
         var existingRealWorkouts = await _realWorkoutRepository
-            .GetAllFromDateRangeAsync(firstDayOfUpcomingWeek, firstDayOfUpcomingWeek.AddDays(7), true, token);
+            .GetAllFromDateRangeAsync(_dateTimeProvider.GetFirstDayOfUpcomingWeek(), 
+                _dateTimeProvider.GetLastDayOfUpcomingWeek(), true, token);
         
         var validator = new GenerateUpcomingWorkoutTimetableCommandValidator(newRealWorkouts, existingRealWorkouts);
         await validator.ValidateAndThrowAsync(request, token);
@@ -67,20 +68,5 @@ internal sealed class GenerateUpcomingWorkoutTimetableCommandHandler : IRequestH
         await _realWorkoutRepository.AddAsync(newRealWorkouts, token);
         _logger.LogInformation("Real workouts successfully generated");
         return Unit.Value;
-    }
-
-    private static void SetDayOfWeek(RepetitiveWorkoutToRealWorkoutDto workout, DateOnly firstDayOfUpcomingWeek)
-    {
-        workout.Date = workout.DayOfWeek switch
-        {
-            DayOfWeek.Monday => firstDayOfUpcomingWeek,
-            DayOfWeek.Tuesday => firstDayOfUpcomingWeek.AddDays(1),
-            DayOfWeek.Wednesday => firstDayOfUpcomingWeek.AddDays(2),
-            DayOfWeek.Thursday => firstDayOfUpcomingWeek.AddDays(3),
-            DayOfWeek.Friday => firstDayOfUpcomingWeek.AddDays(4),
-            DayOfWeek.Saturday => firstDayOfUpcomingWeek.AddDays(5),
-            DayOfWeek.Sunday => firstDayOfUpcomingWeek.AddDays(6),
-            _ => workout.Date
-        };
     }
 }
