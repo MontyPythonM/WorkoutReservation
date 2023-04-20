@@ -42,7 +42,8 @@ public sealed class Reservation : Entity
 
     protected override void Valid()
     {
-        // TODO add validation for enum 
+        if (!Enum.IsDefined(ReservationStatus))
+            throw new DomainException(this, nameof(ReservationStatus), ExceptionCode.ValueOutOfRange);
         
         if (RealWorkout is null)
             throw new DomainException(this, nameof(RealWorkout), ExceptionCode.CannotBeNull);

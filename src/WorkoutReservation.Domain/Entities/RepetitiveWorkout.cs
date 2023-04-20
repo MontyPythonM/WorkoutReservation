@@ -44,7 +44,8 @@ public sealed class RepetitiveWorkout : Entity
     
     protected override void Valid()
     {
-        // TODO add validation for enum 
+        if (!Enum.IsDefined(DayOfWeek))
+            throw new DomainException(this, nameof(DayOfWeek), ExceptionCode.ValueOutOfRange);
         
         if (MaxParticipantNumber <= 0)
             throw new DomainException(this, nameof(MaxParticipantNumber), ExceptionCode.ValueToSmall);

@@ -44,7 +44,8 @@ public sealed class WorkoutType : Entity
     
     protected override void Valid()
     {
-        // TODO add validation for enum 
+        if (!Enum.IsDefined(Intensity))
+            throw new DomainException(this, nameof(Intensity), ExceptionCode.ValueOutOfRange);
         
         if (string.IsNullOrWhiteSpace(Name))
             throw new DomainException(this, nameof(Name), ExceptionCode.CannotBeNullOrWhiteSpace);
