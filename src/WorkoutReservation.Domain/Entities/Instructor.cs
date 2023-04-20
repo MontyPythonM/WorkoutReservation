@@ -43,6 +43,9 @@ public sealed class Instructor : Entity
 
     protected override void Valid()
     {
+        if (!Enum.IsDefined(Gender.Value) && Gender is not null)
+            throw new DomainException(this, nameof(Gender), ExceptionCode.ValueOutOfRange);
+        
         if (string.IsNullOrWhiteSpace(FirstName))
             throw new DomainException(this, nameof(FirstName), ExceptionCode.CannotBeNullOrWhiteSpace);
 
