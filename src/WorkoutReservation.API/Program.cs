@@ -1,7 +1,10 @@
 using Hangfire;
+using Microsoft.Extensions.Options;
 using NLog.Web;
-using WorkoutReservation.API.Extensions;
+using Swashbuckle.AspNetCore.SwaggerGen;
+using WorkoutReservation.API.Hangfire;
 using WorkoutReservation.API.Middleware;
+using WorkoutReservation.API.Swagger;
 using WorkoutReservation.Application;
 using WorkoutReservation.Infrastructure;
 using WorkoutReservation.Infrastructure.Seeders;
@@ -18,11 +21,8 @@ builder.Services.AddControllers(options => options.UseDateOnlyTimeOnlyStringConv
 builder.Services.AddInfrastructureServices(builder.Configuration);
 builder.Services.AddApplicationServices(builder.Configuration);
 
-builder.Services.AddSwaggerGen(c =>
-{
-    c.UseDateOnlyTimeOnlyStringConverters();
-    c.EnableAnnotations();
-});
+builder.Services.AddSwaggerGen();
+builder.Services.AddTransient<IConfigureOptions<SwaggerGenOptions>, ConfigureSwaggerOptions>();
 
 builder.Services.AddScoped<ExceptionHandlingMiddleware>();
 builder.Services.AddCors(options =>
@@ -57,7 +57,7 @@ if (app.Environment.IsDevelopment())
 app.UseCors("WorkoutReservationUIOrigin");
 app.UseMiddleware<ExceptionHandlingMiddleware>();
 app.UseRouting();
-//app.UseHttpsRedirection();
+app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();
     

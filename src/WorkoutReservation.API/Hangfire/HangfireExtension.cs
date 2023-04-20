@@ -2,7 +2,7 @@
 using MediatR;
 using WorkoutReservation.Application.Features.RepetitiveWorkouts.Commands.GenerateUpcomingWorkoutTimetable;
 
-namespace WorkoutReservation.API.Extensions;
+namespace WorkoutReservation.API.Hangfire;
 
 internal sealed class HangfireExtension
 {

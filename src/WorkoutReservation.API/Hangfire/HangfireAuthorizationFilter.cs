@@ -5,9 +5,9 @@ using WorkoutReservation.Application.Common.Exceptions;
 using WorkoutReservation.Application.Contracts;
 using WorkoutReservation.Domain.Enums;
 
-namespace WorkoutReservation.API.Extensions;
+namespace WorkoutReservation.API.Hangfire;
 
-public class HangfireAuthorizationFilter : IDashboardAuthorizationFilter
+internal class HangfireAuthorizationFilter : IDashboardAuthorizationFilter
 {
     private readonly IServiceProvider _serviceProvider;
 
