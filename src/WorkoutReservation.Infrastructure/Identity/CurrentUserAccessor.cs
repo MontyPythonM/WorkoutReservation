@@ -1,10 +1,11 @@
 ﻿using System.Security.Claims;
 using Microsoft.AspNetCore.Http;
-using WorkoutReservation.Application.Common.Exceptions;
 using WorkoutReservation.Application.Contracts;
+using WorkoutReservation.Application.Exceptions;
 using WorkoutReservation.Domain.Entities;
 using WorkoutReservation.Infrastructure.Authentication;
-using WorkoutReservation.Infrastructure.Exceptions;
+using WorkoutReservation.Shared.Exceptions;
+using WorkoutReservation.Shared.Extensions;
 
 namespace WorkoutReservation.Infrastructure.Identity;
 
@@ -30,10 +31,11 @@ public sealed class CurrentUserAccessor : ICurrentUserAccessor
         return user;
     }
     
-    public Guid GetUserId() => Guid.TryParse(_httpContextAccessor.HttpContext?.User
-        .FindFirstValue(ClaimTypes.NameIdentifier), out var parsedUserId) ? 
-            parsedUserId : 
-            throw new ConversionException("Invalid current user name identifier");
+    public Guid? GetNullableUserId() => _httpContextAccessor.HttpContext?.User
+        .FindFirstValue(ClaimTypes.NameIdentifier).ToNullableGuid();
+
+    public Guid GetUserId() => _httpContextAccessor.HttpContext.User
+        .FindFirstValue(ClaimTypes.NameIdentifier).ToGuid();
 
     public IEnumerable<Claim> GetUserClaims() => _httpContextAccessor.HttpContext!.User.Claims.ToList();
 
@@ -42,6 +44,5 @@ public sealed class CurrentUserAccessor : ICurrentUserAccessor
         .Select(claim => claim.Value)
         .ToHashSet();
 
-    public bool IsUserContextExist() =>
-        _httpContextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier) is not null;
+    public bool IsUserContextExist() => GetNullableUserId() is not null;
 }

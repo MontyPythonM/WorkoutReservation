@@ -1,4 +1,4 @@
-﻿using WorkoutReservation.Domain.Attributes;
+﻿using WorkoutReservation.Shared.Attributes;
 
 namespace WorkoutReservation.Domain.Enums;
 

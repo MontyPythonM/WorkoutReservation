@@ -1,6 +1,5 @@
 ﻿using FluentValidation;
 using WorkoutReservation.Domain.Entities;
-using WorkoutReservation.Domain.Extensions;
 
 namespace WorkoutReservation.Application.Features.RealWorkouts.Commands.CreateRealWorkout;
 

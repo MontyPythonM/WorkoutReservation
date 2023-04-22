@@ -1,6 +1,7 @@
 ﻿using WorkoutReservation.Domain.Abstractions;
 using WorkoutReservation.Domain.Enums;
 using WorkoutReservation.Domain.Exceptions;
+using WorkoutReservation.Shared.Exceptions;
 
 namespace WorkoutReservation.Domain.Entities;
 
@@ -80,24 +81,27 @@ public sealed class ApplicationUser : Entity
         Valid();
     }
 
+    private const int FirstNameLengthLimit = 50;
+    private const int LastNameLengthLimit = 50;
+    
     protected override void Valid()
     {
-        if (!Enum.IsDefined(Gender.Value) && Gender is not null)
-            throw new DomainException(this, nameof(Gender), ExceptionCode.ValueOutOfRange);
+        if (!Enum.IsDefined(Gender.Value) && Gender.HasValue)
+            throw new GenderOutOfRangeException();
 
         if (string.IsNullOrWhiteSpace(FirstName))
-            throw new DomainException(this, nameof(FirstName), ExceptionCode.CannotBeNullOrWhiteSpace);
+            throw new FirstNameIsNullOrWhiteSpaceException();
 
-        if (FirstName.Length > 50)
-            throw new DomainException(this, nameof(FirstName), ExceptionCode.ValueToLarge);
+        if (FirstName.Length > FirstNameLengthLimit)
+            throw new FirstNameLengthExceedException(FirstNameLengthLimit);
 
         if (string.IsNullOrWhiteSpace(LastName))
-            throw new DomainException(this, nameof(LastName), ExceptionCode.CannotBeNullOrWhiteSpace);
+            throw new LastNameIsNullOrWhiteSpaceException();
 
-        if (LastName.Length > 50)
-            throw new DomainException(this, nameof(LastName), ExceptionCode.ValueToLarge);
-        
+        if (LastName.Length > LastNameLengthLimit)
+            throw new LastNameLengthExceedException(LastNameLengthLimit);
+
         if (DateOfBirth > DateOnly.FromDateTime(DateTime.Now) && DateOfBirth.HasValue)
-            throw new DomainException(this, nameof(DateOfBirth), ExceptionCode.ValueToLarge);
+            throw new DateOfBirthInFutureException();
     }
 }

@@ -1,7 +1,7 @@
 ﻿using MediatR;
 using Microsoft.Extensions.Logging;
-using WorkoutReservation.Application.Common.Exceptions;
 using WorkoutReservation.Application.Contracts;
+using WorkoutReservation.Application.Exceptions;
 using WorkoutReservation.Domain.Entities;
 
 namespace WorkoutReservation.Application.Features.Users.Commands.DeleteUser;
@@ -32,7 +32,7 @@ internal sealed class DeleteUserCommandHandler : IRequestHandler<DeleteUserComma
             throw new NotFoundException(nameof(ApplicationUser), request.Id.ToString());
         
         if (userToRemove.Id == currentUser.Id)
-            throw new BadRequestException("You cannot delete your own account by this endpoint. Use route: ./api/account/delete-account");
+            throw new UserCannotDeleteOwnAccount();
 
         userToRemove.SoftDeleteUser();
         await _userRepository.UpdateAsync(userToRemove, token);

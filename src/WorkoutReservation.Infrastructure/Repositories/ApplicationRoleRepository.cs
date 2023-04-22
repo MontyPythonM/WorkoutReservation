@@ -3,8 +3,8 @@ using TinyHelpers.Extensions;
 using WorkoutReservation.Application.Contracts;
 using WorkoutReservation.Domain.Entities;
 using WorkoutReservation.Domain.Enums;
-using WorkoutReservation.Infrastructure.Exceptions;
 using WorkoutReservation.Infrastructure.Persistence;
+using WorkoutReservation.Shared.Exceptions;
 
 namespace WorkoutReservation.Infrastructure.Repositories;
 

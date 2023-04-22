@@ -6,14 +6,14 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.VisualStudio.TestPlatform.TestHost;
 using Moq;
-using WorkoutReservation.Application.Common.Exceptions;
-using WorkoutReservation.Application.Common.MappingProfile;
 using WorkoutReservation.Application.Contracts;
+using WorkoutReservation.Application.Exceptions;
 using WorkoutReservation.Application.Features.RepetitiveWorkouts.Commands.GenerateUpcomingWorkoutTimetable;
+using WorkoutReservation.Application.MappingProfile;
 using WorkoutReservation.Domain.Entities;
 using WorkoutReservation.Domain.Enums;
-using WorkoutReservation.Domain.Exceptions;
-using WorkoutReservation.Domain.Extensions;
+using WorkoutReservation.Shared.Exceptions;
+using WorkoutReservation.Shared.Extensions;
 using Xunit;
 using static Moq.It;
 

@@ -26,6 +26,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\src\WorkoutReservation.Application\WorkoutReservation.Application.csproj" />
     <ProjectReference Include="..\..\src\WorkoutReservation.Infrastructure\WorkoutReservation.Infrastructure.csproj" />
+    <ProjectReference Include="..\..\src\WorkoutReservation.Shared\WorkoutReservation.Shared.csproj" />
   </ItemGroup>
 
   <ItemGroup>

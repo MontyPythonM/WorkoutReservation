@@ -1,7 +1,6 @@
 ﻿using FluentValidation;
-using WorkoutReservation.Domain.Entities;
 using WorkoutReservation.Domain.Enums;
-using WorkoutReservation.Domain.Extensions;
+using WorkoutReservation.Shared.Extensions;
 
 namespace WorkoutReservation.Application.Features.Reservations.Queries.GetUserReservationsList;
 

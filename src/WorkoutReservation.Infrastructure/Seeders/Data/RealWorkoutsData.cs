@@ -1,5 +1,4 @@
 ﻿using WorkoutReservation.Domain.Entities;
-using WorkoutReservation.Domain.Extensions;
 
 namespace WorkoutReservation.Infrastructure.Seeders.Data;
 

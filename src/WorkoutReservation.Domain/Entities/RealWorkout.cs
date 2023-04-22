@@ -1,7 +1,8 @@
 ﻿using WorkoutReservation.Domain.Abstractions;
 using WorkoutReservation.Domain.Enums;
 using WorkoutReservation.Domain.Exceptions;
-using WorkoutReservation.Domain.Extensions;
+using WorkoutReservation.Shared.Exceptions;
+using WorkoutReservation.Shared.Extensions;
 
 namespace WorkoutReservation.Domain.Entities;
 
@@ -50,7 +51,11 @@ public sealed class RealWorkout : Entity
     
     public void AddReservation(ApplicationUser user)
     {
-        ThrowIfRealWorkoutAlreadyStarted();
+        if (Date <= DateOnly.FromDateTime(DateTime.Now.Date) && EndTime < TimeOnly.FromDateTime(DateTime.Now))
+        {
+            throw new RealWorkoutAlreadyStartedException(Id);
+        }
+        
         Reservations.Add(new Reservation(this, user));
         IncrementCurrentParticipantNumber();
         Valid();
@@ -64,7 +69,10 @@ public sealed class RealWorkout : Entity
         if (reservation.ReservationStatus == ReservationStatus.Cancelled)
             throw new DomainException(this, nameof(Reservations), ExceptionCode.CannotBeOverwritten);
         
-        ThrowIfRealWorkoutAlreadyStarted();
+        if (Date <= DateOnly.FromDateTime(DateTime.Now.Date) && EndTime < TimeOnly.FromDateTime(DateTime.Now))
+        {
+            throw new RealWorkoutAlreadyStartedException(Id);
+        }
         
         reservation.SetReservationStatus(ReservationStatus.Cancelled);
         DecrementCurrentParticipantNumber();
@@ -92,41 +100,33 @@ public sealed class RealWorkout : Entity
     protected override void Valid()
     {
         if (MaxParticipantNumber <= 0)
-            throw new DomainException(this, nameof(MaxParticipantNumber), ExceptionCode.ValueToSmall);
+            throw new MaxParticipantNumberLessOrEqualZeroException();
 
         if (StartTime > EndTime)
-            throw new DomainException(this, nameof(EndTime), ExceptionCode.InvalidValue);
-        
+            throw new StartTimeGreaterThanEndTimeException(StartTime, EndTime);
+
         if (WorkoutType is null)
-            throw new DomainException(this, nameof(WorkoutType), ExceptionCode.CannotBeNull);
-        
+            throw new WorkoutTypeCannotBeNullException();
+
         if (Instructor is null)
-            throw new DomainException(this, nameof(Instructor), ExceptionCode.CannotBeNull);
-        
+            throw new InstructorCannotBeNullException();
+
         if (CurrentParticipantNumber > MaxParticipantNumber)
-            throw new DomainException(this, nameof(CurrentParticipantNumber), ExceptionCode.ValueToLarge);
+            throw new CurrentParticipantNumberGreaterThanMaxParticipantNumberException(CurrentParticipantNumber, MaxParticipantNumber);
 
         if (CurrentParticipantNumber < 0)
-            throw new DomainException(this, nameof(CurrentParticipantNumber), ExceptionCode.ValueToSmall);
-        
+            throw new CurrentParticipantNumberLessThanZeroException(CurrentParticipantNumber);
+
         if (Date > DateTime.Now.GetLastDayOfUpcomingWeek())
-            throw new DomainException(this, nameof(Date), ExceptionCode.ValueToLarge);
-        
+            throw new WorkoutDateExceededException();
+
         if (IsAnyUserHasMoreThanOneActiveReservation())
-            throw new DomainException(this, nameof(Reservations), ExceptionCode.AlreadyExists);
-        
+            throw new DuplicateReservationException();
+
         if (Reservations.Count < 0)
-            throw new DomainException(this, nameof(Reservations), ExceptionCode.ValueToSmall);
+            throw new ReservationsLessThanZeroException();
     }
     
-    private void ThrowIfRealWorkoutAlreadyStarted()
-    {
-        if (Date <= DateOnly.FromDateTime(DateTime.Now.Date) && EndTime < TimeOnly.FromDateTime(DateTime.Now))
-        {
-            throw new DomainException(this, nameof(EndTime), ExceptionCode.ValueToSmall);
-        }
-    }
-
     private bool IsAnyUserHasMoreThanOneActiveReservation()
     {
         var reservationsDistinctByUser = Reservations

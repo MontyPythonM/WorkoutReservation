@@ -3,9 +3,9 @@ using Microsoft.EntityFrameworkCore;
 using WorkoutReservation.Application.Contracts;
 using WorkoutReservation.Domain.Entities;
 using WorkoutReservation.Domain.Enums;
-using WorkoutReservation.Domain.Extensions;
 using WorkoutReservation.Infrastructure.Interfaces;
 using WorkoutReservation.Infrastructure.Persistence;
+using WorkoutReservation.Shared.Extensions;
 
 namespace WorkoutReservation.Infrastructure.Repositories;
 
