@@ -1,5 +1,6 @@
 ﻿using WorkoutReservation.Domain.Abstractions;
 using WorkoutReservation.Domain.Exceptions;
+using WorkoutReservation.Shared.Exceptions;
 
 namespace WorkoutReservation.Domain.Entities;
 
@@ -45,18 +46,18 @@ public sealed class RepetitiveWorkout : Entity
     protected override void Valid()
     {
         if (!Enum.IsDefined(DayOfWeek))
-            throw new DomainException(this, nameof(DayOfWeek), ExceptionCode.ValueOutOfRange);
-        
+            throw new DayOfWeekOutOfRangeException();
+
         if (MaxParticipantNumber <= 0)
-            throw new DomainException(this, nameof(MaxParticipantNumber), ExceptionCode.ValueToSmall);
+            throw new MaxParticipantNumberLessOrEqualZeroException();
 
         if (StartTime > EndTime)
-            throw new DomainException(this, nameof(EndTime), ExceptionCode.InvalidValue);
-        
+            throw new StartTimeGreaterThanEndTimeException(StartTime, EndTime);
+
         if (WorkoutType is null)
-            throw new DomainException(this, nameof(WorkoutType), ExceptionCode.CannotBeNull);
-        
+            throw new WorkoutTypeCannotBeNullException();
+
         if (Instructor is null)
-            throw new DomainException(this, nameof(Instructor), ExceptionCode.CannotBeNull);
+            throw new InstructorCannotBeNullException();
     }
 }

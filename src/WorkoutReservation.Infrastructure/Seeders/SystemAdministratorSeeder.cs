@@ -1,11 +1,10 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using WorkoutReservation.Application.Common.Exceptions;
 using WorkoutReservation.Domain.Entities;
+using WorkoutReservation.Infrastructure.Exceptions;
 using WorkoutReservation.Infrastructure.Interfaces;
 using WorkoutReservation.Infrastructure.Persistence;
-using WorkoutReservation.Infrastructure.Seeders.Data;
 using WorkoutReservation.Infrastructure.Settings;
 
 namespace WorkoutReservation.Infrastructure.Seeders;
@@ -32,7 +31,7 @@ public class SystemAdministratorSeeder
     public async Task SeedAsync(CancellationToken token = default)
     {
         if (await _dbContext.Database.CanConnectAsync(token) is false)
-            throw new DatabaseConnectionException();
+            throw new CannotConnectToDatabaseException();
 
         var anyAdmin = await _dbContext.ApplicationUsers
             .AnyAsync(x => x.ApplicationRoles.Contains(ApplicationRole.SystemAdministrator), token);

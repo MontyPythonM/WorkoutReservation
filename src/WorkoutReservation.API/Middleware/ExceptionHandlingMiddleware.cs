@@ -1,7 +1,8 @@
 ﻿using System.Net;
-using WorkoutReservation.Application.Common.Exceptions;
-using WorkoutReservation.Domain.Exceptions;
-using WorkoutReservation.Infrastructure.Exceptions;
+using FluentValidation;
+using WorkoutReservation.Application.Exceptions;
+using WorkoutReservation.Shared.Exceptions;
+using ApplicationException = WorkoutReservation.Shared.Exceptions.ApplicationException;
 
 namespace WorkoutReservation.API.Middleware;
 
@@ -25,29 +26,9 @@ public class ExceptionHandlingMiddleware : IMiddleware
             context.Response.StatusCode = (int)HttpStatusCode.BadRequest;
             await context.Response.WriteAsync(ex.Message);
         }
-        catch (InvalidCredentialsException ex)
-        {
-            context.Response.StatusCode = (int)HttpStatusCode.Conflict;
-            await context.Response.WriteAsync(ex.Message);
-        }
-        catch (BadRequestException ex)
+        catch (ValidationException ex)
         {
             context.Response.StatusCode = (int)HttpStatusCode.BadRequest;
-            await context.Response.WriteAsync(ex.Message);
-        }
-        catch (FluentValidation.ValidationException ex)
-        {
-            context.Response.StatusCode = (int)HttpStatusCode.BadRequest;
-            await context.Response.WriteAsync(ex.Message);
-        }
-        catch (NotFoundException ex)
-        {
-            context.Response.StatusCode = (int)HttpStatusCode.NotFound;
-            await context.Response.WriteAsync(ex.Message);
-        }
-        catch (UnauthorizedException ex)
-        {
-            context.Response.StatusCode = (int)HttpStatusCode.Unauthorized;
             await context.Response.WriteAsync(ex.Message);
         }
         catch (DomainException ex)
@@ -55,15 +36,16 @@ public class ExceptionHandlingMiddleware : IMiddleware
             context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
             await context.Response.WriteAsync(ex.Message);
         }
-        catch (InfrastructureException ex)
+        catch (ApplicationException ex)
         {
-            context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+            context.Response.StatusCode = ex.HttpStatusCode is not null
+                ? (int)ex.HttpStatusCode
+                : (int)HttpStatusCode.InternalServerError;
+                
             await context.Response.WriteAsync(ex.Message);
         }
-        catch (DatabaseConnectionException ex)
+        catch (InfrastructureException ex)
         {
-            _logger.LogError("Cannot connect with database.", ex);
-
             context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
             await context.Response.WriteAsync(ex.Message);
         }

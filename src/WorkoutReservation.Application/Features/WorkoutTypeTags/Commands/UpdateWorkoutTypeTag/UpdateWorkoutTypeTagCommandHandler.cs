@@ -1,6 +1,7 @@
 ﻿using MediatR;
-using WorkoutReservation.Application.Common.Exceptions;
 using WorkoutReservation.Application.Contracts;
+using WorkoutReservation.Application.Exceptions;
+using WorkoutReservation.Domain.Entities;
 
 namespace WorkoutReservation.Application.Features.WorkoutTypeTags.Commands.UpdateWorkoutTypeTag;
 
@@ -20,7 +21,7 @@ internal sealed class UpdateWorkoutTypeTagCommandHandler : IRequestHandler<Updat
         var workoutTypeTag = await _workoutTypeTagRepository.GetByIdAsync(request.Id, false, token);
         
         if (workoutTypeTag is null)
-            throw new NotFoundException($"Workout type tag with Id: {request.Id} not found.");
+            throw new NotFoundException(nameof(WorkoutTypeTag), request.Id.ToString());
         
         workoutTypeTag.Update(request.Tag, request.IsActive);
         

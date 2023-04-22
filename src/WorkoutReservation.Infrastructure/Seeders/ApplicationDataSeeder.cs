@@ -1,8 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using WorkoutReservation.Application.Common.Exceptions;
 using WorkoutReservation.Application.Contracts;
 using WorkoutReservation.Domain.Entities;
+using WorkoutReservation.Infrastructure.Exceptions;
 using WorkoutReservation.Infrastructure.Persistence;
 using WorkoutReservation.Infrastructure.Seeders.Data;
 
@@ -29,7 +29,7 @@ public class ApplicationDataSeeder
     public async Task SeedAsync(CancellationToken token = default)
     {
         if (await _dbContext.Database.CanConnectAsync(token) is false)
-            throw new DatabaseConnectionException();
+            throw new CannotConnectToDatabaseException();
         
         if (await _dbContext.Instructors.AnyAsync(token) || await _dbContext.WorkoutTypes.AnyAsync(token) ||
             await _dbContext.RealWorkouts.AnyAsync(token) || await _dbContext.RepetitiveWorkouts.AnyAsync(token))

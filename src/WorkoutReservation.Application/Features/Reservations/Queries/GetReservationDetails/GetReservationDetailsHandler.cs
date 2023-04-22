@@ -1,7 +1,7 @@
-﻿using AutoMapper;
-using MediatR;
-using WorkoutReservation.Application.Common.Exceptions;
+﻿using MediatR;
 using WorkoutReservation.Application.Contracts;
+using WorkoutReservation.Application.Exceptions;
+using WorkoutReservation.Domain.Entities;
 using WorkoutReservation.Domain.Enums;
 
 namespace WorkoutReservation.Application.Features.Reservations.Queries.GetReservationDetails;
@@ -26,7 +26,7 @@ public class GetReservationDetailsHandler : IRequestHandler<GetReservationDetail
     {
         var reservation = await _reservationRepository.GetDetailsByIdAsync(request.ReservationId, true, token);
         if (reservation is null)
-            throw new NotFoundException($"Reservation with Id: {request.ReservationId} not found.");
+            throw new NotFoundException(nameof(Reservation), request.ReservationId.ToString());
         
         var userPermissions = _currentUserAccessor.GetUserPermissions();
 
@@ -55,6 +55,6 @@ public class GetReservationDetailsHandler : IRequestHandler<GetReservationDetail
             };
         }
         
-        throw new UnauthorizedException();
+        throw new UserCannotSeeOtherUsersReservationException();
     }
 }

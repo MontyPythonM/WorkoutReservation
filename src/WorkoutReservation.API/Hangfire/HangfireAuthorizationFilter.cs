@@ -1,9 +1,4 @@
-﻿using System.Security.Claims;
-using Hangfire.Annotations;
-using Hangfire.Dashboard;
-using WorkoutReservation.Application.Common.Exceptions;
-using WorkoutReservation.Application.Contracts;
-using WorkoutReservation.Domain.Enums;
+﻿using Hangfire.Dashboard;
 
 namespace WorkoutReservation.API.Hangfire;
 

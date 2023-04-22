@@ -1,6 +1,7 @@
 ﻿using WorkoutReservation.Domain.Abstractions;
 using WorkoutReservation.Domain.Enums;
 using WorkoutReservation.Domain.Exceptions;
+using WorkoutReservation.Shared.Exceptions;
 
 namespace WorkoutReservation.Domain.Entities;
 
@@ -39,19 +40,21 @@ public sealed class Reservation : Entity
         Note = note;
         Valid();
     }
+    
+    private const int NoteLengthLimit = 3000;
 
     protected override void Valid()
     {
         if (!Enum.IsDefined(ReservationStatus))
-            throw new DomainException(this, nameof(ReservationStatus), ExceptionCode.ValueOutOfRange);
-        
+            throw new ReservationStatusOutOfRangeException();
+
         if (RealWorkout is null)
-            throw new DomainException(this, nameof(RealWorkout), ExceptionCode.CannotBeNull);
-        
+            throw new RealWorkoutCannotBeNullException();
+
         if (User is null)
-            throw new DomainException(this, nameof(User), ExceptionCode.CannotBeNull);
-        
-        if (Note.Length > 3000)
-            throw new DomainException(this, nameof(Note), ExceptionCode.ValueToLarge);
+            throw new ApplicationUserCannotBeNullException();
+
+        if (Note.Length > NoteLengthLimit)
+            throw new NoteLengthLimitExceedException(NoteLengthLimit);
     }
 }

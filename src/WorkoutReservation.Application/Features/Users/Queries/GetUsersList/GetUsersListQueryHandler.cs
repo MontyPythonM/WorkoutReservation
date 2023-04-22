@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
 using FluentValidation;
 using MediatR;
-using WorkoutReservation.Application.Common.Dtos;
 using WorkoutReservation.Application.Contracts;
+using WorkoutReservation.Application.Dtos;
 
 namespace WorkoutReservation.Application.Features.Users.Queries.GetUsersList;
 
