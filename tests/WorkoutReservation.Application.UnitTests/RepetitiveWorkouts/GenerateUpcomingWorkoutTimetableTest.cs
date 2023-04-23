@@ -59,6 +59,12 @@ public class GenerateUpcomingWorkoutTimetableTest : IClassFixture<Program>
                 new(10, new TimeOnly(10,00), new TimeOnly(12,00), DayOfWeek.Monday, WorkoutType, Instructor)
             });
 
+        var upcomingMonday = DateTime.Now.GetFirstDayOfUpcomingWeek();
+        
+        _dateTimeProviderMock
+            .Setup(x => x.CalculateDateInUpcomingWeek(DayOfWeek.Monday))
+            .Returns(upcomingMonday);
+        
         _instructorRepositoryMock
             .Setup(x => x.GetAllAsync(false, IsAny<CancellationToken>()))
             .ReturnsAsync(new List<Instructor>(){ Instructor });
@@ -67,8 +73,8 @@ public class GenerateUpcomingWorkoutTimetableTest : IClassFixture<Program>
             .Setup(x => x.GetAllAsync(false, IsAny<CancellationToken>()))
             .ReturnsAsync(new List<WorkoutType>(){ WorkoutType });
         
-        var upcomingMonday = DateTime.Now.GetFirstDayOfUpcomingWeek();
-        
+
+
         var existingRealWorkouts = new List<RealWorkout>
         {
             new(10, new TimeOnly(11,00), new TimeOnly(13,00), WorkoutType, Instructor, upcomingMonday, false),
@@ -84,7 +90,7 @@ public class GenerateUpcomingWorkoutTimetableTest : IClassFixture<Program>
         Func<Task<Unit>> result = async () => await GetHandler().Handle(GetCommand(), CancellationToken.None);
 
         // assert
-        await result.Should().ThrowAsync<DomainException>();
+        await result.Should().ThrowAsync<ValidationException>();
     }
     
     [Fact]
@@ -175,6 +181,12 @@ public class GenerateUpcomingWorkoutTimetableTest : IClassFixture<Program>
     
     private void PrepareRealWorkouts(List<RealWorkout> returns)
     {
+        _dateTimeProviderMock.Setup(x => x.GetFirstDayOfUpcomingWeek())
+            .Returns(DateTime.Now.GetFirstDayOfUpcomingWeek());
+        
+        _dateTimeProviderMock.Setup(x => x.GetLastDayOfUpcomingWeek())
+            .Returns(DateTime.Now.GetLastDayOfUpcomingWeek());
+        
         _realWorkoutRepositoryMock
             .Setup(x => x.GetAllFromDateRangeAsync(DateTime.Now.GetFirstDayOfUpcomingWeek(),
                 DateTime.Now.GetLastDayOfUpcomingWeek(), true, IsAny<CancellationToken>()))
