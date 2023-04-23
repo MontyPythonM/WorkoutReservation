@@ -32,6 +32,20 @@ public sealed class Instructor : Entity
         Valid();
     }
 
+    /// <summary>
+    /// For unit testing purposes only
+    /// </summary>
+    internal Instructor(int id, string firstName, string lastName, Gender? gender, string biography, string email)
+    {
+        Id = id;
+        FirstName = firstName;
+        LastName = lastName;
+        Gender = gender;
+        Biography = biography;
+        Email = email;
+        Valid();
+    }
+    
     public void Update(string firstName, string lastName, Gender? gender, string biography, string email)
     {
         FirstName = firstName;

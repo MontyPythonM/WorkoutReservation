@@ -21,8 +21,8 @@ namespace WorkoutReservation.Application.UnitTests.RepetitiveWorkouts;
 
 public class GenerateUpcomingWorkoutTimetableTest : IClassFixture<Program>
 {
-    private static readonly Instructor Instructor = new("FirstName", "LastName", Gender.Unspecified, "Biography", "EmailAddress");
-    private static readonly WorkoutType WorkoutType = new("Name", "Description", WorkoutIntensity.Extreme, new List<Instructor>(), new List<WorkoutTypeTag>());
+    private static readonly Instructor Instructor = new(1 ,"FirstName", "LastName", Gender.Unspecified, "Biography", "EmailAddress");
+    private static readonly WorkoutType WorkoutType = new(1, "Name", "Description", WorkoutIntensity.Extreme, new List<Instructor>(), new List<WorkoutTypeTag>());
     private readonly List<RepetitiveWorkout> _repetitiveWorkouts = new()
     {
         new RepetitiveWorkout(10, new TimeOnly(10,00), new TimeOnly(12,00), DayOfWeek.Monday, WorkoutType, Instructor), 
@@ -50,7 +50,6 @@ public class GenerateUpcomingWorkoutTimetableTest : IClassFixture<Program>
     public async Task Handle_ExistingAndNewRealWorkoutsTimeCollisionExist_ThrowValidationException(int testScenario)
     {
         // arrange
-        SetInstructorAndWorkoutTypeIds();
         _repetitiveWorkoutRepositoryMock
             .Setup(x => x.GetAllAsync(false, IsAny<CancellationToken>(), 
                 incl => incl.Instructor, incl => incl.WorkoutType))
@@ -73,8 +72,6 @@ public class GenerateUpcomingWorkoutTimetableTest : IClassFixture<Program>
             .Setup(x => x.GetAllAsync(false, IsAny<CancellationToken>()))
             .ReturnsAsync(new List<WorkoutType>(){ WorkoutType });
         
-
-
         var existingRealWorkouts = new List<RealWorkout>
         {
             new(10, new TimeOnly(11,00), new TimeOnly(13,00), WorkoutType, Instructor, upcomingMonday, false),
@@ -97,7 +94,6 @@ public class GenerateUpcomingWorkoutTimetableTest : IClassFixture<Program>
     public async Task Handle_ExistingAndNewRealWorkoutsTimeCollisionNotExist_NotThrowValidationException()
     {
         // arrange
-        SetInstructorAndWorkoutTypeIds();
         _repetitiveWorkoutRepositoryMock
             .Setup(x => x.GetAllAsync(false, IsAny<CancellationToken>(), 
                 incl => incl.Instructor, incl => incl.WorkoutType))
@@ -123,7 +119,6 @@ public class GenerateUpcomingWorkoutTimetableTest : IClassFixture<Program>
     public async Task Handle_TimeCollisionExistButItNotTheSameDay_NotThrowValidationException()
     {
         // arrange
-        SetInstructorAndWorkoutTypeIds();
         _repetitiveWorkoutRepositoryMock
             .Setup(x => x.GetAllAsync(false, IsAny<CancellationToken>(), 
                 incl => incl.Instructor, incl => incl.WorkoutType))
@@ -164,7 +159,6 @@ public class GenerateUpcomingWorkoutTimetableTest : IClassFixture<Program>
     public async Task Handle_ForValidData_NotThrowAnyException()
     {
         // arrange
-        SetInstructorAndWorkoutTypeIds();
         _repetitiveWorkoutRepositoryMock
             .Setup(x => x.GetAllAsync(false, IsAny<CancellationToken>(), 
                 incl => incl.Instructor, incl => incl.WorkoutType))
@@ -198,10 +192,4 @@ public class GenerateUpcomingWorkoutTimetableTest : IClassFixture<Program>
     private GenerateUpcomingWorkoutTimetableCommandHandler GetHandler() => 
         new(_repetitiveWorkoutRepositoryMock.Object, _realWorkoutRepositoryMock.Object, _mapperMock, _loggerMock,
         _instructorRepositoryMock.Object, _workoutTypeRepositoryMock.Object, _dateTimeProviderMock.Object);
-    
-    private void SetInstructorAndWorkoutTypeIds()
-    {
-        _repetitiveWorkouts[0].Instructor.Id = 1;
-        _repetitiveWorkouts[0].WorkoutType.Id = 1;
-    }
 }

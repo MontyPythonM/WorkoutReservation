@@ -32,6 +32,21 @@ public sealed class WorkoutType : Entity
         Valid();
     }
 
+    /// <summary>
+    /// For unit testing purposes only
+    /// </summary>
+    internal WorkoutType(int id, string name, string description, WorkoutIntensity intensity,
+        List<Instructor> instructors, List<WorkoutTypeTag> tags)
+    {
+        Id = id;
+        Name = name;
+        Description = description;
+        Intensity = intensity;
+        AddTags(tags);
+        AddInstructors(instructors);
+        Valid();
+    }
+    
     public void Update(string name, string description, WorkoutIntensity intensity, 
         List<Instructor> instructors, List<WorkoutTypeTag> tags)
     {
