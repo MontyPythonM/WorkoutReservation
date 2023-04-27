@@ -4,7 +4,7 @@ using WorkoutReservation.Domain.Entities;
 
 namespace WorkoutReservation.Application.Features.RepetitiveWorkouts.Commands.GenerateUpcomingWorkoutTimetable;
 
-internal sealed class GenerateUpcomingWorkoutTimetableCommandValidator : AbstractValidator<GenerateUpcomingWorkoutTimetableCommand>
+internal sealed class GenerateUpcomingWorkoutTimetableCommandValidator : AbstractValidator<GenerateUpcomingWorkoutsCommand>
 {
     public GenerateUpcomingWorkoutTimetableCommandValidator(IReadOnlyCollection<RealWorkout> newRealWorkouts, 
         IReadOnlyCollection<RealWorkout> existingRealWorkouts)

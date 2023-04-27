@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 using WorkoutReservation.API.Controllers.Base;
-using WorkoutReservation.API.Hangfire;
 using WorkoutReservation.Application.Contracts;
 using WorkoutReservation.Application.Features.RepetitiveWorkouts.Commands.CreateRepetitiveWorkout;
 using WorkoutReservation.Application.Features.RepetitiveWorkouts.Commands.DeleteAllRepetitiveWorkouts;
@@ -11,6 +10,7 @@ using WorkoutReservation.Application.Features.RepetitiveWorkouts.Commands.Update
 using WorkoutReservation.Application.Features.RepetitiveWorkouts.Queries.GetRepetitiveWorkoutList;
 using WorkoutReservation.Domain.Enums;
 using WorkoutReservation.Infrastructure.Authorization;
+using WorkoutReservation.Infrastructure.Hangfire;
 
 namespace WorkoutReservation.API.Controllers;
 
@@ -69,8 +69,8 @@ public class RepetitiveWorkoutController : ApiControllerBase
     [SwaggerOperation(Summary = "Forces generation of a new repetitive workouts list for the coming week")]
     public Task<IActionResult> GenerateNewUpcomingWeek(CancellationToken token)
     {
-        var command = new GenerateUpcomingWorkoutTimetableCommand(_currentUserAccessor.GetUserId());
-        HangfireExtension.EnqueueGenerateWorkoutsJob(command, token);
+        var command = new GenerateUpcomingWorkoutsCommand(_currentUserAccessor.GetUserId());
+        HangfireBackgroundJobsService.EnqueueGenerateWorkoutsJob(command);
         return Task.FromResult<IActionResult>(Ok());
     }
 }

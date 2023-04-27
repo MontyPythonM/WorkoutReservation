@@ -33,7 +33,7 @@ internal sealed class SelfDeleteUserCommandHandler : IRequestHandler<SelfDeleteU
         if (passwordCompareResult == PasswordVerificationResult.Failed)
             throw new InvalidCredentialException("Invalid password");
 
-        user.SoftDeleteUser();
+        user.SelfDeleteUser();
         
         await _userRepository.UpdateAsync(user, token);
         return Unit.Value;

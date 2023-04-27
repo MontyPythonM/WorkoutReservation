@@ -187,7 +187,7 @@ public class GenerateUpcomingWorkoutTimetableTest : IClassFixture<Program>
             .ReturnsAsync(returns);
     }
 
-    private GenerateUpcomingWorkoutTimetableCommand GetCommand() => new(Guid.NewGuid());
+    private GenerateUpcomingWorkoutsCommand GetCommand() => new(Guid.NewGuid());
     
     private GenerateUpcomingWorkoutTimetableCommandHandler GetHandler() => 
         new(_repetitiveWorkoutRepositoryMock.Object, _realWorkoutRepositoryMock.Object, _mapperMock, _loggerMock,

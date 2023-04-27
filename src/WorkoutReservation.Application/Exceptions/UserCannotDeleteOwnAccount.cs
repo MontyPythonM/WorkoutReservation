@@ -6,7 +6,7 @@ namespace WorkoutReservation.Application.Exceptions;
 public class UserCannotDeleteOwnAccount : ApplicationException
 {
     public UserCannotDeleteOwnAccount() 
-        : base("You cannot delete your own account by this endpoint. Use route: ./api/account/delete-account", 
+        : base("User cannot delete own account by this endpoint. Use route: ../api/account/delete-account", 
             System.Net.HttpStatusCode.Forbidden)
     {
     }

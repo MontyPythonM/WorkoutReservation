@@ -1,5 +1,6 @@
 ﻿using WorkoutReservation.Domain.Abstractions;
 using WorkoutReservation.Domain.Enums;
+using WorkoutReservation.Domain.Events;
 using WorkoutReservation.Domain.Exceptions;
 using WorkoutReservation.Shared.Exceptions;
 
@@ -14,7 +15,7 @@ public sealed class ApplicationUser : Entity
     public Gender? Gender { get; private set; }
     public DateOnly? DateOfBirth { get; private set; }
     public string PasswordHash { get; private set; }
-    public bool IsDeleted { get; set; }
+    public bool IsDeleted { get; private set; }
     public ICollection<Reservation> Reservations { get; private set; } = new List<Reservation>();
     public ICollection<ApplicationRole> ApplicationRoles { get; private set; } = new List<ApplicationRole>();
 
@@ -25,6 +26,7 @@ public sealed class ApplicationUser : Entity
     
     public ApplicationUser(string email, string firstName, string lastName, Gender? gender, DateOnly? dateOfBirth)
     {
+        Id = Guid.NewGuid();
         Email = email;
         FirstName = firstName;
         LastName = lastName;
@@ -61,10 +63,21 @@ public sealed class ApplicationUser : Entity
         return ApplicationRoles.Any(role => role.Id.Equals(appRole.Id));
     }
 
-    public void SoftDeleteUser()
+    public void SelfDeleteUser()
     {
-        AnonymizeSensitiveData();
+        var email = Email;        
         IsDeleted = true;
+        AnonymizeSensitiveData();
+        AddDomainEvent(new UserSelfDeletedEvent(Id, email, DateTime.Now));
+        Valid();
+    }
+
+    public void DeleteUser()
+    {
+        var email = Email;
+        IsDeleted = true;
+        AnonymizeSensitiveData();
+        AddDomainEvent(new UserDeletedByAdministratorEvent(Id, email, DateTime.Now));
         Valid();
     }
 
@@ -78,7 +91,6 @@ public sealed class ApplicationUser : Entity
         Gender = Enums.Gender.Unspecified;
         DateOfBirth = null;
         PasswordHash = string.Empty;
-        Valid();
     }
 
     private const int FirstNameLengthLimit = 50;

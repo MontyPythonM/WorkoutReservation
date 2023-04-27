@@ -1,5 +1,6 @@
 ﻿using System.Linq.Expressions;
 using WorkoutReservation.Domain.Entities;
+using WorkoutReservation.Domain.Enums;
 
 namespace WorkoutReservation.Application.Contracts;
 
@@ -13,4 +14,6 @@ public interface IApplicationUserRepository
     public Task<bool> IsEmailAlreadyTaken(string email, CancellationToken token);
     public Task<(List<ApplicationUser> users, int totalItems)> GetPagedAsync(IPagedQuery request,
         CancellationToken token);
+    public Task<List<ApplicationUser>> GetByRoleAsync(ApplicationRole role, bool asNoTracking = false,
+        CancellationToken token = default);
 }

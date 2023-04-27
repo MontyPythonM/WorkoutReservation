@@ -1038,6 +1038,32 @@ namespace WorkoutReservation.Infrastructure.Migrations
                     b.ToTable("WorkoutTypeTags", "WorkoutReservation");
                 });
 
+            modelBuilder.Entity("WorkoutReservation.Infrastructure.Outbox.OutboxMessage", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Content")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Error")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("OccurredOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("ProcessedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Type")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("OutboxMessages", "WorkoutReservation");
+                });
+
             modelBuilder.Entity("WorkoutTypeWorkoutTypeTag", b =>
                 {
                     b.Property<int>("WorkoutTypeTagsId")

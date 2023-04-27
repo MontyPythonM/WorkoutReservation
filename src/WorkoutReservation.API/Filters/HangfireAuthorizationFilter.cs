@@ -1,6 +1,6 @@
 ﻿using Hangfire.Dashboard;
 
-namespace WorkoutReservation.API.Hangfire;
+namespace WorkoutReservation.API.Filters;
 
 internal class HangfireAuthorizationFilter : IDashboardAuthorizationFilter
 {

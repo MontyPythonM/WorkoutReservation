@@ -1,5 +1,7 @@
-﻿using System.Text;
+﻿using System.Reflection;
+using System.Text;
 using Hangfire;
+using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -7,13 +9,17 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
+using Quartz;
 using WorkoutReservation.Application.Contracts;
 using WorkoutReservation.Domain.Entities;
 using WorkoutReservation.Infrastructure.Authentication;
 using WorkoutReservation.Infrastructure.Authorization;
+using WorkoutReservation.Infrastructure.BackgroundJobs;
 using WorkoutReservation.Infrastructure.Identity;
 using WorkoutReservation.Infrastructure.Interfaces;
+using WorkoutReservation.Infrastructure.Outbox;
 using WorkoutReservation.Infrastructure.Persistence;
+using WorkoutReservation.Infrastructure.Persistence.Interceptors;
 using WorkoutReservation.Infrastructure.Repositories;
 using WorkoutReservation.Infrastructure.Seeders;
 using WorkoutReservation.Infrastructure.Seeders.Data;
@@ -51,24 +57,33 @@ public static class ConfigureInfrastructureServices
         configuration.GetSection("FirstAdmin").Bind(systemAdministratorSettings);
         
         services.AddAuthorization();
+        services.AddSingleton<IDateTimeProvider, DateTimeProvider>();
+        services.AddSingleton<IAuthorProvider, AuthorProvider>();
+        services.AddSingleton<DomainEventsToMessagesInterceptor>();
+        services.AddSingleton<AuditableEntitiesInterceptor>();
         services.AddSingleton<IAuthorizationHandler, PermissionAuthorizationHandler>();
         services.AddSingleton<IAuthorizationPolicyProvider, PermissionAuthorizationPolicyProvider>();
         services.AddSingleton(authenticationSettings);
         services.AddSingleton(systemAdministratorSettings);
 
         services.AddHttpContextAccessor();
-        
-        services.AddDbContext<AppDbContext>(options =>
-            options.UseSqlServer(configuration.GetConnectionString("localDbConnection")));
 
+        services.AddDbContext<AppDbContext>((serviceProvider, optionsBuilder) =>
+        {
+            optionsBuilder.UseSqlServer(configuration.GetConnectionString("localDbConnection"))
+                .AddInterceptors(serviceProvider.GetService<DomainEventsToMessagesInterceptor>())
+                .AddInterceptors(serviceProvider.GetService<AuditableEntitiesInterceptor>());
+        });
+        
         services.AddHangfire(options =>
             options.UseSqlServerStorage(configuration.GetConnectionString("localDbConnection")));
-
         services.AddHangfireServer();
+
+        services.AddQuartzBackgroundJobs();
+        services.AddQuartzHostedService();
+        
         services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
         services.AddScoped<ICurrentUserAccessor, CurrentUserAccessor>();
-        services.AddScoped<IAuthorProvider, AuthorProvider>();
-        services.AddScoped<IDateTimeProvider, DateTimeProvider>();
         services.AddScoped<IApplicationRoleRepository, ApplicationRoleRepository>();
         services.AddScoped<IApplicationUserRepository, ApplicationUserRepository>();
         services.AddScoped<IInstructorRepository, InstructorRepository>();
@@ -81,8 +96,14 @@ public static class ConfigureInfrastructureServices
         services.AddScoped<IJwtProvider, JwtProvider>();
         services.AddScoped<IPasswordHasher<ApplicationUser>, PasswordHasher<ApplicationUser>>();
         services.AddScoped<IPermissionService, PermissionService>();
+        services.AddScoped<IEmailSender, EmailSender>();
+        services.AddScoped<IEmailBuilder, EmailBuilder>();
+        services.Configure<SendgridEmailSettings>(configuration.GetSection(SendgridEmailSettings.SectionName));
+
         services.AddScoped<SystemAdministratorSeeder>();
         services.AddScoped<ApplicationDataSeeder>();
+        
+        services.AddMediatR(Assembly.GetExecutingAssembly());
         
         GlobalJobFilters.Filters.Add(new AutomaticRetryAttribute { Attempts = 0 , LogEvents = true });
 

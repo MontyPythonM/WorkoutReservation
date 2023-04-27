@@ -8,9 +8,9 @@ using WorkoutReservation.Domain.Entities;
 
 namespace WorkoutReservation.Application.Features.RepetitiveWorkouts.Commands.GenerateUpcomingWorkoutTimetable;
 
-public record GenerateUpcomingWorkoutTimetableCommand(Guid? UserId) : IRequest;
+public record GenerateUpcomingWorkoutsCommand(Guid? UserId) : IRequest;
 
-internal sealed class GenerateUpcomingWorkoutTimetableCommandHandler : IRequestHandler<GenerateUpcomingWorkoutTimetableCommand>
+internal sealed class GenerateUpcomingWorkoutTimetableCommandHandler : IRequestHandler<GenerateUpcomingWorkoutsCommand>
 {
     private readonly IRepetitiveWorkoutRepository _repetitiveRepository;
     private readonly IRealWorkoutRepository _realWorkoutRepository;
@@ -33,7 +33,7 @@ internal sealed class GenerateUpcomingWorkoutTimetableCommandHandler : IRequestH
         _dateTimeProvider = dateTimeProvider;
     }
 
-    public async Task<Unit> Handle(GenerateUpcomingWorkoutTimetableCommand request, CancellationToken token)
+    public async Task<Unit> Handle(GenerateUpcomingWorkoutsCommand request, CancellationToken token)
     {
         var repetitiveWorkouts = await _repetitiveRepository
             .GetAllAsync(false, token, incl => incl.Instructor, incl => incl.WorkoutType);

@@ -2,11 +2,12 @@ using Hangfire;
 using Microsoft.Extensions.Options;
 using NLog.Web;
 using Swashbuckle.AspNetCore.SwaggerGen;
-using WorkoutReservation.API.Hangfire;
+using WorkoutReservation.API.Filters;
 using WorkoutReservation.API.Middleware;
 using WorkoutReservation.API.Swagger;
 using WorkoutReservation.Application;
 using WorkoutReservation.Infrastructure;
+using WorkoutReservation.Infrastructure.Hangfire;
 using WorkoutReservation.Infrastructure.Seeders;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -52,6 +53,12 @@ if (app.Environment.IsDevelopment())
     await scope.ServiceProvider
         .GetService<ApplicationDataSeeder>()
         .SeedAsync();
+    
+    app.UseHangfireDashboard("/hangfire", new DashboardOptions
+    {
+        Authorization = new[] { new HangfireAuthorizationFilter(app.Services) },
+        IsReadOnlyFunc = _ => false
+    });
 }
 
 app.UseCors("WorkoutReservationUIOrigin");
@@ -60,13 +67,8 @@ app.UseRouting();
 app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();
-    
-app.UseHangfireDashboard("/hangfire", new DashboardOptions
-{
-    Authorization = new[] { new HangfireAuthorizationFilter(app.Services) },
-    IsReadOnlyFunc = _ => true
-});
-HangfireExtension.AddGenerateWorkoutsRecurringJob();
+
+HangfireBackgroundJobsService.AddRecurringJob();
     
 app.MapControllers();
 app.Run();
