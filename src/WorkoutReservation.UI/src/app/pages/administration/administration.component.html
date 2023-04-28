@@ -1,13 +1,4 @@
-﻿<div class="button-section">
-  <dx-button
-    [disabled]="!(hasPermission(permissions.OpenHangfireDashboard) | async)!"
-    text="Open Hangfire dashboard"
-    type="default"
-    icon="chart"
-    (onClick)="openHangfireDashboard()">
-  </dx-button>
-</div>
-<dx-tab-panel
+﻿<dx-tab-panel
   id="tab-panel"
   [dataSource]="tabs"
   [animationEnabled]="true"

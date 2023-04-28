@@ -1,6 +1,6 @@
-﻿namespace WorkoutReservation.Infrastructure.Outbox;
+﻿namespace WorkoutReservation.Infrastructure.Messages;
 
-public sealed class OutboxMessage
+public sealed class Message
 {
     public Guid Id { get; set; }
     public string Type { get; set; } = string.Empty;

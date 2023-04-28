@@ -2,7 +2,7 @@
 using Newtonsoft.Json;
 using WorkoutReservation.Application.Contracts;
 using WorkoutReservation.Domain.Abstractions;
-using WorkoutReservation.Infrastructure.Outbox;
+using WorkoutReservation.Infrastructure.Messages;
 
 namespace WorkoutReservation.Infrastructure.Persistence.Interceptors;
 
@@ -34,7 +34,7 @@ internal sealed class DomainEventsToMessagesInterceptor : SaveChangesInterceptor
                 entity.ClearDomainEvents();
                 return domainEvents;
             })
-            .Select(domainEvent => new OutboxMessage
+            .Select(domainEvent => new Message
             {
                 Id = Guid.NewGuid(),
                 Type = domainEvent.GetType().Name,
@@ -47,7 +47,7 @@ internal sealed class DomainEventsToMessagesInterceptor : SaveChangesInterceptor
             })
             .ToList();
         
-        dbContext.Set<OutboxMessage>().AddRange(outboxMessages);
+        dbContext.Set<Message>().AddRange(outboxMessages);
         
         return base.SavingChangesAsync(eventData, result, cancellationToken);
     }

@@ -1,12 +1,13 @@
 ﻿using FluentValidation;
 using Microsoft.IdentityModel.Tokens;
+using WorkoutReservation.Application.Features.RepetitiveWorkouts.Commands.GenerateUpcomingWorkouts;
 using WorkoutReservation.Domain.Entities;
 
-namespace WorkoutReservation.Application.Features.RepetitiveWorkouts.Commands.GenerateUpcomingWorkoutTimetable;
+namespace WorkoutReservation.Application.Features.RepetitiveWorkouts.Commands.GenerateUpcomingWorkouts;
 
-internal sealed class GenerateUpcomingWorkoutTimetableCommandValidator : AbstractValidator<GenerateUpcomingWorkoutsCommand>
+internal sealed class GenerateUpcomingWorkoutsValidator : AbstractValidator<GenerateUpcomingWorkoutsCommand>
 {
-    public GenerateUpcomingWorkoutTimetableCommandValidator(IReadOnlyCollection<RealWorkout> newRealWorkouts, 
+    public GenerateUpcomingWorkoutsValidator(IReadOnlyCollection<RealWorkout> newRealWorkouts, 
         IReadOnlyCollection<RealWorkout> existingRealWorkouts)
     {
         RuleFor(x => x).Custom((value, context) =>

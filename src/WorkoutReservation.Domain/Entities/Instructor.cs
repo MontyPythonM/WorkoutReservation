@@ -1,4 +1,5 @@
-﻿using WorkoutReservation.Domain.Abstractions;
+﻿using System.ComponentModel.DataAnnotations;
+using WorkoutReservation.Domain.Abstractions;
 using WorkoutReservation.Domain.Enums;
 using WorkoutReservation.Domain.Exceptions;
 using WorkoutReservation.Shared.Exceptions;
@@ -83,6 +84,7 @@ public sealed class Instructor : Entity
         if (string.IsNullOrWhiteSpace(Email))
             throw new EmailCannotBeNullOrWhitespaceException();
         
-        // TODO: add email format policy
+        if(!new EmailAddressAttribute().IsValid(Email))
+            throw new InvalidEmailFormatException(Email);
     }
 }

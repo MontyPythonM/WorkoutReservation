@@ -11,9 +11,4 @@ public class DomainException : Exception
     public DomainException(string message) : base(message)
     {
     }
-    
-    public DomainException(object entity, string property, ExceptionCode code) : 
-        base($"{entity.ToString()}.{property} - Validation exception: {code.StringValue()}")
-    {
-    }
 }

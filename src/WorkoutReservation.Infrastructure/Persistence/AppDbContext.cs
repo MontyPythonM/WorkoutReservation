@@ -3,7 +3,7 @@ using WorkoutReservation.Application.Contracts;
 using WorkoutReservation.Domain.Abstractions;
 using WorkoutReservation.Domain.Entities;
 using WorkoutReservation.Infrastructure.Interfaces;
-using WorkoutReservation.Infrastructure.Outbox;
+using WorkoutReservation.Infrastructure.Messages;
 
 namespace WorkoutReservation.Infrastructure.Persistence;
 
@@ -25,7 +25,7 @@ public sealed class AppDbContext : DbContext
     public DbSet<ApplicationRole> ApplicationRoles { get; set; }
     public DbSet<ApplicationPermission> ApplicationPermissions { get; set; }
     public DbSet<Reservation> Reservations { get; set; }
-    public DbSet<OutboxMessage> OutboxMessages { get; set; }
+    public DbSet<Message> Messages { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

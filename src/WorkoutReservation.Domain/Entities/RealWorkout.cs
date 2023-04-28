@@ -64,15 +64,13 @@ public sealed class RealWorkout : Entity
     public void CancelReservation(Reservation reservation)
     {
         if (reservation is null)
-            throw new DomainException(this, nameof(Reservations), ExceptionCode.NotExists);
+            throw new ReservationCannotBeNullException();
 
         if (reservation.ReservationStatus == ReservationStatus.Cancelled)
-            throw new DomainException(this, nameof(Reservations), ExceptionCode.CannotBeOverwritten);
+            throw new ReservationAlreadyCancelledException();
         
         if (Date <= DateOnly.FromDateTime(DateTime.Now.Date) && EndTime < TimeOnly.FromDateTime(DateTime.Now))
-        {
             throw new RealWorkoutAlreadyStartedException(Id);
-        }
         
         reservation.SetReservationStatus(ReservationStatus.Cancelled);
         DecrementCurrentParticipantNumber();

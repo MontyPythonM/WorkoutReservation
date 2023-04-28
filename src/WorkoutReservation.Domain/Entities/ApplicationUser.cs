@@ -1,4 +1,5 @@
-﻿using WorkoutReservation.Domain.Abstractions;
+﻿using System.ComponentModel.DataAnnotations;
+using WorkoutReservation.Domain.Abstractions;
 using WorkoutReservation.Domain.Enums;
 using WorkoutReservation.Domain.Events;
 using WorkoutReservation.Domain.Exceptions;
@@ -19,6 +20,8 @@ public sealed class ApplicationUser : Entity
     public ICollection<Reservation> Reservations { get; private set; } = new List<Reservation>();
     public ICollection<ApplicationRole> ApplicationRoles { get; private set; } = new List<ApplicationRole>();
 
+    private const string AnonymizedValue = "ANONYMIZED";
+    
     private ApplicationUser()
     {
         // required for EF Core
@@ -83,11 +86,9 @@ public sealed class ApplicationUser : Entity
 
     private void AnonymizeSensitiveData()
     {
-        const string anonymizedValue = "ANONYMIZED";
-
-        Email = anonymizedValue;
-        FirstName = anonymizedValue;
-        LastName = anonymizedValue;
+        Email = AnonymizedValue;
+        FirstName = AnonymizedValue;
+        LastName = AnonymizedValue;
         Gender = Enums.Gender.Unspecified;
         DateOfBirth = null;
         PasswordHash = string.Empty;
@@ -115,5 +116,8 @@ public sealed class ApplicationUser : Entity
 
         if (DateOfBirth > DateOnly.FromDateTime(DateTime.Now) && DateOfBirth.HasValue)
             throw new DateOfBirthInFutureException();
+        
+        if(!new EmailAddressAttribute().IsValid(Email) && Email != AnonymizedValue)
+            throw new InvalidEmailFormatException(Email);
     }
 }

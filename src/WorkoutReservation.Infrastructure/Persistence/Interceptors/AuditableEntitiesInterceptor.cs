@@ -20,11 +20,10 @@ internal sealed class AuditableEntitiesInterceptor : SaveChangesInterceptor
     public override ValueTask<InterceptionResult<int>> SavingChangesAsync(DbContextEventData eventData, 
         InterceptionResult<int> result, CancellationToken cancellationToken = default)
     {
-        var dbContext = eventData.Context;
         var now = _dateTimeProvider.Now;
         var author = _authorProvider.GetAuthor();
         
-        foreach (var entityEntry in dbContext.ChangeTracker.Entries<Entity>())
+        foreach (var entityEntry in eventData.Context.ChangeTracker.Entries<Entity>())
         {
             if (entityEntry.State == EntityState.Added)
             {

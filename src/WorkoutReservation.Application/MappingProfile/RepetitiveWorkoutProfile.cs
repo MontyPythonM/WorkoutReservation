@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using WorkoutReservation.Application.Features.RepetitiveWorkouts.Commands.GenerateUpcomingWorkoutTimetable;
+using WorkoutReservation.Application.Features.RepetitiveWorkouts.Commands.GenerateUpcomingWorkouts;
 using WorkoutReservation.Domain.Entities;
 
 namespace WorkoutReservation.Application.MappingProfile;

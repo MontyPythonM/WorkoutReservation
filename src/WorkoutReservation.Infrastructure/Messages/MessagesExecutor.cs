@@ -7,18 +7,18 @@ using WorkoutReservation.Application.Contracts;
 using WorkoutReservation.Infrastructure.Persistence;
 using WorkoutReservation.Shared.Events;
 
-namespace WorkoutReservation.Infrastructure.Outbox;
+namespace WorkoutReservation.Infrastructure.Messages;
 
 [DisallowConcurrentExecution]
-internal sealed class OutboxMessagesExecutor : IJob
+internal sealed class MessagesExecutor : IJob
 {
     private readonly IPublisher _publisher;
     private readonly AppDbContext _dbContext;
-    private readonly ILogger<OutboxMessagesExecutor> _logger;
+    private readonly ILogger<MessagesExecutor> _logger;
     private readonly IDateTimeProvider _dateTimeProvider;
 
-    public OutboxMessagesExecutor(IPublisher publisher, AppDbContext dbContext, 
-        ILogger<OutboxMessagesExecutor> logger, IDateTimeProvider dateTimeProvider)
+    public MessagesExecutor(IPublisher publisher, AppDbContext dbContext, 
+        ILogger<MessagesExecutor> logger, IDateTimeProvider dateTimeProvider)
     {
         _publisher = publisher;
         _dbContext = dbContext;
@@ -28,7 +28,7 @@ internal sealed class OutboxMessagesExecutor : IJob
 
     public async Task Execute(IJobExecutionContext context)
     {
-        var messages = await _dbContext.OutboxMessages
+        var messages = await _dbContext.Messages
             .Where(message => message.ProcessedOn == null)
             .Take(10)
             .ToListAsync(context.CancellationToken);

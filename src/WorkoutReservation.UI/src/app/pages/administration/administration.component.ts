@@ -29,8 +29,4 @@ export class AdministrationComponent extends BaseComponent {
   setCurrentTab = (): number => {
     return this.tabs.findIndex(tab => tab.url === this.router.url);
   }
-
-  openHangfireDashboard() {
-    return window.open(environment.serverUrl + pageUrls.hangfire, "Hangfire Dashboard");
-  }
 }

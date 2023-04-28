@@ -41,7 +41,7 @@ internal sealed class CreateRepetitiveWorkoutCommandHandler : IRequestHandler<Cr
         await validator.ValidateAndThrowAsync(request, token);
 
         var repetitiveWorkout = new RepetitiveWorkout(request.MaxParticipantNumber, request.StartTime, 
-            request.EndTime, request.DayOfWeek, workoutType, instructor);
+            request.EndTime, request.DayOfWeek, workoutType, instructor, false);
         
         await _repetitiveWorkoutRepository.AddAsync(repetitiveWorkout, token);
         return Unit.Value;

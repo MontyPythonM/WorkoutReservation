@@ -1,4 +1,4 @@
-﻿namespace WorkoutReservation.Application.Features.RepetitiveWorkouts.Commands.GenerateUpcomingWorkoutTimetable;
+﻿namespace WorkoutReservation.Application.Features.RepetitiveWorkouts.Commands.GenerateUpcomingWorkouts;
 
 internal class RepetitiveWorkoutToRealWorkoutDto
 {

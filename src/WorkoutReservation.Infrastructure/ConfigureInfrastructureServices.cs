@@ -1,6 +1,5 @@
 ﻿using System.Reflection;
 using System.Text;
-using Hangfire;
 using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
@@ -17,7 +16,6 @@ using WorkoutReservation.Infrastructure.Authorization;
 using WorkoutReservation.Infrastructure.BackgroundJobs;
 using WorkoutReservation.Infrastructure.Identity;
 using WorkoutReservation.Infrastructure.Interfaces;
-using WorkoutReservation.Infrastructure.Outbox;
 using WorkoutReservation.Infrastructure.Persistence;
 using WorkoutReservation.Infrastructure.Persistence.Interceptors;
 using WorkoutReservation.Infrastructure.Repositories;
@@ -75,10 +73,6 @@ public static class ConfigureInfrastructureServices
                 .AddInterceptors(serviceProvider.GetService<AuditableEntitiesInterceptor>());
         });
         
-        services.AddHangfire(options =>
-            options.UseSqlServerStorage(configuration.GetConnectionString("localDbConnection")));
-        services.AddHangfireServer();
-
         services.AddQuartzBackgroundJobs();
         services.AddQuartzHostedService();
         
@@ -105,8 +99,6 @@ public static class ConfigureInfrastructureServices
         
         services.AddMediatR(Assembly.GetExecutingAssembly());
         
-        GlobalJobFilters.Filters.Add(new AutomaticRetryAttribute { Attempts = 0 , LogEvents = true });
-
         return services;
     }
 }

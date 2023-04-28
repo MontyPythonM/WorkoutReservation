@@ -26,7 +26,7 @@ public enum Permission
     DeleteRepetitiveWorkout,
     DeleteAllRepetitiveWorkouts,
     GenerateNewUpcomingWeek,
-    OpenHangfireDashboard,
+    CanSeeApplicationStatistics,
     
     GetOwnReservations,
     GetAllReservations,
