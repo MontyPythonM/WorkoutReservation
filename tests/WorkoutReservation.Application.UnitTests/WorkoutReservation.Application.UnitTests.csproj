@@ -17,15 +17,12 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
-    <PackageReference Include="coverlet.collector" Version="3.1.2">
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-      <PrivateAssets>all</PrivateAssets>
-    </PackageReference>
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\WorkoutReservation.Application\WorkoutReservation.Application.csproj" />
     <ProjectReference Include="..\..\src\WorkoutReservation.Infrastructure\WorkoutReservation.Infrastructure.csproj" />
+    <ProjectReference Include="..\..\src\WorkoutReservation.Shared\WorkoutReservation.Shared.csproj" />
   </ItemGroup>
 
   <ItemGroup>

@@ -9,7 +9,6 @@ internal sealed class UpdateRepetitiveWorkoutCommandValidator : AbstractValidato
         IEnumerable<RepetitiveWorkout> dailyWorkouts)
     {
         RuleFor(x => x.DayOfWeek).IsInEnum();
-        RuleFor(x => x.MaxParticipantNumber).NotEmpty();
         RuleFor(x => x.WorkoutTypeId).NotEmpty();
         RuleFor(x => x.InstructorId).NotEmpty();
         

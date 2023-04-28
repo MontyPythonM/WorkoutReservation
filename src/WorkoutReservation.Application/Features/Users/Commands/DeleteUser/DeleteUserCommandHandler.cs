@@ -1,7 +1,6 @@
 ﻿using MediatR;
-using Microsoft.Extensions.Logging;
-using WorkoutReservation.Application.Common.Exceptions;
 using WorkoutReservation.Application.Contracts;
+using WorkoutReservation.Application.Exceptions;
 using WorkoutReservation.Domain.Entities;
 
 namespace WorkoutReservation.Application.Features.Users.Commands.DeleteUser;
@@ -12,32 +11,27 @@ internal sealed class DeleteUserCommandHandler : IRequestHandler<DeleteUserComma
 {
     private readonly IApplicationUserRepository _userRepository;
     private readonly ICurrentUserAccessor _currentUserAccessor;
-    private readonly ILogger<DeleteUserCommandHandler> _logger;
 
     public DeleteUserCommandHandler(IApplicationUserRepository userRepository,
-        ICurrentUserAccessor currentUserAccessor,
-        ILogger<DeleteUserCommandHandler> logger)
+        ICurrentUserAccessor currentUserAccessor)
     {
         _userRepository = userRepository;
         _currentUserAccessor = currentUserAccessor;
-        _logger = logger;
     }
 
     public async Task<Unit> Handle(DeleteUserCommand request, CancellationToken token)
     {
-        var currentUser = await _currentUserAccessor.GetUserAsync(token);
         var userToRemove = await _userRepository.GetByGuidAsync(request.Id, false, token);
 
         if (userToRemove is null)
             throw new NotFoundException(nameof(ApplicationUser), request.Id.ToString());
         
-        if (userToRemove.Id == currentUser.Id)
-            throw new BadRequestException("You cannot delete your own account by this endpoint. Use route: ./api/account/delete-account");
+        if (userToRemove.Id == _currentUserAccessor.GetUserId())
+            throw new UserCannotDeleteOwnAccount();
 
-        userToRemove.SoftDeleteUser();
-        await _userRepository.UpdateAsync(userToRemove, token);
+        userToRemove.DeleteUser();
         
-        _logger.LogInformation($"User with Id: {request.Id} was soft deleted by user Id: {currentUser.Id}.");
+        await _userRepository.UpdateAsync(userToRemove, token);
         return Unit.Value;
     }
 }

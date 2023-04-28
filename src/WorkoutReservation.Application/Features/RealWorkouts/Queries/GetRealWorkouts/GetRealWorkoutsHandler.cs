@@ -2,7 +2,6 @@
 using WorkoutReservation.Application.Contracts;
 using WorkoutReservation.Domain.Entities;
 using WorkoutReservation.Domain.Enums;
-using WorkoutReservation.Domain.Extensions;
 
 namespace WorkoutReservation.Application.Features.RealWorkouts.Queries.GetRealWorkouts;
 

@@ -5,5 +5,13 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>disable</Nullable>
   </PropertyGroup>
+  
+  <ItemGroup>
+    <ProjectReference Include="..\WorkoutReservation.Shared\WorkoutReservation.Shared.csproj" />
+  </ItemGroup>
 
+  <ItemGroup>
+    <InternalsVisibleTo Include="WorkoutReservation.Application.UnitTests" />
+  </ItemGroup>
+  
 </Project>

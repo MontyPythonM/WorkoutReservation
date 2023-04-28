@@ -1,6 +1,7 @@
 ﻿using WorkoutReservation.Domain.Abstractions;
 using WorkoutReservation.Domain.Enums;
 using WorkoutReservation.Domain.Exceptions;
+using WorkoutReservation.Shared.Exceptions;
 
 namespace WorkoutReservation.Domain.Entities;
 
@@ -31,6 +32,21 @@ public sealed class WorkoutType : Entity
         Valid();
     }
 
+    /// <summary>
+    /// For unit testing purposes only
+    /// </summary>
+    internal WorkoutType(int id, string name, string description, WorkoutIntensity intensity,
+        List<Instructor> instructors, List<WorkoutTypeTag> tags)
+    {
+        Id = id;
+        Name = name;
+        Description = description;
+        Intensity = intensity;
+        AddTags(tags);
+        AddInstructors(instructors);
+        Valid();
+    }
+    
     public void Update(string name, string description, WorkoutIntensity intensity, 
         List<Instructor> instructors, List<WorkoutTypeTag> tags)
     {
@@ -42,21 +58,25 @@ public sealed class WorkoutType : Entity
         Valid();
     }
     
+    private const int NameLengthLimit = 50;
+    private const int DescriptionLengthLimit = 600;
+
     protected override void Valid()
     {
-        // TODO add validation for enum 
-        
+        if (!Enum.IsDefined(Intensity))
+            throw new IntensityOutOfRangeException();
+
         if (string.IsNullOrWhiteSpace(Name))
-            throw new DomainException(this, nameof(Name), ExceptionCode.CannotBeNullOrWhiteSpace);
-        
-        if (Name.Length > 50)
-            throw new DomainException(this, nameof(Name), ExceptionCode.ValueToLarge);
-        
+            throw new WorkoutTypeNameCannotBeNullOrWhiteSpace();
+
+        if (Name.Length > NameLengthLimit)
+            throw new WorkoutTypeNameLengthExceedException(NameLengthLimit);
+
         if (string.IsNullOrWhiteSpace(Description))
-            throw new DomainException(this, nameof(Description), ExceptionCode.CannotBeNullOrWhiteSpace);
-        
-        if (Description.Length > 600)
-            throw new DomainException(this, nameof(Description), ExceptionCode.ValueToLarge);
+            throw new DescriptionCannotBeNullOrWhitespaceException();
+
+        if (Description.Length > DescriptionLengthLimit)
+            throw new DescriptionLengthExceedException(DescriptionLengthLimit);
     }
     
     private void AddTags(List<WorkoutTypeTag> tags)

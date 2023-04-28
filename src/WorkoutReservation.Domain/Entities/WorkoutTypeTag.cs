@@ -1,5 +1,6 @@
 ﻿using WorkoutReservation.Domain.Abstractions;
 using WorkoutReservation.Domain.Exceptions;
+using WorkoutReservation.Shared.Exceptions;
 
 namespace WorkoutReservation.Domain.Entities;
 
@@ -29,12 +30,14 @@ public sealed class WorkoutTypeTag : Entity
         Valid();
     }
 
+    private const int TagLengthLimit = 30;
+
     protected override void Valid()
     {
         if (string.IsNullOrWhiteSpace(Tag))
-            throw new DomainException(this, nameof(Tag), ExceptionCode.CannotBeNullOrWhiteSpace);
-        
-        if (Tag.Length > 30)
-            throw new DomainException(this, nameof(Tag), ExceptionCode.ValueToLarge);
+            throw new WorkoutTypeTagCannotBeNullOfWhitespace();
+
+        if (Tag.Length > TagLengthLimit)
+            throw new WorkoutTypeTagLengthExceed(TagLengthLimit);
     }
 }

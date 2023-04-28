@@ -3,9 +3,9 @@ using Microsoft.EntityFrameworkCore;
 using WorkoutReservation.Application.Contracts;
 using WorkoutReservation.Domain.Entities;
 using WorkoutReservation.Domain.Enums;
-using WorkoutReservation.Domain.Extensions;
 using WorkoutReservation.Infrastructure.Interfaces;
 using WorkoutReservation.Infrastructure.Persistence;
+using WorkoutReservation.Shared.Extensions;
 
 namespace WorkoutReservation.Infrastructure.Repositories;
 
@@ -55,7 +55,8 @@ public class ApplicationUserRepository : IApplicationUserRepository
         await _dbContext.SaveChangesAsync(token);
     }
 
-    public async Task<(List<ApplicationUser> users, int totalItems)> GetPagedAsync(IPagedQuery request, CancellationToken token)
+    public async Task<(List<ApplicationUser> users, int totalItems)> GetPagedAsync(IPagedQuery request, 
+        CancellationToken token)
     {
         var usersQuery = _dbContext.ApplicationUsers
             .AsNoTracking()
@@ -99,5 +100,17 @@ public class ApplicationUserRepository : IApplicationUserRepository
     {
         return await _dbContext.ApplicationUsers
             .FirstOrDefaultAsync(user => user.Email == email, token) is not null;
+    }
+
+    public async Task<List<ApplicationUser>> GetByRoleAsync(ApplicationRole role, bool asNoTracking = false, 
+        CancellationToken token = default)
+    {
+       var query =  _dbContext.ApplicationUsers
+            .Where(user => user.ApplicationRoles.Contains(role))
+            .AsQueryable();
+       
+       return await _repository
+           .ApplyAsNoTracking(asNoTracking, query)
+           .ToListAsync(token);
     }
 }

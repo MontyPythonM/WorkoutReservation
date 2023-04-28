@@ -23,7 +23,7 @@ export enum Permission {
   DeleteRepetitiveWorkout = "DeleteRepetitiveWorkout",
   DeleteAllRepetitiveWorkouts = "DeleteAllRepetitiveWorkouts",
   GenerateNewUpcomingWeek = "GenerateNewUpcomingWeek",
-  OpenHangfireDashboard = "OpenHangfireDashboard",
+  CanSeeApplicationStatistics = "CanSeeApplicationStatistics",
 
   GetOwnReservations = "GetOwnReservations",
   GetAllReservations = "GetAllReservations",

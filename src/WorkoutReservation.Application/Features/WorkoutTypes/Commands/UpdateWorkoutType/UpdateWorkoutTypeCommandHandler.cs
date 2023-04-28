@@ -1,7 +1,7 @@
 ﻿using FluentValidation;
 using MediatR;
-using WorkoutReservation.Application.Common.Exceptions;
 using WorkoutReservation.Application.Contracts;
+using WorkoutReservation.Application.Exceptions;
 using WorkoutReservation.Domain.Entities;
 using WorkoutReservation.Domain.Enums;
 

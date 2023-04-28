@@ -1,7 +1,7 @@
 ﻿using FluentValidation;
 using MediatR;
-using WorkoutReservation.Application.Common.Exceptions;
 using WorkoutReservation.Application.Contracts;
+using WorkoutReservation.Application.Exceptions;
 using WorkoutReservation.Domain.Entities;
 
 namespace WorkoutReservation.Application.Features.RepetitiveWorkouts.Commands.CreateRepetitiveWorkout;
@@ -41,7 +41,7 @@ internal sealed class CreateRepetitiveWorkoutCommandHandler : IRequestHandler<Cr
         await validator.ValidateAndThrowAsync(request, token);
 
         var repetitiveWorkout = new RepetitiveWorkout(request.MaxParticipantNumber, request.StartTime, 
-            request.EndTime, request.DayOfWeek, workoutType, instructor);
+            request.EndTime, request.DayOfWeek, workoutType, instructor, false);
         
         await _repetitiveWorkoutRepository.AddAsync(repetitiveWorkout, token);
         return Unit.Value;

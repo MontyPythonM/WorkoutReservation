@@ -1,6 +1,9 @@
-﻿using WorkoutReservation.Domain.Abstractions;
+﻿using System.ComponentModel.DataAnnotations;
+using WorkoutReservation.Domain.Abstractions;
 using WorkoutReservation.Domain.Enums;
+using WorkoutReservation.Domain.Events;
 using WorkoutReservation.Domain.Exceptions;
+using WorkoutReservation.Shared.Exceptions;
 
 namespace WorkoutReservation.Domain.Entities;
 
@@ -13,10 +16,12 @@ public sealed class ApplicationUser : Entity
     public Gender? Gender { get; private set; }
     public DateOnly? DateOfBirth { get; private set; }
     public string PasswordHash { get; private set; }
-    public bool IsDeleted { get; set; }
+    public bool IsDeleted { get; private set; }
     public ICollection<Reservation> Reservations { get; private set; } = new List<Reservation>();
     public ICollection<ApplicationRole> ApplicationRoles { get; private set; } = new List<ApplicationRole>();
 
+    private const string AnonymizedValue = "ANONYMIZED";
+    
     private ApplicationUser()
     {
         // required for EF Core
@@ -24,6 +29,7 @@ public sealed class ApplicationUser : Entity
     
     public ApplicationUser(string email, string firstName, string lastName, Gender? gender, DateOnly? dateOfBirth)
     {
+        Id = Guid.NewGuid();
         Email = email;
         FirstName = firstName;
         LastName = lastName;
@@ -60,41 +66,58 @@ public sealed class ApplicationUser : Entity
         return ApplicationRoles.Any(role => role.Id.Equals(appRole.Id));
     }
 
-    public void SoftDeleteUser()
+    public void SelfDeleteUser()
     {
-        AnonymizeSensitiveData();
+        var email = Email;        
         IsDeleted = true;
+        AnonymizeSensitiveData();
+        AddDomainEvent(new UserSelfDeletedEvent(Id, email, DateTime.Now));
+        Valid();
+    }
+
+    public void DeleteUser()
+    {
+        var email = Email;
+        IsDeleted = true;
+        AnonymizeSensitiveData();
+        AddDomainEvent(new UserDeletedByAdministratorEvent(Id, email, DateTime.Now));
         Valid();
     }
 
     private void AnonymizeSensitiveData()
     {
-        const string anonymizedValue = "ANONYMIZED";
-
-        Email = anonymizedValue;
-        FirstName = anonymizedValue;
-        LastName = anonymizedValue;
+        Email = AnonymizedValue;
+        FirstName = AnonymizedValue;
+        LastName = AnonymizedValue;
         Gender = Enums.Gender.Unspecified;
         DateOfBirth = null;
         PasswordHash = string.Empty;
-        Valid();
     }
 
+    private const int FirstNameLengthLimit = 50;
+    private const int LastNameLengthLimit = 50;
+    
     protected override void Valid()
     {
-        if (string.IsNullOrWhiteSpace(FirstName))
-            throw new DomainException(this, nameof(FirstName), ExceptionCode.CannotBeNullOrWhiteSpace);
+        if (!Enum.IsDefined(Gender.Value) && Gender.HasValue)
+            throw new GenderOutOfRangeException();
 
-        if (FirstName.Length > 50)
-            throw new DomainException(this, nameof(FirstName), ExceptionCode.ValueToLarge);
+        if (string.IsNullOrWhiteSpace(FirstName))
+            throw new FirstNameIsNullOrWhiteSpaceException();
+
+        if (FirstName.Length > FirstNameLengthLimit)
+            throw new FirstNameLengthExceedException(FirstNameLengthLimit);
 
         if (string.IsNullOrWhiteSpace(LastName))
-            throw new DomainException(this, nameof(LastName), ExceptionCode.CannotBeNullOrWhiteSpace);
+            throw new LastNameIsNullOrWhiteSpaceException();
 
-        if (LastName.Length > 50)
-            throw new DomainException(this, nameof(LastName), ExceptionCode.ValueToLarge);
-        
+        if (LastName.Length > LastNameLengthLimit)
+            throw new LastNameLengthExceedException(LastNameLengthLimit);
+
         if (DateOfBirth > DateOnly.FromDateTime(DateTime.Now) && DateOfBirth.HasValue)
-            throw new DomainException(this, nameof(DateOfBirth), ExceptionCode.ValueToLarge);
+            throw new DateOfBirthInFutureException();
+        
+        if(!new EmailAddressAttribute().IsValid(Email) && Email != AnonymizedValue)
+            throw new InvalidEmailFormatException(Email);
     }
 }

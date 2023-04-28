@@ -1,6 +1,8 @@
-﻿using WorkoutReservation.Domain.Abstractions;
+﻿using System.ComponentModel.DataAnnotations;
+using WorkoutReservation.Domain.Abstractions;
 using WorkoutReservation.Domain.Enums;
 using WorkoutReservation.Domain.Exceptions;
+using WorkoutReservation.Shared.Exceptions;
 
 namespace WorkoutReservation.Domain.Entities;
 
@@ -31,6 +33,20 @@ public sealed class Instructor : Entity
         Valid();
     }
 
+    /// <summary>
+    /// For unit testing purposes only
+    /// </summary>
+    internal Instructor(int id, string firstName, string lastName, Gender? gender, string biography, string email)
+    {
+        Id = id;
+        FirstName = firstName;
+        LastName = lastName;
+        Gender = gender;
+        Biography = biography;
+        Email = email;
+        Valid();
+    }
+    
     public void Update(string firstName, string lastName, Gender? gender, string biography, string email)
     {
         FirstName = firstName;
@@ -41,24 +57,34 @@ public sealed class Instructor : Entity
         Valid();
     }
 
+    private const int FirstNameLengthLimit = 50;
+    private const int LastNameLengthLimit = 50;
+    private const int BiographyLengthLimit = 3000;
+    
     protected override void Valid()
     {
+        if (!Enum.IsDefined(Gender.Value) && Gender is not null)
+            throw new GenderOutOfRangeException();
+
         if (string.IsNullOrWhiteSpace(FirstName))
-            throw new DomainException(this, nameof(FirstName), ExceptionCode.CannotBeNullOrWhiteSpace);
+            throw new FirstNameIsNullOrWhiteSpaceException();
 
-        if (FirstName.Length > 50)
-            throw new DomainException(this, nameof(FirstName), ExceptionCode.ValueToLarge);
-        
+        if (FirstName.Length > FirstNameLengthLimit)
+            throw new FirstNameLengthExceedException(FirstNameLengthLimit);
+
         if (string.IsNullOrWhiteSpace(LastName))
-            throw new DomainException(this, nameof(LastName), ExceptionCode.CannotBeNullOrWhiteSpace);
-        
-        if (LastName.Length > 50)
-            throw new DomainException(this, nameof(LastName), ExceptionCode.ValueToLarge);
+            throw new LastNameIsNullOrWhiteSpaceException();
 
-        if (Biography.Length > 3000)
-            throw new DomainException(this, nameof(Biography), ExceptionCode.ValueToLarge);
-        
+        if (LastName.Length > LastNameLengthLimit)
+            throw new LastNameLengthExceedException(LastNameLengthLimit);
+
+        if (Biography.Length > BiographyLengthLimit)
+            throw new BiographyLengthLimitExceedException(BiographyLengthLimit);
+
         if (string.IsNullOrWhiteSpace(Email))
-            throw new DomainException(this, nameof(Email), ExceptionCode.CannotBeNullOrWhiteSpace);
+            throw new EmailCannotBeNullOrWhitespaceException();
+        
+        if(!new EmailAddressAttribute().IsValid(Email))
+            throw new InvalidEmailFormatException(Email);
     }
 }

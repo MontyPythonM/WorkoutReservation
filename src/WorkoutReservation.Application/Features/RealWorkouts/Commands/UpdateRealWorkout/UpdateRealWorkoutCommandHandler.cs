@@ -1,7 +1,7 @@
 ﻿using FluentValidation;
 using MediatR;
-using WorkoutReservation.Application.Common.Exceptions;
 using WorkoutReservation.Application.Contracts;
+using WorkoutReservation.Application.Exceptions;
 using WorkoutReservation.Domain.Entities;
 
 namespace WorkoutReservation.Application.Features.RealWorkouts.Commands.UpdateRealWorkout;
@@ -30,6 +30,7 @@ internal sealed class UpdateRealWorkoutCommandHandler : IRequestHandler<UpdateRe
             throw new NotFoundException(nameof(RealWorkout), request.Id.ToString());
 
         var instructor = await _instructorRepository.GetByIdAsync(request.InstructorId, false, token);
+        
         if (instructor is null)
             throw new NotFoundException(nameof(Instructor), request.InstructorId.ToString());
         
