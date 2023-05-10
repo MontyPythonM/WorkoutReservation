@@ -77,7 +77,10 @@ export class RepetitiveWorkoutsComponent extends BaseComponent implements OnInit
 
   forceGenerateUpcomingWeek() {
     this.subscribe(this.repetitiveWorkoutService.generateUpcomingWeek(), {
-      next: () => this.notificationService.show("Workout generator has been launched. Check if the operation was successful!", "info"),
+      next: () => {
+        this.notificationService.show("Workout generator has been launched. Check if the operation was successful!", "success");
+        this.ngOnInit();
+      },
       error: () => this.notificationService.show("Forced generation of repetitive workouts failed", "error")
     });
   }
