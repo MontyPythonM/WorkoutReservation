@@ -10,7 +10,10 @@ public class ReservationConfiguration : IEntityTypeConfiguration<Reservation>
     {
         builder.ToTable("Reservations", "WorkoutReservation");
 
-        builder.Property(x => x.ReservationStatus).IsRequired();
+        builder.Property(x => x.ReservationStatus)            
+            .IsRequired()
+            .HasConversion<string>();   
+        
         builder.Property(x => x.Note).HasMaxLength(3000);
 
         builder.HasOne(x => x.User)

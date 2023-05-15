@@ -1,5 +1,6 @@
 ﻿using WorkoutReservation.Domain.Abstractions;
 using WorkoutReservation.Domain.Enums;
+using WorkoutReservation.Domain.Events;
 using WorkoutReservation.Domain.Exceptions;
 using WorkoutReservation.Shared.Exceptions;
 using WorkoutReservation.Shared.Extensions;
@@ -74,6 +75,7 @@ public sealed class RealWorkout : Entity
         
         reservation.SetReservationStatus(ReservationStatus.Cancelled);
         DecrementCurrentParticipantNumber();
+        AddDomainEvent(new ReservationCancelledEvent(reservation.Id));
         Valid();
     }
 

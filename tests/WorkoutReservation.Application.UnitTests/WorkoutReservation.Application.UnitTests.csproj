@@ -25,10 +25,6 @@
     <ProjectReference Include="..\..\src\WorkoutReservation.Shared\WorkoutReservation.Shared.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Mocks" />
-  </ItemGroup>
-
 
 </Project>
     
