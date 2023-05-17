@@ -15,7 +15,7 @@ Application user roles:
 ## How to download and run
 1. Download the solution using the `git clone https://github.com/MontyPythonM/WorkoutReservationWebApp.git` command,
 2. Overwrite the **appsettings.json** file (e.g. by user secrets) as recommended below:
-  - Enter your database connection string in the **ConnectionStrings.localDbConnection** section (use MS SQL server or MS SQL Lite),
+  - Enter your database connection string in the **ConnectionStrings.localDbConnection** section (use MS SQL Server or MS SQL Express),
   - Enter your credentials in **FirstAdmin** section. Application will create a system administrator user based on this data during the first launch,
   - Enter the application key (min. 16 chars) used for user authentication purposes in the **Authentication.JwtKey** section.
 3. Run the backend application (WorkoutReservation.API starter project) in the `WorkoutReservation` configuration,
