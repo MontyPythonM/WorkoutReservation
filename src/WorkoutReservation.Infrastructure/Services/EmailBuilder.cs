@@ -1,6 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 using SendGrid.Helpers.Mail;
 using WorkoutReservation.Application.Contracts;
 using WorkoutReservation.Infrastructure.Exceptions;
@@ -10,18 +9,18 @@ namespace WorkoutReservation.Infrastructure.Services;
 
 public class EmailBuilder : IEmailBuilder
 {
-    private readonly SendgridEmailSettings _settings;
+    private readonly SendgridEmailSettings _sendgridEmailSettings;
     private readonly ILogger<EmailBuilder> _logger;
 
-    public EmailBuilder(IOptionsSnapshot<SendgridEmailSettings> snapshot, ILogger<EmailBuilder> logger)
+    public EmailBuilder(SendgridEmailSettings sendgridEmailSettings, ILogger<EmailBuilder> logger)
     {
-        _settings = snapshot.Value;
+        _sendgridEmailSettings = sendgridEmailSettings;
         _logger = logger;
     }
     
     public SendGridMessage CreateSendGridMessage(IEnumerable<string> emailAddresses, string content, string subject)
     {
-        var from = new EmailAddress(_settings.FromAddress, _settings.FromName);
+        var from = new EmailAddress(_sendgridEmailSettings.FromAddress, _sendgridEmailSettings.FromName);
         var tos = new List<EmailAddress>();
         
         foreach (var email in emailAddresses)

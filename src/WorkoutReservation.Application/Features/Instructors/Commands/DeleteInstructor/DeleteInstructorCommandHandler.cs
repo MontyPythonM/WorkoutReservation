@@ -22,6 +22,7 @@ internal sealed class DeleteInstructorCommandHandler : IRequestHandler<DeleteIns
 
     public async Task<Unit> Handle(DeleteInstructorCommand request, CancellationToken token)
     {
+        // TODO: deleting an instructor associated with some realWorkout causes an internal exception
         var instructor = await _instructorRepository.GetByIdAsync(request.InstructorId, false, token);
         if (instructor is null)
             throw new NotFoundException(nameof(Instructor), request.InstructorId.ToString());

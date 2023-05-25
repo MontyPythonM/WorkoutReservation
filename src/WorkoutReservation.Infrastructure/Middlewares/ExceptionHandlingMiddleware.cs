@@ -1,12 +1,13 @@
 ﻿using System.Net;
 using FluentValidation;
-using WorkoutReservation.Application.Exceptions;
+using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Logging;
 using WorkoutReservation.Shared.Exceptions;
 using ApplicationException = WorkoutReservation.Shared.Exceptions.ApplicationException;
 
 namespace WorkoutReservation.API.Middleware;
 
-public class ExceptionHandlingMiddleware : IMiddleware
+internal sealed class ExceptionHandlingMiddleware : IMiddleware
 {
     private readonly ILogger<ExceptionHandlingMiddleware> _logger;
 

@@ -1,7 +1,8 @@
 ﻿namespace WorkoutReservation.Infrastructure.Settings;
 
-public class SystemAdministratorSettings
+public sealed class FirstAdministratorSettings
 {
+    public const string SectionName = "FirstAdministrator";
     public string FirstName { get; set; }
     public string LastName { get; set; }
     public string Email { get; set; }

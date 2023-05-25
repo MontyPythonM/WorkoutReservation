@@ -8,7 +8,7 @@ namespace WorkoutReservation.Application;
 
 public static class ConfigureApplicationServices
 {
-    public static IServiceCollection AddApplicationServices(this IServiceCollection services, IConfiguration configuration)
+    public static IServiceCollection AddApplication(this IServiceCollection services, IConfiguration configuration)
     {
         services.AddMediatR(Assembly.GetExecutingAssembly());
         services.AddAutoMapper(Assembly.GetExecutingAssembly());
@@ -17,5 +17,4 @@ public static class ConfigureApplicationServices
 
         return services;
     }
-     
 }

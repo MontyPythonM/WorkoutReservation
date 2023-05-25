@@ -13,7 +13,7 @@ internal sealed class InstructorsData
         "Polish fitness trainer, personal trainer, specializing in functional training and HIIT (High Intensity Interval Training), " +
         "as well as blogger, TV presenter and media personality.";
     
-    internal static IEnumerable<Instructor> Create()
+    public static List<Instructor> Create()
     {
         var instructors = new List<Instructor>
         {

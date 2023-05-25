@@ -4,7 +4,6 @@ using System.Text;
 using Microsoft.IdentityModel.Tokens;
 using WorkoutReservation.Application.Contracts;
 using WorkoutReservation.Domain.Entities;
-using WorkoutReservation.Infrastructure.Interfaces;
 using WorkoutReservation.Infrastructure.Settings;
 
 namespace WorkoutReservation.Infrastructure.Authentication;

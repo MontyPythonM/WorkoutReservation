@@ -1,39 +1,35 @@
-﻿using System.ComponentModel.DataAnnotations;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
+﻿using Microsoft.Extensions.Logging;
 using SendGrid;
 using SendGrid.Helpers.Mail;
-using TinyHelpers.Extensions;
 using WorkoutReservation.Application.Contracts;
-using WorkoutReservation.Infrastructure.Exceptions;
 using WorkoutReservation.Infrastructure.Settings;
 
 namespace WorkoutReservation.Infrastructure.Services;
 
 public class EmailSender : IEmailSender
 {
-    private readonly SendgridEmailSettings _settings;
+    private readonly SendgridEmailSettings _sendgridEmailSettings;
     private readonly ILogger<EmailSender> _logger;
     private readonly IDateTimeProvider _dateTimeProvider;
 
-    public EmailSender(IOptionsSnapshot<SendgridEmailSettings> snapshot, ILogger<EmailSender> logger,
+    public EmailSender(SendgridEmailSettings sendgridEmailSettings, ILogger<EmailSender> logger,
         IDateTimeProvider dateTimeProvider)
     {
-        _settings = snapshot.Value;
+        _sendgridEmailSettings = sendgridEmailSettings;
         _logger = logger;
         _dateTimeProvider = dateTimeProvider;
     }
     
     public async Task SendEmail(SendGridMessage message, CancellationToken token)
     {
-        if (_settings.EnableDelivery)
+        if (_sendgridEmailSettings.EnableDelivery)
         {
-            var client = new SendGridClient(_settings.ApiKey);
+            var client = new SendGridClient(_sendgridEmailSettings.ApiKey);
             
-            if (!string.IsNullOrWhiteSpace(_settings.DeliveryAddress))
+            if (!string.IsNullOrWhiteSpace(_sendgridEmailSettings.DeliveryAddress))
             {
                 message.Personalizations = new List<Personalization>();
-                message.AddTo(new EmailAddress(_settings.DeliveryAddress));
+                message.AddTo(new EmailAddress(_sendgridEmailSettings.DeliveryAddress));
             }
 
             var response = await client.SendEmailAsync(message, token);

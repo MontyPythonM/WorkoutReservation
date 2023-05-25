@@ -4,7 +4,7 @@ namespace WorkoutReservation.Infrastructure.Seeders.Data;
 
 internal sealed class RepetitiveWorkoutsData
 {
-    internal static IEnumerable<RepetitiveWorkout> Create(List<Instructor> instructors, List<WorkoutType> workoutTypes)
+    public static IEnumerable<RepetitiveWorkout> Create(List<Instructor> instructors, List<WorkoutType> workoutTypes)
     {
         if (!instructors.Any() || !workoutTypes.Any())
             return new List<RepetitiveWorkout>();
