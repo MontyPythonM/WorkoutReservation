@@ -14,34 +14,29 @@ internal sealed class WorkoutTypesData
     private const string FullBodyWorkoutDescription = "A full body workout is just what it sounds like: a workout that aims to hit all the major muscle groups in one single session. " +
                                                       "Popular programs would include exercises for back, legs, chest, shoulders, arms and core.";
     
-    internal static IEnumerable<WorkoutType> Create()
+    private static readonly List<WorkoutTypeTag> HathaYogaTags = new()
     {
-        var hathaYogaTags = new List<WorkoutTypeTag>
-        {
-            new("Relax"), 
-            new("Cosmic power"), 
-            new("Self control"), 
-            new("Stretching")
-        };
-        
-        var crossfitTags = new List<WorkoutTypeTag>
-        { 
-            new("Strength"), 
-            new("Vigor"),
-            new("Fat melting") 
-        };
-        
-        var hathaYoga = new WorkoutType("Hatha yoga", HathaYogaDescription, WorkoutIntensity.Low, new List<Instructor>(), hathaYogaTags);
-        var crossfit = new WorkoutType("Crossfit", CrossfitDescription, WorkoutIntensity.Extreme, new List<Instructor>(), crossfitTags);
-        
-        var workoutTypes = new List<WorkoutType>
+        new WorkoutTypeTag("Relax"), 
+        new WorkoutTypeTag("Cosmic power"), 
+        new WorkoutTypeTag("Self control"), 
+        new WorkoutTypeTag("Stretching")
+    };
+    
+    private static readonly List<WorkoutTypeTag> CrossfitTags = new()
+    { 
+        new WorkoutTypeTag("Strength"), 
+        new WorkoutTypeTag("Vigor"),
+        new WorkoutTypeTag("Fat melting") 
+    };
+    
+    public static List<WorkoutType> Create()
+    {
+        return new List<WorkoutType>
         {
             new("Vinyasa yoga", VinyasaYogaDescription, WorkoutIntensity.Moderate, new List<Instructor>(), new List<WorkoutTypeTag>()),
             new("Full-body workout", FullBodyWorkoutDescription, WorkoutIntensity.Vigorous, new List<Instructor>(), new List<WorkoutTypeTag>()),
-            hathaYoga,
-            crossfit
+            new("Hatha yoga", HathaYogaDescription, WorkoutIntensity.Low, new List<Instructor>(), HathaYogaTags),
+            new("Crossfit", CrossfitDescription, WorkoutIntensity.Extreme, new List<Instructor>(), CrossfitTags)
         };
-        
-        return workoutTypes;
     }
 }

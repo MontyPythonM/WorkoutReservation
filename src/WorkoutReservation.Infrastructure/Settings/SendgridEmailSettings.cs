@@ -3,9 +3,9 @@
 public sealed class SendgridEmailSettings
 {
     public const string SectionName = "SendgridEmail";
-    public string ApiKey { get; init; }
-    public string FromName { get; init; }
-    public string FromAddress { get; init; }
-    public bool EnableDelivery { get; init; }
-    public string DeliveryAddress { get; init; }
+    public string ApiKey { get; set; }
+    public string FromName { get; set; }
+    public string FromAddress { get; set; }
+    public bool EnableDelivery { get; set; }
+    public string DeliveryAddress { get; set; }
 }

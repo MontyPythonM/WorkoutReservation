@@ -1,11 +1,10 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Quartz;
-using WorkoutReservation.Application.Features.RepetitiveWorkouts.Commands.GenerateUpcomingWorkouts;
 using WorkoutReservation.Infrastructure.Messages;
 
 namespace WorkoutReservation.Infrastructure.BackgroundJobs;
 
-public static class QuartzExtensions
+public static class Extensions
 {
     internal static IServiceCollection AddQuartzBackgroundJobs(this IServiceCollection services)
     {
@@ -25,6 +24,8 @@ public static class QuartzExtensions
             configuration.UseMicrosoftDependencyInjectionJobFactory();
         });
 
+        services.AddQuartzHostedService();
+        
         return services;
     }
 }

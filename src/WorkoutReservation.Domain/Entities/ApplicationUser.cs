@@ -3,7 +3,6 @@ using WorkoutReservation.Domain.Abstractions;
 using WorkoutReservation.Domain.Enums;
 using WorkoutReservation.Domain.Events;
 using WorkoutReservation.Domain.Exceptions;
-using WorkoutReservation.Shared.Exceptions;
 
 namespace WorkoutReservation.Domain.Entities;
 
@@ -27,7 +26,7 @@ public sealed class ApplicationUser : Entity
         // required for EF Core
     }
     
-    public ApplicationUser(string email, string firstName, string lastName, Gender? gender, DateOnly? dateOfBirth)
+    public ApplicationUser(string email, string firstName, string lastName, Gender? gender, DateOnly? dateOfBirth, string passwordHash)
     {
         Id = Guid.NewGuid();
         Email = email;
@@ -35,7 +34,7 @@ public sealed class ApplicationUser : Entity
         LastName = lastName;
         Gender = gender;
         DateOfBirth = dateOfBirth;
-        PasswordHash = string.Empty;
+        PasswordHash = passwordHash;
         IsDeleted = false;
         Valid();
     }
@@ -58,8 +57,6 @@ public sealed class ApplicationUser : Entity
         Valid();
     }
     
-    public void SetPasswordHash(string passwordHash) => PasswordHash = passwordHash;
-
     public bool IsInRole(Role role)
     {
         var appRole = ApplicationRole.FromValue((int)role);
