@@ -1,8 +1,6 @@
 ﻿using MediatR;
-using Microsoft.AspNetCore.Identity;
 using WorkoutReservation.Application.Contracts;
 using WorkoutReservation.Application.Exceptions;
-using WorkoutReservation.Domain.Entities;
 
 namespace WorkoutReservation.Application.Features.Account.Queries.Login;
 
@@ -10,15 +8,15 @@ public record LoginQuery(string Email, string Password) : IRequest<string>;
 
 internal sealed class LoginQueryHandler : IRequestHandler<LoginQuery, string>
 {
-    private readonly IPasswordHasher<ApplicationUser> _passwordHasher;
     private readonly IApplicationUserRepository _userRepository;
+    private readonly IPasswordManager _passwordManager;
     private readonly IJwtProvider _jwtProvider;
     
     public LoginQueryHandler(IApplicationUserRepository userRepository, 
-        IPasswordHasher<ApplicationUser> passwordHasher, IJwtProvider jwtProvider)
+        IPasswordManager passwordManager, IJwtProvider jwtProvider)
     {
         _userRepository = userRepository;
-        _passwordHasher = passwordHasher;
+        _passwordManager = passwordManager;
         _jwtProvider = jwtProvider;
     }
 
@@ -29,9 +27,9 @@ internal sealed class LoginQueryHandler : IRequestHandler<LoginQuery, string>
         if (user is null)
             throw new InvalidCredentialsException();
 
-        var result = _passwordHasher.VerifyHashedPassword(user, user.PasswordHash, request.Password);
+        var isPasswordValid = _passwordManager.Validate(request.Password, user.PasswordHash);
 
-        if (result == PasswordVerificationResult.Failed)
+        if (!isPasswordValid)
             throw new InvalidCredentialsException();
 
         return await _jwtProvider.GenerateAsync(user, token);

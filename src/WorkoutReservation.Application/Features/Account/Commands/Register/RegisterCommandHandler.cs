@@ -1,6 +1,5 @@
 ﻿using FluentValidation;
 using MediatR;
-using Microsoft.AspNetCore.Identity;
 using WorkoutReservation.Application.Contracts;
 using WorkoutReservation.Domain.Entities;
 using WorkoutReservation.Domain.Enums;
@@ -13,15 +12,15 @@ public record RegisterCommand(string Email, string Password, string ConfirmPassw
 internal sealed class RegisterCommandHandler : IRequestHandler<RegisterCommand>
 {
     private readonly IApplicationUserRepository _userRepository; 
-    private readonly IPasswordHasher<ApplicationUser> _passwordHasher;
+    private readonly IPasswordManager _passwordManager;
     private readonly IApplicationRoleRepository _roleRepository;
     
     public RegisterCommandHandler(IApplicationUserRepository userRepository, 
-        IPasswordHasher<ApplicationUser> passwordHasher, 
+        IPasswordManager passwordManager, 
         IApplicationRoleRepository roleRepository)
     {
         _userRepository = userRepository;
-        _passwordHasher = passwordHasher;
+        _passwordManager = passwordManager;
         _roleRepository = roleRepository;
     }
 
@@ -32,10 +31,9 @@ internal sealed class RegisterCommandHandler : IRequestHandler<RegisterCommand>
         var validator = new RegisterCommandValidator(isEmailAlreadyTaken);
         await validator.ValidateAndThrowAsync(request, token);
 
-        var newUser = new ApplicationUser(request.Email, request.FirstName, 
-            request.LastName, request.Gender, request.DateOfBirth);
+        var newUser = new ApplicationUser(request.Email, request.FirstName, request.LastName, 
+            request.Gender, request.DateOfBirth, _passwordManager.Secure(request.Password));
 
-        newUser.SetPasswordHash(_passwordHasher.HashPassword(newUser, request.Password));
         newUser.SetRole(await _roleRepository.GetAsync(Role.Member, token));
         
         await _userRepository.AddAsync(newUser, token);

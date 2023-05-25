@@ -3,6 +3,7 @@ using NLog.Web;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using WorkoutReservation.API.Settings;
 using WorkoutReservation.API.Swagger;
+using WorkoutReservation.Infrastructure;
 
 namespace WorkoutReservation.API;
 
@@ -40,15 +41,5 @@ public static class Extensions
         builder.Logging.SetMinimumLevel(LogLevel.Trace);
         builder.Host.UseNLog();
         return builder;
-    }
-
-    public static T GetOptions<T>(this IConfiguration configuration, string sectionName) 
-        where T : class, new()
-    {
-        var options = new T();
-        var section = configuration.GetSection(sectionName);
-        section.Bind(options);
-
-        return options;
     }
 }

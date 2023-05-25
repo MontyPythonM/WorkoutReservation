@@ -1,7 +1,7 @@
-﻿using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using WorkoutReservation.Application.Contracts;
 using WorkoutReservation.Domain.Entities;
 using WorkoutReservation.Domain.Enums;
 using WorkoutReservation.Infrastructure.Exceptions;
@@ -27,7 +27,7 @@ internal sealed class DatabaseSeedInitializer : IHostedService
     {
         using var scope = _serviceProvider.CreateScope();
         var context = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-        var hasher = scope.ServiceProvider.GetRequiredService<IPasswordHasher<ApplicationUser>>();
+        var passwordManager = scope.ServiceProvider.GetRequiredService<IPasswordManager>();
         
         if (await context.Database.CanConnectAsync(token) is false)
         {
@@ -39,22 +39,19 @@ internal sealed class DatabaseSeedInitializer : IHostedService
         
         if (!isAdministratorExist)
         {        
-            await SeedFirstAdministratorAsync(context, hasher, token);
+            await SeedFirstAdministratorAsync(context, passwordManager, token);
         }
 
         if (await IsDatabaseEmptyAsync(context, token))
         {
             await SeedDataAsync(context, token);
-            await context.SaveChangesAsync(token); // must be redundantly called, due to the need to retrieve instructors and workoutTypes with assigned primary keys
-        
             await SeedWorkoutTypeInstructorRelationAsync(context, token);
-            await context.SaveChangesAsync(token);
         }
     }
     
     public Task StopAsync(CancellationToken token) => Task.CompletedTask;
 
-    private async Task SeedFirstAdministratorAsync(AppDbContext context, IPasswordHasher<ApplicationUser> hasher, 
+    private async Task SeedFirstAdministratorAsync(AppDbContext context, IPasswordManager passwordManager, 
         CancellationToken token)
     {
         var administrator = new ApplicationUser(
@@ -62,7 +59,9 @@ internal sealed class DatabaseSeedInitializer : IHostedService
             _firstAdministratorSettings.FirstName, 
             _firstAdministratorSettings.LastName, 
             Gender.Unspecified, 
-            null);
+            null,
+            passwordManager.Secure(_firstAdministratorSettings.Password)
+            );
         
         var systemAdministratorRole = await context.ApplicationRoles
             .FirstOrDefaultAsync(x => x.Id == (int)Role.SystemAdministrator, token);
@@ -72,11 +71,9 @@ internal sealed class DatabaseSeedInitializer : IHostedService
             throw new InfrastructureException("Application role not exist");
         }
         
-        var hashPassword = hasher.HashPassword(administrator, _firstAdministratorSettings.Password);
-
-        administrator.SetPasswordHash(hashPassword);
         administrator.SetRole(systemAdministratorRole);
         await context.AddAsync(administrator, token);
+        await context.SaveChangesAsync(token);
     }
     
     private async Task SeedDataAsync(AppDbContext context, CancellationToken token)
@@ -90,6 +87,7 @@ internal sealed class DatabaseSeedInitializer : IHostedService
         await context.AddRangeAsync(workoutTypes, token);
         await context.AddRangeAsync(realWorkouts, token);
         await context.AddRangeAsync(repetitiveWorkouts, token);
+        await context.SaveChangesAsync(token);
     }
 
     private async Task SeedWorkoutTypeInstructorRelationAsync(AppDbContext context, CancellationToken token)
@@ -107,6 +105,7 @@ internal sealed class DatabaseSeedInitializer : IHostedService
         };
         
         await context.AddRangeAsync(relation, token);
+        await context.SaveChangesAsync(token);
     }
     
     private async Task<bool> IsDatabaseEmptyAsync(AppDbContext context, CancellationToken token)
