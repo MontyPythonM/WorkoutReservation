@@ -1,7 +1,7 @@
 ﻿using System.Reflection;
 using WorkoutReservation.Shared.Attributes;
 
-namespace WorkoutReservation.Shared.Extensions;
+namespace WorkoutReservation.Shared.TypesExtensions;
 
 public static class EnumExtension
 {

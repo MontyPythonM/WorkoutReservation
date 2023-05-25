@@ -17,7 +17,7 @@ using WorkoutReservation.Infrastructure.Settings;
 
 namespace WorkoutReservation.Infrastructure;
 
-public static class ConfigureInfrastructureServices
+public static class Extensions
 {
     public static WebApplication UseInfrastructure(this WebApplication app)
     {

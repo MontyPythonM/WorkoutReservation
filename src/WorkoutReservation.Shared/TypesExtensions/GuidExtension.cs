@@ -1,6 +1,6 @@
 ﻿using WorkoutReservation.Shared.Exceptions;
 
-namespace WorkoutReservation.Shared.Extensions;
+namespace WorkoutReservation.Shared.TypesExtensions;
 
 public static class GuidExtension
 {

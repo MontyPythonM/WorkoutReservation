@@ -1,4 +1,4 @@
-﻿using WorkoutReservation.Shared.Extensions;
+﻿using WorkoutReservation.Shared.TypesExtensions;
 
 namespace WorkoutReservation.Shared.Exceptions;
 

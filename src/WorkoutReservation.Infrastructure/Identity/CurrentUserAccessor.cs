@@ -5,7 +5,7 @@ using WorkoutReservation.Application.Exceptions;
 using WorkoutReservation.Domain.Entities;
 using WorkoutReservation.Infrastructure.Authentication;
 using WorkoutReservation.Shared.Exceptions;
-using WorkoutReservation.Shared.Extensions;
+using WorkoutReservation.Shared.TypesExtensions;
 
 namespace WorkoutReservation.Infrastructure.Identity;
 

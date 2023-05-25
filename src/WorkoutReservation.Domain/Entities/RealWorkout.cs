@@ -3,7 +3,7 @@ using WorkoutReservation.Domain.Enums;
 using WorkoutReservation.Domain.Events;
 using WorkoutReservation.Domain.Exceptions;
 using WorkoutReservation.Shared.Exceptions;
-using WorkoutReservation.Shared.Extensions;
+using WorkoutReservation.Shared.TypesExtensions;
 
 namespace WorkoutReservation.Domain.Entities;
 
