@@ -1,4 +1,4 @@
-﻿namespace WorkoutReservation.Shared.Extensions;
+﻿namespace WorkoutReservation.Shared.TypesExtensions;
 
 public static class DateTimeExtension
 {

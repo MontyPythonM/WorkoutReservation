@@ -13,7 +13,7 @@ using WorkoutReservation.Application.MappingProfile;
 using WorkoutReservation.Domain.Entities;
 using WorkoutReservation.Domain.Enums;
 using WorkoutReservation.Shared.Exceptions;
-using WorkoutReservation.Shared.Extensions;
+using WorkoutReservation.Shared.TypesExtensions;
 using Xunit;
 using static Moq.It;
 

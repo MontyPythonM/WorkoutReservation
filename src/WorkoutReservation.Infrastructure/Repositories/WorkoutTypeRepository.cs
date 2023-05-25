@@ -5,7 +5,7 @@ using WorkoutReservation.Domain.Entities;
 using WorkoutReservation.Domain.Enums;
 using WorkoutReservation.Infrastructure.Interfaces;
 using WorkoutReservation.Infrastructure.Persistence;
-using WorkoutReservation.Shared.Extensions;
+using WorkoutReservation.Shared.TypesExtensions;
 
 namespace WorkoutReservation.Infrastructure.Repositories;
 
