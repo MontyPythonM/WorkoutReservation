@@ -43,6 +43,7 @@ internal static class RolePermissionMatrix
             new(ApplicationRole.SystemAdministrator, Permission.OpenAdministrationPage),
             new(ApplicationRole.SystemAdministrator, Permission.CanSeeAdministrativeContent),
             new(ApplicationRole.SystemAdministrator, Permission.GetWorkoutTypes),
+            new(ApplicationRole.SystemAdministrator, Permission.CreateHomePageContent),
 
             new(ApplicationRole.BusinessAdministrator, Permission.CreateInstructor),
             new(ApplicationRole.BusinessAdministrator, Permission.UpdateInstructor),
@@ -73,7 +74,7 @@ internal static class RolePermissionMatrix
             new(ApplicationRole.BusinessAdministrator, Permission.OpenAdministrationPage),
             new(ApplicationRole.BusinessAdministrator, Permission.CanSeeAdministrativeContent),
             new(ApplicationRole.BusinessAdministrator, Permission.GetWorkoutTypes),
-            
+
             new(ApplicationRole.Manager, Permission.GetAllWorkoutTypeTags),
             new(ApplicationRole.Manager, Permission.GetRealWorkoutDetails),
             new(ApplicationRole.Manager, Permission.UpdateRealWorkout),

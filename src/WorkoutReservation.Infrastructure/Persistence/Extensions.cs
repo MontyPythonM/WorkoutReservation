@@ -37,7 +37,8 @@ internal static class Extensions
         services.AddScoped<IRealWorkoutRepository, RealWorkoutRepository>();
         services.AddScoped<IReservationRepository, ReservationRepository>();
         services.AddScoped<IWorkoutTypeTagRepository, WorkoutTypeTagRepository>();
-        
+        services.AddScoped<IContentRepository, ContentRepository>();
+
         return services;
     }
 }

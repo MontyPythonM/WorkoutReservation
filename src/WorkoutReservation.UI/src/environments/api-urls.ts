@@ -32,5 +32,9 @@ export const apiUrl = {
   workoutTypeTag: {
     onlyActive: 'workout-type-tag/only-active',
     baseUrl: 'workout-type-tag/'
+  },
+  content: {
+    base: 'content/',
+    homePage: 'content/home-page/'
   }
 }

@@ -1,8 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using WorkoutReservation.Application.Contracts;
-using WorkoutReservation.Domain.Abstractions;
 using WorkoutReservation.Domain.Entities;
-using WorkoutReservation.Infrastructure.Interfaces;
 using WorkoutReservation.Infrastructure.Messages;
 
 namespace WorkoutReservation.Infrastructure.Persistence;
@@ -26,6 +23,7 @@ public sealed class AppDbContext : DbContext
     public DbSet<ApplicationPermission> ApplicationPermissions { get; set; }
     public DbSet<Reservation> Reservations { get; set; }
     public DbSet<Message> Messages { get; set; }
+    public DbSet<Content> Contents { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
