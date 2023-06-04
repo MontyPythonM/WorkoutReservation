@@ -137,7 +137,7 @@ export class RepetitiveWorkoutsComponent extends BaseComponent implements OnInit
 
   openGeneratePopup = () => {
     this.popupTitle = "Generate workouts for upcoming week";
-    this.popupContent = "This action does not guarantee the execution of the generation. Check the hangfire dashboard to make sure the operation was successful.";
+    this.popupContent = "This action does not guarantee the execution of generation. Make sure the operation is successful.";
     this.isGeneratePopupVisible = true;
   }
 

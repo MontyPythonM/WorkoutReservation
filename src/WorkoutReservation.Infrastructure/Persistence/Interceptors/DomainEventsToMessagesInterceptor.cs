@@ -43,7 +43,7 @@ internal sealed class DomainEventsToMessagesInterceptor : SaveChangesInterceptor
                     {
                         TypeNameHandling = TypeNameHandling.All
                     }),
-                OccurredOn = _dateTimeProvider.Now
+                OccurredOn = _dateTimeProvider.GetNow()
             })
             .ToList();
         

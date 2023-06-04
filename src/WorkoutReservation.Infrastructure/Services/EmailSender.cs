@@ -37,7 +37,7 @@ public class EmailSender : IEmailSender
             if (!response.IsSuccessStatusCode)
             {
                 _logger.LogError($"Email sent to: '{string.Join(", ", message.ReplyTos.Select(to => to.Email))}' " +
-                                 $"with subject: '{message.Subject}' failed at {_dateTimeProvider.Now}. " +
+                                 $"with subject: '{message.Subject}' failed at {_dateTimeProvider.GetNow()}. " +
                                  $"Response status code: {response.StatusCode}. Response body: {response.Body.ToString()}");
             }
         }

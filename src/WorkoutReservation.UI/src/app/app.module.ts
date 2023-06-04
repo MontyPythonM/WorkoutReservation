@@ -20,6 +20,7 @@ import {
   DxButtonModule,
   DxDataGridModule,
   DxFormModule,
+  DxHtmlEditorModule,
   DxListModule,
   DxLoadPanelModule,
   DxMenuModule,
@@ -86,6 +87,7 @@ export let AppInjector: Injector;
     DxDataGridModule,
     DxLoadPanelModule,
     DxTagBoxModule,
+    DxHtmlEditorModule,
     ConfirmationPopupModule,
     PagerModule,
     SearchPanelModule

@@ -2,7 +2,7 @@
 
 public interface IDateTimeProvider
 {
-    public DateTime Now { get; }
+    public DateTime GetNow();
     public DateOnly CalculateDateInCurrentWeek(DayOfWeek dayOfWeek);
     public DateOnly CalculateDateInUpcomingWeek(DayOfWeek dayOfWeek);
     public DateTime CalculateDateTimeInCurrentWeek(DayOfWeek dayOfWeek, TimeOnly timeOnly);

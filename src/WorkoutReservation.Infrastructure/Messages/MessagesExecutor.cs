@@ -47,7 +47,7 @@ internal sealed class MessagesExecutor : IJob
                 }
 
                 await _publisher.Publish(domainEvent, context.CancellationToken);
-                message.ProcessedOn = _dateTimeProvider.Now;
+                message.ProcessedOn = _dateTimeProvider.GetNow();
             }
             catch (Exception e)
             {

@@ -6,7 +6,7 @@ namespace WorkoutReservation.Infrastructure.Services;
 
 public class DateTimeProvider : IDateTimeProvider
 {
-    public DateTime Now { get; } = DateTime.Now;
+    public DateTime GetNow() => DateTime.UtcNow;
 
     public DateOnly CalculateDateInCurrentWeek(DayOfWeek dayOfWeek)
     {
@@ -30,24 +30,24 @@ public class DateTimeProvider : IDateTimeProvider
     public DateTime CalculateDateTimeInCurrentWeek(DayOfWeek dayOfWeek, TimeOnly timeOnly) => 
         CalculateDateInCurrentWeek(dayOfWeek).ToDateTime(timeOnly);
 
-    public bool CheckIsExpired(DateOnly date, TimeOnly time) => Now > date.ToDateTime(time);
+    public bool CheckIsExpired(DateOnly date, TimeOnly time) => GetNow() > date.ToDateTime(time);
     
-    public bool CheckIsExpired(DateTime dateTime) => Now > dateTime;
+    public bool CheckIsExpired(DateTime dateTime) => GetNow() > dateTime;
 
     public DateOnly GetFirstDayOfCurrentWeek() => 
-        DateOnly.FromDateTime(CalculateFirstDayOfWeek(Now));
+        DateOnly.FromDateTime(CalculateFirstDayOfWeek(GetNow()));
 
     public DateOnly GetLastDayOfCurrentWeek() =>
-        DateOnly.FromDateTime(CalculateFirstDayOfWeek(Now)).AddDays(6);
+        DateOnly.FromDateTime(CalculateFirstDayOfWeek(GetNow())).AddDays(6);
 
     public DateOnly GetFirstDayOfUpcomingWeek() => 
-        DateOnly.FromDateTime(CalculateFirstDayOfWeek(Now)).AddDays(7);
+        DateOnly.FromDateTime(CalculateFirstDayOfWeek(GetNow())).AddDays(7);
     
     public DateOnly GetLastDayOfUpcomingWeek() => 
-        DateOnly.FromDateTime(CalculateFirstDayOfWeek(Now)).AddDays(13);
+        DateOnly.FromDateTime(CalculateFirstDayOfWeek(GetNow())).AddDays(13);
     
     public DateOnly GetFirstDayOfCurrentWeekAndAddDays(int days) => 
-        DateOnly.FromDateTime(CalculateFirstDayOfWeek(Now)).AddDays(days);
+        DateOnly.FromDateTime(CalculateFirstDayOfWeek(GetNow())).AddDays(days);
     
     private static DateTime CalculateFirstDayOfWeek(DateTime dateTime) => 
         dateTime.AddDays((-7 + (1 - (int)dateTime.DayOfWeek)) % 7);
