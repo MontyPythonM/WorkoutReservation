@@ -2,7 +2,6 @@
 using Microsoft.EntityFrameworkCore;
 using WorkoutReservation.Application.Contracts;
 using WorkoutReservation.Domain.Entities;
-using WorkoutReservation.Infrastructure.Interfaces;
 using WorkoutReservation.Infrastructure.Persistence;
 
 namespace WorkoutReservation.Infrastructure.Repositories;
@@ -10,109 +9,74 @@ namespace WorkoutReservation.Infrastructure.Repositories;
 public class RealWorkoutRepository : IRealWorkoutRepository
 {
     private readonly AppDbContext _dbContext;
-    private readonly IRepository<RealWorkout> _repository;
 
-    public RealWorkoutRepository(AppDbContext dbContext, IRepository<RealWorkout> repository)
+    public RealWorkoutRepository(AppDbContext dbContext)
     {
         _dbContext = dbContext;
-        _repository = repository;
-    }
-
-    public async Task<List<RealWorkout>> GetAllAsync(bool asNoTracking, CancellationToken token)
-    {
-        var query = _dbContext.RealWorkouts.AsQueryable();
-        query = _repository.ApplyAsNoTracking(asNoTracking, query);
-        
-        return await query.ToListAsync(token);
-    }
-    
-    public async Task<List<RealWorkout>> GetAllAsync(Expression<Func<RealWorkout, bool>> wherePredicate, 
-        bool asNoTracking, CancellationToken token)
-    {
-        var query = _dbContext.RealWorkouts.AsQueryable().Where(wherePredicate);
-        query = _repository.ApplyAsNoTracking(asNoTracking, query);
-        
-        return await query.ToListAsync(token);
     }
     
     public async Task<List<RealWorkout>> GetByDayAsync(DateOnly day, bool asNoTracking, CancellationToken token)
     {
-        var query = _dbContext.RealWorkouts
+        return await _dbContext.RealWorkouts
+            .ApplyAsNoTracking(asNoTracking)
             .Where(x => x.Date == day)
             .OrderBy(x => x.StartTime)
-            .AsQueryable();
-        
-        query = _repository.ApplyAsNoTracking(asNoTracking, query);
-        
-        return await query.ToListAsync(token);
+            .ToListAsync(token);
     }
     
     public async Task<List<RealWorkout>> GetAllFromDateRangeAsync(DateOnly startDate, 
         DateOnly endDate, bool asNoTracking, CancellationToken token)
     {
-        var query = _dbContext.RealWorkouts
+        return await _dbContext.RealWorkouts
+            .ApplyAsNoTracking(asNoTracking)
             .Where(x => x.Date >= startDate && x.Date <= endDate)
             .OrderBy(x => x.Date)
             .ThenBy(x => x.StartTime)
-            .AsQueryable();
-        
-        query = _repository.ApplyAsNoTracking(asNoTracking, query);
-        
-        return await query.ToListAsync(token);
+            .ToListAsync(token);
     }
 
     public async Task<List<RealWorkout>> GetAllFromDateRangeAsync(DateOnly startDate, DateOnly endDate, 
         bool asNoTracking, CancellationToken token, params Expression<Func<RealWorkout, object>>[] includes)
     {
-        var query = _dbContext.RealWorkouts
+        return await _dbContext.RealWorkouts
+            .ApplyAsNoTracking(asNoTracking)
+            .ApplyIncludes(includes)
             .Where(x => x.Date >= startDate && x.Date <= endDate)
             .OrderBy(x => x.Date)
             .ThenBy(x => x.StartTime)
-            .AsQueryable();
-        
-        query = _repository.ApplyAsNoTracking(asNoTracking, query);
-        query = _repository.ApplyIncludes(includes, query); 
-        
-        return await query.ToListAsync(token);
+            .ToListAsync(token);
     }
     
     public async Task<RealWorkout> GetByIdAsync(int realWorkoutId, bool asNoTracking, CancellationToken token, 
         params Expression<Func<RealWorkout, object>>[] includes)
     {
-         var query = _dbContext.RealWorkouts.AsQueryable();
-         query = _repository.ApplyAsNoTracking(asNoTracking, query);
-         query = _repository.ApplyIncludes(includes, query); 
-         
-         return await query.FirstOrDefaultAsync(x => x.Id == realWorkoutId, token);             
+         return await _dbContext.RealWorkouts
+             .ApplyAsNoTracking(asNoTracking)
+             .ApplyIncludes(includes)
+             .FirstOrDefaultAsync(realWorkout => realWorkout.Id == realWorkoutId, token);             
     }
     
     public async Task<RealWorkout> GetByIdWithReservationUserAsync(int realWorkoutId, bool asNoTracking, CancellationToken token)
     {
-        var query = _dbContext.RealWorkouts
+        return await _dbContext.RealWorkouts
+            .ApplyAsNoTracking(asNoTracking)
             .Include(r => r.WorkoutType)
             .Include(r => r.Instructor)
             .Include(r => r.Reservations)
             .ThenInclude(reservation => reservation.User)
-            .AsQueryable();
-        
-        query = _repository.ApplyAsNoTracking(asNoTracking, query);
-        
-        return await query.FirstOrDefaultAsync(x => x.Id == realWorkoutId, token);             
+            .FirstOrDefaultAsync(realWorkout => realWorkout.Id == realWorkoutId, token);             
     }
     
     public async Task<RealWorkout> GetByReservationIdAsync(int reservationId, bool asNoTracking, CancellationToken token)
     {
-        var query = _dbContext.RealWorkouts
+        return await _dbContext.RealWorkouts
+            .ApplyAsNoTracking(asNoTracking)
             .Include(r => r.WorkoutType)
             .Include(r => r.Instructor)
             .Include(r => r.Reservations)
             .ThenInclude(reservation => reservation.User)
             .Where(r => r.Reservations.Any(reservation => reservation.Id == reservationId))
-            .AsQueryable();
-        
-        query = _repository.ApplyAsNoTracking(asNoTracking, query);
-        
-        return await query.FirstOrDefaultAsync(token);
+            .FirstOrDefaultAsync(token);
     }
     
     public async Task AddAsync(RealWorkout realWorkout, CancellationToken token)

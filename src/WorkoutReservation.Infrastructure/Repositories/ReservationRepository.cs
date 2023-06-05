@@ -3,7 +3,6 @@ using Microsoft.EntityFrameworkCore;
 using WorkoutReservation.Application.Contracts;
 using WorkoutReservation.Domain.Entities;
 using WorkoutReservation.Domain.Enums;
-using WorkoutReservation.Infrastructure.Interfaces;
 using WorkoutReservation.Infrastructure.Persistence;
 using WorkoutReservation.Shared.TypesExtensions;
 
@@ -12,33 +11,30 @@ namespace WorkoutReservation.Infrastructure.Repositories;
 public class ReservationRepository : IReservationRepository
 {
     private readonly AppDbContext _dbContext;
-    private readonly IRepository<Reservation> _repository;
 
-    public ReservationRepository(AppDbContext dbContext, IRepository<Reservation> repository)
+    public ReservationRepository(AppDbContext dbContext)
     {
         _dbContext = dbContext;
-        _repository = repository;
     }
 
-    public async Task<Reservation> GetByIdAsync(int reservationId, bool asNoTracking, CancellationToken token, params Expression<Func<Reservation, object>>[] includes)
+    public async Task<Reservation> GetByIdAsync(int reservationId, bool asNoTracking, 
+        CancellationToken token, params Expression<Func<Reservation, object>>[] includes)
     {
-        var query = _dbContext.Reservations.AsQueryable();
-        query = _repository.ApplyAsNoTracking(asNoTracking, query);
-        query = _repository.ApplyIncludes(includes, query);
-        
-        return await query.FirstOrDefaultAsync(x => x.Id == reservationId, token);
+        return await _dbContext.Reservations
+            .ApplyAsNoTracking(asNoTracking)
+            .ApplyIncludes(includes)
+            .FirstOrDefaultAsync(reservation => reservation.Id == reservationId, token);
     }
     
     public async Task<Reservation> GetDetailsByIdAsync(int reservationId, bool asNoTracking, CancellationToken token)
     {
-        var query = _dbContext.Reservations
-            .Include(r => r.RealWorkout).ThenInclude(w => w.Instructor)
-            .Include(r => r.RealWorkout).ThenInclude(w => w.WorkoutType)
-            .AsQueryable();
-        
-        query = _repository.ApplyAsNoTracking(asNoTracking, query);
-        
-        return await query.FirstOrDefaultAsync(r => r.Id == reservationId, token);
+        return await _dbContext.Reservations
+            .ApplyAsNoTracking(asNoTracking)
+            .Include(reservation => reservation.RealWorkout)
+            .ThenInclude(realWorkout => realWorkout.Instructor)
+            .Include(reservation => reservation.RealWorkout)
+            .ThenInclude(realWorkout => realWorkout.WorkoutType)
+            .FirstOrDefaultAsync(reservation => reservation.Id == reservationId, token);
     }
     
     public async Task<(List<Reservation> reservations, int totalItems)> GetPagedAsync(IPagedQuery request, 
@@ -46,22 +42,21 @@ public class ReservationRepository : IReservationRepository
     {
         var reservationsQuery = _dbContext.Reservations
             .AsNoTracking()
-            .Include(x => x.User)
-            .Include(x => x.RealWorkout).ThenInclude(x => x.Instructor)
-            .Include(x => x.RealWorkout).ThenInclude(x => x.WorkoutType)
-            .Where(x => x.UserId == userId)
-            .AsQueryable(); 
+            .Include(r => r.User)
+            .Include(r => r.RealWorkout).ThenInclude(r => r.Instructor)
+            .Include(r => r.RealWorkout).ThenInclude(r => r.WorkoutType)
+            .Where(r => r.UserId == userId);
         
         var query = reservationsQuery
-            .Where(x => request.SearchPhrase == null ||
-                        x.Id.ToString().ToLower().Contains(request.SearchPhrase.ToLower()) ||
-                        x.User.Id.ToString().ToLower().Contains(request.SearchPhrase.ToLower()) ||
-                        x.User.FirstName.ToLower().Contains(request.SearchPhrase.ToLower()) ||
-                        x.User.LastName.ToLower().Contains(request.SearchPhrase.ToLower()) ||
-                        x.RealWorkout.WorkoutType.Name.ToLower().Contains(request.SearchPhrase.ToLower()) ||
-                        x.RealWorkout.Instructor.FirstName.ToLower().Contains(request.SearchPhrase.ToLower()) ||
-                        x.RealWorkout.Instructor.LastName.ToLower().Contains(request.SearchPhrase.ToLower()) ||
-                        x.RealWorkout.Instructor.FirstName.ToLower().Contains(request.SearchPhrase.ToLower()));
+            .Where(r => request.SearchPhrase == null ||
+                        r.Id.ToString().ToLower().Contains(request.SearchPhrase.ToLower()) ||
+                        r.User.Id.ToString().ToLower().Contains(request.SearchPhrase.ToLower()) ||
+                        r.User.FirstName.ToLower().Contains(request.SearchPhrase.ToLower()) ||
+                        r.User.LastName.ToLower().Contains(request.SearchPhrase.ToLower()) ||
+                        r.RealWorkout.WorkoutType.Name.ToLower().Contains(request.SearchPhrase.ToLower()) ||
+                        r.RealWorkout.Instructor.FirstName.ToLower().Contains(request.SearchPhrase.ToLower()) ||
+                        r.RealWorkout.Instructor.LastName.ToLower().Contains(request.SearchPhrase.ToLower()) ||
+                        r.RealWorkout.Instructor.FirstName.ToLower().Contains(request.SearchPhrase.ToLower()));
 
         var totalCount = query.Count();
 
@@ -91,16 +86,15 @@ public class ReservationRepository : IReservationRepository
     {
         var reservationsQuery = _dbContext.Reservations
             .AsNoTracking()
-            .Include(x => x.User)
-            .Include(x => x.RealWorkout).ThenInclude(x => x.Instructor)
-            .Include(x => x.RealWorkout).ThenInclude(x => x.WorkoutType)
-            .AsQueryable();    
+            .Include(r => r.User)
+            .Include(r => r.RealWorkout).ThenInclude(r => r.Instructor)
+            .Include(r => r.RealWorkout).ThenInclude(r => r.WorkoutType);
         
         var query = reservationsQuery
-            .Where(x => request.SearchPhrase == null ||
-                        x.RealWorkout.WorkoutType.Name.ToLower().Contains(request.SearchPhrase.ToLower()) ||
-                        x.RealWorkout.Instructor.FirstName.ToLower().Contains(request.SearchPhrase.ToLower()) ||
-                        x.RealWorkout.Instructor.LastName.ToLower().Contains(request.SearchPhrase.ToLower()));
+            .Where(r => request.SearchPhrase == null ||
+                        r.RealWorkout.WorkoutType.Name.ToLower().Contains(request.SearchPhrase.ToLower()) ||
+                        r.RealWorkout.Instructor.FirstName.ToLower().Contains(request.SearchPhrase.ToLower()) ||
+                        r.RealWorkout.Instructor.LastName.ToLower().Contains(request.SearchPhrase.ToLower()));
         
         var totalCount = query.Count();
 
