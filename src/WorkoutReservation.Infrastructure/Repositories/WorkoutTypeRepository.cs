@@ -3,7 +3,6 @@ using Microsoft.EntityFrameworkCore;
 using WorkoutReservation.Application.Contracts;
 using WorkoutReservation.Domain.Entities;
 using WorkoutReservation.Domain.Enums;
-using WorkoutReservation.Infrastructure.Interfaces;
 using WorkoutReservation.Infrastructure.Persistence;
 using WorkoutReservation.Shared.TypesExtensions;
 
@@ -12,20 +11,17 @@ namespace WorkoutReservation.Infrastructure.Repositories;
 public class WorkoutTypeRepository : IWorkoutTypeRepository
 {
     private readonly AppDbContext _dbContext;
-    private readonly IRepository<WorkoutType> _repository;
 
-    public WorkoutTypeRepository(AppDbContext dbContext, IRepository<WorkoutType> repository)
+    public WorkoutTypeRepository(AppDbContext dbContext)
     {
         _dbContext = dbContext;
-        _repository = repository;
     }
 
     public async Task<List<WorkoutType>> GetAllAsync(bool asNoTracking, CancellationToken token)
     {
-        var query = _dbContext.WorkoutTypes.AsQueryable();
-        query = _repository.ApplyAsNoTracking(asNoTracking, query);
-        
-        return await query.ToListAsync(token);
+        return await _dbContext.WorkoutTypes
+            .ApplyAsNoTracking(asNoTracking)
+            .ToListAsync(token);
     }
 
     public async Task<(List<WorkoutType> workoutTypes, int totalItems)> GetPagedAsync(IPagedQuery request,
@@ -33,13 +29,12 @@ public class WorkoutTypeRepository : IWorkoutTypeRepository
     {
         var workoutTypesQuery = _dbContext.WorkoutTypes
             .AsNoTracking()
-            .Include(x => x.Instructors)
-            .Include(x => x.WorkoutTypeTags)
-            .AsQueryable();
+            .Include(w => w.Instructors)
+            .Include(w => w.WorkoutTypeTags);
         
         var query = workoutTypesQuery
-            .Where(x => request.SearchPhrase == null ||
-                        x.Name.ToLower().Contains(request.SearchPhrase.ToLower()));
+            .Where(w => request.SearchPhrase == null ||
+                        w.Name.ToLower().Contains(request.SearchPhrase.ToLower()));
 
         var totalCount = query.Count();
 
@@ -64,21 +59,13 @@ public class WorkoutTypeRepository : IWorkoutTypeRepository
             .ToListAsync(token), totalCount);
     }
     
-    public async Task<WorkoutType> GetByIdAsync(int workoutTypeId, bool asNoTracking, CancellationToken token)
+    public async Task<WorkoutType> GetByIdAsync(int workoutTypeId, bool asNoTracking = false, 
+        CancellationToken token = default, params Expression<Func<WorkoutType, object>>[] includes)
     {
-        var query = _dbContext.WorkoutTypes.AsQueryable();
-        query = _repository.ApplyAsNoTracking(asNoTracking, query);
-        
-        return await query.FirstOrDefaultAsync(x => x.Id == workoutTypeId, token);
-    }
-    
-    public async Task<WorkoutType> GetByIdAsync(int workoutTypeId, bool asNoTracking = false, CancellationToken token = default, params Expression<Func<WorkoutType, object>>[] includes)
-    {
-        var query = _dbContext.WorkoutTypes.AsQueryable();
-        query = _repository.ApplyAsNoTracking(asNoTracking, query);
-        query = _repository.ApplyIncludes(includes, query);
-        
-        return await query.FirstOrDefaultAsync(x => x.Id == workoutTypeId, token);
+        return await _dbContext.WorkoutTypes
+            .ApplyAsNoTracking(asNoTracking)
+            .ApplyIncludes(includes)
+            .FirstOrDefaultAsync(workoutType => workoutType.Id == workoutTypeId, token);
     }
     
     public async Task AddAsync(WorkoutType workoutType, CancellationToken token)
@@ -90,12 +77,6 @@ public class WorkoutTypeRepository : IWorkoutTypeRepository
     public async Task DeleteAsync(WorkoutType workoutType, CancellationToken token)
     {
         _dbContext.Remove(workoutType);
-        await _dbContext.SaveChangesAsync(token);
-    }
-
-    public async Task DeleteAsync(List<WorkoutType> workoutTypes, CancellationToken token)
-    {
-        _dbContext.RemoveRange(workoutTypes);
         await _dbContext.SaveChangesAsync(token);
     }
 

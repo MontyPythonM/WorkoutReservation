@@ -11,6 +11,7 @@ using WorkoutReservation.Infrastructure.BackgroundJobs;
 using WorkoutReservation.Infrastructure.Identity;
 using WorkoutReservation.Infrastructure.Interfaces;
 using WorkoutReservation.Infrastructure.Persistence;
+using WorkoutReservation.Infrastructure.Repositories;
 using WorkoutReservation.Infrastructure.Security;
 using WorkoutReservation.Infrastructure.Services;
 using WorkoutReservation.Infrastructure.Settings;
@@ -31,6 +32,7 @@ public static class Extensions
             .AddAuthenticationServices(configuration)
             .AddAuthorizationServices()
             .AddSqlServerDatabase(configuration)
+            .AddRepositories()
             .AddSettings(configuration)
             .AddQuartzBackgroundJobs();
 

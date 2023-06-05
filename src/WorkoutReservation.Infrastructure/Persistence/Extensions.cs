@@ -1,10 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using WorkoutReservation.Application.Contracts;
-using WorkoutReservation.Infrastructure.Interfaces;
 using WorkoutReservation.Infrastructure.Persistence.Interceptors;
-using WorkoutReservation.Infrastructure.Repositories;
 using WorkoutReservation.Infrastructure.Services;
 using WorkoutReservation.Infrastructure.Settings;
 
@@ -27,17 +24,6 @@ internal static class Extensions
         services.AddSingleton<DomainEventsToMessagesInterceptor>();
         services.AddSingleton<AuditableEntitiesInterceptor>();
         services.AddHostedService<DatabaseSeedInitializer>();
-        
-        services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
-        services.AddScoped<IApplicationRoleRepository, ApplicationRoleRepository>();
-        services.AddScoped<IApplicationUserRepository, ApplicationUserRepository>();
-        services.AddScoped<IInstructorRepository, InstructorRepository>();
-        services.AddScoped<IWorkoutTypeRepository, WorkoutTypeRepository>();
-        services.AddScoped<IRepetitiveWorkoutRepository, RepetitiveWorkoutRepository>();
-        services.AddScoped<IRealWorkoutRepository, RealWorkoutRepository>();
-        services.AddScoped<IReservationRepository, ReservationRepository>();
-        services.AddScoped<IWorkoutTypeTagRepository, WorkoutTypeTagRepository>();
-        services.AddScoped<IContentRepository, ContentRepository>();
 
         return services;
     }

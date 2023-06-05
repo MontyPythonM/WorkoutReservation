@@ -1,4 +1,13 @@
 <div class="container">
+  <dx-button
+    *ngIf="(hasPermission(permissions.CreateHomePageContent) | async)!"
+    [disabled]="!(hasPermission(permissions.CreateHomePageContent) | async)!"
+    class="button"
+    text="Save changes"
+    icon="save"
+    type="success"
+    (onClick)="saveContent()">
+  </dx-button>
   <dx-html-editor
     class="html-editor"
     [(valueType)]="contentType"
@@ -54,13 +63,4 @@
     <dxo-media-resizing [enabled]="true"></dxo-media-resizing>
     <dxo-table-context-menu [enabled]="true"></dxo-table-context-menu>
   </dx-html-editor>
-  <dx-button
-    *ngIf="(hasPermission(permissions.CreateHomePageContent) | async)!"
-    [disabled]="!(hasPermission(permissions.CreateHomePageContent) | async)!"
-    class="button-right"
-    text="Save changes"
-    icon="save"
-    type="success"
-    (onClick)="saveContent()">
-  </dx-button>
 </div>

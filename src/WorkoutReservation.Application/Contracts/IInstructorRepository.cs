@@ -8,7 +8,6 @@ public interface IInstructorRepository
     public Task<List<Instructor>> GetAllAsync(bool asNoTracking, CancellationToken token);
     public Task<List<Instructor>> GetAllAsync(Expression<Func<Instructor, bool>> wherePredicate, 
         bool asNoTracking, CancellationToken token);
-    public Task<Instructor> GetByIdAsync(int instructorId, bool asNoTracking, CancellationToken token);
     public Task<Instructor> GetByIdAsync(int instructorId, bool asNoTracking, CancellationToken token, 
         params Expression<Func<Instructor, object>>[] includes);
     public Task AddAsync(Instructor instructor, CancellationToken token);

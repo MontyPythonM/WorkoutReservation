@@ -5,9 +5,6 @@ namespace WorkoutReservation.Application.Contracts;
 
 public interface IRealWorkoutRepository
 {
-    public Task<List<RealWorkout>> GetAllAsync(bool asNoTracking, CancellationToken token);
-    public Task<List<RealWorkout>> GetAllAsync(Expression<Func<RealWorkout, bool>> wherePredicate, 
-        bool asNoTracking, CancellationToken token);
     public Task<List<RealWorkout>> GetAllFromDateRangeAsync(DateOnly startDate,
         DateOnly endDate, bool asNoTracking, CancellationToken token);
     public Task<List<RealWorkout>> GetByDayAsync(DateOnly day, bool asNoTracking, CancellationToken token);

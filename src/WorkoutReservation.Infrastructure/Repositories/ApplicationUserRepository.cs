@@ -3,7 +3,6 @@ using Microsoft.EntityFrameworkCore;
 using WorkoutReservation.Application.Contracts;
 using WorkoutReservation.Domain.Entities;
 using WorkoutReservation.Domain.Enums;
-using WorkoutReservation.Infrastructure.Interfaces;
 using WorkoutReservation.Infrastructure.Persistence;
 using WorkoutReservation.Shared.TypesExtensions;
 
@@ -12,35 +11,29 @@ namespace WorkoutReservation.Infrastructure.Repositories;
 public class ApplicationUserRepository : IApplicationUserRepository
 {
     private readonly AppDbContext _dbContext;
-    private readonly IRepository<ApplicationUser> _repository;
 
-    public ApplicationUserRepository(AppDbContext dbContext, IRepository<ApplicationUser> repository)
+    public ApplicationUserRepository(AppDbContext dbContext)
     {
         _dbContext = dbContext;
-        _repository = repository;
     }
     
     public async Task<ApplicationUser> GetByEmailAsync(string email, bool asNoTracking = false, 
         CancellationToken token = default, params Expression<Func<ApplicationUser, object>>[] includes)
     {
-        var query = _dbContext.ApplicationUsers.AsQueryable();
-        query = _repository.ApplyAsNoTracking(asNoTracking, query);
-        query = _repository.ApplyIncludes(includes, query);
-        
-        return await query.FirstOrDefaultAsync(user => user.Email == email, token);
+        return await _dbContext.ApplicationUsers
+            .ApplyAsNoTracking(asNoTracking)
+            .ApplyIncludes(includes)
+            .FirstOrDefaultAsync(user => user.Email == email, token);
     }
     
-    public async Task<ApplicationUser> GetByGuidAsync(Guid guid, bool asNoTracking = false, 
+    public async Task<ApplicationUser> GetByGuidAsync(Guid userId, bool asNoTracking = false, 
         CancellationToken token = default)
     { 
-        var query = _dbContext.ApplicationUsers
+        return await _dbContext.ApplicationUsers
+            .ApplyAsNoTracking(asNoTracking)
             .Include(user => user.ApplicationRoles)
             .ThenInclude(role => role.ApplicationPermissions)
-            .AsQueryable();
-        
-        query = _repository.ApplyAsNoTracking(asNoTracking, query);
-        
-        return await query.FirstOrDefaultAsync(x => x.Id == guid, token);
+            .FirstOrDefaultAsync(user => user.Id == userId, token);
     }
     
     public async Task AddAsync(ApplicationUser user, CancellationToken token)
@@ -60,8 +53,7 @@ public class ApplicationUserRepository : IApplicationUserRepository
     {
         var usersQuery = _dbContext.ApplicationUsers
             .AsNoTracking()
-            .Include(x => x.ApplicationRoles)
-            .AsQueryable();
+            .Include(x => x.ApplicationRoles);
         
         var query = usersQuery
             .Where(x => request.SearchPhrase == null ||
@@ -105,12 +97,9 @@ public class ApplicationUserRepository : IApplicationUserRepository
     public async Task<List<ApplicationUser>> GetByRoleAsync(ApplicationRole role, bool asNoTracking = false, 
         CancellationToken token = default)
     {
-       var query =  _dbContext.ApplicationUsers
-            .Where(user => user.ApplicationRoles.Contains(role))
-            .AsQueryable();
-       
-       return await _repository
-           .ApplyAsNoTracking(asNoTracking, query)
+       return await _dbContext.ApplicationUsers
+           .Where(user => user.ApplicationRoles.Contains(role))
+           .ApplyAsNoTracking(asNoTracking)
            .ToListAsync(token);
     }
 }
