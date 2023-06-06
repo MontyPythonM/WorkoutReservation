@@ -21,6 +21,8 @@ Project("{54A90642-561A-4BB1-A94E-469ADEE60C69}") = "WorkoutReservation.UI", "sr
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WorkoutReservation.Shared", "src\WorkoutReservation.Shared\WorkoutReservation.Shared.csproj", "{C2F2948F-4971-48D6-A9E8-222F7BFCB950}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WorkoutReservation.Domain.UnitTests", "tests\WorkoutReservation.Domain.UnitTests\WorkoutReservation.Domain.UnitTests.csproj", "{5718C6C2-8045-4EA8-B177-63251F84B443}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -57,6 +59,10 @@ Global
 		{C2F2948F-4971-48D6-A9E8-222F7BFCB950}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C2F2948F-4971-48D6-A9E8-222F7BFCB950}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C2F2948F-4971-48D6-A9E8-222F7BFCB950}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5718C6C2-8045-4EA8-B177-63251F84B443}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5718C6C2-8045-4EA8-B177-63251F84B443}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5718C6C2-8045-4EA8-B177-63251F84B443}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5718C6C2-8045-4EA8-B177-63251F84B443}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -69,6 +75,7 @@ Global
 		{89C8F713-D642-4C01-883F-D6895B3CCE26} = {EAE81CE8-0DD3-430C-9982-3FBA49135D5F}
 		{312009B2-8488-4072-922A-4392BE5A57E3} = {3965AD60-CF6C-4A46-8C2C-7DFBE0C45F7B}
 		{C2F2948F-4971-48D6-A9E8-222F7BFCB950} = {3965AD60-CF6C-4A46-8C2C-7DFBE0C45F7B}
+		{5718C6C2-8045-4EA8-B177-63251F84B443} = {EAE81CE8-0DD3-430C-9982-3FBA49135D5F}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {03DCDDAF-E7D1-4A7B-9879-FFF098F42804}

@@ -2,7 +2,6 @@
 using WorkoutReservation.Domain.Enums;
 using WorkoutReservation.Domain.Events;
 using WorkoutReservation.Domain.Exceptions;
-using WorkoutReservation.Shared.Exceptions;
 using WorkoutReservation.Shared.TypesExtensions;
 
 namespace WorkoutReservation.Domain.Entities;
@@ -50,27 +49,25 @@ public sealed class RealWorkout : Entity
         Valid();
     }
     
-    public void AddReservation(ApplicationUser user)
+    public void AddReservation(ApplicationUser user, DateTime now)
     {
-        if (Date <= DateOnly.FromDateTime(DateTime.Now.Date) && EndTime < TimeOnly.FromDateTime(DateTime.Now))
-        {
+        if (Date <= DateOnly.FromDateTime(now) && EndTime < TimeOnly.FromDateTime(now))
             throw new RealWorkoutAlreadyStartedException(Id);
-        }
-        
+
         Reservations.Add(new Reservation(this, user));
         IncrementCurrentParticipantNumber();
         Valid();
     }
 
-    public void CancelReservation(Reservation reservation)
+    public void CancelReservation(Reservation reservation, DateTime now)
     {
         if (reservation is null)
             throw new ReservationCannotBeNullException();
 
         if (reservation.ReservationStatus == ReservationStatus.Cancelled)
             throw new ReservationAlreadyCancelledException();
-        
-        if (Date <= DateOnly.FromDateTime(DateTime.Now.Date) && EndTime < TimeOnly.FromDateTime(DateTime.Now))
+
+        if (Date <= DateOnly.FromDateTime(now) && EndTime < TimeOnly.FromDateTime(now))
             throw new RealWorkoutAlreadyStartedException(Id);
         
         reservation.SetReservationStatus(ReservationStatus.Cancelled);
@@ -112,13 +109,13 @@ public sealed class RealWorkout : Entity
             throw new InstructorCannotBeNullException();
 
         if (CurrentParticipantNumber > MaxParticipantNumber)
-            throw new CurrentParticipantNumberGreaterThanMaxParticipantNumberException(CurrentParticipantNumber, MaxParticipantNumber);
+            throw new ParticipantNumberExceedException(CurrentParticipantNumber, MaxParticipantNumber);
 
         if (CurrentParticipantNumber < 0)
             throw new CurrentParticipantNumberLessThanZeroException(CurrentParticipantNumber);
 
         if (Date > DateTime.Now.GetLastDayOfUpcomingWeek())
-            throw new WorkoutDateExceededException();
+            throw new RealWorkoutDateExceededException();
 
         if (IsAnyUserHasMoreThanOneActiveReservation())
             throw new DuplicateReservationException();

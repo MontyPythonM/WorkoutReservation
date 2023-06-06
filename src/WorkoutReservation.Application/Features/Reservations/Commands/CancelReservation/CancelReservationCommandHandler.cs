@@ -12,13 +12,16 @@ internal sealed class CancelReservationCommandHandler : IRequestHandler<CancelRe
     private readonly ICurrentUserAccessor _currentUserAccessor;
     private readonly IRealWorkoutRepository _realWorkoutRepository;
     private readonly IReservationRepository _reservationRepository;
+    private readonly IDateTimeProvider _dateTimeProvider;
 
     public CancelReservationCommandHandler(ICurrentUserAccessor currentUserAccessor,
-        IRealWorkoutRepository realWorkoutRepository, IReservationRepository reservationRepository)
+        IRealWorkoutRepository realWorkoutRepository, IReservationRepository reservationRepository,
+        IDateTimeProvider dateTimeProvider)
     {
         _currentUserAccessor = currentUserAccessor;
         _realWorkoutRepository = realWorkoutRepository;
         _reservationRepository = reservationRepository;
+        _dateTimeProvider = dateTimeProvider;
     }
 
     public async Task<Unit> Handle(CancelReservationCommand request, CancellationToken token)
@@ -33,7 +36,7 @@ internal sealed class CancelReservationCommandHandler : IRequestHandler<CancelRe
         var reservation = await _reservationRepository
             .GetByIdAsync(request.ReservationId, false, token);
         
-        realWorkout.CancelReservation(reservation);
+        realWorkout.CancelReservation(reservation, _dateTimeProvider.GetNow());
         await _realWorkoutRepository.UpdateAsync(realWorkout, token);
         return Unit.Value;
     }
