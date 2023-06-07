@@ -1,5 +1,6 @@
 ﻿using MediatR;
 using WorkoutReservation.Application.Contracts;
+using WorkoutReservation.Domain.Abstractions;
 using WorkoutReservation.Domain.Entities;
 using WorkoutReservation.Domain.Enums;
 

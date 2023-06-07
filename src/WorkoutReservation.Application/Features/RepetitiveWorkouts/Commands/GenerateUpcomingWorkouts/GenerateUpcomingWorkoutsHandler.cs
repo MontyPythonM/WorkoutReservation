@@ -4,6 +4,7 @@ using MediatR;
 using Microsoft.Extensions.Logging;
 using WorkoutReservation.Application.Contracts;
 using WorkoutReservation.Application.Exceptions;
+using WorkoutReservation.Domain.Abstractions;
 using WorkoutReservation.Domain.Entities;
 
 namespace WorkoutReservation.Application.Features.RepetitiveWorkouts.Commands.GenerateUpcomingWorkouts;

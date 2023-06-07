@@ -5,6 +5,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using WorkoutReservation.API.Middleware;
 using WorkoutReservation.Application.Contracts;
+using WorkoutReservation.Domain.Abstractions;
 using WorkoutReservation.Infrastructure.Authentication;
 using WorkoutReservation.Infrastructure.Authorization;
 using WorkoutReservation.Infrastructure.BackgroundJobs;

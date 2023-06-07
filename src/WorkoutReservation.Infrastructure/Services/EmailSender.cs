@@ -2,6 +2,7 @@
 using SendGrid;
 using SendGrid.Helpers.Mail;
 using WorkoutReservation.Application.Contracts;
+using WorkoutReservation.Domain.Abstractions;
 using WorkoutReservation.Infrastructure.Settings;
 
 namespace WorkoutReservation.Infrastructure.Services;

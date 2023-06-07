@@ -10,6 +10,7 @@ using WorkoutReservation.Application.Contracts;
 using WorkoutReservation.Application.Exceptions;
 using WorkoutReservation.Application.Features.RepetitiveWorkouts.Commands.GenerateUpcomingWorkouts;
 using WorkoutReservation.Application.MappingProfile;
+using WorkoutReservation.Domain.Abstractions;
 using WorkoutReservation.Domain.Entities;
 using WorkoutReservation.Domain.Enums;
 using WorkoutReservation.Shared.TypesExtensions;

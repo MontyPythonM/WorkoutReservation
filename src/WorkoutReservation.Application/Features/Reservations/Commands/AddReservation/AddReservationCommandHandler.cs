@@ -1,6 +1,7 @@
 ﻿using MediatR;
 using WorkoutReservation.Application.Contracts;
 using WorkoutReservation.Application.Exceptions;
+using WorkoutReservation.Domain.Abstractions;
 using WorkoutReservation.Domain.Entities;
 
 namespace WorkoutReservation.Application.Features.Reservations.Commands.AddReservation;

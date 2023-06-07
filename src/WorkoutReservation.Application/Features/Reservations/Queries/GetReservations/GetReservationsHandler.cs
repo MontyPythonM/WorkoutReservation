@@ -2,6 +2,7 @@
 using MediatR;
 using WorkoutReservation.Application.Contracts;
 using WorkoutReservation.Application.Dtos;
+using WorkoutReservation.Domain.Abstractions;
 
 namespace WorkoutReservation.Application.Features.Reservations.Queries.GetReservations;
 

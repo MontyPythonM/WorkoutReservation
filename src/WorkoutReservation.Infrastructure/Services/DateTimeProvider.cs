@@ -1,5 +1,4 @@
-﻿using WorkoutReservation.Application.Contracts;
-using WorkoutReservation.Infrastructure.Exceptions;
+﻿using WorkoutReservation.Domain.Abstractions;
 using WorkoutReservation.Shared.Exceptions;
 
 namespace WorkoutReservation.Infrastructure.Services;
