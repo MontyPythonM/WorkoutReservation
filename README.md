@@ -57,6 +57,6 @@ Application user roles:
 - FluentValidation 
 - xUnit
 - Moq
-- FluentAssertions
+- Shouldly
 - Swagger
 - NLog
