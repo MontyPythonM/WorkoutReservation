@@ -1,6 +1,7 @@
 ﻿using MediatR;
 using WorkoutReservation.Application.Contracts;
 using WorkoutReservation.Application.Exceptions;
+using WorkoutReservation.Domain.Abstractions;
 using WorkoutReservation.Domain.Entities;
 
 namespace WorkoutReservation.Application.Features.Reservations.Commands.AddReservation;
@@ -11,12 +12,14 @@ internal sealed class AddReservationCommandHandler : IRequestHandler<AddReservat
 {
     private readonly IRealWorkoutRepository _realWorkoutRepository;
     private readonly ICurrentUserAccessor _currentUserAccessor;
+    private readonly IDateTimeProvider _dateTimeProvider;
 
     public AddReservationCommandHandler(IRealWorkoutRepository realWorkoutRepository,
-        ICurrentUserAccessor currentUserAccessor)
+        ICurrentUserAccessor currentUserAccessor, IDateTimeProvider dateTimeProvider)
     {
         _realWorkoutRepository = realWorkoutRepository;
         _currentUserAccessor = currentUserAccessor;
+        _dateTimeProvider = dateTimeProvider;
     }
 
     public async Task<Unit> Handle(AddReservationCommand request, CancellationToken token)
@@ -29,7 +32,7 @@ internal sealed class AddReservationCommandHandler : IRequestHandler<AddReservat
         if (realWorkout is null)
             throw new NotFoundException(nameof(RealWorkout), request.RealWorkoutId.ToString());
         
-        realWorkout.AddReservation(user);
+        realWorkout.AddReservation(user, _dateTimeProvider.GetNow());
         await _realWorkoutRepository.UpdateAsync(realWorkout, token);
         
         return Unit.Value;

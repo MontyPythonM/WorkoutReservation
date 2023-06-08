@@ -2,9 +2,9 @@
 
 namespace WorkoutReservation.Domain.Exceptions;
 
-public class WorkoutDateExceededException : DomainException
+public class RealWorkoutDateExceededException : DomainException
 {
-    public WorkoutDateExceededException() 
+    public RealWorkoutDateExceededException()
         : base("The date cannot be further than 2 weeks")
     {
     }

@@ -33,10 +33,7 @@ public sealed class Instructor : Entity
         Valid();
     }
 
-    /// <summary>
-    /// For unit testing purposes only
-    /// </summary>
-    internal Instructor(int id, string firstName, string lastName, Gender? gender, string biography, string email)
+    public Instructor(int id, string firstName, string lastName, Gender? gender, string biography, string email)
     {
         Id = id;
         FirstName = firstName;

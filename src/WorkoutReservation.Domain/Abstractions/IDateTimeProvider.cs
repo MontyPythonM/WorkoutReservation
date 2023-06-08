@@ -1,4 +1,4 @@
-﻿namespace WorkoutReservation.Application.Contracts;
+﻿namespace WorkoutReservation.Domain.Abstractions;
 
 public interface IDateTimeProvider
 {

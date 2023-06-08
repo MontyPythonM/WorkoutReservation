@@ -4,6 +4,7 @@ using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Quartz;
 using WorkoutReservation.Application.Contracts;
+using WorkoutReservation.Domain.Abstractions;
 using WorkoutReservation.Infrastructure.Persistence;
 using WorkoutReservation.Shared.Events;
 

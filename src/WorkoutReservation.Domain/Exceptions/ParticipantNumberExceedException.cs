@@ -2,9 +2,9 @@
 
 namespace WorkoutReservation.Domain.Exceptions;
 
-public class CurrentParticipantNumberGreaterThanMaxParticipantNumberException : DomainException
+public class ParticipantNumberExceedException : DomainException
 {
-    public CurrentParticipantNumberGreaterThanMaxParticipantNumberException(int currentParticipantNumber, int maxParticipantNumber) 
+    public ParticipantNumberExceedException(int currentParticipantNumber, int maxParticipantNumber) 
         : base($"Current participant number ({currentParticipantNumber}) cannot be greater than maximum participant number ({maxParticipantNumber})")
     {
     }
