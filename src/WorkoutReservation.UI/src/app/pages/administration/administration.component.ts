@@ -2,7 +2,6 @@ import {Component} from '@angular/core';
 import {BaseComponent} from 'src/app/common/base.component';
 import {Router} from "@angular/router";
 import {pageUrls} from 'src/environments/page-urls';
-import {environment} from "../../../environments/environment";
 import {Permission} from "../../models/enums/permission.enum";
 
 @Component({

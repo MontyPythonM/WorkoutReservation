@@ -1,0 +1,19 @@
+﻿services:
+  workoutreservation.db:
+    image: mcr.microsoft.com/mssql/server:latest
+    shm_size: '4gb'
+    container_name: workoutreservation.db
+    restart: always
+    environment:
+      ACCEPT_EULA: "Y"
+      SA_PASSWORD: "ghT!JMhtozdm1@0dcFS#1ugSrF^&dK3Je"
+    ports:
+      - 1433:1433
+    volumes:
+      - my-volume:/var/opt/mssql
+    expose:
+      - 1433
+
+volumes:
+  my-volume:
+    driver: local
