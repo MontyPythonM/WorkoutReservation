@@ -44,8 +44,7 @@ export abstract class BaseService {
       .pipe(map((response: HttpResponse<T>) => response.body as T));
   }
 
-  private request<T>(method: string, url: string, data?: any, params?: any, options?: {})
-    : Observable<HttpResponse<T>> {
+  private request<T>(method: string, url: string, data?: any, params?: any, options?: {}) : Observable<HttpResponse<T>> {
       const requestOptions = Object.assign({}, httpOptions);
       Object.assign(requestOptions, options);
       requestOptions.body = data;

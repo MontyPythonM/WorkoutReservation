@@ -21,10 +21,10 @@ public abstract class Enumeration<TEnum> : IEquatable<Enumeration<TEnum>>
         // for EF core
     }
     
-    public static TEnum? FromValue(int value) => 
-        Enumerations.TryGetValue(value, out TEnum? enumeration) ? enumeration : default;
+    public static TEnum FromValue(int value) => 
+        Enumerations.TryGetValue(value, out TEnum enumeration) ? enumeration : default;
     
-    public static TEnum? FromName(string name) => 
+    public static TEnum FromName(string name) => 
         Enumerations.Values.SingleOrDefault(e => e.Name == name);
 
     public bool Equals(Enumeration<TEnum> other)
