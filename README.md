@@ -13,19 +13,18 @@ Application user roles:
 <br><br>
 
 ## How to download and run
-1. Download the solution using the `git clone https://github.com/MontyPythonM/WorkoutReservationWebApp.git` command,
+1. Clone solution code with command `git clone https://github.com/MontyPythonM/WorkoutReservationWebApp.git`,
 2. Overwrite the **appsettings.json** file (e.g. by user secrets) as recommended below:
-    - Enter your database connection string in the **ConnectionStrings.localDbConnection** section (use MS SQL Server),
-    - Enter your credentials in **FirstAdmin** section. Application will create a system administrator user based on this data during the first launch,
-    - Enter the application key (min. 16 chars) used for user authentication purposes in the **Authentication.JwtKey** section
+    - Add your credentials in **FirstAdmin** section. Application will create a system administrator user based on this data during the first launch,
+    - Add application key (min. 16 chars) used for user authentication purposes in the **Authentication.JwtKey** section
 3. Backend:
-    - Install dotnet ef cli `dotnet tool install --global dotnet-ef`,
-    - Create database and apply migrations using `dotnet ef database update -s ../WorkoutReservation.API` (in *src/WorkoutReservation.Infrastructure*),
-    - Run the backend application (WorkoutReservation.API starter project) in the `WorkoutReservation` configuration
+    - Open terminal and type `docker-compose up -d`
+    - Apply migrations using `dotnet ef database update -s ../WorkoutReservation.API` (in *src/WorkoutReservation.Infrastructure*),
+    - Run the backend application
 4. Fronted: 
     - Make sure you have **node.js** installed,
     - Install packages `npm install`,
-    - Run the frontend application using the `npm start` command in the console (in *src/WorkoutReservation.UI/src/app*)
+    - Run the frontend application using the `npm start` or `ng serve` command in the console (in *src/WorkoutReservation.UI/src/app*)
 <br>
 
 ## Design Patterns
