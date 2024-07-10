@@ -39,11 +39,12 @@ Application user roles:
 
 ## Technologies
   
-- ASP.NET Core 6
+- ASP.NET Core 8.0
 - Angular 13
-- Entity Framework Core 6
-- MS SQL Server Express
+- Entity Framework Core 8.0
+- MS SQL Server
 - JWT Bearer authentication
+- Docker
 
 <br>
 
